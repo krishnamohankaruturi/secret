@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.OrganizationBundleReportMapper">
+
+  <resultMap id="BaseResultMap" type="edu.ku.cete.domain.OrganizationBundleReport" >	
+    <id column="id" property="id" jdbcType="BIGINT" />    
+    <result column="organizationid" property="organizationId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+    <result column= "assessmentprogramid" property = "assessmentProgramId" jdbcType="BIGINT" />
+    <result column="schoolyear" property="schoolYear" jdbcType="BIGINT" />
+    <result column="activeflag" property="activeFlag" jdbcType="BOOLEAN" />
+    <result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="createduser" property="createdUser" jdbcType="BIGINT" />
+    <result column="submitteduser" property="submittedUser" jdbcType="VARCHAR" />
+    <result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+    <result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+    <result column="byschool" property="bySchool" jdbcType="BOOLEAN" />
+    <result column="separatefile" property="separateFile" jdbcType="BOOLEAN" />
+    <result column="schoolids" property="schoolIds" jdbcType="VARCHAR" />
+    <result column="subjects" property="subjects" jdbcType="VARCHAR" />
+    <result column="grades" property="grades" jdbcType="VARCHAR" />
+    <result column="schoolnames" property="schoolNames" jdbcType="VARCHAR" />
+    <result column="subjectnames" property="subjectNames" jdbcType="VARCHAR" />
+    <result column="gradenames" property="gradeNames" jdbcType="VARCHAR" />
+    <result column="statusString" property="statusString" jdbcType="VARCHAR" />
+    <result column="sort1" property="sort1" jdbcType="VARCHAR" />
+    <result column="sort2" property="sort2" jdbcType="VARCHAR" />
+    <result column="sort3" property="sort3" jdbcType="VARCHAR" />
+    <result column="reporttype" property="reportType" jdbcType="VARCHAR" />
+     
+  </resultMap>
+  
+  <insert id="insert" parameterType = "edu.ku.cete.domain.OrganizationBundleReport">
+  <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT nextval('organizationbundledreportsprocess_id_seq')
+    </selectKey>
+  
+  	insert into organizationbundledreportsprocess (id, organizationid, status, assessmentprogramid, schoolyear, activeflag,
+    createddate, createduser, modifieddate, modifieduser, byschool, separatefile, schoolids, subjects, grades, schoolnames, subjectNames, gradeNames, sort1, sort2,
+    sort3, reporttype) 
+    values (#{id,jdbcType=BIGINT}, #{organizationId,jdbcType=BIGINT}, #{status,jdbcType=BIGINT}, #{assessmentProgramId,jdbcType=BIGINT}, #{schoolYear,jdbcType=BIGINT},
+            #{activeFlag,jdbcType=BIGINT}, #{createdDate,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=INTEGER}, #{modifiedDate,jdbcType=TIMESTAMP},
+            #{modifiedUser,jdbcType=INTEGER}, #{bySchool,jdbcType=BOOLEAN}, #{separateFile,jdbcType=BOOLEAN}, #{schoolIds,jdbcType=VARCHAR},
+            #{subjects,jdbcType=VARCHAR}, #{grades,jdbcType=VARCHAR}, #{schoolNames,jdbcType=VARCHAR}, #{subjectNames,jdbcType=VARCHAR}, #{gradeNames,jdbcType=VARCHAR}, #{sort1,jdbcType=VARCHAR}, #{sort2,jdbcType=VARCHAR}, #{sort3,jdbcType=VARCHAR}
+           ,#{reportType,jdbcType=VARCHAR})  
+  </insert>
+  <select id="getLatestPendingReqest" resultMap="BaseResultMap">
+	select id, organizationid, assessmentprogramid, status, schoolyear, activeflag, createddate,createduser,modifieddate,modifieduser,
+       byschool, separatefile, schoolids, subjects, grades, sort1, sort2, sort3 from organizationbundledreportsprocess where activeflag is true and status = (SELECT c.id
+		FROM   category c,
+		       categorytype ct
+		WHERE  c.categorytypeid = ct.id
+		AND    c.categorycode   = 'IN_QUEUE'
+		AND    ct.typecode      = 'PD_REPORT_STATUS') 
+		AND reporttype NOT IN('STUDENT_SUMMARY_BUNDLED')
+		order by id limit 1
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	select id, organizationid, assessmentprogramid, status, schoolyear, activeflag, createddate,createduser,modifieddate,modifieduser,
+       byschool, separatefile, schoolids, subjects, grades, sort1, sort2, sort3, reporttype from organizationbundledreportsprocess 
+       where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="edu.ku.cete.domain.OrganizationBundleReport" >
+    update organizationbundledreportsprocess
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+      <if test="activeFlag != null" >
+        activeflag = #{activeFlag,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedDate != null" >
+        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUser != null" >
+        modifieduser = #{modifiedUser,jdbcType=INTEGER},
+      </if>
+      <if test="reportTypeCode != null">
+      	reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="deActivateForSameOrganizationAndStatus" parameterType="edu.ku.cete.domain.OrganizationBundleReport" >
+    update organizationbundledreportsprocess
+    <set>
+        activeflag = false,
+      <if test="modifiedDate != null" >
+        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdUser != null" >
+        modifieduser = #{createdUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    where activeflag is true 
+    and organizationid = #{organizationId,jdbcType=BIGINT} 
+    and status = #{status,jdbcType=BIGINT}
+    and assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+    <if test="reportType != null">
+    	and reporttype = #{reportType,jdbcType=VARCHAR}
+    </if>
+  </update> 
+  
+   <select id="selectByOrganizationAndAssessment" resultMap="BaseResultMap">
+	select * from (select id, organizationid, assessmentprogramid, schoolyear, activeflag, createddate,createduser,modifieddate,modifieduser,
+       byschool, 
+       separatefile,
+       (select categoryname from category where id = org.status) as statusString,
+       (select categoryCode from category where id = org.status) as statusCode,
+       (case when createduser = -1 THEN 'All' ELSE org.schoolnames END) as schoolnames,
+       (case when createduser = -1 THEN 'All' ELSE org.subjectnames END) as subjectnames, 
+       (case when createduser = -1 THEN 'All' ELSE org.gradenames END) as gradenames, 
+       (case when sort1 = 'legallastname' THEN 'Student Last Name' ELSE INITCAP(org.sort1) END) as sort1,
+       (case when sort2 = 'legallastname' THEN 'Student Last Name' ELSE INITCAP(org.sort2) END) as sort2,
+       (case when sort3 = 'legallastname' THEN 'Student Last Name' ELSE INITCAP(org.sort3) END) as sort3, 
+       (case WHEN createduser = -1 THEN 'System' 
+     ELSE (select (COALESCE(surname, '') ||' '|| COALESCE(firstname, '')) as subittedusername from aartuser where id = org.createduser)END) as submitteduser
+        from organizationbundledreportsprocess org
+       where organizationid = #{organizationId,jdbcType=BIGINT}
+       and assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+       and schoolyear = #{currentSchoolYear,jdbcType=BIGINT}
+       <if test="reportCode != null">
+       		AND reporttype = #{reportCode,jdbcType=VARCHAR}
+       </if>
+       and activeflag is true) bundleReport  order by  statusCode ='FAILED', statusCode = 'IN_QUEUE', statusCode = 'IN_PROGRESS', statusCode = 'COMPLETED', id desc
+  </select>   
+  
+     <select id="getInprogressRequest" resultType="java.lang.Integer">
+	   select count(id) from organizationbundledreportsprocess
+	   where organizationid = #{organizationId,jdbcType=BIGINT}
+       and assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+       and schoolyear = #{currentSchoolYear,jdbcType=BIGINT}
+       and activeflag is true
+       and status = #{status, jdbcType=BIGINT}
+       <if test="reportCode != null">
+       		AND reporttype = #{reportCode,jdbcType=VARCHAR}
+       </if>
+  </select>
+  
+  <select id="getLatestPendingReqestForStudentBundledReport" resultMap="BaseResultMap">
+	select orp.id, organizationid, assessmentprogramid, status, schoolyear, orp.activeflag, orp.createddate, orp.createduser, orp.modifieddate, orp.modifieduser,
+       byschool, separatefile, schoolids, subjects, grades, sort1, sort2, sort3 
+       FROM organizationbundledreportsprocess orp
+       JOIN assessmentprogram ap ON ap.id = orp.assessmentprogramid AND ap.abbreviatedname = 'DLM' and ap.activeflag is true 
+       WHERE orp.activeflag is true 
+       <if test="reportType != null">
+       		AND orp.reporttype = #{reportType,jdbcType=VARCHAR}
+       </if>
+       AND status = (SELECT c.id
+		FROM   category c,
+		       categorytype ct
+		WHERE  c.categorytypeid = ct.id
+		AND    c.categorycode   = 'IN_QUEUE'
+		AND    ct.typecode      = 'PD_REPORT_STATUS') order by orp.id limit 1
+  </select>                                
+</mapper>

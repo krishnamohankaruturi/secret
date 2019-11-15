@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.report.model.BatchUploadReasonMapper">
+	<resultMap id="BaseResultMap" type="edu.ku.cete.report.domain.BatchUploadReason">
+		<result column="batchuploadid" jdbcType="BIGINT" property="batchUploadId" />
+		<result column="line" jdbcType="VARCHAR" property="line" />
+		<result column="fieldname" jdbcType="VARCHAR" property="fieldName" />
+		<result column="reason" jdbcType="VARCHAR" property="reason" />
+		<result column="errorType" jdbcType="VARCHAR" property="errorType" />
+	</resultMap>
+	<insert id="insert" parameterType="edu.ku.cete.report.domain.BatchUploadReason">
+		insert into batchuploadreason (batchuploadid, line, fieldname,
+		reason,errortype)
+		values (#{batchUploadId,jdbcType=BIGINT}, #{line,jdbcType=VARCHAR},
+		#{fieldName,jdbcType=VARCHAR},
+		#{reason,jdbcType=VARCHAR}, #{errorType,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="edu.ku.cete.report.domain.BatchUploadReason">
+		insert into batchuploadreason
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="batchUploadId != null">
+				batchuploadid,
+			</if>
+			<if test="line != null or line != ''">
+				line,
+			</if>
+			<if test="fieldName != null">
+				fieldname,
+			</if>
+			<if test="reason != null">
+				reason,
+			</if>
+			<if test="errorType != null">
+				errortype,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="batchUploadId != null">
+				#{batchUploadId,jdbcType=BIGINT},
+			</if>
+			<if test="line != null or line != ''">
+				#{line,jdbcType=VARCHAR},
+			</if>
+			<if test="fieldName != null">
+				#{fieldName,jdbcType=VARCHAR},
+			</if>
+			<if test="reason != null">
+				#{reason,jdbcType=VARCHAR},
+			</if>
+			<if test="errorType != null">
+				#{errorType,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="selectByBatchUploadId" resultMap="BaseResultMap">
+		select * from batchUploadReason where batchuploadid =
+		#{batchUploadId,jdbcType=BIGINT} and fieldname is not null
+		order by line::int
+	</select>
+	<!--US16252 -->
+	<select id="select100ByBatchUploadId" resultMap="BaseResultMap">
+		select * from batchUploadReason where batchuploadid =
+		#{batchUploadId,jdbcType=BIGINT} and fieldname is not null limit 100
+	</select>
+</mapper>

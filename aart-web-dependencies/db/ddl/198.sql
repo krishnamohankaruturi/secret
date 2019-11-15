@@ -1,0 +1,1 @@
+alter table assessmentprogram add column abbreviatedname character varying(75)

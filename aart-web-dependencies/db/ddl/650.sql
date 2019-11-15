@@ -1,0 +1,1 @@
+--650.sql empty DDL

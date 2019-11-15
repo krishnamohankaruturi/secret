@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="75px" height="30px" viewBox="0 0 75 30" enable-background="new 0 0 75 30" xml:space="preserve">
+<g>
+	<defs>
+		<rect id="SVGID_1_" x="3" y="4.434" width="68.152" height="22.232"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  overflow="visible"/>
+	</clipPath>
+	<polygon clip-path="url(#SVGID_2_)" fill="none" stroke="#000000" stroke-width="0.5" points="3.25,4.685 3.25,26.417 
+		70.731,26.417 64.957,15.834 70.731,4.685 	"/>
+</g>
+<text transform="matrix(1 0 0 1 6.3521 14.2202)" font-family="'Verdana'" font-size="7.5">RESPONSE</text>
+<text transform="matrix(1 0 0 1 6.3521 22.8823)"><tspan x="0" y="0" font-family="'Verdana'" font-size="7.5">N</tspan><tspan x="5.61" y="0" font-family="'Verdana'" font-size="7.5">O</tspan><tspan x="11.333" y="0" font-family="'Verdana'" font-size="7.5">T SCORED</tspan></text>
+</svg>

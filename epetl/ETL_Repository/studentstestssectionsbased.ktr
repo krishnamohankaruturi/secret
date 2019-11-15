@@ -1,0 +1,1651 @@
+<transformation>
+  <info>
+    <name>studentstestssectionsbased</name>
+    <description/>
+    <extended_description/>
+    <trans_version/>
+    <trans_type>Normal</trans_type>
+    <trans_status>0</trans_status>
+    <directory>&#x2f;</directory>
+    <parameters>
+    </parameters>
+    <log>
+<trans-log-table><connection/>
+<schema/>
+<table/>
+<size_limit_lines/>
+<interval/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>TRANSNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>STATUS</id><enabled>Y</enabled><name>STATUS</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name><subject/></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name><subject/></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name><subject/></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name><subject/></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name><subject/></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name><subject/></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>STARTDATE</id><enabled>Y</enabled><name>STARTDATE</name></field><field><id>ENDDATE</id><enabled>Y</enabled><name>ENDDATE</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>DEPDATE</id><enabled>Y</enabled><name>DEPDATE</name></field><field><id>REPLAYDATE</id><enabled>Y</enabled><name>REPLAYDATE</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field><field><id>EXECUTING_SERVER</id><enabled>N</enabled><name>EXECUTING_SERVER</name></field><field><id>EXECUTING_USER</id><enabled>N</enabled><name>EXECUTING_USER</name></field><field><id>CLIENT</id><enabled>N</enabled><name>CLIENT</name></field></trans-log-table>
+<perf-log-table><connection/>
+<schema/>
+<table/>
+<interval/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>SEQ_NR</id><enabled>Y</enabled><name>SEQ_NR</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>TRANSNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>STEPNAME</id><enabled>Y</enabled><name>STEPNAME</name></field><field><id>STEP_COPY</id><enabled>Y</enabled><name>STEP_COPY</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>INPUT_BUFFER_ROWS</id><enabled>Y</enabled><name>INPUT_BUFFER_ROWS</name></field><field><id>OUTPUT_BUFFER_ROWS</id><enabled>Y</enabled><name>OUTPUT_BUFFER_ROWS</name></field></perf-log-table>
+<channel-log-table><connection/>
+<schema/>
+<table/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>LOGGING_OBJECT_TYPE</id><enabled>Y</enabled><name>LOGGING_OBJECT_TYPE</name></field><field><id>OBJECT_NAME</id><enabled>Y</enabled><name>OBJECT_NAME</name></field><field><id>OBJECT_COPY</id><enabled>Y</enabled><name>OBJECT_COPY</name></field><field><id>REPOSITORY_DIRECTORY</id><enabled>Y</enabled><name>REPOSITORY_DIRECTORY</name></field><field><id>FILENAME</id><enabled>Y</enabled><name>FILENAME</name></field><field><id>OBJECT_ID</id><enabled>Y</enabled><name>OBJECT_ID</name></field><field><id>OBJECT_REVISION</id><enabled>Y</enabled><name>OBJECT_REVISION</name></field><field><id>PARENT_CHANNEL_ID</id><enabled>Y</enabled><name>PARENT_CHANNEL_ID</name></field><field><id>ROOT_CHANNEL_ID</id><enabled>Y</enabled><name>ROOT_CHANNEL_ID</name></field></channel-log-table>
+<step-log-table><connection/>
+<schema/>
+<table/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>TRANSNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>STEPNAME</id><enabled>Y</enabled><name>STEPNAME</name></field><field><id>STEP_COPY</id><enabled>Y</enabled><name>STEP_COPY</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>LOG_FIELD</id><enabled>N</enabled><name>LOG_FIELD</name></field></step-log-table>
+<metrics-log-table><connection/>
+<schema/>
+<table/>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>METRICS_DATE</id><enabled>Y</enabled><name>METRICS_DATE</name></field><field><id>METRICS_CODE</id><enabled>Y</enabled><name>METRICS_CODE</name></field><field><id>METRICS_DESCRIPTION</id><enabled>Y</enabled><name>METRICS_DESCRIPTION</name></field><field><id>METRICS_SUBJECT</id><enabled>Y</enabled><name>METRICS_SUBJECT</name></field><field><id>METRICS_TYPE</id><enabled>Y</enabled><name>METRICS_TYPE</name></field><field><id>METRICS_VALUE</id><enabled>Y</enabled><name>METRICS_VALUE</name></field></metrics-log-table>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>100000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>Y</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <capture_step_performance>N</capture_step_performance>
+    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
+    <step_performance_capturing_size_limit>100</step_performance_capturing_size_limit>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <created_user>-</created_user>
+  <created_date>2016&#x2f;02&#x2f;23 10&#x3a;27&#x3a;41.653</created_date>
+  <modified_user>-</modified_user>
+  <modified_date>2016&#x2f;03&#x2f;16 17&#x3a;53&#x3a;40.546</modified_date>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
+    <is_key_private>N</is_key_private>
+  </info>
+  <notepads>
+  </notepads>
+  <connection>
+    <name>EP_ETL_Source</name>
+    <server>&#x24;&#x7b;ep.source.db.host&#x7d;</server>
+    <type>POSTGRESQL</type>
+    <access>Native</access>
+    <database>&#x24;&#x7b;ep.source.db.name&#x7d;</database>
+    <port>&#x24;&#x7b;ep.source.db.port&#x7d;</port>
+    <username>&#x24;&#x7b;ep.source.db.userid&#x7d;</username>
+    <password>&#x24;&#x7b;ep.source.db.password&#x7d;</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_POSTGRESQL.rewriteBatchedStatements</code><attribute>true</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_POSTGRESQL.useCompression</code><attribute>false</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_POSTGRESQL.useServerPrepStmts</code><attribute>false</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>&#x24;&#x7b;ep.source.db.port&#x7d;</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>N</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>EP_ETL_Target</name>
+    <server>&#x24;&#x7b;ep.target.db.host&#x7d;</server>
+    <type>POSTGRESQL</type>
+    <access>Native</access>
+    <database>&#x24;&#x7b;ep.target.db.name&#x7d;</database>
+    <port>&#x24;&#x7b;ep.target.db.port&#x7d;</port>
+    <username>&#x24;&#x7b;ep.target.db.userid&#x7d;</username>
+    <password>&#x24;&#x7b;ep.target.db.password&#x7d;</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_POSTGRESQL.rewriteBatchedStatements</code><attribute>true</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_POSTGRESQL.useCompression</code><attribute>false</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_POSTGRESQL.useServerPrepStmts</code><attribute>false</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>&#x24;&#x7b;ep.target.db.port&#x7d;</attribute></attribute>
+      <attribute><code>PRESERVE_RESERVED_WORD_CASE</code><attribute>N</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SUPPORTS_BOOLEAN_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>SUPPORTS_TIMESTAMP_DATA_TYPE</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Get System Info</from><to>Get studentresponsescore Id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>Table input studentresponsescore</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get studentresponsescore Id</from><to>Table output studentresponsescore</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input studentresponsescore</from><to>Database lookup</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup</from><to>Get System Info</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input studentsresponseparameters</from><to>Database lookup studentstestsections</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get System Info studentsresponseparameters</from><to>Get studentsresponseparameters Id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>Table input studentsresponseparameters</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get studentsresponseparameters Id</from><to>Table output studentsresponseparameters</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup studentstestsections</from><to>Database lookup studentstests</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup studentstests</from><to>Get System Info studentsresponseparameters</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>Table input studentstestsectionstasksfoils</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get System Info studentstestsectionstasksfoils</from><to>Get studentstestsectionstasksfoils Id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get studentstestsectionstasksfoils Id</from><to>Table output studentstestsectionstasksfoils</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>Table input exitwithoutsavetest</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input exitwithoutsavetest</from><to>Database lookup exitwithoutsavetest</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup exitwithoutsavetest</from><to>Get System Info exitwithoutsavetest</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input studentstestsectionstasksfoils</from><to>Database lookup studentstestsectionstasksfoils</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup studentstestsectionstasksfoils</from><to>Get System Info studentstestsectionstasksfoils</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get System Info exitwithoutsavetest</from><to>Get exitwithoutsavetest Id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get exitwithoutsavetest Id</from><to>Table output exitwithoutsavetest</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get System Info studentstestsectionstasks</from><to>Get studentstestsectionstasks Id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get studentstestsectionstasks Id</from><to>Table output studentstestsectionstasks</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup studentsresponses</from><to>Get System Info studentsresponses</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get System Info studentsresponses</from><to>Get studentsresponses Id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get studentsresponses Id</from><to>Table output studentsresponses</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>Table input studentstestsectionstasks</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input studentstestsectionstasks</from><to>Database lookup studentstestsectionstasks</to><enabled>Y</enabled> </hop>
+  <hop> <from>Database lookup studentstestsectionstasks</from><to>Get System Info studentstestsectionstasks</to><enabled>Y</enabled> </hop>
+  <hop> <from>get studentstests id</from><to>Table input studentsresponses</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table input studentsresponses</from><to>Database lookup studentsresponses</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>get studentstests id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table output studentresponsescore</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table output studentsresponseparameters</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table output studentstestsectionstasksfoils</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table output studentsresponses</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table output studentstestsectionstasks</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Table output exitwithoutsavetest</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Variables</from><to>Write to log starting</to><enabled>Y</enabled> </hop>
+  </order>
+  <step>
+    <name>Database lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>studentstestsections</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>Y</eat_row_on_failure>
+      <key>
+        <name>src_studentstestsectionsid</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>archid</name>
+        <rename>studentstestsections_archid</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>416</xloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Database lookup exitwithoutsavetest</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>studentstestsections</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>Y</eat_row_on_failure>
+      <key>
+        <name>exitwithoutsavetest_studenttestsectionid</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>archid</name>
+        <rename>studentstestsections_archid</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>416</xloc>
+      <yloc>752</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Database lookup studentsresponses</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>studentstestsections</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>Y</eat_row_on_failure>
+      <key>
+        <name>sr_studentstestsectionsid</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>archid</name>
+        <rename>studentstestsections_archid</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>576</xloc>
+      <yloc>576</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Database lookup studentstests</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>studentstests</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>Y</eat_row_on_failure>
+      <key>
+        <name>srp_studentstestsid</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>archid</name>
+        <rename>studentstests_archid</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>448</xloc>
+      <yloc>416</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Database lookup studentstestsections</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>studentstestsections</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>Y</eat_row_on_failure>
+      <key>
+        <name>srp_studentstestsectionsid</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>archid</name>
+        <rename>studentstestsections_archid</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>336</xloc>
+      <yloc>368</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Database lookup studentstestsectionstasks</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>studentstestsections</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>Y</eat_row_on_failure>
+      <key>
+        <name>stst_studentstestsectionsid</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>archid</name>
+        <rename>studentstestsections_archid</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>400</xloc>
+      <yloc>672</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Database lookup studentstestsectionstasksfoils</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>studentstestsections</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>Y</eat_row_on_failure>
+      <key>
+        <name>ststf_studentstestsectionsid</name>
+        <field>id</field>
+        <condition>&#x3d;</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>archid</name>
+        <rename>studentstestsections_archid</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>432</xloc>
+      <yloc>480</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Dummy &#x28;do nothing&#x29;</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1232</xloc>
+      <yloc>560</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get System Info</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>syscreateddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      <field>
+        <name>sysmodifieddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>656</xloc>
+      <yloc>320</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get System Info exitwithoutsavetest</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>syscreateddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      <field>
+        <name>sysmodifieddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>576</xloc>
+      <yloc>768</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get System Info studentsresponseparameters</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>syscreateddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      <field>
+        <name>sysmodifieddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>640</xloc>
+      <yloc>400</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get System Info studentsresponses</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>syscreateddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      <field>
+        <name>sysmodifieddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>736</xloc>
+      <yloc>592</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get System Info studentstestsectionstasks</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>syscreateddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      <field>
+        <name>sysmodifieddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>544</xloc>
+      <yloc>688</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get System Info studentstestsectionstasksfoils</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>syscreateddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      <field>
+        <name>sysmodifieddate</name>
+        <type>system date &#x28;fixed&#x29;</type>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>608</xloc>
+      <yloc>512</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get Variables</name>
+    <type>GetVariable</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>schoolyear</name>
+        <variable>&#x24;&#x7b;schoolyear&#x7d;</variable>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>64</xloc>
+      <yloc>544</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get exitwithoutsavetest Id</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>exitwithoutsavetest_archid</valuename>
+      <use_database>Y</use_database>
+      <connection>EP_ETL_Target</connection>
+      <schema/>
+      <seqname>exitwithoutsavetest_archid</seqname>
+      <use_counter>N</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>752</xloc>
+      <yloc>768</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get studentresponsescore Id</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>studentresponsescore_archid</valuename>
+      <use_database>Y</use_database>
+      <connection>EP_ETL_Target</connection>
+      <schema/>
+      <seqname>studentresponsescore_archid</seqname>
+      <use_counter>N</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>848</xloc>
+      <yloc>320</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get studentsresponseparameters Id</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>studentsresponseparameters_archid</valuename>
+      <use_database>Y</use_database>
+      <connection>EP_ETL_Target</connection>
+      <schema/>
+      <seqname>studentsresponseparameters_archid</seqname>
+      <use_counter>N</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>832</xloc>
+      <yloc>416</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get studentsresponses Id</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>studentsresponses_archid</valuename>
+      <use_database>Y</use_database>
+      <connection>EP_ETL_Target</connection>
+      <schema/>
+      <seqname>studentsresponses_archid</seqname>
+      <use_counter>N</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>880</xloc>
+      <yloc>560</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get studentstestsectionstasks Id</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>studentstestsectionstasks_archid</valuename>
+      <use_database>Y</use_database>
+      <connection>EP_ETL_Target</connection>
+      <schema/>
+      <seqname>studentstestsectionstasks_archid</seqname>
+      <use_counter>N</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>736</xloc>
+      <yloc>672</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get studentstestsectionstasksfoils Id</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>studentstestsectionstasksfoils_archid</valuename>
+      <use_database>Y</use_database>
+      <connection>EP_ETL_Target</connection>
+      <schema/>
+      <seqname>studentstestsectionstasksfoils_archid</seqname>
+      <use_counter>N</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>800</xloc>
+      <yloc>480</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input exitwithoutsavetest</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Source</connection>
+    <sql>Select &#xd;&#xa;studenttestsectionid as exitwithoutsavetest_studenttestsectionid,&#xd;&#xa;createddate as exitwithoutsavetest_createddate &#xd;&#xa;from exitwithoutsavetest &#xd;&#xa;  where studenttestsectionid in &#x28;&#xd;&#xa;SELECT &#xd;&#xa;  id &#xd;&#xa;FROM &#xd;&#xa;  studentstestsections where studentstestid in &#x28;SELECT &#xd;&#xa;  st.id&#xd;&#xa;FROM &#xd;&#xa;  public.studentstests st &#xd;&#xa;  inner join testsession ts on  st.testsessionid &#x3d; ts.id &#xd;&#xa; where ts.schoolyear in &#x28;&#x3f;&#x29;&#x29;&#xd;&#xa;&#x29;</sql>
+    <limit>0</limit>
+    <lookup>Get Variables</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>240</xloc>
+      <yloc>768</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input studentresponsescore</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Source</connection>
+    <sql>SELECT &#xd;&#xa;  studentstestsectionsid as src_studentstestsectionsid, &#xd;&#xa;  taskvariantid as src_taskvariantid, &#xd;&#xa;  score as src_score, &#xd;&#xa;  dimension as src_dimension, &#xd;&#xa;  diagnosticstatement as src_diagnosticstatement, &#xd;&#xa;  raterid as src_raterid, &#xd;&#xa;  ratername as src_ratername, &#xd;&#xa;  raterorder as src_raterorder, &#xd;&#xa;  raterexposure as src_raterexposure, &#xd;&#xa;  createdate as src_createdate, &#xd;&#xa;  modifieddate as src_modifieddate, &#xd;&#xa;  activeflag as src_activeflag&#xd;&#xa;FROM &#xd;&#xa;  public.studentresponsescore &#xd;&#xa;where studentstestsectionsid in &#x28;&#xd;&#xa;SELECT &#xd;&#xa;  id &#xd;&#xa;FROM &#xd;&#xa;  studentstestsections where studentstestid in &#x28;SELECT &#xd;&#xa;  st.id&#xd;&#xa;FROM &#xd;&#xa;  public.studentstests st &#xd;&#xa;  inner join testsession ts on  st.testsessionid &#x3d; ts.id &#xd;&#xa; where ts.schoolyear in &#x28;&#x3f;&#x29;&#x29;&#xd;&#xa;&#xd;&#xa;&#x29;&#x3b;</sql>
+    <limit>0</limit>
+    <lookup>Get Variables</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>192</xloc>
+      <yloc>320</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input studentsresponseparameters</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Source</connection>
+    <sql>SELECT &#xd;&#xa;  id as srp_id, &#xd;&#xa;  studentstestsid as srp_studentstestsid, &#xd;&#xa;  studentstestsectionsid as srp_studentstestsectionsid, &#xd;&#xa;  testid as srp_testid, &#xd;&#xa;  taskvariantid as srp_taskvariantid, &#xd;&#xa;  score as srp_score, &#xd;&#xa;  avalue as srp_avalue, &#xd;&#xa;  bvalue as srp_bvalue, &#xd;&#xa;  createddate as srp_createddate, &#xd;&#xa;  modifieddate as srp_modifieddate, &#xd;&#xa;  createduser as srp_createduser, &#xd;&#xa;  modifieduser as srp_modifieduser, &#xd;&#xa;  activeflag as srp_activeflag, &#xd;&#xa;  b2value as srp_b2value, &#xd;&#xa;  formulacode as srp_formulacode&#xd;&#xa;FROM &#xd;&#xa;  studentsresponseparameters where &#xd;&#xa;studentstestsectionsid in &#x28;&#xd;&#xa;SELECT &#xd;&#xa;  id &#xd;&#xa;FROM &#xd;&#xa;  studentstestsections where studentstestid in &#x28;SELECT &#xd;&#xa;  st.id&#xd;&#xa;FROM &#xd;&#xa;  public.studentstests st &#xd;&#xa;  inner join testsession ts on  st.testsessionid &#x3d; ts.id &#xd;&#xa; where ts.schoolyear in &#x28;&#x3f;&#x29;&#x29;&#xd;&#xa;&#x29;</sql>
+    <limit>0</limit>
+    <lookup>Get Variables</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>224</xloc>
+      <yloc>432</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input studentsresponses</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Source</connection>
+    <sql>SELECT &#xd;&#xa;  studentid as sr_studentid, &#xd;&#xa;  testid as sr_testid, &#xd;&#xa;  testsectionid as sr_testsectionid, &#xd;&#xa;  studentstestsid as sr_studentstestsid, &#xd;&#xa;  studentstestsectionsid as sr_studentstestsectionsid, &#xd;&#xa;  taskvariantid as sr_taskvariantid, &#xd;&#xa;  foilid as sr_foilid, &#xd;&#xa;  response as sr_response, &#xd;&#xa;  score as sr_score, &#xd;&#xa;  questarrequestid as sr_questarrequestid, &#xd;&#xa;  questarresponsetext as sr_questarresponsetext, &#xd;&#xa;  createduser as sr_createduser, &#xd;&#xa;  modifieduser as sr_modifieduser, &#xd;&#xa;  createddate as sr_createddate, &#xd;&#xa;  modifieddate as sr_modifieddate, &#xd;&#xa;  activeflag as sr_activeflag&#xd;&#xa;FROM &#xd;&#xa;  studentsresponses &#xd;&#xa;  where  studentstestsectionsid in&#x28;&#x3f;&#x29;</sql>
+    <limit>0</limit>
+    <lookup>get studentstests id</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>416</xloc>
+      <yloc>592</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input studentstestsectionstasks</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Source</connection>
+    <sql>SELECT &#xd;&#xa;  taskid as stst_taskid, &#xd;&#xa;  sortorder as stst_sortorder, &#xd;&#xa;  studentstestsectionsid as stst_studentstestsectionsid, &#xd;&#xa;  createdate as stst_createdate, &#xd;&#xa;  modifieddate as stst_modifieddate, &#xd;&#xa;  createusername as stst_createusername, &#xd;&#xa;  modifiedusername as stst_modifiedusername&#xd;&#xa;FROM &#xd;&#xa;  studentstestsectionstasks &#xd;&#xa;  where studentstestsectionsid in &#x28;&#xd;&#xa;SELECT &#xd;&#xa;  id &#xd;&#xa;FROM &#xd;&#xa;  studentstestsections where studentstestid in &#x28;SELECT &#xd;&#xa;  st.id&#xd;&#xa;FROM &#xd;&#xa;  public.studentstests st &#xd;&#xa;  inner join testsession ts on  st.testsessionid &#x3d; ts.id &#xd;&#xa; where ts.schoolyear in &#x28;&#x3f;&#x29;&#x29;&#xd;&#xa;&#x29;</sql>
+    <limit>0</limit>
+    <lookup>Get Variables</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>240</xloc>
+      <yloc>688</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table input studentstestsectionstasksfoils</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Source</connection>
+    <sql>SELECT &#xd;&#xa;  foilid as ststf_foilid,&#xd;&#xa;  taskid as ststf_taskid, &#xd;&#xa;  sortorder as ststf_sortorder, &#xd;&#xa;  studentstestsectionsid as ststf_studentstestsectionsid, &#xd;&#xa;  createdate as ststf_createdate, &#xd;&#xa;  modifieddate as ststf_modifieddate, &#xd;&#xa;  createusername as ststf_createusername, &#xd;&#xa;  modifiedusername as ststf_modifiedusername&#xd;&#xa;FROM &#xd;&#xa;  studentstestsectionstasksfoils&#xd;&#xa;  where studentstestsectionsid in &#x28;&#xd;&#xa;SELECT &#xd;&#xa;  id &#xd;&#xa;FROM &#xd;&#xa;  studentstestsections where studentstestid in &#x28;SELECT &#xd;&#xa;  st.id&#xd;&#xa;FROM &#xd;&#xa;  public.studentstests st &#xd;&#xa;  inner join testsession ts on  st.testsessionid &#x3d; ts.id &#xd;&#xa; where ts.schoolyear in &#x28;&#x3f;&#x29;&#x29;&#xd;&#xa;&#x29;&#x3b;</sql>
+    <limit>0</limit>
+    <lookup>Get Variables</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>256</xloc>
+      <yloc>512</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table output exitwithoutsavetest</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <schema/>
+    <table>exitwithoutsavetest</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>arch_createddtae</column_name>
+          <stream_name>syscreateddate</stream_name>
+        </field>
+        <field>
+          <column_name>arch_modifieddtae</column_name>
+          <stream_name>sysmodifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>studenttestsectionid</column_name>
+          <stream_name>exitwithoutsavetest_studenttestsectionid</stream_name>
+        </field>
+        <field>
+          <column_name>createddate</column_name>
+          <stream_name>exitwithoutsavetest_createddate</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsections_archid</column_name>
+          <stream_name>studentstestsections_archid</stream_name>
+        </field>
+        <field>
+          <column_name>archid</column_name>
+          <stream_name>exitwithoutsavetest_archid</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>928</xloc>
+      <yloc>768</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table output studentresponsescore</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <schema/>
+    <table>studentresponsescore</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>studentstestsectionsid</column_name>
+          <stream_name>src_studentstestsectionsid</stream_name>
+        </field>
+        <field>
+          <column_name>taskvariantid</column_name>
+          <stream_name>src_taskvariantid</stream_name>
+        </field>
+        <field>
+          <column_name>score</column_name>
+          <stream_name>src_score</stream_name>
+        </field>
+        <field>
+          <column_name>dimension</column_name>
+          <stream_name>src_dimension</stream_name>
+        </field>
+        <field>
+          <column_name>diagnosticstatement</column_name>
+          <stream_name>src_diagnosticstatement</stream_name>
+        </field>
+        <field>
+          <column_name>raterid</column_name>
+          <stream_name>src_raterid</stream_name>
+        </field>
+        <field>
+          <column_name>ratername</column_name>
+          <stream_name>src_ratername</stream_name>
+        </field>
+        <field>
+          <column_name>raterorder</column_name>
+          <stream_name>src_raterorder</stream_name>
+        </field>
+        <field>
+          <column_name>raterexposure</column_name>
+          <stream_name>src_raterexposure</stream_name>
+        </field>
+        <field>
+          <column_name>createdate</column_name>
+          <stream_name>src_createdate</stream_name>
+        </field>
+        <field>
+          <column_name>modifieddate</column_name>
+          <stream_name>src_modifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>activeflag</column_name>
+          <stream_name>src_activeflag</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsections_archid</column_name>
+          <stream_name>studentstestsections_archid</stream_name>
+        </field>
+        <field>
+          <column_name>archid</column_name>
+          <stream_name>studentresponsescore_archid</stream_name>
+        </field>
+        <field>
+          <column_name>arch_createddate</column_name>
+          <stream_name>syscreateddate</stream_name>
+        </field>
+        <field>
+          <column_name>arch_modifieddate</column_name>
+          <stream_name>sysmodifieddate</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1056</xloc>
+      <yloc>336</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table output studentsresponseparameters</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <schema/>
+    <table>studentsresponseparameters</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>archid</column_name>
+          <stream_name>studentsresponseparameters_archid</stream_name>
+        </field>
+        <field>
+          <column_name>id</column_name>
+          <stream_name>srp_id</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsid</column_name>
+          <stream_name>srp_studentstestsid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionsid</column_name>
+          <stream_name>srp_studentstestsectionsid</stream_name>
+        </field>
+        <field>
+          <column_name>testid</column_name>
+          <stream_name>srp_testid</stream_name>
+        </field>
+        <field>
+          <column_name>taskvariantid</column_name>
+          <stream_name>srp_taskvariantid</stream_name>
+        </field>
+        <field>
+          <column_name>score</column_name>
+          <stream_name>srp_score</stream_name>
+        </field>
+        <field>
+          <column_name>avalue</column_name>
+          <stream_name>srp_avalue</stream_name>
+        </field>
+        <field>
+          <column_name>bvalue</column_name>
+          <stream_name>srp_bvalue</stream_name>
+        </field>
+        <field>
+          <column_name>createddate</column_name>
+          <stream_name>srp_createddate</stream_name>
+        </field>
+        <field>
+          <column_name>modifieddate</column_name>
+          <stream_name>srp_modifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>createduser</column_name>
+          <stream_name>srp_createduser</stream_name>
+        </field>
+        <field>
+          <column_name>modifieduser</column_name>
+          <stream_name>srp_modifieduser</stream_name>
+        </field>
+        <field>
+          <column_name>activeflag</column_name>
+          <stream_name>srp_activeflag</stream_name>
+        </field>
+        <field>
+          <column_name>b2value</column_name>
+          <stream_name>srp_b2value</stream_name>
+        </field>
+        <field>
+          <column_name>formulacode</column_name>
+          <stream_name>srp_formulacode</stream_name>
+        </field>
+        <field>
+          <column_name>arch_createddate</column_name>
+          <stream_name>syscreateddate</stream_name>
+        </field>
+        <field>
+          <column_name>arch_modifieddate</column_name>
+          <stream_name>sysmodifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionsid_archid</column_name>
+          <stream_name>studentstestsections_archid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstests_archid</column_name>
+          <stream_name>studentstests_archid</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1056</xloc>
+      <yloc>416</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table output studentsresponses</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <schema/>
+    <table>studentsresponses</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>studentid</column_name>
+          <stream_name>sr_studentid</stream_name>
+        </field>
+        <field>
+          <column_name>testid</column_name>
+          <stream_name>sr_testid</stream_name>
+        </field>
+        <field>
+          <column_name>arch_createddate</column_name>
+          <stream_name>syscreateddate</stream_name>
+        </field>
+        <field>
+          <column_name>arch_modifieddate</column_name>
+          <stream_name>sysmodifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>studentsresponses_createddate</column_name>
+          <stream_name>sr_createddate</stream_name>
+        </field>
+        <field>
+          <column_name>studentsresponses_modifieddate</column_name>
+          <stream_name>sr_modifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>studentsresponses_activeflag</column_name>
+          <stream_name>sr_activeflag</stream_name>
+        </field>
+        <field>
+          <column_name>studentsresponses_createduser</column_name>
+          <stream_name>sr_createduser</stream_name>
+        </field>
+        <field>
+          <column_name>studentsresponses_modifieduser</column_name>
+          <stream_name>sr_modifieduser</stream_name>
+        </field>
+        <field>
+          <column_name>testsectionid</column_name>
+          <stream_name>sr_testsectionid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsections_archid</column_name>
+          <stream_name>studentstestsections_archid</stream_name>
+        </field>
+        <field>
+          <column_name>archid</column_name>
+          <stream_name>studentsresponses_archid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsid</column_name>
+          <stream_name>sr_studentstestsid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionsid</column_name>
+          <stream_name>sr_studentstestsectionsid</stream_name>
+        </field>
+        <field>
+          <column_name>taskvariantid</column_name>
+          <stream_name>sr_taskvariantid</stream_name>
+        </field>
+        <field>
+          <column_name>foilid</column_name>
+          <stream_name>sr_foilid</stream_name>
+        </field>
+        <field>
+          <column_name>response</column_name>
+          <stream_name>sr_response</stream_name>
+        </field>
+        <field>
+          <column_name>score</column_name>
+          <stream_name>sr_score</stream_name>
+        </field>
+        <field>
+          <column_name>questarrequestid</column_name>
+          <stream_name>sr_questarrequestid</stream_name>
+        </field>
+        <field>
+          <column_name>questarresponsetext</column_name>
+          <stream_name>sr_questarresponsetext</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>1008</xloc>
+      <yloc>576</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table output studentstestsectionstasks</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <schema/>
+    <table>studentstestsectionstasks</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>taskid</column_name>
+          <stream_name>stst_taskid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionsid</column_name>
+          <stream_name>stst_studentstestsectionsid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasks_createdate</column_name>
+          <stream_name>stst_createdate</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasks_modifieddate</column_name>
+          <stream_name>stst_modifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsections_archid</column_name>
+          <stream_name>studentstestsections_archid</stream_name>
+        </field>
+        <field>
+          <column_name>archid</column_name>
+          <stream_name>studentstestsectionstasks_archid</stream_name>
+        </field>
+        <field>
+          <column_name>sortorder</column_name>
+          <stream_name>stst_sortorder</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasks_createusername</column_name>
+          <stream_name>stst_createusername</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasks_modifiedusername</column_name>
+          <stream_name>stst_modifiedusername</stream_name>
+        </field>
+        <field>
+          <column_name>arch_createddate</column_name>
+          <stream_name>syscreateddate</stream_name>
+        </field>
+        <field>
+          <column_name>arch_modifieddate</column_name>
+          <stream_name>sysmodifieddate</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>928</xloc>
+      <yloc>688</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table output studentstestsectionstasksfoils</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Target</connection>
+    <schema/>
+    <table>studentstestsectionstasksfoils</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>foilid</column_name>
+          <stream_name>ststf_foilid</stream_name>
+        </field>
+        <field>
+          <column_name>taskid</column_name>
+          <stream_name>ststf_taskid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsections_archid</column_name>
+          <stream_name>studentstestsections_archid</stream_name>
+        </field>
+        <field>
+          <column_name>archid</column_name>
+          <stream_name>studentstestsectionstasksfoils_archid</stream_name>
+        </field>
+        <field>
+          <column_name>sortorder</column_name>
+          <stream_name>ststf_sortorder</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionsid</column_name>
+          <stream_name>ststf_studentstestsectionsid</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasksfoils_createdate</column_name>
+          <stream_name>ststf_createdate</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasksfoils_modifieddate</column_name>
+          <stream_name>ststf_modifieddate</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasksfoils_createusername</column_name>
+          <stream_name>ststf_createusername</stream_name>
+        </field>
+        <field>
+          <column_name>studentstestsectionstasksfoils_modifiedusername</column_name>
+          <stream_name>ststf_modifiedusername</stream_name>
+        </field>
+        <field>
+          <column_name>arch_createddate</column_name>
+          <stream_name>syscreateddate</stream_name>
+        </field>
+        <field>
+          <column_name>arch_modifieddate</column_name>
+          <stream_name>sysmodifieddate</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>992</xloc>
+      <yloc>496</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Write to log starting</name>
+    <type>WriteToLog</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <loglevel>log_level_basic</loglevel>
+      <displayHeader>Y</displayHeader>
+      <limitRows>N</limitRows>
+      <limitRowsNumber>0</limitRowsNumber>
+      <logmessage>Transformation for studenttestsections&#xd;&#xa;tables started for following school year&#x3a;</logmessage>
+    <fields>
+      <field>
+        <name>schoolyear</name>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>64</xloc>
+      <yloc>640</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>get studentstests id</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>EP_ETL_Source</connection>
+    <sql>SELECT &#xd;&#xa;  id &#xd;&#xa;FROM &#xd;&#xa;  studentstestsections where studentstestid in &#x28;SELECT &#xd;&#xa;  st.id&#xd;&#xa;FROM &#xd;&#xa;  public.studentstests st &#xd;&#xa;  inner join testsession ts on  st.testsessionid &#x3d; ts.id &#xd;&#xa; where ts.schoolyear in &#x28;&#x3f;&#x29;&#x29;</sql>
+    <limit>0</limit>
+    <lookup>Get Variables</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>256</xloc>
+      <yloc>592</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+
+</transformation>

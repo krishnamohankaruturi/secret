@@ -1,0 +1,2 @@
+-- 580.sql
+-- DE13975:FCS - Science - Final band is not getting calculated

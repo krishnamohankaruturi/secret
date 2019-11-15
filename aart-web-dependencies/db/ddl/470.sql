@@ -1,0 +1,1 @@
+-- US16701: KIDS 2016 - STCO record changes DDL

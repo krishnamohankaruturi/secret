@@ -1,0 +1,118 @@
+<form class="form report-filter-form" novalidate="true">
+	<%var filterIndex = 0;%>
+	<% if (filtersNeeded.summaryLevel) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_summaryLevelSelect">Summary Level:</label>
+			<select id="<%=contentElementId%>_summaryLevelSelect" title="Summary Level" name="summaryLevel" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="summaryLevel">
+				<!-- <option value="0">Select</option> -->
+				<% if (userOrgLevel <= 20) { %><option value="state">State</option> <% } %>
+				<% if (userOrgLevel <= 50) { %><option value="district">District</option> <% } %>
+				<% if (userOrgLevel <= 70) { %><option value="school">School</option> <% } %>
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.reportYear) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_reportYearSelect">Report Year:</label>
+			<select id="<%=contentElementId%>_reportYearSelect" title="Report Year" name="reportYear" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="reportYear">
+				<!-- <option value="0">Select</option> -->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.state) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_stateSelect">State:</label>
+			<select id="<%=contentElementId%>_stateSelect" name="stateId" title="State" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="state">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.district) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_districtSelect">District:</label>
+			<select id="<%=contentElementId%>_districtSelect" title="District" name="districtId" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="district">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.school) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_schoolSelect">School:</label>
+			<select id="<%=contentElementId%>_schoolSelect" title="School" name="schoolId" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="school">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.subject) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_subjectSelect">Subject:</label>
+			<select id="<%=contentElementId%>_subjectSelect" title="Subject" name="subjectId" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="subject">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.grade) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_gradeSelect">Grade:</label>
+			<select id="<%=contentElementId%>_gradeSelect" title="Grade" name="gradeId" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="grade">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.roster) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_rosterSelect">Roster:</label>
+			<select id="<%=contentElementId%>_rosterSelect" name="rosterId" title="Roster" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="roster">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.teacherRoster) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_teacherRosterSelect">Roster:</label>
+			<select id="<%=contentElementId%>_teacherRosterSelect" title="Roster" name="rosterId" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="teacherRoster">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.teacher) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_teacherSelect">Teacher:</label>
+			<select id="<%=contentElementId%>_teacherSelect" name="dlmTeacherId" title="Teacher" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="teacher">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+	<% if (filtersNeeded.windowCycle) { %>
+		<div class="form-fields">
+			<label class="field-label" for="<%=contentElementId%>_windowCycle">Window:</label>
+			<select id="<%=contentElementId%>_windowCycleSelect" title="windowCycle" name="windowCycle" class="select-plugin" data-filter-index="<%= filterIndex++ %>" data-data-type="windowCycle">
+				<!--<option value="0">Select</option>-->
+			</select>
+		</div>
+	<% } %>
+	
+</form>
+
+<div id="<%=contentElementId%>_reportContentDiv" class="report-content"></div>
+<% if (filtersNeeded.subject || filtersNeeded.grade || filtersNeeded.roster || filtersNeeded.teacherRoster) { %>
+<div class="bottom">
+	<div class="pagination">
+	    <a href="#" class="first" data-action="first">&laquo;</a>
+	    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+	    <input type="text" readonly="readonly" />
+	    <a href="#" class="next" data-action="next">&rsaquo;</a>
+	    <a href="#" class="last" data-action="last">&raquo;</a>
+	</div>
+</div>
+<% } %>

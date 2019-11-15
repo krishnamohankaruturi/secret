@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="/css/new-theme/graph.css" />
+	<style>
+		body { margin: 5px; }
+	</style>
+</head>
+
+<body>
+	<!-- start graph calc -->
+
+<div id="gCalc">
+
+    <!--<div class="tool-hdr">
+		<a href="#" class="ind-tool-close tool-close">X</a>
+	</div>-->
+
+    <div id="graphCalc">
+        <canvas id="main_graph" width="400" height="400"></canvas>
+        <div id="con" class="overlay" style="display: none; ">
+            <div id="logt" class="monospace" style="max-height: 315px; "></div>
+        </div>
+        <div class="overlay-gc" id="funcs">
+            <div id="iptxt">
+                <label class="pd-lft">Xmin:</label>
+                <input id="xmin" size="4">
+                <label class="pd-lft">Xmax:</label>
+                <input id="xmax" size="4"><br/>
+                <label class="pd-lft">Ymin:</label>
+                <input id="ymin" size="4">
+                <label class="pd-lft">Ymax:</label>
+                <input id="ymax" size="4">
+            </div>
+            <ul id="graphs"></ul>
+            <!--<div class="buttons">
+                <input type="button" value="+" title="Add a new equation/graph">
+                <input type="button" value="reload" title="Reset Graph" style="display: none; ">
+            </div>-->
+        </div>
+    </div>
+
+    <div id="gcalculator">
+
+        <input type="text" id="display" class="calcDisplay"/>
+        <br />
+
+           
+            <a class="xfunction-button e-button back-plusminus-function-clear" href="#">e</a>
+            <a class="xfunction-button ln-button back-plusminus-function-clear" href="#">ln</a>
+            <a class="xfunction-button log-button back-plusminus-function-clear" href="#">log</a>
+            <a class="xfunction-button abs-button back-plusminus-function-clear" href="#">abs</a>
+            <a class="xfunction-button pi-button back-plusminus-function-clear" href="#">&pi;</a>
+      
+        <br />
+            
+               
+            <a class="xfunction-button sin-button back-plusminus-function-clear" href="#">sin</a>
+            <a class="xfunction-button cos-button back-plusminus-function-clear" href="#">cos</a>
+            <a class="xfunction-button tan-button back-plusminus-function-clear" href="#">tan</a>
+            <a class="xfunction-button cube-button back-plusminus-function-clear" href="#">x^3</a>
+            <a class="xfunction-button sqrt-button back-plusminus-function-clear" href="#">sqrt</a>
+        
+        <br />
+                  
+            <a class="xfunction-button y-button back-plusminus-function-clear" href="#">y</a>
+            <a class="xfunction-button x-button back-plusminus-function-clear" href="#">x</a>
+            <a class="xfunction-button square-button back-plusminus-function-clear" href="#">x^2</a><!-- &sup2; -->
+            <a class="xfunction-button exponent-button back-plusminus-function-clear" href="#">^</a>          
+            <a class="calc-back back-plusminus-function-clear" href="#">&lt;--</a>
+       
+        <br />
+                    
+      
+            <a class="num-button seven" href="#">7</a>
+            <a class="num-button eight" href="#">8</a>
+            <a class="num-button nine" href="#">9</a>
+            <a class="xfunction-button leftparenthetical-button back-plusminus-function-clear" href="#">(</a>
+            <a class="xfunction-button rightparenthetical-button back-plusminus-function-clear" href="#">)</a>
+              
+        <br />
+
+        <!--<div class="buttonrow">-->         
+            <a class="num-button four" href="#">4</a>
+            <a class="num-button five" href="#">5</a>
+            <a class="num-button six" href="#">6</a>
+            <a class="function-button multiply back-plusminus-function-clear" href="#">x</a>
+            <a class="function-button divide back-plusminus-function-clear" href="#">/</a>
+        <!--</div>-->
+        <br />
+              
+            <a class="num-button one" href="#">1</a>
+            <a class="num-button two" href="#">2</a>
+            <a class="num-button three" href="#">3</a>
+            <a class="function-button add back-plusminus-function-clear" href="#">+</a>
+            <a class="function-button subtract back-plusminus-function-clear" href="#">-</a>
+        
+        <br />
+
+               
+            <a class="num-button zero" href="#">0</a>
+            <a class="num-button dot" href="#">.</a>
+            <a class="plusminus" href="#">&plusmn;</a>
+            <a class="clear-button" href="#">c</a>  
+            <a class="equals-button" href="#">=</a>
+       
+        <br />          
+    </div>
+</div><!-- /gCalc -->
+
+    <!-- END graph calc -->
+
+	<script src="/js/external/jquery-1.7.2.js"></script>
+	<script src="/js/tools/graphingCalculator/mathquill_modified.js"></script>
+	<script src="/js/tools/graphingCalculator/math.js"></script>
+	<script src="/js/tools/graphingCalculator/ui.js"></script>
+	<script src="/js/tools/graphingCalculator/main.js"></script>
+	<script src="/js/tools/graphingCalculator/calculator.js"></script>
+
+</body>
+
+</html>

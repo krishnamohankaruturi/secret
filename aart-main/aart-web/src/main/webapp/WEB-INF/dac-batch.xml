@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+     http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+	
+	<bean name="dacPageReader" scope="step" class="edu.ku.cete.batch.dac.DailyAccessCodeReader" autowire-candidate="false">
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" /> 
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="pageSize" value="1000" />
+	</bean>
+
+	<bean id="dacReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="dacPageReader" />
+	</bean>
+
+	<bean name="dacProcessor" scope="step" class="edu.ku.cete.batch.dac.DailyAccessCodeProcessor">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<bean name="dacWriter" scope="step" class="edu.ku.cete.batch.dac.DailyAccessCodeWriter" autowire-candidate="false">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<bean name="dacStepListener" scope="step" class="edu.ku.cete.batch.dac.DailyAccessCodeStepListener">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<batch:job id="dacJob">
+		<batch:step id="partitionedDacBatchStep">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk reader="dacReader" writer="dacWriter"
+					processor="dacProcessor" commit-interval="1" skip-policy="skipPolicy" />
+				<batch:no-rollback-exception-classes>
+					<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				</batch:no-rollback-exception-classes>
+				<batch:transaction-attributes isolation="DEFAULT"
+					propagation="REQUIRES_NEW" timeout="60" />
+				<batch:listeners>
+					<batch:listener ref="dacStepListener" />
+				</batch:listeners>
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+		</batch:listeners>
+	</batch:job>
+</beans>

@@ -1,0 +1,1 @@
+delete from category where categorycode = 'EXIT_RECORD_TYPE';

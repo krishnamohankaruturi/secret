@@ -1,0 +1,52 @@
+div .reports .clear {
+	clear: both;
+}
+div .reports .reportContainer { 
+	display: table;
+	
+    width:100%;
+}
+
+div .reports .reportRow { 
+	display: table-row; 
+}
+
+div .reports .reportCell { 
+	display: table-cell;
+	padding: 5px;
+}
+
+div .reports .filterContainer { 
+	display: table;
+	border-spacing:10px;
+	border-collapse:seperate; 
+}
+
+div .reports .filterRow { 
+	display: table-row; 
+
+}
+
+div .reports .filterCell { 
+	display: table-cell;
+	padding: 5px;
+
+}
+
+div .reports select {
+	width: 200px;
+}
+
+div .reports .filterLabel { 
+	color: blue;
+}
+div .reports .filterError { 
+	color: red;
+}
+
+div .form .buttons {
+	float: left;
+}
+.inline_block {
+	display: inline-block;
+}

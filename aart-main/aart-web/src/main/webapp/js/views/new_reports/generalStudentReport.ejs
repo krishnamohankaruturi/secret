@@ -1,0 +1,29 @@
+<div class="container">
+	<div class="row">
+		<% if (data != null && data.length > 0) {
+			var recordsPerColumn = 15;
+			var numberOfColumns = data.length / recordsPerColumn;
+			for (var col = 0; col < numberOfColumns; col++) { %>
+				<div class="col-lg">
+					<% for (var x = (col * recordsPerColumn); x < ((col + 1) * recordsPerColumn) && x < data.length; x++) {
+						var record = data[x];
+						var text = record.legalLastName + ', ' + record.legalFirstName;
+						if (record.legalMiddleName){
+							text += ' ' + record.legalMiddleName.charAt(0) + '.';
+						}
+						text += ' (' + record.stateStudentIdentifier + ')'; %>
+						<div class="item">
+							<a href="getStudentReportFile.htm?id=<%= record.id%>&reportyear=<%=record.schoolYear%>">
+								<%= text %>
+							</a>
+						</div>
+					<% } %>
+				</div>
+			<% } %>
+		<%}else{ %>
+			<div style="margin:0px;">
+				Report Not Available		
+		    </div>
+		<%}%>
+	</div>
+</div>

@@ -1,0 +1,40 @@
+<div id="oldTestPage">
+	<div class="w">
+		<!--<div class="alt-header">-->
+			<!--<a class="alt-ui-logo" href="#"><img src="/images/kite-alt-logo.png" alt="KITE" /></a> /logo -->
+			<!--<br class="clear" />-->
+		<!--</div>--><!-- /intro header -->
+		
+		<section id="tde-content" class="alt-content">
+		
+		<br style="clear: both" />
+		</section>
+		
+		<div class="alt-footer footer">
+			<div class="alt-buttons">
+				<a id="replayButton" class="btn blue-btn" href="#"><%= messages.testPage.replay %></a>
+				<a id="pauseButton" class="btn green-btn pause" href="#"><%= messages.testPage.pause %></a>
+				<a id="endButton" class="btn red-btn" href="#"><%= messages.testPage.end %></a>
+			</div>
+			<div class="nr-buttons">
+				<div class="alt-float-buttons"><a class="btn blue-btn tde-controls-back tabable" href="#"><%= messages.testPage.back %><img src="/images/arrowBack-sm-icon.png" /></a></div>
+				<div class="alt-float-buttons cdiv" style="text-align:center; margin-top:10px;">
+					<% if(exitFlag) { %>
+						<div class="cdiv-inner tde-controls-save">
+							<% if(exitandsave) { %>
+								<a class="btn red-btn" href="#"><img src="/images/signout-icon.png"><%= messages.testPage.saveasdraft %></a>
+							<% } else {%>
+								<a class="" href="#"><img src="/images/buttons_exit_sign.png"></a>
+							<% } %>
+						</div>
+					<% } %>
+				</div>
+				<div class="alt-float-buttons"><a class="btn green-btn tde-controls-next tabable" href="#"><%= messages.testPage.next %><img src="/images/arrow-sm-icon.png" /></a></div>
+			</div>
+			<div id="actionAudio" class="jp-jplayer" style="display:none;"></div>
+		</div>
+		
+		<!--<div id="testAudio" class="jp-jplayer" style="display:none;"></div>
+		<div id="foilAudio" class="jp-jplayer" style="display:none;"></div>-->
+	</div>
+</div>

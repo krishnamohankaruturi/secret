@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.AssessmentProgramDao">
+    
+    <sql id="Base_Column_List">
+    	ap.id, ap.programname, ap.abbreviatedname, ap.beginreportyear
+    </sql>
+    
+    <select id="getAll" resultType="AssessmentProgram">
+    	SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap
+    </select>
+    
+    <!-- Added during US16351-Get All assessment programs based on user Id -->
+    <select id="getAllAssessmentProgramByUserId" resultType="AssessmentProgram">
+    	SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap Where id in( select assessmentprogramid from userassessmentprogram where aartuserid=#{userId} and activeflag=true)
+        ORDER BY ap.programname
+    </select>
+    
+    <select id="findByAssessmentProgramId" resultType="AssessmentProgram" parameterType="long">
+        SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap
+        WHERE id = #{assessmentProgramId}
+    </select>
+    
+    <select id="getAllAssessmentProgramByStudentId" resultType="AssessmentProgram">
+    	SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap Where id in( select assessmentprogramid from studentassessmentprogram where studentid=#{studentId}  and activeflag=true)
+    </select>
+   
+    <select id="findByProgramName" resultType="AssessmentProgram">
+        SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap
+        WHERE programname = #{programName}
+    </select>
+    
+     <select id="findByAbbreviatedName" resultType="AssessmentProgram">
+        SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap
+        WHERE TRIM(upper(abbreviatedname)) = upper(#{abbreviatedName})
+        AND activeflag is true
+    </select>
+    
+   <select id="selectAllAssessmentProgramParticipation" resultType="edu.ku.cete.web.AssessmentProgramParticipationDTO">    		
+		SELECT 
+			assessment_program_name AS assessmentProgramName, test_collection_name AS testCollectionName, test_name AS testName,
+			state AS state, district AS district, school AS school,	day AS day, status AS status, total AS total
+		FROM assessment_program_participation
+    </select>
+    
+       <select id="selectAssessmentProgramsForAutoRegistration" resultType="AssessmentProgram">    		
+    	SELECT distinct
+        	<include refid="Base_Column_List"/>
+		FROM assessmentprogram ap 
+        JOIN testingprogram tp ON tp.assessmentprogramid=ap.id 
+        JOIN assessment asmt ON asmt.testingprogramid = tp.id 
+        where ap.activeflag = true and tp.activeflag = true 
+        and asmt.activeflag = true and asmt.autoenrollmentflag=true 
+        order by ap.programname    
+    </select>
+    
+    <select id="selectAssessmentProgramsForBatchReporting" resultType="AssessmentProgram" parameterType="long">    		
+    	select * from (
+			 select distinct <include refid="Base_Column_List"/>
+			 from assessmentprogram ap
+			 inner join orgassessmentprogram orgap on orgap.assessmentprogramid = ap.id and orgap.activeflag is true
+			 where orgap.organizationid = ANY(
+				select id from (select id, contractingorganization from organization_parent(#{userOrganizationId})) orgs where contractingorganization=true)
+			 union
+			 select distinct <include refid="Base_Column_List"/>
+			 from assessmentprogram ap
+			 inner join orgassessmentprogram orgap on orgap.assessmentprogramid = ap.id and orgap.activeflag is true
+			 inner join organization org on orgap.organizationid = org.id
+			 where org.id = #{userOrganizationId} and org.contractingorganization = true
+	         ) aps
+	      order by aps.programname   
+    </select>
+    
+    <select id="getAllActive" resultType="AssessmentProgram">
+    	SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap where activeflag = true
+        order by ap.programname
+    </select>
+    
+    <!--
+    	In case any changes to this query please modify selectAllTestingPrograms of TestingProgramDAO, since this query is also
+    	used there. 
+     -->
+    <select id="findByOrganizationId" resultType="AssessmentProgram" parameterType="long">
+		select * from (
+			 select distinct ap.id, ap.programname, ap.abbreviatedname
+			 from assessmentprogram ap
+			 inner join orgassessmentprogram orgap on orgap.assessmentprogramid = ap.id and orgap.activeflag is true
+			 where orgap.organizationid = ANY(
+				select id from (select id, contractingorganization from organization_parent(#{userOrganizationId})) orgs where contractingorganization=true)
+			 union
+			 select distinct ap.id, ap.programname, ap.abbreviatedname
+			 from assessmentprogram ap
+			 inner join orgassessmentprogram orgap on orgap.assessmentprogramid = ap.id and orgap.activeflag is true
+			 inner join organization org on orgap.organizationid = org.id
+			 where org.id = #{userOrganizationId} and org.contractingorganization = true
+	         ) aps order by programname    
+     </select>
+     <!-- Added during US16425 getAssessmentProgramname -->
+      <select id="getAssessmentProgramName" resultType="String">
+		select programname from (
+			 select distinct ap.id, ap.programname, ap.abbreviatedname
+			 from assessmentprogram ap
+			 inner join orgassessmentprogram orgap on orgap.assessmentprogramid = ap.id and orgap.activeflag is true
+			 where orgap.organizationid = ANY(
+				select id from (select id, contractingorganization from organization_parent(#{userOrganizationId})) orgs where contractingorganization=true)
+			 union
+			 select distinct ap.id, ap.programname, ap.abbreviatedname
+			 from assessmentprogram ap
+			 inner join orgassessmentprogram orgap on orgap.assessmentprogramid = ap.id and orgap.activeflag is true
+			 inner join organization org on orgap.organizationid = org.id
+			 where org.id = #{userOrganizationId} and org.contractingorganization = true
+	         ) aps order by programname    
+     </select>
+     
+     
+     
+     <select id="findByStudentId" resultType="AssessmentProgram">
+     	select <include refid="Base_Column_List"/>
+     	from assessmentprogram ap
+     	where ap.id = 
+     		getstudentassessmentprogram(
+     			#{studentId,jdbcType=BIGINT}, 
+				#{currentSchoolYear, jdbcType=INTEGER}
+				)
+     </select>
+     
+     <select id="findByTestTypeCode" resultType="AssessmentProgram" parameterType="String">
+       select distinct ap.*
+       from testtype tt
+       inner join assessment a on tt.assessmentid = a.id and tt.activeflag = true and a.activeflag = true
+       inner join testingprogram tp on a.testingprogramid = tp.id and tp.activeflag = true
+       inner join assessmentprogram ap on tp.assessmentprogramid = ap.id and ap.activeflag = true
+       where tt.testtypecode = #{testTypeCode}
+     </select>
+     
+     <select id="findByTestSessionId" resultType="AssessmentProgram" parameterType="Long">
+     	SELECT distinct ap.*
+     	FROM testsession ts 
+        INNER JOIN testcollection tc ON ts.testcollectionid = tc.id
+        INNER JOIN assessmentstestcollections atc ON tc.id = atc.testcollectionid
+        INNER JOIN assessment a ON atc.assessmentid = a.id
+        INNER JOIN testingprogram tp ON a.testingprogramid = tp.id
+        INNER JOIN assessmentprogram ap ON tp.assessmentprogramid = ap.id
+        WHERE ts.id = #{testSessionId,jdbcType=BIGINT}
+     </select>
+     
+     <select id="getPermittedAPsBySelectedStateIds" resultType="AssessmentProgram">
+     
+     <if test="userId !=null">
+     	select distinct ap.id as id ,ap.abbreviatedname as programName from authorities au 
+		inner join groupauthorities ga on ga.authorityid = au.id and au.activeflag is true and ga.activeflag is true
+		inner join usersorganizations uo on uo.organizationid=ga.organizationid and uo.activeflag is true
+		inner join userorganizationsgroups uog on uog.userorganizationid=uo.id and uog.groupid=ga.groupid and uog.activeflag is true
+		inner join userassessmentprogram uap on uap.userorganizationsgroupsid=uog.id 
+		and uap.assessmentprogramid=ga.assessmentprogramid and uap.activeflag is true
+		inner join assessmentprogram ap on ap.id=ga.assessmentprogramid and ap.id=uap.assessmentprogramid and ap.activeflag is true
+		where uo.aartuserid = #{userId}
+		<if test="stateIds !=null">
+		and uo.organizationid in
+		<foreach collection="stateIds" item="stateId" open="(" close=")" separator="," >
+			#{stateId}
+		</foreach>
+		</if>
+		and au.authority='PERMISSIONS_AND_ROLES_EXTRACT';
+     </if>
+     
+     <if test="userId ==null">
+    	select distinct ap.id as id ,ap.abbreviatedname as programName from orgassessmentprogram oap 
+		inner join assessmentprogram ap on ap.id=oap.assessmentprogramid and ap.activeflag is true and oap.activeflag is true
+		where 
+		<if test="stateIds !=null">
+		 oap.organizationid in
+		<foreach collection="stateIds" item="stateId" open="(" close=")" separator="," >
+			#{stateId}
+		</foreach>
+		</if>
+     </if>
+     </select>
+          
+    <select id="getAssessmentProgramCodeById" resultType="AssessmentProgram" parameterType="long">
+        SELECT
+        	<include refid="Base_Column_List"/>
+        FROM assessmentprogram ap where ap.id in
+        <foreach collection="assessmentProgramIds" item="assessmentProgramId" open="(" close=")" separator="," >
+			#{assessmentProgramId}
+		</foreach>
+        
+     </select>
+     
+               
+    <select id="findAssessPgmIdByAbbreviatedName" resultType="long">
+        SELECT	id
+        FROM assessmentprogram 
+     	WHERE abbreviatedname = #{abbreviatedName}
+     </select>
+               
+    <select id="getAssessPgmIdByAbbreviatedName" resultType="long">
+        SELECT	id
+        FROM assessmentprogram 
+     	WHERE abbreviatedname in  
+     	<foreach collection="abbreviatedNames" item="abbreviatedName" open="(" close=")" separator="," >
+			#{abbreviatedName}
+		</foreach>
+     </select>
+     
+</mapper>

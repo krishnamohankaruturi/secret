@@ -1,0 +1,1 @@
+update testsession set source = 'ITI' where source = cast((select id from category where categorycode = 'ITI') as text);

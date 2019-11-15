@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="edu.ku.cete.model.announcements.CMDAO">
+	
+   <resultMap id="BaseMessageResultMap" type="edu.ku.cete.domain.announcements.CommunicationMessage" >
+    <id column="id" property="messageId" jdbcType="BIGINT" />
+    <result column="messagetitle" property="messageTitle" jdbcType="VARCHAR" />
+	<result column="messagecontent" property="messageContent" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="messageStatus" property="messageStatus" jdbcType="VARCHAR" />
+    <result column="assessmentprogramid" property="assessmentProgramId" jdbcType="BIGINT"/>
+    <result column="stateprogramid" property="stateProgramId" jdbcType="BIGINT"/>
+     <result column="expireuserdate" property="expireMessageDate" jdbcType="VARCHAR" />
+    <result column="expiretime" property="expireMessagetime" jdbcType="VARCHAR" />
+    <result column="expiredate" property="expiryDate" jdbcType="TIMESTAMP" />
+    <result column="displaydate" property="displayDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="BaseAssessmentProgramsResultMap" type="edu.ku.cete.domain.announcements.CommunicationMessage" >
+    <id column="id" property="assessmentId" jdbcType="BIGINT" />
+    <result column="programname" property="assessmentName" jdbcType="VARCHAR" />
+  </resultMap>
+   <resultMap id="BaseStateListResultMap" type="edu.ku.cete.domain.announcements.CommunicationMessage" >
+    <id column="organizationid" property="stateId" jdbcType="BIGINT" />
+    <result column="organizationname" property="stateName" jdbcType="VARCHAR" />
+  </resultMap>
+   <insert id="saveMessage" parameterType="edu.ku.cete.domain.announcements.CommunicationMessage" useGeneratedKeys="true" keyColumn="id" keyProperty="messageId">
+    insert into public.communicationmessage
+    	(messageTitle, messageContent, assessmentProgramId, stateProgramId, createddate, expiredate,
+    	displaydate,status,displayuserdate,expireuserdate,displaytime,expiretime,createduser,organizationid, modifieduser, modifieddate)
+    values (#{messageTitle},#{messageContent},#{assessmentProgramId},#{stateProgramId},#{createdDate},#{expiryDate},
+    	#{displayDate},#{messageStatus},#{displayMessageDate},#{expireMessageDate},#{displayMessagetime},#{expireMessagetime},#{createdUser},#{organizationId},
+    	#{modifiedUser}, #{modifiedDate})
+  </insert>
+  <update id="updateMessage" parameterType="edu.ku.cete.domain.announcements.CommunicationMessage">
+     update public.communicationmessage set
+     	messageTitle = #{messageTitle}, messageContent = #{messageContent}, assessmentProgramId = #{assessmentProgramId},
+     	stateProgramId = #{stateProgramId}, modifieddate = #{modifiedDate}, expiredate = #{expiryDate},
+     	displaydate = #{displayDate} ,status =#{messageStatus},displayuserdate=#{displayMessageDate},
+     	expireuserdate=#{expireMessageDate},displaytime=#{displayMessagetime},expiretime=#{expireMessagetime},
+     	modifieduser=#{modifiedUser},organizationid=#{organizationId}
+     WHERE id = #{messageId}
+  </update>
+  
+  <update id="cancelMessage" parameterType="edu.ku.cete.domain.announcements.CommunicationMessage">
+      update public.communicationmessage set activeflag = #{activeFlag},
+      modifieddate = #{modifiedDate},modifieduser = #{modifiedUser} WHERE id = #{messageId}
+  </update>
+  
+  <select id="getMessagesByAssessmentProgram" resultMap="BaseMessageResultMap">
+  select * from (
+  select id,MessageTitle,messagecontent,createddate,status,assessmentprogramid,stateprogramid,
+  CASE 
+   WHEN expiredate &lt; now() THEN 'Expired'
+   WHEN displaydate &lt; now() and expiredate &gt; now() THEN 'Active'
+   ELSE 'Pending'
+  END as messageStatus, 
+  displaydate,expiredate,expireuserdate,expiretime 
+  from communicationmessage 
+  where activeflag is true and assessmentprogramid = #{currentAssessmentProgramId}
+  <include refid="Comminication_Message_Where_Clause" />
+  ) as msg <if test="sortByColumn != null">
+       ORDER BY
+           	  <choose>
+           	  
+           	  	<when test="sortByColumn == 'messageId'">id</when>
+                  <when test="sortByColumn == 'messageTitle'">messagetitle</when>
+                  <when test="sortByColumn == 'createdDate'">createddate</when>
+                  <when test="sortByColumn == 'messageStatus'">messageStatus</when>
+                  <when test="sortByColumn == 'assessmentProgramId'">assessmentprogramid</when>
+                  <when test="sortByColumn == 'stateProgramId'">stateprogramid</when>
+                  <when test="sortByColumn == 'expireMessageDate'">expiredate</when>
+                  <when test="sortByColumn == 'expireMessagetime'">expiretime</when>
+              </choose>
+               <if test="sortType=='desc'">
+                desc
+            </if>
+            <if test="sortType=='asc' or sortType==null">
+                asc
+            </if>
+        </if> 
+        limit #{limit} 
+        offset #{offset}
+  </select>
+  	<sql id="Comminication_Message_Where_Clause">
+		<if test="criteria.createdDate != null">
+			AND to_char(createddate, 'MM/DD/YYYY') ilike #{criteria.createdDate} 
+		</if>
+		<if test="criteria.messageTitle != null">
+			AND messageTitle ilike #{criteria.messageTitle}
+		</if>  
+		<if test="criteria.messageStatus != null and criteria.messageStatus=='%expired%'">
+			AND expiredate &lt; now()
+		</if>
+		<if test="criteria.messageStatus != null and criteria.messageStatus=='%active%'">
+			AND displaydate &lt; now() and expiredate &gt; now()
+		</if>
+		<if test="criteria.messageStatus != null and criteria.messageStatus=='%pending%'">
+			AND displaydate &gt; now()
+		</if>
+	</sql>
+  <select id="getUserMessageList" resultMap="BaseMessageResultMap">
+	select distinct * from (
+	SELECT c.*
+	        FROM communicationmessage c inner join communicationmessagestate cmap on cmap.comminicationmessageid=c.id 
+	        and cmap.stateid=#{stateId} and cmap.groupid=#{groupId}
+	        WHERE 
+	        c.assessmentprogramid = #{currentAssessmentProgramId} and 
+	        c.activeflag=true and c.status='Active' and c.displaydate &lt; now() and c.expiredate &gt; now()
+	union all
+	SELECT c.*
+	        FROM communicationmessage c inner join communicationmessagestate cmap on cmap.comminicationmessageid=c.id 
+	        and cmap.stateid is null and cmap.groupid=#{groupId}
+	        WHERE 
+	        c.assessmentprogramid = #{currentAssessmentProgramId} and 
+	        c.activeflag=true and c.status='Active' and c.displaydate &lt; now() and c.expiredate &gt; now()
+	union all
+	SELECT c.*
+	        FROM communicationmessage c inner join communicationmessagestate cmap on cmap.comminicationmessageid=c.id 
+	        and cmap.stateid=#{stateId} and cmap.groupid is null
+	        WHERE 
+	        c.assessmentprogramid = #{currentAssessmentProgramId} and 
+	        c.activeflag=true and c.status='Active' and c.displaydate &lt; now() and c.expiredate &gt; now()
+	union all
+	SELECT c.*
+	        FROM communicationmessage c
+	        WHERE 
+	        c.assessmentprogramid = #{currentAssessmentProgramId} and 
+	        c.activeflag=true and c.status='Active' and c.displaydate &lt; now() and c.expiredate &gt; now()
+	        and c.id not in (select distinct comminicationmessageid from communicationmessagestate)
+	) as messages order by createddate desc
+  </select>
+  <select id="getAllUserMessageList" resultMap="BaseMessageResultMap">
+  SELECT c.* FROM communicationmessage c 
+	WHERE c.activeflag=true and c.status='Active' and c.displaydate &lt; now() and c.expiredate &gt; now() order by createddate desc
+  </select>
+  
+  <select id="messageCountDetails" parameterType="edu.ku.cete.web.CreateMessageDto" resultType="java.lang.Integer" >
+   	SELECT count(1) FROM   communicationmessage  WHERE 
+	activeflag=true  and assessmentprogramid = #{currentAssessmentProgramId}
+   	<include refid="Comminication_Message_Where_Clause" />
+  </select> 
+  
+	<select id="getAssessmentPrograms" resultMap="BaseAssessmentProgramsResultMap" parameterType="edu.ku.cete.domain.announcements.CommunicationMessage">
+  		SELECT id,programname FROM assessmentprogram where id=#{assessmentId} and activeflag is true
+	</select>
+  
+	<select id="getStatesList" resultMap="BaseStateListResultMap">
+		select org.id as organizationid,org.organizationname 
+		from orgassessmentprogram op join organization org on op.organizationid = org.id
+		where op.assessmentprogramid = #{assessmentProgramId} and organizationtypeid = 
+		(select id from organizationtype  where typecode  = 'ST') and org.activeflag is true and op.activeflag is true
+		order by lower(org.organizationname)
+	</select>
+  
+  <select id="editMessageData" resultType="edu.ku.cete.domain.announcements.CommunicationMessage">
+		  	SELECT c.id                    AS "messageId",
+		       c.messagetitle      AS "messageTitle",
+		       c.messagecontent        AS "messageContent",
+		         c.displayuserdate        AS "displayMessageDate",
+		           c.expireuserdate        AS "expireMessageDate",
+		            c.displaytime        AS "displayMessagetime",
+		           c.expiretime        AS "expireMessagetime",
+		           c.expiretime        AS "expireMessagetime",
+		           c.stateprogramid        AS "stateProgramId"
+		      
+			FROM   communicationmessage c
+			WHERE  c.id    = #{messageId}
+  </select>
+
+  <select id="getAllActiveMessages" resultMap="BaseMessageResultMap">
+	  select * from (
+	  select id,MessageTitle,messagecontent,createddate,status,assessmentprogramid,stateprogramid,
+	  CASE 
+	   WHEN expiredate &lt; now() THEN 'Expired'
+	   WHEN displaydate &lt; now() and expiredate &gt; now() THEN 'Active'
+	   ELSE 'Pending'
+	  END as messageStatus, 
+	  displaydate,expiredate,expireuserdate,expiretime 
+	  from communicationmessage 
+	  where activeflag is true
+	  <include refid="Comminication_Message_Where_Clause" />
+	  ) as msg <if test="sortByColumn != null">
+       ORDER BY
+           	  <choose>
+           	  
+           	  	<when test="sortByColumn == 'messageId'">id</when>
+                  <when test="sortByColumn == 'messageTitle'">messagetitle</when>
+                  <when test="sortByColumn == 'createdDate'">createddate</when>
+                  <when test="sortByColumn == 'messageStatus'">messageStatus</when>
+                  <when test="sortByColumn == 'assessmentProgramId'">assessmentprogramid</when>
+                  <when test="sortByColumn == 'stateProgramId'">stateprogramid</when>
+                  <when test="sortByColumn == 'expireMessageDate'">expiredate</when>
+                  <when test="sortByColumn == 'expireMessagetime'">expiretime</when>
+              </choose>
+               <if test="sortType=='desc'">
+                desc
+            </if>
+            <if test="sortType=='asc' or sortType==null">
+                asc
+            </if>
+        </if> 
+        limit #{limit} 
+        offset #{offset}
+  </select>
+  <select id="getAllActiveMessagesCount" parameterType="edu.ku.cete.web.CreateMessageDto" resultType="java.lang.Integer" >
+   	SELECT count(1) FROM   communicationmessage WHERE activeflag=true
+   	<include refid="Comminication_Message_Where_Clause" />
+  </select>
+</mapper>

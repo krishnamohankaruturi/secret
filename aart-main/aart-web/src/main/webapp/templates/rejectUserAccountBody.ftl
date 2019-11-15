@@ -1,0 +1,1 @@
+Your account has been denied for access to Kite. Contact your local Assessment Coordinator or Administrator for more information. Please ignore this notification if you did not request this account.

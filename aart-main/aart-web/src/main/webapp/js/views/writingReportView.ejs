@@ -1,0 +1,72 @@
+<!-- The data comes to reportData awkwardly, so just transform it here to make it easier to deal with later -->
+<% var reports = []; %>
+<% for (var i in reportData) { %>
+	<% if (reportData.hasOwnProperty(i)) { %>
+		<% if (!isNaN(i)) { %>
+			<% reports[i] = reportData[i]; %>
+		<% } %>
+	<% } %>
+<% } %>
+
+<div id="writingReportContent" class="writingreport" style="clear:both;">
+	<br/><br/>
+	
+	<% for (var i = 0; i < reports.length; i++) { %>
+		<% var studentName = reports[i].legalLastName + ', ' + reports[i].legalFirstName; %>
+		<% if (i > 0) { %>
+			<div><br/></div>
+			<div><hr/></div>
+			<div><br/><br/></div>
+		<% } %>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-lg">
+					<div class="logo heading blueheader aligncenter">
+						<%=reports[i].schoolYear-1%>&mdash;<%=reports[i].schoolYear%>
+					</div>
+					<div class="col-lg clearleft floatleft padleft">
+					<% if (reports[i].assessmentProgramCode === 'KAP') { %>
+						<img src="images/reports/KAPlogo_2017-2018.png" width="200px" height="75px" />
+					<% } else if (reports[i].assessmentProgramCode === 'KELPA2') { %>
+						<img src="images/reports/KELPA2logo_2017-2018.png" width="200px" height="75px" />
+					<% } %>
+				</div>
+				</div>
+				<div class="col-lg">
+					<div class="heading greenheader aligntop floatleft padleft aligncenter" style="line-height:1.3em">Student Writing Responses:<br/><%= studentName %></div>
+				</div>
+				<div class="col-lg-3"></div>
+			</div>
+			<div class="row">
+				<div class="heading padleft">State Student ID:&nbsp;<%= reports[i].stateStudentIdentifier %></div>
+			</div>
+			<div class="row">
+				<div class="heading padleft">Grade:&nbsp;<%= reports[i].gradeName %></div>
+			</div>
+			<div class="row">
+				<div class="heading padleft">School/Building:&nbsp;<%= reports[i].schoolName %></div>
+			</div>
+			<div class="row">
+				<div class="heading padleft">Organization ID:&nbsp;<%= reports[i].schoolIdentifier %></div>
+			</div>
+			<br/>
+			<div class="writingcontent">
+				<span class="questionMetadata">
+					Question #<%= reports[i].positionInTest %>
+					&nbsp;&mdash;&nbsp;
+					<% if (reports[i].taskScore != null || reports[i].nonScoreReasonId != null) { %>
+						Scored
+					<% } else { %>
+						Needs Scoring
+					<% } %>
+				</span>
+				<div class="response">
+					<% if (reports[i].writingResponse != null) { %>
+						<%== reports[i].writingResponse %>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	<% } %>
+</div>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.ActivationEmailTemplateDao" >
+    
+	<resultMap type="edu.ku.cete.domain.common.ActivationEmailTemplate" id="baseresultMap">
+        <result column="id" property="id" jdbcType="BIGINT" />
+        <result column="templatename" property="templateName" jdbcType="VARCHAR"/>
+        <result column="assessmentprogramid" property="assessmentProgramId" jdbcType="BIGINT"/>        
+        <result column="emailsubject" property="emailSubject"  jdbcType="VARCHAR" />
+        <result column="emailbody" property="emailBody"  jdbcType="VARCHAR" />
+        <result column="includeeplogo" property="includeEpLogo"  jdbcType="BIT" />
+        <result column="allstates" property="allStates" jdbcType="BIT"/>
+        <result column="isdefault" property="isDefault" jdbcType="BIT"/>        
+    </resultMap>
+    <resultMap type="edu.ku.cete.domain.common.ActivationEmailTemplate" id="customResultMap" extends="baseresultMap">  
+     	<result column="assessmentprogramname" property="assessmentProgramName"  jdbcType="VARCHAR" />     
+        <result column="states" property="states"  jdbcType="VARCHAR" />
+        <result column="assignedstates" property="assignedStates"  jdbcType="VARCHAR" />
+    </resultMap>
+   
+    <resultMap id="auditresultMap" type="edu.ku.cete.domain.common.ActivationEmailTemplate" extends="customResultMap">       
+		 <result column="createdusername" property="createdusername"  jdbcType="VARCHAR" />
+		<result property="createdDate" column="createddate" jdbcType="TIMESTAMP" />
+		<result property="modifiedusername" column="modifiedusername" jdbcType="TIMESTAMP" />
+		<result property="modifiedDate" column="modifieddate" jdbcType="TIMESTAMP" />
+		<result property="createdUser" column="createduser" jdbcType="BIGINT" />
+		<result property="modifiedUser" column="modifieduser" jdbcType="BIGINT" />
+        <collection property="statesList" ofType="edu.ku.cete.domain.common.Organization" javaType="list">
+           <result column="stateid" property="id"  jdbcType="BIGINT" />
+           <result column="statename" property="organizationName"  jdbcType="VARCHAR" />
+           <result column="statedisplayidentifier" property="displayIdentifier"  jdbcType="VARCHAR" />
+         </collection>       
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    	id,templatename,assessmentprogramid,emailsubject,emailbody,includeeplogo,allstates,activeflag,isdefault
+    </sql>
+    
+	<insert id="add" useGeneratedKeys="true" parameterType="ActivationEmailTemplate" keyColumn="id" keyProperty="id">		
+		insert into activationemailtemplate(templatename, assessmentprogramid, emailsubject, 
+        emailbody, includeeplogo, allstates, isdefault, createddate, createduser, modifieddate, modifieduser)
+		values(#{templateName,jdbcType=VARCHAR},#{assessmentProgramId,jdbcType=BIGINT},#{emailSubject,jdbcType=VARCHAR},#{emailBody,jdbcType=VARCHAR},
+		#{includeEpLogo,jdbcType=BIT},#{allStates,jdbcType=BIT},#{isDefault,jdbcType=BIT},#{createdDate,jdbcType=INTEGER},#{createdUser,jdbcType=INTEGER},
+		#{modifiedDate,jdbcType=TIMESTAMP},#{modifiedUser,jdbcType=TIMESTAMP})
+	</insert>
+	
+	<update id="update" parameterType="ActivationEmailTemplate" flushCache="true">
+		UPDATE activationemailtemplate 
+	<set>
+      <if test="templateName != null">
+        templatename = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentProgramId != null">
+        assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT},
+      </if>
+      <if test="emailSubject != null">
+        emailsubject = #{emailSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="emailBody != null">
+        emailbody = #{emailBody,jdbcType=VARCHAR},
+      </if>
+      <if test="includeEpLogo != null">
+        includeeplogo = #{includeEpLogo,jdbcType=BIT},
+      </if>
+      <if test="isDefault != null">
+        isdefault = #{isDefault,jdbcType=BIT},
+      </if>
+      <if test="allStates != null">
+        allstates = #{allStates,jdbcType=BIT},
+      </if>
+      
+      <if test="modifiedDate != null">
+        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUser != null">
+        modifieduser = #{modifiedUser,jdbcType=BIGINT},
+      </if>
+      <if test="activeFlag != null">
+        activeflag = #{activeFlag,jdbcType=BIT},
+      </if>
+    </set>    
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateDefaultEmailTemplate" parameterType="ActivationEmailTemplate">
+		UPDATE activationemailtemplate 
+	<set>
+      <if test="emailSubject != null">
+        emailsubject = #{emailSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="emailBody != null">
+        emailbody = #{emailBody,jdbcType=VARCHAR},
+      </if>
+      <if test="includeEpLogo != null">
+        includeeplogo = #{includeEpLogo,jdbcType=BIT},
+      </if>      
+      <if test="modifiedDate != null">
+        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUser != null">
+        modifieduser = #{modifiedUser,jdbcType=BIGINT},
+      </if>      
+    </set>    
+		WHERE isdefault = true
+	</update>
+			
+	<update id="updateInactiveAllStatesByTemplateId" parameterType="ActivationEmailTemplate">
+		UPDATE activationemailtemplate 
+		<set>
+		  <if test="allStates != null">
+           allstates = #{allStates,jdbcType=BIT},
+          </if>
+          <if test="modifiedDate != null">
+        	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="modifiedUser != null">
+       	 modifieduser = #{modifiedUser,jdbcType=BIGINT},
+     	 </if> 
+		</set>	 
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getEmailActivationDetailsByTemplateId" resultType="ActivationEmailTemplate" parameterType="Long">			
+			select  
+			<include refid="Base_Column_List"/>
+			from activationemailtemplate			
+			WHERE id = #{templateId} and isdefault = false 			   
+	</select>	
+	
+	<select id="getEmailActivationDetailsByAssesmentProgramIdandStateId" resultType="ActivationEmailTemplate" parameterType="Long">	
+		select <include refid="Base_Column_List"/> 
+		from activationemailtemplate aet 
+		left join activationemailtemplatestate aets on aets.templateid = aet.id 
+		where aet.assessmentprogramid = #{assessmentProgramId}
+		and aets.stateid = #{stateId} 
+		and aets.activeflag = true limit 1	
+	</select>
+	
+	<select id="getDefaultEmailTemplate" resultType="ActivationEmailTemplate" >			
+			select  
+			<include refid="Base_Column_List"/>
+			from activationemailtemplate			
+			WHERE isdefault = true limit 1		   
+	</select>
+	
+	<select id="getTemplateByTemplateName" resultType="ActivationEmailTemplate" parameterType="ActivationEmailTemplate" >			
+			select  
+			<include refid="Base_Column_List"/>
+			from activationemailtemplate WHERE templatename = #{templateName} and isdefault = false limit 1		   
+	</select>
+
+	<select id="getTemplateByTemplateNameandTemplateId" resultType="ActivationEmailTemplate" parameterType="ActivationEmailTemplate" >			
+			select  
+			<include refid="Base_Column_List"/>
+			from activationemailtemplate WHERE templatename = #{templateName}  and id not in (#{id}) and isdefault = false limit 1		   
+	</select>
+	
+	<select id="getAllActive" resultType="ActivationEmailTemplate">
+    	SELECT
+        	<include refid="Base_Column_List"/>
+        FROM activationemailtemplate 
+        where activeflag = true and isdefault = false 
+        	and templatename!='Claim User Email Template'
+        order by templateName
+    </select>
+    
+	<sql id="selectEmailActivation">
+		select * from (
+			select (0)::bigint as id,ap.abbreviatedname as assessmentprogramname,
+			array_to_string(array_agg(DISTINCT  org.organizationname ), ', ')  as states,
+			array_to_string(array_agg(DISTINCT etsorg.organizationname ), ', ')::text AS assignedstates,	
+			true::boolean AS isdefault,
+			'n/a'::text as templatename 
+			from assessmentprogram ap
+			left join orgassessmentprogram orgap on orgap.assessmentprogramid = ap.id and orgap.activeflag is true
+			left join organization org on org.id = orgap.organizationid 
+			left join activationemailtemplate et on et.assessmentprogramid = ap.id 
+			left join activationemailtemplatestate ets on ets.templateid = et.id 
+			left join organization etsorg on etsorg.id = ets.stateid and ets.activeflag = true  
+			where ap.activeflag= true 
+			group by orgap.assessmentprogramid,ap.abbreviatedname		
+		) as defaulttemplate 
+		UNION 
+			select * from (
+			select et.id as id,ap.abbreviatedname as assessmentprogramname,
+			 CASE 
+     		    WHEN et.allstates = true then 'All'
+     			WHEN et.allstates = false then array_to_string(array_agg(DISTINCT etsorg.organizationname ), ', ')END as states,
+ 			('')::text AS assignedstates,	
+			false::boolean AS isdefault,
+			et.templatename as templatename
+			from activationemailtemplate et
+			left join activationemailtemplatestate ets on ets.templateid = et.id 
+			left join assessmentprogram ap on ap.id = et.assessmentprogramid 
+			left join organization etsorg on etsorg.id = ets.stateid 
+			 where et.isdefault = false  and ets.activeflag = true 
+			group by ap.abbreviatedname,et.templatename,et.id 
+		) as customtemplate
+	</sql>
+	<sql id="selectEmailActivationWhere">
+		WHERE 1=1
+			<if test="assessmentProgramName != null">AND upper(assessmentprogramname) like upper('%' || #{assessmentProgramName} || '%')</if>
+			<if test="states != null">AND upper(states) like upper('%' || #{states} || '%')</if>
+			<if test="defaultTemplate != null">
+				<choose>
+					<when test="defaultTemplate == '-1'">
+						AND isdefault is null
+					</when>
+					<otherwise>
+						AND isdefault= CAST(#{defaultTemplate} as BOOLEAN) 
+					</otherwise>
+				</choose>
+			</if>
+			<if test="templateName != null">AND upper(templateName) like upper('%' || #{templateName} || '%')</if>			
+	</sql>
+	<select id="findSelectEmailActivation" resultMap="customResultMap" parameterType="hashmap">
+		/*NO LOAD BALANCE*/
+		SELECT * FROM (<include refid="selectEmailActivation"/>) AS EMAILTEMPLATES
+		<include refid="selectEmailActivationWhere"/>
+		<if test="sortByColumn != null">
+    	ORDER BY 
+    		<choose>
+	      		<when test="sortByColumn == 'assessmentProgramName'">assessmentprogramname</when>
+	      		<when test="sortByColumn == 'defaultTemplate'">isdefault</when>
+	      		<when test="sortByColumn == 'templateName'">templateName</when>
+	      	</choose>
+	      	<if test="sortType=='desc'">
+    			desc
+   	 		</if>
+   	 		<if test="sortType=='asc' or sortType==null">
+   	 			asc
+   	 		</if>
+		</if>
+		
+    	LIMIT #{limit}
+    	OFFSET #{offset}
+	</select>
+	
+	<select id="countSelectEmailActivation" resultType="java.lang.Integer" parameterType="hashmap">
+		/*NO LOAD BALANCE*/
+   		SELECT count(1) FROM (<include refid="selectEmailActivation"/>) AS EMAILTEMPLATES
+   			<include refid="selectEmailActivationWhere"/>
+  	</select>	
+  	
+  	<select id="getActivationEmailForAuditById" resultMap="auditresultMap" parameterType="Long" flushCache="true" useCache="false">			
+			select  
+			aet.id,aet.templatename,aet.assessmentprogramid,ap.abbreviatedname as assessmentprogramname,aet.emailsubject,aet.emailbody,aet.includeeplogo,aet.allstates,aet.activeflag,aet.isdefault,aets.stateid,
+			org.organizationname as statename,org.displayidentifier as statedisplayidentifier,ap.abbreviatedname,aet.createddate, aet.createduser, aet.modifieddate, aet.modifieduser,
+			crtusr.displayname as  createdusername,mdfdusr.displayname as modifiedusername
+			from activationemailtemplate aet Left join activationemailtemplatestate aets on aets.templateid=aet.id	and aets.activeflag is true		
+			Left join assessmentprogram ap on ap.id=aet.assessmentprogramid and ap.activeflag is true 
+			Left join organization org on aets.stateid=org.id
+			Left join aartuser crtusr on  crtusr.id=aet.createduser
+			Left join aartuser mdfdusr on mdfdusr.id=aet.modifieduser
+			WHERE aet.id = #{templateId} 
+	</select>
+	
+<select id="getTemplateByAssesmentAndState" resultMap="customResultMap"  >			
+			select  
+			aet.id,aet.templatename,aet.assessmentprogramid,aet.emailsubject,aet.emailbody,aet.includeeplogo,aet.allstates,aet.isdefault 
+			from activationemailtemplate aet inner join  activationemailtemplatestate aets on aets.templateid=aet.id	and aets.activeflag is true		
+			where  aet.assessmentprogramid=#{assessmentprogrsmId,jdbcType=BIGINT} and aet.templatename!='Claim User Email Template'
+			 <if test="stateId != null">
+       			and aets.stateid = #{stateId,jdbcType=VARCHAR}
+      		</if>
+      		<if test="stateId == null">
+      		and aet.isdefault is true
+      		</if>     
+      		union 
+      		select  
+			daet.id,daet.templatename,daet.assessmentprogramid,daet.emailsubject,daet.emailbody ,daet.includeeplogo,daet.allstates,daet.isdefault
+			from activationemailtemplate daet
+			where daet.isdefault is true and daet.templatename!='Claim User Email Template'			 		
+</select>
+
+	<select id="getTemplateForClaimUsers" resultMap="customResultMap"  >			
+				select  
+				id,templatename,assessmentprogramid,emailsubject,emailbody,includeeplogo,allstates,isdefault 
+				from activationemailtemplate 	
+				where templatename=#{templateName} and activeflag is true	
+	</select>
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+
+<project name="build-deploy" basedir="." default="all-ENV">
+    <property name="local.deploy.path" value="aart-main/aart-web/target"/>
+	<property file="../environments/${env}/aart-build.properties" />
+
+	<target name="all-ENV" description="Build for all environments uses 'env' variable">
+
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+		
+		<property file="${env.dir}${env}/aart-build.properties" />
+		
+		<echo message="Build for env: ${env}" />
+		
+		<!-- Deploy the application to the Development environment -->
+		<antcall target="remote-deploy" inheritall="false">
+			<param name="deploy.host" value="${deploy.server}" />
+			<param name="deploy.path" value="${deploy.base.path}" />
+			<param name="deploy.conf" value="${deploy.conf.path}" />
+			<param name="cmd.tomcat.start" value="${cmd.tomcat.start}" />
+			<param name="cmd.tomcat.stop" value="${cmd.tomcat.stop}" />
+			<param name="deploy.user" value="${scp.user}" />
+			<param name="deploy.keyfile" value="${scp.keyfile}" />
+			<param name="deploy.env" value="${env}" />
+			<param name="env.dir" value="${env.dir}" />
+			<param name="env" value="${env}" />
+		</antcall>
+	</target>
+
+
+	<target name="remote-deploy" description="Do not use: Deploys item to remote environment.">
+		<!-- Deploy the application to the environment that is passed in -->
+		<echo
+			message="The deploy-host is ${deploy.host} and the deploy-path is ${deploy.path}" />
+		<echo message="The deploy-user is ${deploy.user}" />
+		<echo message="tomcat stop command is ${cmd.tomcat.stop}" />
+		<echo message="tomcat start command is ${cmd.tomcat.start}" />
+
+		<!-- Shutdown tomcat in the remote environement, then clean the temp and 
+			work directories -->
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="${cmd.tomcat.stop}" />
+
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="rm -rf ${deploy.path}/work/*" />
+
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="rm -rf ${deploy.path}/temp/*" />
+
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="rm -rf ${deploy.path}/webapps/AART" />
+
+
+		<!-- Copy all WAR files in the plugins/components/dist folder to the remote 
+			environment -->
+		<scp todir="${deploy.user}@${deploy.host}:${deploy.path}/webapps"
+			keyfile="${deploy.keyfile}" passphrase="No" trust="true">
+			<fileset dir="${local.deploy.path}" includes="*.war" />
+		</scp>
+
+        <sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="mkdir -p ${deploy.conf}" /> 
+		
+		<scp todir="${deploy.user}@${deploy.host}:${deploy.conf}"
+			keyfile="${deploy.keyfile}" passphrase="No" trust="true">
+			<fileset dir="../environments/${env}/aart" includes="*" /> 
+		</scp>
+
+		<!-- Startup tomcat in the remote environement -->
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="true" trust="true"
+			command="${cmd.tomcat.start}" />
+	</target>
+
+</project>

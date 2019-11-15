@@ -1,0 +1,1 @@
+update studenttrackerband set testsessionid=null where id in (218182,218006);

@@ -1,0 +1,1 @@
+--Changing the schoolyear datatype in reportsmedianscore table

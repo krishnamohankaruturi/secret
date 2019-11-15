@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+  Added By Sudhansu 
+  Feature: f183
+  Projected Testing
+ --> 
+<mapper namespace="edu.ku.cete.model.ProjectedTestingDao">   
+   <insert id="save" parameterType="edu.ku.cete.model.ProjectedTestingDTO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		INSERT INTO projectedtestingdate(
+            assessmentprogramid, stateid, districtid, schoolid, testdate, 
+            monthname, currentschoolyear, createduser, createddate, modifieddate, modifieduser, 
+            activeflag, projectiontype, grade)
+		  values(#{assessmentProgramId},#{stateid},#{districtId}
+		         ,#{schoolId},#{testDate},#{month},#{currentSchoolYear},#{createdUser},#{createdDate},#{modifiedDate}
+		          ,#{modifiedUser},#{activeFlag}, #{projectionType}, #{grade})
+	</insert>
+   
+
+
+  <select id="getProjectedTesting" resultType="edu.ku.cete.model.ProjectedTestingDTO" >    
+      
+	select * from projectedtestingdate where 
+	assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+	and schoolid = #{schoolId, jdbcType=BIGINT}
+	and upper(SUBSTR(monthname, 1, 3)) = upper(SUBSTR(#{month, jdbcType=VARCHAR}, 1, 3))
+	and currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT}
+	and grade = #{gradeId} and projectiontype = #{projectionType}
+	      
+  </select>
+  
+  
+   <update id="updateByPrimaryKeySelective" parameterType="edu.ku.cete.model.ProjectedTestingDTO">
+    
+    update projectedtestingdate
+    <set>
+      <if test="assessmentProgramId != null">
+        assessmentprogramid = #{assessmentProgramId,jdbcType=VARCHAR},
+      </if>
+      <if test="stateid != null">
+        stateid = #{stateid,jdbcType=VARCHAR},
+      </if>
+      <if test="districtId != null">
+        districtid = #{districtId,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolId != null">
+        schoolid = #{schoolId,jdbcType=VARCHAR},
+      </if>
+      <if test="testDate != null">
+        testdate = #{testDate,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+        monthname = #{month, jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        createddate = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdUser != null">
+        createduser = #{createdUser,jdbcType=INTEGER},
+      </if>
+      <if test="activeFlag != null">
+        activeflag = #{activeFlag,jdbcType=BIT},
+      </if>
+      <if test="modifiedDate != null">
+        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUser != null">
+        modifieduser = #{modifiedUser,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=BIGINT},
+      </if>
+      <if test="projectionType != null">
+        projectiontype = #{projectionType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getProjectedTestingForLoggedInUser"  resultType="edu.ku.cete.model.ProjectedTestingDTO">    
+		select pt.assessmentprogramid as assessmentProgramId,pt.stateid as stateId,pt.schoolid as schoolId,pt.districtid as districtId,
+		pt.monthname as month,pt.testdate as testDate,otd.districtname as districtName,otd.schoolname as schoolName,pt.grade as grade,
+		gc.name as gradeName, pt.projectiontype as projectionType,
+		(select max(modifieddate) from projectedtestingdate where districtid = pt.districtid and schoolid = pt.schoolid 
+		and monthname = pt.monthname and grade = pt.grade and projectiontype = pt.projectiontype) as modifieddate,
+		(select au_pt.firstname ||' '|| au_pt.surname
+		from projectedtestingdate ptd
+		left join aartuser au_pt ON au_pt.id = ptd.modifieduser
+		where ptd.districtid = pt.districtid and ptd.schoolid = pt.schoolid and ptd.monthname = pt.monthname 
+		and ptd.grade = pt.grade and ptd.projectiontype = pt.projectiontype and au_pt.activeflag is true
+		and ptd.modifieddate =(select max(modifieddate) from projectedtestingdate 
+		where districtid = pt.districtid and schoolid = pt.schoolid 
+		and monthname = pt.monthname and grade = pt.grade and projectiontype = pt.projectiontype) limit 1) as modifiedby
+		from projectedtestingdate pt
+		inner join organizationtreedetail otd on otd.schoolid = pt.schoolid
+		inner join gradecourse gc on gc.id=pt.grade and gc.activeflag is true
+		inner join aartuser au on au.id = pt.modifieduser and au.activeflag is true
+		where assessmentprogramid =  #{viewMyCalendarCriteriaMap.assessmentProgramId}::BIGINT
+		and pt.schoolid in( select id from organization_children_oftype(#{viewMyCalendarCriteriaMap.organizationId}::BIGINT,'SCH')
+		union 
+		select #{viewMyCalendarCriteriaMap.organizationId}::BIGINT)
+		and pt.activeflag is true and pt.currentschoolyear = #{viewMyCalendarCriteriaMap.currentSchoolYear}::BIGINT
+		<include refid="projected_Test_Info_Where_Clause" />
+		 
+		<if test="sortByColumn != null">
+    		ORDER BY (
+    		<choose>
+	    		<when test="sortByColumn == 'districtName'">
+	    			otd.districtname,otd.schoolname,UPPER(SUBSTR(pt.monthname, 1, 3)) != 'AUG',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'SEP',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'OCT',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'NOV',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'DEC',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JAN',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'FEB',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAR',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'APR',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAY',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUN',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUL',(substring(gc.name, '[0-9]+'))::int,pt.projectiontype
+	    		</when>
+	      		<when test="sortByColumn == 'schoolName'">
+	      			otd.schoolname,otd.districtname,UPPER(SUBSTR(pt.monthname, 1, 3)) != 'AUG',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'SEP',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'OCT',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'NOV',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'DEC',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JAN',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'FEB',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAR',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'APR',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAY',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUN',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUL' ,(substring(gc.name, '[0-9]+'))::int,pt.projectiontype
+				</when>
+	      		<when test="sortByColumn == 'month'">
+	      			UPPER(SUBSTR(pt.monthname, 1, 3)) != 'AUG',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'SEP',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'OCT',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'NOV',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'DEC',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JAN',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'FEB',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAR',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'APR',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAY',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUN',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUL',otd.schoolname,otd.districtname,(substring(gc.name, '[0-9]+'))::int,pt.projectiontype 
+	      		</when>
+	      		<when test="sortByColumn == 'gradeName'">
+					(substring(gc.name, '[0-9]+'))::int, UPPER(SUBSTR(pt.monthname, 1, 3)) != 'AUG',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'SEP',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'OCT',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'NOV',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'DEC',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JAN',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'FEB',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAR',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'APR',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAY',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUN',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUL' ,otd.schoolname,otd.districtname,pt.projectiontype
+			    </when>
+			    <when test="sortByColumn == 'projectionType'">
+					pt.projectiontype,UPPER(SUBSTR(pt.monthname, 1, 3)) != 'AUG',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'SEP',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'OCT',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'NOV',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'DEC',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JAN',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'FEB',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAR',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'APR',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAY',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUN',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUL' ,otd.schoolname,otd.districtname,(substring(gc.name, '[0-9]+'))::int
+			    </when>
+			    <when test="sortByColumn == 'modifiedBy'">modifiedby</when>
+				<when test="sortByColumn == 'modifiedDate'">modifieddate</when>
+			    <otherwise>
+					otd.districtname,otd.schoolname,UPPER(SUBSTR(pt.monthname, 1, 3)) != 'AUG',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'SEP',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'OCT',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'NOV',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'DEC',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JAN',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'FEB',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAR',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'APR',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'MAY',UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUN',
+					UPPER(SUBSTR(pt.monthname, 1, 3)) != 'JUL',(substring(gc.name, '[0-9]+'))::int,pt.projectiontype 
+			    </otherwise>
+	      	</choose>
+    	 	<if test="sortType=='desc'">
+	    		) desc
+    	 	</if>
+    	 	<if test="sortType=='asc' or sortType==null">
+    	 		) asc
+    	 	</if>
+		</if> 
+		
+  </select>
+  
+  <sql id="projected_Test_Info_Where_Clause">
+		<if test="viewMyCalendarCriteriaMap.districtName != null">
+			and districtname ilike #{viewMyCalendarCriteriaMap.districtName} 
+		</if>
+		<if test="viewMyCalendarCriteriaMap.schoolName != null">
+			and schoolname ilike #{viewMyCalendarCriteriaMap.schoolName}
+		</if>
+		<if test="viewMyCalendarCriteriaMap.month != null">
+			and monthname ilike #{viewMyCalendarCriteriaMap.month}
+		</if>
+		<if test="viewMyCalendarCriteriaMap.gradeName != null">
+			and gc.name ilike #{viewMyCalendarCriteriaMap.gradeName}
+		</if>
+		<if test="viewMyCalendarCriteriaMap.projectionType != null">
+			and projectiontype ilike #{viewMyCalendarCriteriaMap.projectionType}
+		</if>
+		<if test="viewMyCalendarCriteriaMap.modifiedBy != null">
+			and au.firstname ||' '|| au.surname ilike #{viewMyCalendarCriteriaMap.modifiedBy}
+		</if>
+		<if test="viewMyCalendarCriteriaMap.modifiedDate != null">
+			AND to_char(pt.modifieddate, 'MM/DD/YYYY') ilike #{viewMyCalendarCriteriaMap.modifiedDate} 
+		</if>
+  </sql>
+  
+  <select id="countViewMyCalendarRecords" resultType="java.lang.Integer" >
+	  	Select count(*)  as count from (
+			select pt.monthname as month ,otd.districtname as districtName,otd.schoolname as schoolName, 
+			pt.grade as gradeId,pt.projectiontype as projectionType,gc.name as gradeName
+			from projectedtestingdate pt 
+			inner join organizationtreedetail otd on otd.schoolid = pt.schoolid
+			inner join gradecourse gc on gc.id=pt.grade and gc.activeflag is true
+			inner join aartuser au on au.id = pt.modifieduser and au.activeflag is true
+			where assessmentprogramid = #{viewMyCalendarCriteriaMap.assessmentProgramId}::BIGINT 
+			and pt.schoolid in( select id from organization_children_oftype(#{viewMyCalendarCriteriaMap.organizationId}::BIGINT,'SCH') 
+			union select #{viewMyCalendarCriteriaMap.organizationId}::BIGINT) and pt.activeflag is true 
+			and pt.currentschoolyear = #{viewMyCalendarCriteriaMap.currentSchoolYear}::BIGINT  
+			<include refid="projected_Test_Info_Where_Clause" />
+			group by schoolname,monthname,districtname,grade,projectiontype,gc.name
+		) as tests 
+  </select>
+  
+   <select id="getProjectedTestingForChart" resultType="edu.ku.cete.model.ProjectedTestingChartDTO" >
+   		select * from(select distinct pr.testdate as testDate,ap.abbreviatedname as assessmentProgram,ap.id as assessmentProgramId,
+		ot.statename as state,ot.districtId as districtid, ot.districtname as district,pr.projectiontype as projectionType, 0 as count
+   		from projectedtestingdate pr
+		inner join assessmentprogram ap on ap.id = pr.assessmentprogramid and pr.activeflag is true and ap.activeflag is true
+		inner join enrollment e on e.attendanceschoolid=pr.schoolid and e.activeflag is true and e.currentschoolyear=#{currentSchoolYear, jdbcType=BIGINT}
+		inner join gradecourse gc on gc.id=pr.grade and gc.id=e.currentgradelevel and gc.activeflag is true
+		inner join student s on s.id=e.studentid and s.activeflag is true
+		inner join studentassessmentprogram sap on sap.studentid=s.id and sap.assessmentprogramid=ap.id and sap.activeflag is true
+		inner join organizationtreedetail ot on ot.schoolid=pr.schoolid
+		where pr.currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT} 
+		and pr.projectiontype='T' and testDate &gt;= date_trunc('week',now())
+		group by pr.testdate,ap.abbreviatedname,ap.id,ot.statename,ot.districtid,ot.districtname,pr.projectiontype
+	union all
+		select distinct pr.testdate as testDate,'SCORING' as assessmentProgram,ap.id as assessmentProgramId,
+		ot.statename as state,ot.districtId as districtid, ot.districtname as district,pr.projectiontype as projectionType, 0 as count
+		from projectedtestingdate pr
+		inner join assessmentprogram ap on ap.id = pr.assessmentprogramid and pr.activeflag is true and ap.activeflag is true
+		inner join enrollment e on e.attendanceschoolid=pr.schoolid and e.activeflag is true and e.currentschoolyear=#{currentSchoolYear, jdbcType=BIGINT}
+		inner join gradecourse gc on gc.id=pr.grade and gc.id=e.currentgradelevel and gc.activeflag is true
+		inner join student s on s.id=e.studentid and s.activeflag is true
+		inner join studentassessmentprogram sap on sap.studentid=s.id and sap.assessmentprogramid=ap.id and sap.activeflag is true
+		inner join organizationtreedetail ot on ot.schoolid=pr.schoolid
+		where pr.currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT} 
+		and pr.projectiontype='S' and testDate &gt;= date_trunc('week',now())
+		group by pr.testdate,ap.abbreviatedname,ap.id,ot.statename,ot.districtid,ot.districtname,pr.projectiontype) as projections 
+		order by testDate
+		
+  </select>
+  
+   <select id="getDistrictSummaryReportDetails" resultType="edu.ku.cete.domain.DistrictSummaryReport" >
+   		select * from(select distinct pr.testdate as date,ap.abbreviatedname as assessmentProgram,
+    	ot.statename as state,ot.districtId as districtid, ot.districtname as district,pr.projectiontype as projectionType,
+    	count(distinct e.id) as estimatedTestSessionsTesting, 0 as estimatedTestSessionsScoring, '' as dtcEmailAddress
+		from assessmentprogram ap
+		inner join projectedtestingdate pr  on ap.id = pr.assessmentprogramid and pr.activeflag is true and ap.activeflag is true
+		inner join enrollment e on e.attendanceschoolid=pr.schoolid and e.activeflag is true and e.currentschoolyear=#{currentSchoolYear, jdbcType=BIGINT}
+		inner join gradecourse gc on gc.id=pr.grade and gc.id=e.currentgradelevel and gc.activeflag is true
+		inner join student s on s.id=e.studentid and s.activeflag is true
+		inner join studentassessmentprogram sap on sap.studentid=s.id and sap.assessmentprogramid=ap.id and sap.activeflag is true
+		inner join organizationtreedetail ot on ot.districtid=pr.districtid 
+		where pr.currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT}
+		and pr.projectiontype='T' and testDate &gt;= date_trunc('day',now())
+		group by pr.testdate,ap.abbreviatedname,ot.statename,ot.districtid,ot.districtname,pr.projectiontype
+		union all
+		select distinct pr.testdate as date,ap.abbreviatedname as assessmentProgram,
+		ot.statename as state,ot.districtId as districtid, ot.districtname as district,pr.projectiontype as projectionType, 0 as estimatedTestSessionsTesting, 
+		count(distinct e.id) as estimatedTestSessionsScoring,
+		'' as dtcEmailAddress
+		from assessmentprogram ap
+		inner join projectedtestingdate pr  on ap.id = pr.assessmentprogramid and pr.activeflag is true and ap.activeflag is true 
+		inner join enrollment e on e.attendanceschoolid=pr.schoolid and e.activeflag is true and e.currentschoolyear=#{currentSchoolYear, jdbcType=BIGINT}
+		inner join gradecourse gc on gc.id=pr.grade and gc.id=e.currentgradelevel and gc.activeflag is true
+		inner join student s on s.id=e.studentid and s.activeflag is true
+		inner join studentassessmentprogram sap on sap.studentid=s.id and sap.assessmentprogramid=ap.id 
+		and sap.activeflag is true
+		inner join organizationtreedetail ot on ot.districtid=pr.districtid 
+		where pr.currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT}
+		and  pr.projectiontype='S' and testDate &gt;= date_trunc('day',now())
+		group by pr.testdate,ap.abbreviatedname,ot.statename,ot.districtid,ot.districtname,pr.projectiontype
+		)as projections
+		order by  date, projectiontype desc, assessmentprogram != 'KAP',assessmentprogram != 'KELPA2',assessmentprogram != 'CPASS',assessmentprogram != 'DLM';
+   </select>
+   
+   <select id="getSchoolProjectionsBy" resultType="edu.ku.cete.model.ProjectedTestingDTO" >
+   	select * from projectedtestingdate 
+		where assessmentprogramid = #{assessmentProgramId}
+		and testdate = #{testDate}
+		and districtid=#{districtId} 
+		and projectiontype=#{projectionType}
+		and currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT} and activeflag is true;
+   </select>
+  
+  <select id="getEnrollmentCountBy" resultType="java.lang.Long">
+  select count(distinct e.id) as enrollments
+	from enrollment e 
+        inner join gradecourse gc on gc.id=#{gradeId} and gc.id=e.currentgradelevel and gc.activeflag is true
+        inner join student s on s.id=e.studentid and s.activeflag is true
+        inner join studentassessmentprogram sap on sap.studentid=s.id and sap.activeflag is true
+        and sap.assessmentprogramid= #{assessmentProgramId}
+        where e.attendanceschoolid=#{schoolId} and e.activeflag is true and e.currentschoolyear=#{currentSchoolYear};
+  </select>
+  
+  <select id="getNoOfDaysProjectedBy" resultType="java.lang.Long">
+  	select count(distinct id) from projectedtestingdate
+	where assessmentprogramid = #{assessmentProgramId}
+	and schoolid=#{schoolId} 
+	and grade = #{gradeId}
+	and projectiontype=#{projectionType} and activeflag is true;
+  </select>
+  
+  <select id="getDtcEmailAddress" resultType="java.lang.String">
+  	select array_to_string(ARRAY(select distinct au.email 
+		from aartuser au
+		inner join usersorganizations uo on uo.aartuserid = au.id and uo.organizationid=#{districtId} and uo.activeflag is true 
+		and au.activeflag is true
+		inner join userorganizationsgroups uog on uog.userorganizationid = uo.id  and uog.activeflag is true
+		and uog.status = 2
+		inner join userassessmentprogram uap on uap.userorganizationsgroupsid = uog.id and
+		uap.assessmentprogramid=(select id from assessmentprogram where abbreviatedname =#{assessmentProgram}) and uap.activeflag is true
+		where uog.groupId=(select id from groups where groupcode='DTC') 
+		),', ') as DTCEmailAddress
+  </select>
+</mapper>

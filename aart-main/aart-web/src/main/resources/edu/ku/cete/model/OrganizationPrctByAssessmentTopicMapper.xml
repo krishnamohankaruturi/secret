@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.OrganizationPrctByAssessmentTopicMapper">
+
+   <insert id="insert" parameterType="edu.ku.cete.report.domain.OrganizationPrctByAssessmentTopic">
+   		INSERT INTO organizationpctbyassessmenttopic(
+            schoolyear, assessmentcode, organizationid, gradeid, contentareaid, 
+            assessmenttopicid, percentcorrect, reportcycle, 
+            activeflag, createduser, createddate, modifieduser, modifieddate, batchuploadid, testingprogramid)
+    VALUES (#{schoolYear,jdbcType=BIGINT}, #{testType,jdbcType=VARCHAR}, #{organizationId,jdbcType=BIGINT}, #{gradeId,jdbcType=BIGINT}, #{subjectId,jdbcType=BIGINT}, 
+            #{topicId,jdbcType=BIGINT}, #{percentCorrect,jdbcType=FLOAT}, #{reportCycle,jdbcType=VARCHAR}, 
+            #{activeFlag,jdbcType=BOOLEAN}, #{createdUser,jdbcType=BIGINT}, now(), 
+            #{modifiedUser,jdbcType=BIGINT}, now(),#{batchUploadedId,jdbcType=BIGINT}, #{testingProgramInternalId,jdbcType=BIGINT});
+   </insert>
+   
+   <update id="update">   
+   	    update organizationpctbyassessmenttopic 
+	    set  batchuploadid = #{batchUploadedId,jdbcType=BIGINT},
+	    percentcorrect = #{percentCorrect,jdbcType=FLOAT},
+	    modifieduser = #{createdUser,jdbcType=BIGINT}, 
+	    modifieddate = now() 
+	    where organizationid = #{organizationId,jdbcType=BIGINT} 
+		<if test="subjectId != null">
+			and contentareaid =#{subjectId,jdbcType=BIGINT}
+		</if>
+		<if test="gradeId != null">
+			and gradeid =#{gradeId,jdbcType=BIGINT} 
+		</if> 
+		and assessmentcode = #{testType,jdbcType=VARCHAR}
+	    and reportcycle = #{reportCycle, jdbcType=VARCHAR}
+	    and assessmenttopicid = #{topicId,jdbcType=BIGINT}
+	    and testingprogramid = #{testingProgramInternalId,jdbcType=BIGINT}
+		and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+		and activeflag is true
+       </update>
+   
+     <delete id="delete">
+        DELETE FROM organizationpctbyassessmenttopic
+	    where contentareaid =#{contentAreaId,jdbcType=BIGINT}
+	    <if test="schoolYear != null">		
+	       and schoolyear = #{schoolYear,jdbcType=BIGINT}
+	    </if> 
+	    <if test="testingProgramId != null">	
+	       and testingprogramid = #{testingProgramId,jdbcType=BIGINT}
+	    </if> 
+	    <if test="reportCycle != null">	
+	       and reportcycle = #{reportCycle, jdbcType=VARCHAR}
+	    </if>
+	    <if test="stateId != null">
+	       and organizationid in (select id from organization_children_Active_or_Inactive(#{stateId,jdbcType=BIGINT}) UNION select #{stateId,jdbcType=BIGINT})
+	    </if>
+    </delete>  
+    
+    <select id="getSchoolIdsForReportGeneration" resultType="Long">
+    select distinct oat.schoolid from studentpctbyassessmenttopic oat
+      where oat.activeflag is true
+        <if test="gradeCourseId != null"> 
+          and oat.gradeid = #{gradeCourseId,jdbcType=BIGINT}
+        </if>	
+	    and oat.testingprogramid = #{testingProgramId,jdbcType=BIGINT}
+	    and oat.schoolyear = #{schoolYear,jdbcType=BIGINT}
+	    and oat.reportcycle = #{reportCycle,jdbcType=VARCHAR}
+	    and oat.assessmentcode = #{assessmentCode,jdbcType=VARCHAR}
+	    <if test="contentAreaId != null">
+	      and oat.contentareaid =#{contentAreaId,jdbcType=BIGINT}
+	    </if>
+	    and oat.schoolid in (select id from organization_children_Active_or_Inactive(#{stateId,jdbcType=BIGINT}) where organizationtypeid in(select id from organizationtype where typecode = 'SCH'))
+	    order by schoolid limit #{pageSize} offset #{offset}  
+    </select>
+    
+    <select id="getOrganizationDetails" resultType="edu.ku.cete.report.domain.OrganizationPrctTopicReportsDTO">
+		   select oast.*, 
+		   
+		   <foreach close=")" collection="topicsId" item="topicId" open="(" separator="||','||">
+		       (select case 
+		                    WHEN (select count(id)
+		                   from organizationpctbyassessmenttopic where organizationid = oast.id and assessmenttopicid = #{topicId,jdbcType=BIGINT}
+								and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+								and reportcycle = #{reportCycle,jdbcType=VARCHAR} 
+								and activeflag is true
+								and assessmentcode = #{assessmentCode,jdbcType=VARCHAR} ) = 0 then 'N/A' 
+						ELSE (select ROUND(percentcorrect)::text
+							from organizationpctbyassessmenttopic where organizationid = oast.id and assessmenttopicid = #{topicId,jdbcType=BIGINT} 
+								and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+								and reportcycle = #{reportCycle,jdbcType=VARCHAR} 
+								and activeflag is true
+								and assessmentcode = #{assessmentCode,jdbcType=VARCHAR}) END ):: text
+	</foreach> as percents
+		
+		from (
+		select distinct o.id,
+				case when ort.typecode = 'ST' and displayidentifier = 'ALL' then 'ALL' ELSE ort.typecode END,
+				ord.scalescore
+				
+		                 from organizationpctbyassessmenttopic opat		                 
+		left join (select distinct on (organizationid) organizationid, scalescore from organizationreportdetails where assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+		                                               and schoolyear = #{schoolYear,jdbcType=BIGINT}  
+		                                               and assessmentcode = #{assessmentCode,jdbcType=VARCHAR}
+		                                               and testingprogramid = #{testingProgramId,jdbcType=BIGINT} 
+		                                               and reporttype = 'CPASS_ORG_SCORE' order by organizationid,id desc) ord on ord.organizationid = opat.organizationid
+		inner join organization o on opat.organizationid = o.id
+		inner join organizationtype ort on ort.id = o.organizationtypeid
+		where opat.organizationid in (select id from organization_parent_active_or_inactive(#{schoolId,jdbcType=BIGINT} ) UNION select id from organization where displayidentifier  = 'ALL')
+		and opat.schoolyear = #{schoolYear,jdbcType=BIGINT}  
+		and opat.reportcycle = #{reportCycle,jdbcType=VARCHAR}
+		and opat.activeflag is true
+		and opat.assessmentcode = #{assessmentCode,jdbcType=VARCHAR}) oast
+		ORDER BY  typecode = 'DT',typecode = 'ST',typecode = 'ALL'  DESC
+    </select>
+</mapper>

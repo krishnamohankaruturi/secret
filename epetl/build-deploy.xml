@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<project name="build-deploy">
+	<property name="local.deploy.path" value="." />
+	<property name="env.dir" value="../environments/"/>
+	<property file="${env.dir}${env}/aart-build.properties" />
+	<target name="all-ENV" description="Build for all environments uses 'env' variable">
+
+		<echo message="Build for env: ${env}" />
+
+		<!-- Deploy the application to the Development environment -->
+		<antcall target="remote-deploy" inheritall="false">
+			<param name="deploy.host" value="${deploy.server}" />
+			<param name="deploy.path" value="${deploy.base.path}" />
+			<param name="deploy.conf" value="${deploy.conf.path}" />
+			<param name="deploy.user" value="${scp.user}" />
+			<param name="deploy.keyfile" value="${scp.keyfile}" />
+		</antcall>
+	</target>
+
+
+	<target name="remote-deploy" description="Do not use: Deploys item to remote environment.">
+		<!-- Deploy the application to the environment that is passed in -->
+		<echo message="The deploy-host is ${deploy.host} and the deploy-path is ${deploy.path}" />
+		<echo message="The deploy-user is ${deploy.user}" />
+
+		<!-- Shutdown tomcat in the remote environement, then clean the temp and 
+			work directories -->
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="${deploy.path}/bin/shutdown.sh" />
+
+	  <sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="mkdir -p ${deploy.path}" />
+
+        <sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="mkdir -p ${deploy.path}/epetl" />
+
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="rm -rf ${deploy.path}/epetl/*" />
+
+        <sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="false" trust="true"
+			command="mkdir -p ${deploy.conf}" />
+
+		<scp todir="${deploy.user}@${deploy.host}:${deploy.conf}"
+			keyfile="${deploy.keyfile}" passphrase="No" trust="true">
+			<fileset dir="${env.dir}${env}/epetl" includes="*" />
+		</scp>
+
+		<!-- Copy all WAR files in the plugins/components/dist folder to the remote 
+			environment -->
+		<scp todir="${deploy.user}@${deploy.host}:${deploy.path}/epetl/" keyfile="${deploy.keyfile}" passphrase="No" trust="true">
+			<fileset dir="${local.deploy.path}" includes="**/*.js" />
+			<fileset dir="${local.deploy.path}" includes="**/*.json" />
+			<fileset dir="${local.deploy.path}" includes="**/*.md" />
+			<fileset dir="${local.deploy.path}" includes="commands" />
+		</scp>
+
+		<!-- Startup tomcat in the remote environement -->
+		<sshexec host="${deploy.host}" username="${deploy.user}"
+			keyfile="${deploy.keyfile}" failonerror="true" trust="true"
+			command="${deploy.path}/bin/startup.sh" />
+	</target>
+
+</project>

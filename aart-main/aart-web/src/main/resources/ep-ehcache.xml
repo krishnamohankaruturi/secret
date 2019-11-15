@@ -1,0 +1,35 @@
+<config
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://www.ehcache.org/v3'
+    xmlns:jsr107='http://www.ehcache.org/v3/jsr107'
+    xsi:schemaLocation="
+        http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd 
+        http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+    
+    <service> 
+        <jsr107:defaults enable-management="true" enable-statistics="true" default-template="defaultCache"> 
+           <jsr107:cache name="getTreeCache" template="getTreeCacheTemplate"/> 
+        </jsr107:defaults>
+    </service>
+    
+    <cache-template name="defaultCache">    
+        <expiry>
+            <none/>
+        </expiry>
+        <resources>           
+            <heap unit="entries">50</heap>              
+        </resources>
+    </cache-template>
+    
+    <cache-template name="getTreeCacheTemplate">
+        <!-- <key-type>edu.ku.cete.domain.common.Organization</key-type> -->
+        <!-- <value-type>edu.ku.cete.domain.ContractingOrganizationTree</value-type>   -->
+        <expiry>
+            <ttl unit="seconds">36000</ttl>
+        </expiry>
+        <resources>
+            <!-- The maximal number of entries to be held in the Cache, prior to eviction starting -->           
+            <heap unit="entries">50</heap>              
+        </resources>
+     </cache-template>
+</config>

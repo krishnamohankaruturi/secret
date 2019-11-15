@@ -1,0 +1,117 @@
+<div class="scroller span1">
+	
+	<% if(uiType == 'genTest') { %>			
+	<div class="q-hdr">
+		<ul>
+			<li>
+				<% if(jQuery.inArray(parseInt(qNum), markedReview) > 0) { %>
+					<a href="#" class="mark-question mark-question-active">Mark for Review</a>
+				<% } else { %>
+					<a href="#" class="mark-question">Mark for Review</a>
+				<% } %>
+				<span>Flag for Review</span>
+			</li>
+		</ul>
+	</div><!-- /q-hdr -->
+	<% } %>
+		
+	<% if(layout == 'rating_scale_vertical' || layout == 'vertical_stacked') { %>		
+		<div class="taskstem"><%=task['question']%></div>
+		<div class="foils q-answers-vertical">
+	<% } else if(layout == 'right_z') { %>
+		<div class='taskstem halfstem'><%=task['question']%></div>
+		<div class="foils q-answers-rightz">
+	<% } else if(layout == 'stacked_z') { %>
+		<div class="taskstem"><%=task['question']%></div>
+		<div class="foils q-answers-stackz">
+	<% } else if (layout == 'right_vertical_stacked') { %>
+		<div class='taskstem threeforthstem'><%=task['question']%></div>
+		<div class="foils q-answers-rightvertical">
+	<% } else if (layout == 'inverted_triangle') { %>
+		<div class='taskstem'><%=task['question']%></div>
+		<div class="foils q-answers-invertedT">
+	<% } else if (layout == 'upright_triangle') { %>
+		<div class='taskstem'><%=task['question']%></div>
+		<div class="foils q-answers-uprightT">
+	<% } %>
+
+	<ul> 
+					
+		<% for(var i=0; i<task['foils'].length; i++) { %>
+			<% if((layout == 'stacked_z' || layout == 'right_z') && i%2==0) { %>
+				<div class="align_z">
+			<% }else if (((layout == 'inverted_triangle' || layout == 'upright_triangle') && i%3==0) 
+							|| (layout == 'inverted_triangle' && i%3==2) || (layout == 'upright_triangle' && i%3==1)) {%>
+				<div class='align_z'>
+			<% } %>
+		<% if(layout == 'inverted_triangle' && i%3==2) { %>
+			<li class='lastFoil'>
+		<% } else if (layout == 'upright_triangle' && i%3==0) {%>
+			<li class='firstFoil'>
+		<% } else { %>
+			<li>
+		<% } %>
+			<% var html;
+				if(task.taskType != 'MC-MS') {
+					html = new EJS({url: path+'/js/views/mc.ejs'}).render({qNum: qNum, i:i, response: response, showtick: showtick})
+				} else {
+					html = new EJS({url: path+'/js/views/ms.ejs'}).render({answers: answers, qNum: qNum, i:i, task: task, showtick: showtick})
+				} %>
+			<% var foilAudios = null;
+				if(spokenPref) {
+					foilAudios = _.map(_.sortBy(_.filter(task['foils'][i].contentGroups, function(contentGroup) {
+												return contentGroup.readAloudAccommodation != null && contentGroup.readAloudAccommodation.readAloudType.replace(" ","").toLowerCase() == spokenPref;
+											}), function(contentGroup) {
+											return contentGroup.readAloudAccommodation.defaultOrder;
+										}), function(contentGroup) {
+											return contentGroup.readAloudAccommodation.accessibilityFile.fileLocation;
+								});
+					foilAudios = JSON.stringify(foilAudios);
+				}
+			%>
+			<% var foilText = task['foils'][i].text;
+			   if(layout == 'stacked_z' || layout == 'inverted_triangle' || layout == 'upright_triangle') { %>
+				<div class="tick ztick"><%= html %></div>
+				<% if(!showtick && ((response.values[qNum]!=null && response.values[qNum]==i) || (answers!=undefined && answers.indexOf(task['foils'][i].id) != -1))) {%>
+					<div class="foil zfoil tabable mark_answered" tabindex="<%= i %>" data-audio='<%= foilAudios %>' ><%= task['foils'][i].text %></div>
+				<% } else {%>
+					<div class="foil zfoil tabable" tabindex="<%= i %>" data-audio='<%= foilAudios %>'><%= foilText %></div>
+				<% } %>
+				
+			<% } else if(layout == 'right_z') { %>
+				<div class="tick rightztick"><%= html %></div>
+				<% if(!showtick && ((response.values[qNum]!=null && response.values[qNum]==i) || (answers!=null && answers.indexOf(task['foils'][i].id) != -1))) {%>
+					<div class="foil rightzfoil tabable mark_answered" tabindex="<%= i %>" data-audio='<%= foilAudios %>' ><%= foilText %></div>
+				<% } else {%>
+					<div class="foil rightzfoil tabable" tabindex="<%= i %>" data-audio='<%= foilAudios %>' ><%= foilText %></div>
+				<% } %>
+			<% } else if(layout == 'right_vertical_stacked') { %>
+				<div class="tick rightvtick"><%= html %></div>
+				<% if(!showtick && ((response.values[qNum]!=null && response.values[qNum]==i) || (answers!=null && answers.indexOf(task['foils'][i].id) != -1))) {%>
+					<div class="foil rightvfoil tabable mark_answered" tabindex="<%= i %>" data-audio='<%= foilAudios %>' ><%= foilText %></div>
+				<% } else {%>
+					<div class="foil rightvfoil tabable" tabindex="<%= i %>" data-audio='<%= foilAudios %>' ><%= foilText %></div>
+				<% } %>
+			<% } else { %>
+				<div class="tick sttick"><%= html %></div>
+				<% if(!showtick && ((response.values[qNum]!=null && response.values[qNum]==i) || (answers!=null && answers.indexOf(task['foils'][i].id) != -1))) {%>
+					<div class="foil stfoil tabable mark_answered" tabindex="<%= i %>" data-audio='<%= foilAudios %>' ><%= foilText %></div>
+				<% } else {%>
+					<div class="foil stfoil tabable" tabindex="<%= i %>" data-audio='<%= foilAudios %>' ><%= foilText %></div>
+				<% } %>
+			<% } %>
+        </li>
+        	<% if((layout == 'stacked_z' || layout == 'right_z') && i%2!=0) { %>
+				</div>
+			<% } else if (layout == 'inverted_triangle' && i%3!=0) {%>
+				</div>
+			<% } else if (layout == 'upright_triangle' && ((i%3)%2==0)) { %>
+			    </div>
+			<% } %>
+    	<% } %>
+	</ul>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="clear"></div>
+<!--<div class="buffer"></div>-->

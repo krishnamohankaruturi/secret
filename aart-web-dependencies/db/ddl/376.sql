@@ -1,0 +1,2 @@
+--DROP SEQUENCE IF EXISTS questarrequest_id_seq;
+--DROP TABLE IF EXISTS questarrequest;

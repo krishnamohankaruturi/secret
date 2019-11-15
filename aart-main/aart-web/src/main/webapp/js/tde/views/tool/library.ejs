@@ -1,0 +1,17 @@
+<div id="library" class="tool">
+	<div class="tool-container">
+		<div class="tool-hdr">
+			<a href="#" class="ind-tool-close tool-close">X</a>
+		</div>
+		<div class="selectarea">
+			<b><%= tool_names.library.viewdoc %>:</b>
+			<select id="libraryselect">
+				<option selected disabled hidden value="">Select document</option>
+				<%for(var i=0; i<library.length; i++) { %>
+					<option value="<%=i%>"><%=library[i]%></option>
+				<% } %>
+			</select>
+		</div>
+		<div class="viewarea"></div>
+	</div>
+</div>

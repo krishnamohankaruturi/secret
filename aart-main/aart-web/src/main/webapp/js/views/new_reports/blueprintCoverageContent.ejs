@@ -1,0 +1,163 @@
+<!--
+Some arrays [particularly of objects] come passed as objects with additional properties to their indexes, and that makes traversal much less straightforward.
+This beginning block is to transform the data so that it's in the same format it actually comes from the server.
+No idea why this is actually necessary, but the objects get messed up somewhere in the pipeline.
+-->
+<% var reports = []; %>
+<% for (var i in reportData) { %>
+	<% if (reportData.hasOwnProperty(i)) { %>
+		<% if (!isNaN(i)) { %>
+			<% reports[i] = reportData[i]['_data']; %>
+			
+			<% var criteriaAndEEs = []; %>
+			<% for (var c in reports[i].criteriaAndEEs) { %>
+				<% if (!isNaN(c)) { %>
+					<% criteriaAndEEs.push(reports[i].criteriaAndEEs[c]['_data']); %>
+				<% } %>
+			<% } %>
+			<% reports[i].criteriaAndEEs = criteriaAndEEs; %>
+			
+			<% for (var x = 0; x < reports[i].criteriaAndEEs.length; x++) { %>
+				<% var ees = []; %>
+				<% for (var e in reports[i].criteriaAndEEs[x].ees) { %>
+					<% if (!isNaN(e)) { %>
+						<% ees.push(reports[i].criteriaAndEEs[x].ees[e]['_data']); %>
+					<% } %>
+				<% } %>
+				<% reports[i].criteriaAndEEs[x].ees = ees; %>
+			<% } %>
+			
+			<% var studentTestCriteria = []; %>
+			<% for (var s in reports[i].studentTestCriteria) { %>
+				<% if (!isNaN(s)) { %>
+					<% studentTestCriteria.push(reports[i].studentTestCriteria[s]['_data']); %>
+				<% } %>
+			<% } %>
+			<% reports[i].studentTestCriteria = studentTestCriteria; %>
+			
+			<% for (var x = 0; x < reports[i].studentTestCriteria.length; x++) { %>
+				<% reports[i].studentTestCriteria[x].eesToTests = reports[i].studentTestCriteria[x].eesToTests['_data']; %>
+			<% } %>
+		<% } %>
+	<% } %>
+<% } %>
+
+
+<% var date = new Date(); %>
+<% var month = date.getMonth(); %>
+<% var day = date.getDate(); %>
+<% var year = date.getFullYear(); %>
+<% var defaultColumnHeight = '40px'; %>
+
+<% var imgSrc = {
+	met: 'images/icon_met.png',
+	partiallyMet: 'images/icon_partially.png',
+	completedTestlet: 'images/icon_completed.png',
+	notTested: 'images/icon_plancreated.png'
+}; %>
+
+<div id="alternateBlueprintCoverage" class="blueprintcoverage">
+	<div class="buttons"><input type="button" id="saveBlueprintCoveragePDF" value="Save"/></div>
+	<div class="green"><%= (month + 1) + '/' + day + '/' + year; %></div>
+	<div class="green"><%= (typeof reports == 'undefined' || typeof reports[0] == 'undefined' || reports[0] == null) ? '' : reports[0].orgName; %></div>
+	<div class="green centerheader clear">Blueprint Coverage Report</div>
+	<div class="legend">
+		<img src="<%= imgSrc.met %>" alt="met criterion">&nbsp;<span>met criterion</span>&nbsp;&nbsp;
+		<img src="<%= imgSrc.completedTestlet %>" alt="student has completed a testlet">&nbsp;<span>student has completed a testlet</span>
+		<br/>
+		<img src="<%= imgSrc.partiallyMet %>" alt="partially met">&nbsp;<span>partially met</span>&nbsp;&nbsp;
+		<img src="<%= imgSrc.notTested %>" alt="plan created, student not tested">&nbsp;<span>plan created, student not tested</span>
+	</div>
+	
+	<% for (var x = 0; x < reports.length; x++) { %>
+		<% var report = reports[x]; %>
+		<div class="blueprintcoverageblock">
+			<div class="teacherheader">
+				<% var headerText = ''; %>
+				<% if (params.groupByTeacher && report.teacherId != null) { %>
+					<% headerText = report.teacherLastName + ', ' + report.teacherFirstName + ' - '; %>
+				<% } %>
+				<% headerText += report.contentAreaName + ' ' + report.gradeCourseName; %>
+				<%= headerText %>
+			</div>
+			
+			<% for (var c = 0; c < report.criteriaAndEEs.length; c++) { %>
+				<% var criteria = report.criteriaAndEEs[c]; %>
+				<br/><br/>
+				<table id="<%=x%>-<%=c%>" class="gridlines overflow-y" style="width:800px;">
+					<thead>
+						<tr scope="row" style="height:<%=defaultColumnHeight%>;">
+							<th scope="col">Conceptual Area</th>
+							<th scope="col">EE</th>
+							<th scope="col">EE Description</th>
+							<% for (var s = 0; s < report.studentTestCriteria.length; s++) { %>
+								<% var student = report.studentTestCriteria[s]; %>
+								<% if (student.criteria == criteria.criteria) { %>
+									<th scope="col" class="studentheader">
+										<div>&nbsp;<%= student.studentLastName %>,&nbsp;<br/><%= student.studentFirstName %></div>
+									</th>
+								<% } %>
+							<% } %>
+						</tr>
+						<tr style="height:<%=defaultColumnHeight%>;">
+							<th scope="colgroup" class="green criteria" colspan="3"><%= criteria.criteriaText %></th>
+							<% for (var s = 0; s < report.studentTestCriteria.length; s++) { %>
+								<% var student = report.studentTestCriteria[s]; %>
+								<% if (student.criteria == criteria.criteria) { %>
+									<th scope="col" class="studentheader">
+										<% if (student.completedCriteriaStatus === 'complete') { %>
+											<div class="studentheadericon"><img src="<%= imgSrc.met %>" alt="met criterion">&nbsp;</div>
+										<% } else if (student.completedCriteriaStatus === 'partial') { %>
+											<div class="studentheadericon"><img src="<%= imgSrc.partiallyMet %>" alt="partially met">&nbsp;</div>
+										<% } %>
+									</th>
+								<% } %>
+							<% } %>
+						</tr>
+					</thead>
+					<tbody>
+						<% for (var e = 0; e < criteria.ees.length; e++) { %>
+							<% var ee = criteria.ees[e]; %>
+							<tr style="height:<%=defaultColumnHeight%>;">
+								<td><%= ee.conceptualCodeForLM %></td>
+								<td><%= ee.eeConetnetCode %></td>
+								<td class="eedescription"><%= ee.eeDescription %></td>
+								<% for (var s = 0; s < report.studentTestCriteria.length; s++) { %>
+									<% var student = report.studentTestCriteria[s]; %>
+									<% if (student.criteria == criteria.criteria) { %>
+										<% var tests = student.eesToTests[ee.eeConetnetCode]; %>
+										<td class="studenttested">
+											<% if (typeof tests !== 'undefined' && tests.length > 0) { %>
+												<% for (var t = 0; t < tests.length; t++) { %>
+													<% if (t > 0) { %>
+														<br/>
+													<% } %>
+													<% var test = tests[t]; %>
+													<% if (test.testStatus == 'complete' || test.savedDate != null || test.confirmDate != null) { %>
+														<% var src = imgSrc.notTested; %>
+														<% var append = ' Saved'; %>
+														<% var testDate = new Date(test.savedDate); %>
+														<% if (test.testStatus == 'complete') { %>
+															<% src = imgSrc.completedTestlet; %>
+															<% testDate = new Date(test.endDateTime); %>
+															<% append = ''; %>
+														<% } else if (test.confirmDate != null) { %>
+															<% testDate = new Date(test.confirmDate); %>
+															<% append = ''; %>
+														<% } %>
+														<img src="<%= src %>" alt="<%= src %>"/>&nbsp;<%= (testDate.getMonth() + 1) + '/' + testDate.getDate() + append %>
+													<% } %>
+												<% } %>
+											<% } %>
+										</td>
+									<% } %>
+								<% } %>
+							</tr>
+						<% } %>
+					</tbody>
+				</table>
+			<% } %>
+		</div>
+		<br/><br/>
+	<% } %>
+</div>

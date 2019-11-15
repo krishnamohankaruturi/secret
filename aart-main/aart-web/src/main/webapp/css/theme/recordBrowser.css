@@ -1,0 +1,217 @@
+
+/* Record Browser css */
+.ui-dialog-buttonset { margin:0 0 0 0;}
+.ui-dialog .ui-dialog-buttonpane{
+	padding: .3em 0em .5em .4em;
+}
+.ui-helper-clearfix:before,
+   : .ui-helper-clearfix:after {
+    	content: "";
+     	display: table;
+     	border-collapse: collapse;
+     }
+   : .ui-helper-clearfix:after {
+     	clear: both;
+     }
+   : .ui-helper-clearfix {
+     	min-height: 0; /* support: IE7 */
+     }
+.orgFilterNav:hover {
+	cursor: pointer;
+}
+
+.orgFilter {
+	border: 1px solid black;
+	float: left;
+	z-index: 100;
+	position: absolute;
+	background: white;
+	display: none;
+	width: 300px;
+	height: 400px;
+}
+
+.orgFilter span {
+	margin-left: 5px;
+	margin-top: 5px;
+	color:#fff;
+	background: #0e76bc !important;
+	border-radius: 4px !important;
+	padding:7px;
+	float:right;
+	cursor:pointer;
+}
+
+.grid_button {
+	margin-left: 5px;
+	margin-top: 5px;
+	color:#fff;
+	background: #0e76bc;
+	border-radius: 4px !important;
+	cursor:pointer;
+}
+
+.filterTree {
+	width: 300px;
+	height: 300px;
+	overflow: scroll;
+	position: relative;
+	top: 15px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+.orgFilter-select-all,  .orgFilter-deselect-all
+ {
+	color: #4090e1;
+	margin: 2px 4px;
+}
+
+.orgFilter-select-all:hover, .orgFilter-deselect-all:hover
+ {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.filter-tree-element {
+	/* background-image: url('../external/images/stock_standard_filter_16x16.png'); */
+	background-repeat: no-repeat;
+	
+	font-size: 1.5em;
+	margin-top: 10px;
+}
+
+.ui-widget {
+	font-size: 1em ;
+font-family: sans-serif;
+
+background: white;
+border-radius: 4px;
+border:none;
+}
+
+.ui-widget-header{}
+.ui-dialog{ position: relative; border: 1px solid #d8d8d8;}
+.ui-dialog-title {
+	font-size: 1.3em; 
+	color: #5f7e1a;
+	text-align: center;
+}
+.ui-jqdialog-titlebar .ui-icon-closethick,
+.ui-dialog-titlebar .ui-icon-closethick{
+	float:right !important;
+	margin:0 10px;
+	
+}
+
+.defaultOrgClass {
+	font-weight: bold;
+	color: #2E6E9E;
+}
+
+.recordBrowserAltRow { 
+	background: #F0F0F0 !important; 
+}
+
+
+.ui-dialog-titlebar a{
+	font-size: 1em; 
+	color: #0e76bc;
+}
+
+.ui-dialog-titlebar {
+	padding:15px 0 15px 15px;
+}
+
+.ui-button-text {cursor: pointer;}
+
+
+.ui-element {
+	white-space: pre-wrap;
+}
+
+.ui-dialog {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: .2em;
+	outline: 0;
+}
+.ui-dialog .ui-dialog-titlebar {
+	padding: .4em 1em;
+	position: relative;
+	overflow: hidden;
+}
+.ui-dialog .ui-dialog-title {
+	float: left;
+	margin: .1em 0;
+	white-space: nowrap;
+	width: 90%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+	position: absolute;
+	right: .3em;
+	top: 50%;
+	width: 21px;
+	margin: -10px 0 0 0;
+	padding: 1px;
+	height: 20px;
+}
+.ui-dialog .ui-dialog-content {
+	position: relative;
+	border: 0;
+	padding: .5em .5em;
+	background: none;
+	overflow: auto;
+	
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+	float: right;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+	margin: .5em 1em .5em 0;
+	cursor: pointer;
+}
+.ui-dialog .ui-resizable-se {
+	cursor: nwse-resize;
+}
+.ui-draggable .ui-dialog-titlebar {
+	cursor: move;
+}
+
+.ui-dialog .ui-dialog-buttonpane { background: white; overflow: hidden; text-align: left; border-top: 1px solid #f2f2f2; padding: 3% 5% 0 3%; position: absolute; bottom: 0; left:0; width:92%;}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset button { margin-top: 5px; }
+
+ 
+/* Misc visuals
+----------------------------------*/
+
+/* Corner radius */
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-left,
+.ui-corner-tl {
+	border-top-left-radius: 2px;
+}
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-right,
+.ui-corner-tr {
+	border-top-right-radius: 2px;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-left,
+.ui-corner-bl {
+	border-bottom-left-radius: 2px;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-right,
+.ui-corner-br {
+	border-bottom-right-radius: 2px;
+}
+
+

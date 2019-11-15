@@ -1,0 +1,1 @@
+ALTER TABLE aartuser DROP COLUMN orgfilters;

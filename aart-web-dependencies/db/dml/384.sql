@@ -1,0 +1,1 @@
+-- US15915 : Test coordination extend window for test session

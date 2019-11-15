@@ -1,0 +1,13 @@
+/* CSS for the header tile definition */
+
+#header_id {
+	height: 45px;
+}
+
+#logo_div {
+	float: left;
+}
+
+#log_status {
+	float:right;
+}

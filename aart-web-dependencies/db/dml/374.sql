@@ -1,0 +1,2 @@
+--US15857 : Technical: SQL Improvements
+--Check EnrollmentDao.xml  : getTECExtractByOrg query perfomance after added index.

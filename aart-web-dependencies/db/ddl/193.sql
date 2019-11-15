@@ -1,0 +1,1 @@
+ALTER TABLE roster DROP CONSTRAINT state_course_fk;

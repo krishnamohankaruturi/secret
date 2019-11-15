@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.warehouse.model.HistoricDataMapper">
+
+  <resultMap id="findStudentMap" type="edu.ku.cete.domain.enrollment.FindEnrollments">
+    	<id column="enrollmentid" property="id" jdbcType="BIGINT" />
+    	<result property="stateStudentIdentifier" column="statestudentidentifier" jdbcType="VARCHAR" />
+    	<result property="legalFirstName" column="firstname" jdbcType="VARCHAR" />
+		<result property="legalLastName" column="lastname" jdbcType="VARCHAR" />
+		<result property="middleName" column="middlename" jdbcType="VARCHAR" />
+    	<result column="status" property="active" jdbcType="BOOLEAN" />
+    	<result column="districtName" property="districtName" javaType="String"/>
+    	<result column="schoolname" property="schoolName" javaType="String"/>		
+    	<result column="gradename"  property="gradeName" jdbcType="VARCHAR"/>    	
+    	<result property="studentId" column="studentid" jdbcType="BIGINT"/>
+    	<result column="schooldistrictid" property="districtId" jdbcType="BIGINT" />
+    	<result column="schoolid" property="schoolId" jdbcType="BIGINT"/>
+    	<result column="schoolyear" property="schoolYear" jdbcType="INTEGER"/>
+    	<result property="gradeId" column="gradeid" jdbcType="VARCHAR"/>
+    	<result column="statename" property="stateName" javaType="String"/>
+		<result column="stateid" property="stateId" jdbcType="BIGINT" />
+		<result column="gender" property="gender" jdbcType="VARCHAR" />
+		<result column="dateofbirth" property="dateOfBirth" jdbcType="TIMESTAMP" />
+		<collection property="assessmentPrograms" ofType="java.lang.Long" javaType="list">
+            <result column="assessmentPrograms" />
+        </collection>
+  </resultMap>
+    
+  <resultMap id="findStudentExistMap" type="edu.ku.cete.domain.enrollment.Enrollment">  
+    	<id column="enrollmentid" property="id" jdbcType="BIGINT" />  
+    	<result column="studentid" property="studentId" jdbcType="BIGINT" />
+    	<result column="assessmentprogramid" property="assessmentProgramId" jdbcType="BIGINT" />
+    	<result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" /> 	
+    	<result column="parentorganizationid" property="attendanceSchoolDistrictId" jdbcType="BIGINT" />
+    	<result column="currentschoolyear" property="currentSchoolYear" jdbcType="INTEGER" />
+    	<result column="activeFlag" property="activeFlag" jdbcType="BIT" />   
+    	<result column="gradeid" property="currentGradeLevel" jdbcType="VARCHAR"/> 
+    	<association property="student" javaType="edu.ku.cete.domain.student.Student">			
+			<result property="stateStudentIdentifier" column="statestudentidentifier" jdbcType="VARCHAR" />
+   		</association>
+  </resultMap>
+    
+  <select id="findStudentEnrollment"  resultMap="findStudentMap">
+  <!-- NOTE: any changes to this query will likely need to be made in the normal database equivalent -->
+	       select enr.id as enrollmentid,stu.id as studentid,stu.statestudentidentifier,stu.legalfirstname as firstname,
+	       stu.legalmiddlename as middlename,stu.legallastname as lastname, enr.activeflag as status, otd.districtname,
+	       otd.districtid as schooldistrictid, otd.schoolname, otd.schoolid, enr.currentschoolyear as schoolyear,
+ 	       gc.name as gradename, gc.id as gradeid, stu.stateid, otd.statename,
+ 	       stu.dateofbirth,CASE WHEN stu.gender = 0 THEN 'Female' ELSE 'Male' END AS gender, 
+  	       sap.assessmentprogramid as assessmentPrograms 
+  	       from student stu
+           join enrollment enr on stu.id = enr.studentid
+           join organizationtreedetail otd on enr.attendanceschoolid = otd.schoolid 
+  	       <if test="isTeacher">
+		        inner join enrollmentsrosters enrlr on (enrlr.enrollmentid = enr.id )
+		        inner join roster rs on (enrlr.rosterid=rs.id and rs.teacherid = #{educatorId}) 
+	       </if>  
+           left join gradecourse gc on gc.id = enr.currentgradelevel and gc.activeflag is true 
+           left join studentassessmentprogram sap on sap.studentid = stu.id and sap.activeflag is true 
+           where
+           stu.activeflag is true
+           and  stu.stateid=#{stateId, jdbcType=BIGINT}
+           and  stu.statestudentidentifier = #{studentStateId,jdbcType=VARCHAR}
+           and enr.currentschoolyear in (
+           select distinct currentschoolyear from enrollment where studentid = stu.id order by currentschoolyear desc limit 1)
+           order by enr.currentschoolyear desc
+  </select>
+	
+  <select id ="findStudentBasedOnStateStudentIdentifier" resultMap="findStudentExistMap">	  
+	       select enr.id as enrollmentid, stu.id as studentid, stu.statestudentidentifier, 
+	       sap.assessmentprogramid, enr.attendanceschoolid, dis.parentorganizationid,
+	       enr.currentschoolyear, enr.activeflag, gc.id as gradeid
+	       from student stu
+	       join enrollment enr on stu.id = enr.studentid
+	  	   join organizationrelation dis on dis.organizationid = enr.attendanceschoolid 
+	       join studentassessmentprogram sap on sap.studentid = stu.id and sap.activeflag is true
+	       left join gradecourse gc on gc.id = enr.currentgradelevel and gc.activeflag is true
+	  	   where  stu.activeflag is true and stu.stateid = #{organizationId, jdbcType=BIGINT}
+	  	   and stu.statestudentidentifier = #{stateStudentIdentifier, jdbcType=VARCHAR} 
+	  	   order by enr.createddate desc limit 1
+  </select> 
+	  
+</mapper>

@@ -1,0 +1,2 @@
+-- DE9813: Accepted non-numeric Low cut score 
+-- For /dml/403.sql

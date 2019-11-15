@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.amp.AmpDataExtractDao" >
+	<resultMap id="BaseResultMap" type="edu.ku.cete.web.AmpStudentDataExtractDTO" >
+		<result column="studentid" property="studentId" jdbcType="BIGINT" />
+		<result column="enrollmentId" property="enrollmentId" jdbcType="BIGINT" />
+	    <result column="studentStateId" property="studentStateId" jdbcType="VARCHAR" />
+	    <result column="gradeEnrolled" property="gradeEnrolled" jdbcType="VARCHAR" />
+	    <result column="attendanceSchoolDispId" property="attendanceSchoolDispId" jdbcType="VARCHAR" />
+	    <result column="districtDispId" property="districtDispId" jdbcType="VARCHAR" />
+	    <result column="studentLegalLastName" property="studentLegalLastName" jdbcType="VARCHAR" />
+	    <result column="studentLegalFirstName" property="studentLegalFirstName" jdbcType="VARCHAR" />
+	    <result column="studentLegalMiddleName" property="studentLegalMiddleName" jdbcType="VARCHAR" />
+	    <result column="generationCode" property="generationCode" jdbcType="VARCHAR" />
+	    <result column="gender" property="gender" jdbcType="VARCHAR" />
+	    <result column="dateOfBirth" property="dateOfBirth" jdbcType="VARCHAR" />
+	    <result column="comprehensiveRace" property="comprehensiveRace" jdbcType="VARCHAR" />
+	    <result column="primaryDisabilityCode" property="primaryDisabilityCode" jdbcType="VARCHAR" />
+	    <result column="giftedStudent" property="giftedStudent" jdbcType="VARCHAR" />
+	    <result column="hispanicEthnicity" property="hispanicEthnicity" jdbcType="VARCHAR" />
+	    <result column="firstLanguage" property="firstLanguage" jdbcType="VARCHAR" />
+	    <result column="esolParticipationCode" property="esolParticipationCode" jdbcType="VARCHAR" />
+	</resultMap>
+  
+ 	<select id="getAMPTestCollections" resultType="java.lang.Long">
+		SELECT 
+			distinct ts.testcollectionid 
+		FROM testsession ts 
+			JOIN organizationtreedetail otd ON otd.schoolid = ts.attendanceschoolid and stateid = 35999
+			JOIN operationaltestwindow otw ON otw.id = ts.operationaltestwindowid 
+		WHERE ts.activeflag is true 
+			AND schoolyear = #{currentSchoolYear} 
+			AND ts.operationaltestwindowid = ANY(ARRAY
+			<foreach collection="operationalTestWindows"
+				item="operationaltestwindowid" open="[" close="]" separator="," >
+				#{operationaltestwindowid, jdbcType=BIGINT}
+			</foreach>) 
+  	</select>
+
+	<select id="getStudentData" resultMap="BaseResultMap" >
+		SELECT st.id as studentId, en.id as enrollmentId,
+			st.statestudentidentifier AS studentStateId,
+			gc.name AS gradeEnrolled,
+			otd.schooldisplayidentifier as attendanceSchoolDispId,
+			otd.districtdisplayidentifier as districtDispId,
+			st.legallastname AS studentLegalLastName,
+			st.legalfirstname AS studentLegalFirstName,
+			st.legalmiddlename AS studentLegalMiddleName,
+			st.generationcode AS generationCode,
+			CASE WHEN st.gender = 0 THEN 'Female' ELSE 'Male' END AS gender,
+			to_char(st.dateofbirth, 'MM/DD/yyyy') AS dateOfBirth,
+			st.comprehensiverace AS comprehensiveRace,
+			st.primarydisabilitycode AS primaryDisabilityCode,
+			en.giftedstudent AS  giftedStudent,
+			st.hispanicethnicity AS hispanicEthnicity,
+			st.firstlanguage AS firstLanguage,
+			st.esolparticipationcode AS esolParticipationCode
+			FROM student st
+			INNER JOIN enrollment en ON (st.id = en.studentid and en.currentschoolyear = #{currentSchoolYear} 
+						and (en.activeflag OR ((NOT en.activeflag) AND (en.exitwithdrawaltype IS NOT NULL))))
+			INNER JOIN gradecourse gc ON gc.id = en.currentgradelevel
+			INNER JOIN organization og ON en.attendanceschoolid = og.id
+			INNER JOIN organizationtreedetail otd ON otd.schoolid =en.attendanceschoolid and otd.stateid =35999
+			WHERE st.activeflag is true and og.reportprocess = true
+			and st.stateid = 35999 
+			and st.id in (SELECT distinct studentid from studentstests
+				where testcollectionid = ANY(ARRAY
+			<foreach collection="testCollections"
+				item="testCollectionId" open="[" close="]" separator="," >
+				#{testCollectionId, jdbcType=BIGINT}
+			</foreach>))
+  	</select>
+  	
+  	<resultMap id="StudentsTestesGradeMap" type="edu.ku.cete.web.StudentGradesTestedDTO" >
+		<id column="studentid" property="studentId" jdbcType="BIGINT" />
+		<id column="enrollmentid" property="enrollmentId" jdbcType="BIGINT" />
+		<collection column="studentid" javaType="ArrayList" ofType="edu.ku.cete.domain.content.GradeCourse" property="gradeCources">
+	   		<result column="gradeCource" property="abbreviatedName" />
+	   		<result column="gradeName" property="name" />
+	 	</collection>
+	</resultMap>
+  	
+  	<select id="getStudentsGradesTested" resultMap="StudentsTestesGradeMap">
+  		SELECT distinct sts.studentid, sts.enrollmentid, gc.abbreviatedname  as "gradeCource", gc.name as "gradeName"
+  		FROM studentstests sts 
+  			JOIN enrollment en ON en.id = sts.enrollmentid and en.currentschoolyear = #{currentSchoolYear}
+			JOIN testcollection tc ON tc.id = sts.testcollectionid
+			JOIN testsession tsn ON tsn.id = sts.testsessionid
+			JOIN gradecourse gc ON gc.id = tsn.gradecourseid
+		WHERE sts.activeflag = true and sts.status in (84,85,86,465) 
+			AND sts.testcollectionid =ANY(ARRAY
+			<foreach collection="testCollections"
+				item="testCollectionId" open="[" close="]" separator="," >
+				#{testCollectionId, jdbcType=BIGINT}
+			</foreach>) order by sts.studentid
+  	</select>
+  	
+  	
+  	<resultMap id="StudentProfileItemAttributeDTOMap" type="java.util.HashMap">
+		<result column="studentid" property="studentId" jdbcType="BIGINT" />
+		<collection property="pnpProfileAttributesList" ofType="edu.ku.cete.web.AmpExtractStudentProfileItemAttributeDTO" javaType="java.util.List">
+		    <id property="attributeNameAttributeContainerId" column="attributeNameAttributeContainerId"/>
+		    <id property="studentId" column="studentId"/>
+		    <result property="selectedValue" column="selectedValue"/>
+		    <result property="attributeNameId" column="attributeNameId"/>
+		    <result property="attributeName" column="attributeName"/>
+		    <result property="attributeContainerId" column="attributeContainerId"/>
+		    <result property="attributeContainerName" column="attributeContainerName"/>
+		  </collection>
+	</resultMap>
+  	
+  	
+	<select id="getStudentProfileItemAttributes" resultMap="StudentProfileItemAttributeDTOMap">
+		SELECT 
+			spiav.studentid as "studentId",	pianc.id as "attributeNameAttributeContainerId", pia.id as "attributeNameId", attributename as "attributeName",
+			piac.id as "attributeContainerId", piac.attributecontainer as "attributeContainerName", spiav.selectedvalue
+		FROM 
+			profileitemattribute pia 
+			JOIN profileItemAttributenameAttributeContainer pianc ON pia.id =  pianc.attributenameid
+			JOIN profileitemattributecontainer piac ON pianc.attributecontainerid = piac.id
+			JOIN studentprofileitemattributevalue spiav ON pianc.id = spiav.profileitemattributenameattributecontainerid
+		WHERE ((attributename IN ('assignedSupport')
+			AND attributecontainer IN ('Spoken','ColourOverlay','InvertColourChoice','Masking','BackgroundColour','Signing','Braille','AuditoryBackground','Spoken'))
+			OR (attributename IN ('preferenceSubject' ,'separateQuiteSetting','readsAssessmentOutLoud','useTranslationsDictionary','dictated','usedCommunicationDevice','signedResponses','largePrintBooklet','paperAndPencil','supportsTwoSwitch')))
+			AND spiav.studentid IN (SELECT st.id
+						FROM student st
+						INNER JOIN enrollment en ON (st.id = en.studentid and en.currentschoolyear = #{currentSchoolYear}
+							AND (en.activeflag OR ((NOT en.activeflag) AND (en.exitwithdrawaltype IS NOT NULL))))
+						WHERE st.activeflag is true 
+						AND st.stateid = 35999 
+						AND st.id in (SELECT distinct studentid FROM studentstests
+						WHERE testcollectionid = ANY(ARRAY
+							<foreach collection="testCollections"
+								item="testCollectionId" open="[" close="]" separator="," >
+								#{testCollectionId, jdbcType=BIGINT}
+							</foreach>)))
+		ORDER BY spiav.studentid
+	</select>
+	
+	<resultMap id="StudentSubjectItemCountMap" type="java.util.HashMap">
+		<result column="studentid" property="studentId" jdbcType="BIGINT" />
+		<collection property="studentSubjectSectionCountLst" ofType="edu.ku.cete.web.AmpExtractStudentSujectSectionItemCountDTO" javaType="java.util.List">
+		    <id property="studentId" column="studentId"/>
+		    <id property="enrollmentId" column="enrollmentId"/>
+		    <id property="contentAreaId" column="contentAreaId"/>
+		    <id property="gradeCourse" column="gradeCourse"/>
+		    <id property="stageCode" column="stageCode"/>
+		    <result property="totalCount" column="totalCount"/>
+		  </collection>
+	</resultMap>
+	
+	<select id ="getStudentSubjectItemsCount" resultMap="StudentSubjectItemCountMap">
+		SELECT sts.studentid,sts.enrollmentid, tc.contentareaid, gc.abbreviatedname as "gradeCourse", stg.code as "stageCode",
+		 <if test="choiceStr == 'total'" >  sum(ts.numberoftestitems) </if>
+		 <if test="choiceStr == 'viewed' or choiceStr == 'answered'" >  count(*) </if> AS "totalCount"
+		FROM studentstests sts 
+			JOIN testsession tss ON tss.id = sts.testsessionid
+			JOIN stage stg ON stg.id = tss.stageid
+			JOIN gradecourse gc on gc.id = tss.gradecourseid
+			JOIN studentstestsections stts ON sts.id = stts.studentstestid
+			JOIN testsection as ts ON stts.testsectionid = ts.id
+			JOIN testcollection tc ON tc.id = sts.testcollectionid
+			 <if test="choiceStr != 'total'" >
+        		JOIN studentsresponses  r ON (r.studentstestsid = sts.id AND r.studentstestsectionsid = stts.id)
+      		</if>
+      		JOIN enrollment en ON (en.id = sts.enrollmentid AND sts.studentid = en.studentid AND en.currentschoolyear = #{currentSchoolYear})
+		WHERE sts.activeflag = true 
+			<if test="choiceStr == 'total'" >
+        		AND sts.status in (84,85,86,465)
+      		</if>
+      		<if test="choiceStr == 'viewed' or choiceStr == 'answered'" >
+        		AND sts.status in (85,86)
+      		</if>
+			AND sts.testcollectionid = ANY(ARRAY
+							<foreach collection="testCollections"
+								item="testCollectionId" open="[" close="]" separator="," >
+								#{testCollectionId, jdbcType=BIGINT}
+							</foreach>)
+			<if test="choiceStr == 'answered'" >
+        		and r.score is not null
+      		</if>
+		GROUP BY sts.studentid,sts.enrollmentid, tc.contentareaid, gc.abbreviatedname,stg.code 
+		ORDER BY sts.studentid, tc.contentareaid
+	</select>
+	
+	<select id ="getStudentSubjectIncludedItemsCount" resultMap="StudentSubjectItemCountMap">
+		SELECT sts.studentid, sts.enrollmentid, tc.contentareaid, gc.abbreviatedname  as "gradeCourse", stg.code as "stageCode",
+			<if test="choiceStr == 'total'" > count(tstv.testsectionid) </if>
+			<if test="choiceStr == 'viewed' or choiceStr == 'answered'" >  count(sr.taskvariantid) </if>
+			<if test="choiceStr == 'answeredcorrect'" > sum(sr.score) </if> AS "totalCount"
+		FROM studentstests sts 
+			JOIN studentstestsections as stts on (sts.id = stts.studentstestid)
+			JOIN testsection ts ON stts.testsectionid = ts.id
+			JOIN testcollection tc ON tc.id = sts.testcollectionid
+			JOIN testsession tsn ON tsn.id = sts.testsessionid
+			JOIN stage stg ON stg.id = tsn.stageid
+			JOIN gradecourse gc on gc.id = tsn.gradecourseid
+			<if test="choiceStr == 'total'" >
+				JOIN testsectionstaskvariants tstv ON (tstv.testsectionid = ts.id)
+			</if>
+			<if test="choiceStr != 'total'" >
+				JOIN studentsresponses sr ON (sr.studentstestsid = sts.id AND sr.studentstestsectionsid = stts.id)
+			</if>
+			JOIN enrollment en ON en.id = sts.enrollmentid AND en.studentid= sts.studentid AND en.currentschoolyear = #{currentSchoolYear}
+		WHERE sts.activeflag = true 
+       		AND sts.status in (84,85,86,465)
+			AND sts.testcollectionid = ANY(ARRAY
+							<foreach collection="testCollections"
+								item="testCollectionId" open="[" close="]" separator="," >
+								#{testCollectionId, jdbcType=BIGINT}
+							</foreach>)
+			<if test="choiceStr == 'total'" >
+				AND tstv.taskvariantid NOT IN (select taskvariantid from excludeditems exc where gradeid=tsn.gradecourseid)
+			</if>
+			<if test="choiceStr != 'total'" >
+				AND sr.taskvariantid NOT IN (select taskvariantid from excludeditems exc where gradeid=tsn.gradecourseid)
+			</if>
+			<if test="choiceStr == 'answered'" >
+				AND sr.score IS NOT null
+			</if>
+		GROUP BY sts.studentid,sts.enrollmentid, tc.contentareaid,gc.abbreviatedname,stg.code
+		ORDER BY sts.studentid, tc.contentareaid
+	</select>
+	
+</mapper>

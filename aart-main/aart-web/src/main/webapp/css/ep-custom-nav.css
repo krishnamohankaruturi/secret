@@ -1,0 +1,157 @@
+/*
+CSS for navigation in EP
+
+Currently built around bootstrap
+*/
+
+/*
+Color constant reference:
+	main blue pill navigation: #0e76bc (with white text)
+	main blue pill navigation selected: #86d8ff (with black text)
+	sub green pill navigation: #81a64c (with white text)
+	sub green pill navigation selected: #cbec8b (with black text)
+
+/* global to all top-layer navigation components from bootstrap */
+.nav {
+	margin-top: 1.25rem;
+}
+
+/* get rid of the silly dotted outlines */
+.nav-pills *:focus, .nav-pills *:active,
+.nav-tabs *:focus, .nav-tabs *:active {
+	outline: none;
+}
+
+.nav-tabs {
+	border-bottom: 1px solid DimGray;
+}
+
+/* inactive tabs */
+.nav-tabs .nav-item .nav-link,
+.nav-tabs .nav-item a.nav-link {
+	border-color: LightGray LightGray DimGray;
+}
+
+/* hovered tab */
+.nav-tabs .nav-item > a.nav-link:hover, 
+ .nav-tabs .nav-item > a.nav-link:focus{
+	background-color: WhiteSmoke;
+	border-color: DarkGray DarkGray DimGray;
+}
+
+
+.nav-tabs .nav-item .nav-link.active,
+.nav-tabs .nav-item .nav-link.active:hover,
+.nav-tabs .nav-item .nav-link.active:focus,
+.nav-tabs .nav-item a.nav-link:active {
+	background-color: White;
+	border-color: DimGray DimGray White;
+}
+
+/* change the font from default for all pill and tab navigation */
+.nav-pills a, .nav-tabs a {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 10pt;
+}
+
+/* style bootstrap dropdowns */
+.dropdown-menu {
+	box-shadow: 2px 2px 2px gray;
+}
+
+/* .main-nav being the top-level navigation of EP */
+.main-nav li {
+	margin: 0 1px;
+	text-transform: uppercase;
+	font-weight: bold;
+	border-radius: .25rem;
+}
+
+.main-nav .dropdown-item {
+	color: black;
+}
+
+.main-nav .dropdown-item:hover {
+	background-color: LightGray;
+}
+
+.main-nav .dropdown-item.active {
+	background-color: #86d8ff;
+}
+
+.main-nav.nav-pills .nav-item .nav-link {
+	background-color: #0e76bc;
+	color: White;
+}
+
+.main-nav.nav-pills .nav-item .nav-link.active,
+.main-nav.nav-pills .nav-item > a.nav-link:hover,
+.main-nav.nav-pills .nav-item > a.nav-link:focus,
+.main-nav.nav-pills .nav-item a.nav-link:active,
+.main-nav.nav-pills .nav-item.show > a.nav-link {
+	background-color: #86d8ff;
+	color: black;
+}
+
+/* .sub-nav being the second level of navigation of EP */
+.sub-nav li {
+	margin: 0 1px;
+	font-weight: bold !important;
+	border-radius: .25rem;
+}
+
+.sub-nav .dropdown-item:hover {
+	background-color: LightGray;
+}
+
+/* inactive pills */
+.sub-nav.nav-pills .nav-item .nav-link {
+	background-color: #81a64c;
+	color: White;
+}
+
+/* hovered or active pills */
+.sub-nav.nav-pills .nav-item a.active,
+.sub-nav.nav-pills .nav-item > a:hover,
+.sub-nav.nav-pills .nav-item a:active,
+.sub-nav.nav-pills .nav-item.show > a {
+	background-color: #cbec8b;
+	color: black;
+}
+
+/* main sub-tab line */
+.sub-nav.nav-tabs {
+	padding: 0 .5rem 0 .5rem;
+}
+
+
+/* inactive tabs */
+.sub-nav.nav-tabs .nav-item > a {
+	color: DimGray;
+}
+
+/* active tabs */
+.sub-nav.nav-tabs .nav-item a.active,
+.sub-nav.nav-tabs .nav-item a:active {
+	color: #0e76bc;
+}
+
+.sub-nav .dropdown-item:hover {
+	background-color: LightGray;
+}
+
+.sub-nav .dropdown-menu .dropdown-item {
+	color: Black;
+}
+
+.sub-nav.nav-tabs .dropdown-menu a.active,
+.sub-nav.nav-tabs .dropdown-menu a:active {
+	background-color: #0e76bc;
+	color: White;
+	font-weight: bold;
+}
+
+
+.tab-content {
+	margin-top: 1rem;
+}

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.AssessmentTopicMapper">
+
+   <insert id="insert" parameterType="edu.ku.cete.report.domain.AssessmentTopic">
+   		INSERT INTO assessmenttopic(topicname, schoolyear, assessmentcode, gradeid, contentareaid, 
+            topiccode, totalnoofitems, activeflag, createduser, createddate, 
+            modifieduser, modifieddate, batchuploadid)
+         VALUES (#{topicName,jdbcType=VARCHAR}, #{schoolYear,jdbcType=BIGINT}, #{testType,jdbcType=VARCHAR}, #{gradeId,jdbcType=BIGINT}, #{contentareaId,jdbcType=BIGINT}, 
+            #{topicCode,jdbcType=VARCHAR}, #{totalNoOfItems,jdbcType=VARCHAR}, #{activeFlag,jdbcType=BOOLEAN}, #{createdUser,jdbcType=BIGINT}, now(), 
+            #{modifiedUser,jdbcType=BIGINT}, now(), #{batchUploadId,jdbcType=BIGINT});   		
+   </insert>
+   
+   <update id="update">
+     update assessmenttopic 
+	    set  batchuploadid = #{batchUploadId,jdbcType=BIGINT}, 
+	 	topicname = #{topicName,jdbcType=VARCHAR},
+	 	totalnoofitems = #{totalNoOfItems,jdbcType=VARCHAR},
+	    modifieduser = #{createdUser,jdbcType=BIGINT}, 
+	    modifieddate = now() 
+	    where assessmentcode = #{testType,jdbcType=VARCHAR}
+		<if test="contentareaId != null">
+			and contentareaid =#{contentareaId,jdbcType=BIGINT}
+		</if>
+		<if test="gradeId != null">
+			and gradeid =#{gradeId,jdbcType=BIGINT} 
+		</if> 
+		and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+		and topiccode = #{topicCode,jdbcType=VARCHAR} 
+		and activeflag is true
+   </update>
+   
+     <delete id="delete">
+     delete from assessmenttopic 
+	    where contentareaid =#{contentAreaId,jdbcType=BIGINT}		
+	    and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+    </delete>  
+    
+    <select id="selectByTopicCode" resultType="edu.ku.cete.report.domain.AssessmentTopic">
+       SELECT id, topicname, schoolyear, assessmentcode, gradeid, contentareaid, 
+       topiccode, totalnoofitems, activeflag, createduser, createddate, 
+       modifieduser, modifieddate, batchuploadid
+        FROM assessmenttopic 
+        WHERE  topiccode = #{topicCode,jdbcType=VARCHAR}
+         and assessmentcode = #{testType,jdbcType=VARCHAR}
+         and schoolyear = #{schoolYear,jdbcType=BIGINT}
+         and activeflag is true    
+    </select>
+    
+    <select id="getAvailableAssessmentCodes" resultType="String">
+       SELECT distinct assessmentcode 
+        FROM assessmenttopic 
+        WHERE schoolyear = #{schoolYear,jdbcType=BIGINT}
+        
+        <if test="contentAreaId != null">
+			and contentareaid =#{contentAreaId,jdbcType=BIGINT}
+		</if>
+		<if test="gradeCourseId != null">
+			and gradeid =#{gradeCourseId,jdbcType=BIGINT} 
+		</if> 
+         and activeflag is true    
+    </select>
+    
+    <select id="getTopicsByAssessmentCodes" resultType="edu.ku.cete.report.domain.AssessmentTopic">
+       SELECT ast.*,gc.abbreviatedname as grade, gc.id as gradeId, ca.id as contentareaId, ca.abbreviatedname as subject   
+        FROM assessmenttopic ast 
+        inner join gradecourse gc on gc.id = ast.gradeid and gc.activeflag is true	
+        inner join contentarea ca on ca.id = ast.contentareaid and ca.activeflag is true
+        WHERE ast.assessmentcode = #{assessmentCode,jdbcType=VARCHAR}
+         and ast.activeflag is true
+         order by ast.topicname    
+    </select>
+ </mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.OrganizationTypeDao">
+
+    <sql id="Base_Column_List">
+        id as organizationTypeId, typename, typecode, typelevel
+    </sql>
+    <insert id="add" parameterType="OrganizationType" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO organizationtype (typename, typecode, typelevel, createddate, createduser, activeflag, modifieddate, modifieduser)
+        VALUES (#{typeName}, #{typeCode}, #{typeLevel}, #{createdDate}, #{createdUser}, #{activeFlag},#{modifiedDate},#{modifiedUser});
+    </insert>
+    
+    <update id="update" parameterType="OrganizationType">
+        UPDATE organizationtype 
+        SET typename=#{typeName}, typecode = #{typeCode}, typelevel = #{typeLevel},
+        modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser},
+		activeflag = #{activeFlag}
+        WHERE id = #{organizationTypeId}
+    </update>
+    
+    <delete id="delete" parameterType="long">
+        DELETE FROM organizationtype WHERE id = #{organizationTypeId}
+    </delete>
+    
+    <select id="get" resultType="OrganizationType" parameterType="long">
+        SELECT id as organizationTypeId, typename, typecode, typelevel
+        FROM organizationtype
+        WHERE id = #{organizationTypeId}
+    </select>
+    
+    <select id="getByTypeCode" parameterType="String" resultType="OrganizationType">
+        SELECT id as organizationTypeId, typename, typecode, typelevel
+        FROM organizationtype
+        WHERE UPPER(typecode) = #{typeCode}
+    </select>
+    
+    <select id="getByTypeCodeCaseInsensitive" parameterType="String" resultType="OrganizationType">
+        SELECT id as organizationTypeId, typename, typecode, typelevel
+        FROM organizationtype
+        WHERE UPPER(typecode) = UPPER(#{typeCode})
+    </select>
+    
+    <select id="getAll" resultType="OrganizationType">
+        SELECT id as organizationTypeId, typename, typecode, typelevel
+        FROM organizationtype
+    </select>
+    
+    <select id="getOrgHierarchyByOrg" resultType="OrganizationType">
+		select orgt.id as organizationtypeid, typename, typecode, typelevel 
+		from organizationhierarchy orgh
+		inner join organizationtype orgt on orgh.organizationtypeid=orgt.id
+		where orgh.organizationid=#{organizationId} order by typelevel
+    </select>
+    
+    <select id="getByLevel" resultType="OrganizationType" parameterType="int">
+    	SELECT id as organizationTypeId, typename, typecode, typelevel
+        FROM organizationtype
+        WHERE typelevel = #{level,jdbcType=INTEGER}
+    </select>
+</mapper>

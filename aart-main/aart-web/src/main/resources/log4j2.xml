@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p: %c - %m%n"/>
+        </Console>
+        
+        <RollingFile name="LogToRollingFile" fileName="${catalina.home}/logs/AART.log" filePattern="${catalina.home}/logs/aart-info-%d{yyyy-MM-dd}.log">>
+			<PatternLayout>
+				<Pattern>%d %p %t %c - %m%n"</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="20 MB"/>
+			</Policies>
+		</RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.springframework.core" level="error">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="org.springframework.beans" level="error">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="org.springframework.context" level="error">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="org.springframework.web" level="error">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="org.apache.commons" level="warn">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="org.apache.cxf" level="error">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="java.sql.ResultSet" level="error">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+         <Logger name="java.sql" level="debug">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+         <Logger name="edu.ku.cete.batch" level="debug">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+          <Logger name="edu.ku.cete.service.impl" level="debug">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="edu.ku.cete.model" level="debug" additivity="false">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Logger name="edu.ku.cete.dataextracts" level="debug">
+            <AppenderRef ref="console"/>
+        </Logger>
+        
+        <Root level="error">
+            <AppenderRef ref="console"/>
+             <AppenderRef ref="LogToRollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

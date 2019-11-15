@@ -1,0 +1,1 @@
+ALTER TABLE studentsresponses DROP COLUMN originalscore;

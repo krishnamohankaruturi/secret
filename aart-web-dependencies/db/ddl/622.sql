@@ -1,0 +1,3 @@
+----ddl/622.sql ==> For dml/622.sql
+--US19228: Ability to exclude permission from roles
+--DE14866: Should not be able to select bundled report permission for teacher

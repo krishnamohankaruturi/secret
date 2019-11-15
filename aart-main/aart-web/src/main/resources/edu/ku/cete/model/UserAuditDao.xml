@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.UserAuditDao">
+
+	<insert id="add" useGeneratedKeys="true" parameterType="UserAudit">
+		INSERT INTO useraudit(userid,useros,logintime) values
+		                        (#{userId},#{userOS}::varchar(256),#{loginTime})
+	</insert>
+	
+	<select id="lastid" resultType="java.lang.Long">
+		SELECT lastval() AS id
+	</select>
+
+	<delete id="delete">
+		DELETE FROM useraudit WHERE id = #{id}
+	</delete>
+	
+ <!-- Manoj Kumar O : Added for US_16244(provide UI TO merge Users) -->
+	<delete id="deleteByUserId">
+		DELETE FROM useraudit WHERE userid = #{id}
+	</delete>
+	
+	<select id="get" resultType="UserAudit" parameterType="Long">
+		SELECT
+			id, name
+		FROM useraudit 
+		WHERE
+			id = #{id}
+	</select>
+
+	<select id="getAll" resultType="UserAudit">
+		SELECT 
+			id, name
+		FROM useraudit
+	</select>
+	
+	<update id="logout" parameterType="String">
+	   UPDATE useraudit SET logouttime = now ( ) 
+	   		where userid = (select id from aartuser WHERE username = #{username}) AND logouttime IS NULL;
+    </update>
+    
+    <update id="logoutById" parameterType="Long">
+	   UPDATE useraudit SET logouttime = now ( ) 
+	   		where userid = #{userId} AND logouttime IS NULL;
+    </update>
+	
+	<update id="update" parameterType="UserAudit">
+		UPDATE useraudit SET name = #{name} WHERE id = #{id}
+	</update>
+</mapper>

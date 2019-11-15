@@ -1,0 +1,18 @@
+<div id="blueprintCoverageReport">
+	<div id="blueprintCoverageTeacherDropdownDiv">
+		<img src="images/search.png" alt="Select Teachers" />
+		<select name="blueprintCoverageTeacherDropdown"  title="Teachers" class="select-plugin" id="blueprintCoverageTeacherDropdown">
+			<% for (var i = 0; i < data.length; i++) { %>
+				<option value="<%= data[i].id %>"><%= data[i].surName + ', ' + data[i].firstName %></option>
+			<% } %>
+		</select>
+		&nbsp;
+	</div>
+	<div id="viewBlueprintCoverageReportButtonsDiv">
+		<input type="checkbox" name="blueprintCoverageGroupByTeacher" id="blueprintCoverageGroupByTeacher"/><label for="blueprintCoverageGroupByTeacher">Group by Teacher</label>
+		<input type="button" id="viewBlueprintCoverage" value="View" />
+	</div>
+	<br/>
+	<div id="blueprintCoverageReportDisplayDiv">
+	</div>
+</div>

@@ -1,0 +1,17 @@
+<!-- 
+Biyatpragyan Mohanty(bmohanty_sta@ku.edu) : US12332 : Task - Technology Enhanced - Mark for Review
+Issue : TE items were not having review link, so user could not mark them for review.
+This is a template file to show the marker link/flag icon for the TE items. If question is already marked, it will display the marked icon.
+ -->
+<div class="q-hdr">
+	<ul>
+		<li>
+			<% if((jQuery.inArray(parseInt(qNum), markedReview) > 0)) { %>
+				<a href="#" class="mark-question mark-question-active">Mark for Review</a>
+			<% } else { %>
+				<a href="#" class="mark-question">Mark for Review</a>
+			<% } %>
+			<span>Flag for Review</span>
+		</li>
+	</ul>
+</div>

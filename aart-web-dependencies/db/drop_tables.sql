@@ -1,0 +1,11 @@
+DROP VIEW IF EXISTS users;
+
+DROP TABLE IF EXISTS authorities;
+
+DROP TABLE IF EXISTS useraudit;
+
+DROP TABLE IF EXISTS aartuser;
+
+DROP TABLE IF EXISTS policy;
+
+DROP TABLE IF EXISTS organization;

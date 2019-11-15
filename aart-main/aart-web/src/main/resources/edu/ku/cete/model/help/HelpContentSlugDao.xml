@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.help.HelpContentSlugDao">
+
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.help.HelpContentSlug">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="helpcontentid" property="helpContentId" jdbcType="BIGINT" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+	</resultMap>
+
+	<insert id="saveHelpContentSlug" parameterType="edu.ku.cete.domain.help.HelpContentSlug" useGeneratedKeys="true"
+		keyColumn="id" keyProperty="id">
+		insert into
+		helpcontentslug
+		(helpcontentid,url,activeflag,
+		createduser,modifieduser,createddate,modifieddate)
+		values
+		(#{helpContentId,jdbcType=BIGINT},#{url,jdbcType=VARCHAR},#{activeFlag,jdbcType=BIT},#{createdUser,jdbcType=BIGINT},
+		#{modifiedUser,jdbcType=BIGINT},#{createdDate,jdbcType=TIMESTAMP},#{modifiedDate,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateHelpContentSlug" parameterType="edu.ku.cete.domain.help.HelpContentSlug">
+		update helpcontentslug
+		<set>
+			<if test="helpContentId != null">
+				helpcontentid = #{helpContentId,jdbcType=BIGINT},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activeFlag != null">
+				activeflag = #{activeFlag,jdbcType=BIT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="getHelpContentSlugById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select hcs.id, hcs.helpcontentid, hcs.url, hcs.createddate, hcs.modifieddate, hcs.createduser, hcs.modifieduser
+		from helpcontentslug hcs
+		where hcs.id = #{id}
+	</select>
+	
+	<select id="getHelpContentSlugByHelpContentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select hcs.id, hcs.helpcontentid, hcs.url, hcs.createddate, hcs.modifieddate, hcs.createduser, hcs.modifieduser
+		from helpcontentslug hcs
+		where hcs.helpcontentid = #{helpContentId}
+	</select>
+	<update id="updateSlugViewsByUrl">
+		update helpcontentslug set views = views + 1 where url = #{slugURL}
+	</update>
+</mapper>

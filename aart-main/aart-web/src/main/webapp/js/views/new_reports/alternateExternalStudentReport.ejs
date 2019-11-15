@@ -1,0 +1,40 @@
+<div>
+	<% if (data != null && data.length > 0) {
+		for (var x = 0; x < data.length; x++) {
+			var record = data[x];
+			var text = record.legalLastName + ', ' + record.legalFirstName;
+			if (record.legalMiddleName){
+				text += ' ' + record.legalMiddleName.charAt(0) + '.';
+			}
+			text += ' (' + record.stateStudentIdentifier + ')';
+		%>
+			<div class="item" style="line-height: 22px;" >			
+					<% if (reportType === 'alternate_student_individual_teacher') { %>
+						<a href="getExternalStudentReportFile.htm?id=<%= record.id%>&rosterid=<%= record.rosterId%>">
+							<%= text %>
+						</a>
+					<% }else{ %>					
+						<a href="getExternalStudentReportFile.htm?id=<%= record.id %>&reportyear=<%=record.schoolYear%>&assessmentid=<%= assessmentProgid %>&assessmentProgCode=<%=programCode%>">
+							<%= text %>
+						</a>
+						<%if(record.level1_text){%>
+							<span> - <%= record.level1_text%></span>
+						<%}%>
+						<%if(record.level2_text){%>
+							<span> - <%= record.level2_text%></span>
+						<%}%>
+					<% } %>
+			</div>
+		<% } %>
+	<% } else { 
+		if (reportType === 'alternate_student_individual_teacher') { %>
+			<div class="item">
+					For students in roster, no reports from last year are available.
+			</div>
+			<%}else{ %>
+		<div style="margin:0px;">
+			Report Not Available		
+	    </div>			
+		<% } 
+	   } %>
+</div>

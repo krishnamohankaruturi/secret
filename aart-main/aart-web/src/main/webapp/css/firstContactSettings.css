@@ -1,0 +1,96 @@
+#firstContactSettingsDiv {
+	padding: 2% 2% 0 2%;
+	clear: both;
+}
+
+#firstContactSettingsDiv .settingInst {
+	clear: both;
+	margin-bottom: 2%;
+}
+
+#firstContactSettingsDiv .topInfoRight, #firstContactSettingsDiv .bottomInfoRight {
+	height: 45px;
+	padding-top: 1%;
+}
+
+#firstContactSettingsDiv .bottomInfoRight {
+	
+}
+
+#firstContactSettingsDiv .instructionHead {
+	color: #0e76bc;
+	font-size: 1em;
+	padding: 5px 10px;
+}
+
+#savefirstContactSettings-top, #savefirstContactSettings-bottom {
+	width: 90px;
+	margin: 0;
+	float: right;
+	margin-bottom: 20px
+}
+
+#firstContactSettingsDiv table {
+	border-collapse: collapse;
+	width: 96%;
+}
+
+#firstContactSettingsDiv th, #firstContactSettingsDiv td {
+	border: solid 1px #989898;
+	padding: 10px;
+	text-align: center !important;
+}
+
+#firstContactSettingsDiv td>span {
+	text-align: left;
+}
+
+#firstContactSettingsDiv .fixed {
+	max-width: 300px;
+	min-width: 300px;
+	font-weight: bold;
+}
+
+#firstContactSettingsDiv .fluid {
+	width: 30%;
+	font-weight: bold;
+}
+
+#firstContactSettingsDiv .orgNameContent {
+	font-weight: bold;
+}
+
+#firstContactSettingsDiv .instructionExp1 {
+	font-size: 15px;
+	padding: 5px 10px;
+}
+
+#firstContactSettingsDiv .instructionExp2 {
+	font-size: 15px;
+	padding: 4px;
+}
+
+.description {
+	width: 1005px;
+	margin: 0 auto;
+	padding: 0;
+	overflow: auto;
+}
+
+#questionRequiredResponse {
+	width: 76%;
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+	border-color: grey;
+	line-height: 22px;
+}
+
+#scienceAvailability {
+	width: 20%;
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+	border-color: grey;
+	line-height: 16px;
+}

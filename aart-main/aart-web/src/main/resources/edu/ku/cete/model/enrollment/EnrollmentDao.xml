@@ -1,0 +1,3164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.enrollment.EnrollmentDao">
+  <resultMap id="studentSchoolRelationInformationMap" type="edu.ku.cete.domain.student.StudentSchoolRelationDataObject">
+	<id column="enrollmentId" property="id" jdbcType="BIGINT" />
+	<result column="responsibleSchoolId" property="responsibleSchoolId"
+		jdbcType="BIGINT" />
+	<result column="responsibleSchoolIdentifier" property="responsibleSchoolIdentifier"
+		jdbcType="VARCHAR" />
+	<result column="studentId" property="studentId" jdbcType="BIGINT" />
+	<result column="stateStudentIdentifier" property="stateStudentIdentifier"
+		jdbcType="VARCHAR" />
+   </resultMap>
+   
+   <resultMap id="reportEnrollmentMap" type="edu.ku.cete.domain.enrollment.Enrollment">
+    <id column="enrollmentid" property="id" jdbcType="BIGINT" />
+	<result column="aypschoolid" property="aypSchoolId" jdbcType="BIGINT" />
+	<result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" />
+	<result column="enrollmentactive" property="active" jdbcType="BIT" />
+	<result column="exitwithdrawaltype" property="exitWithdrawalType" jdbcType="INTEGER" />
+	<result column="exitwithdrawaldate" property="exitWithdrawalDate" jdbcType="TIMESTAMP" />
+	<result column="attendanceschooldistrictid" property="attendanceSchoolDistrictId" jdbcType="BIGINT" />
+   </resultMap>
+   
+    <resultMap id="enrollmentWithRosterMap" type="edu.ku.cete.domain.enrollment.StudentRoster">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="enrollmentid" property="enrollmentId" jdbcType="BIGINT" />
+	    <result column="aypschoolidentifier" property="aypSchoolIdentifier" jdbcType="VARCHAR" />
+	    <result column="residencedistrictidentifier" property="residenceDistrictIdentifier" jdbcType="VARCHAR" />
+	    <result column="currentgradelevel" property="currentGradeLevel" jdbcType="INTEGER" />
+	    <result column="localstudentidentifier" property="localStudentIdentifier" jdbcType="VARCHAR" />
+	    <result column="currentschoolyear" property="currentSchoolYear" jdbcType="INTEGER" />
+	    <result column="schoolentrydate" property="schoolEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="districtentrydate" property="districtEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="stateentrydate" property="stateEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="exitwithdrawaldate" property="exitWithdrawalDate" jdbcType="TIMESTAMP" />
+	    <result column="exitwithdrawaltype" property="exitWithdrawalType" jdbcType="INTEGER" />
+	    <result column="specialcircumstancestransferchoice" property="specialCircumstancesTransferChoice" jdbcType="VARCHAR" />
+	    <result column="giftedstudent" property="giftedStudent" jdbcType="BIT" />
+	    <result column="specialedprogramendingdate" property="specialEdProgramEndingDate" jdbcType="TIMESTAMP" />
+	    <result column="qualifiedfor504" property="qualifiedFor504" jdbcType="VARCHAR" />
+	    <result column="studentid" property="studentId" jdbcType="BIGINT" />
+	    <result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" />
+	    <result column="restrictionid" property="restrictionId" jdbcType="BIGINT" />
+	    <result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+	    <result column="createduser" property="createdUser" jdbcType="INTEGER" />
+	    <result column="activeflag" property="activeFlag" jdbcType="BIT" />
+	    <result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+	    <result column="modifieduser" property="modifiedUser" jdbcType="INTEGER" />
+	    <result column="accessprofilestatus" property="accessProfileStatus" jdbcType="VARCHAR" />
+	    <result column="firstcontact" property="firstContact" jdbcType="VARCHAR" />
+	    <result property="enrollmentStatus" column="enrollmentStatus" jdbcType="VARCHAR"/>
+	    <result column="history" property="history" jdbcType="VARCHAR" />
+	    <result column="sciencebandid" property="scienceBandId" jdbcType="BIGINT" />
+        <association property="roster" javaType="edu.ku.cete.domain.enrollment.Roster">
+	        <id column="rosterid" property="id" jdbcType="BIGINT" />
+	        <result column="coursesectionname" property="courseSectionName" jdbcType="VARCHAR" />
+	        <result column="coursesectiondescription" property="courseSectionDescription" jdbcType="VARCHAR" />
+	        <result column="teacherid" property="teacherId" jdbcType="BIGINT" />
+	        <result column="statesubjectareaid" property="stateSubjectAreaId" jdbcType="BIGINT" />
+	        <result column="courseenrollmentstatusid" property="courseEnrollmentStatusId" jdbcType="BIGINT" />
+	        <result column="statecourseid" property="stateCourseId" jdbcType="BIGINT" />
+	        <result column="restrictionId" property="restrictionId" jdbcType="BIGINT" />
+	        <result column="classroomid" property="classroomId" jdbcType="BIGINT"/>
+        </association>
+        <association property="educator" javaType="edu.ku.cete.domain.user.User">
+            <id property="id" column="teacherid"/>
+            <result property="userName" column="educatorusername"/>
+            <result property="uniqueCommonIdentifier" column="educatorIdentifier"/>
+            <result property="firstName" column="educatorFirstName"/>
+            <result property="middleName" column="educatorMiddleName"/>
+            <result property="surName" column="educatorLastName"/>
+            <result property="defaultUserGroupsId" column="educatorDefaultUserGroupsId"/>
+            <result property="email" column="educatorEmail"/>
+        </association>
+        <association property="stateCourse" javaType="edu.ku.cete.domain.content.ContentArea">
+            <id property="id" column="statecourseid" jdbcType="BIGINT"/>
+            <result property="name" column="stateCourseName" jdbcType="VARCHAR"/>
+            <result property="externalId" column="stateCourseExternalId" jdbcType="VARCHAR"/>
+            <result property="sortOrder" column="stateCourseSortOrder" jdbcType="VARCHAR"/>
+            <result property="originationCode" column="stateCourseOriginationCode" jdbcType="BIGINT"/>
+            <result property="abbreviatedName" column="stateCourseAbbreviatedName" jdbcType="TIMESTAMP"/>
+        </association>
+        <association property="gradeCourse" javaType="edu.ku.cete.domain.content.GradeCourse">
+	        <id property="id" column="currentgradelevel" jdbcType="BIGINT"/>
+		    <result column="gradeCourseName" jdbcType="VARCHAR" property="name" />
+		    <result column="abbreviatedName" jdbcType="VARCHAR" property="abbreviatedName" />
+		    <result column="gradeLevel" jdbcType="INTEGER" property="gradeLevel" />
+		    <result column="originationcode" property="originationCode" jdbcType="VARCHAR"/>
+    	</association>
+        <association property="stateSubjectArea" javaType="edu.ku.cete.domain.content.ContentArea">
+            <id property="id" column="stateSubjectAreaId" jdbcType="BIGINT"/>
+            <result property="name" column="stateSubjectAreaName" jdbcType="VARCHAR"/>
+            <result property="externalId" column="stateSubjectAreaExternalId" jdbcType="VARCHAR"/>
+            <result property="sortOrder" column="stateSubjectAreaSortOrder" jdbcType="VARCHAR"/>
+            <result property="originationCode" column="stateSubjectAreaOriginationCode" jdbcType="BIGINT"/>
+            <result property="abbreviatedName" column="stateSubjectAreaAbbreviatedName" jdbcType="TIMESTAMP"/>
+        </association>
+        <association property="student" javaType="edu.ku.cete.domain.student.Student">
+			<id property="id" column="studentid" jdbcType="BIGINT" />
+			<result property="stateStudentIdentifier" column="statestudentidentifier" jdbcType="VARCHAR" />
+			<result property="legalFirstName" column="legalfirstname" jdbcType="VARCHAR" />
+			<result property="legalMiddleName" column="legalmiddlename" jdbcType="VARCHAR" />
+			<result property="legalLastName" column="legallastname" jdbcType="VARCHAR" />
+			<result property="generationCode" column="generationcode" jdbcType="VARCHAR" />
+			<result property="gender" column="gender" jdbcType="INTEGER" />
+			<result property="dateOfBirth" column="dateofbirth" jdbcType="TIMESTAMP" />
+			<result property="comprehensiveRace" column="comprehensiverace" jdbcType="VARCHAR" />
+			<result property="primaryDisabilityCode" column="primarydisabilitycode" jdbcType="VARCHAR" />
+			<result property="firstLanguage" column="firstlanguage" jdbcType="VARCHAR" />		
+			<result property="studentAssessmentProgram" column="programname" jdbcType="VARCHAR" />
+			<result property="dlmStudent" column="dlmstudent" jdbcType="BIT" />
+			<result property="finalMathBandId" column="finalmathbandid" jdbcType="BIGINT" />
+			<result property="finalElaBandId" column="finalelabandid" jdbcType="BIGINT" />
+			<result property="statePoolType" column="orgpooltype" jdbcType="VARCHAR"/>
+			<result property="hispanicEthnicity" column="hispanicethinicity" jdbcType="VARCHAR" />
+			<!--  <result property="createdDate" column="studentcreateddate" jdbcType="TIMESTAMP" />
+			<result property="modifiedDate" column="studentmodifieddate" jdbcType="TIMESTAMP" />
+			<result property="createdUser" column="studentcreateduser" jdbcType="BIGINT" />
+			<result property="modifiedUser" column="studentmodifieduser" jdbcType="BIGINT" />-->
+		</association>       
+		<association property="attendanceSchool" javaType="edu.ku.cete.domain.common.Organization">
+	        <id column="attendanceschoolid" property="id" jdbcType="BIGINT"/>
+	        <result column="attendanceSchoolName" property="organizationName" javaType="String"/>
+	        <result column="attendanceSchoolIdentifier" property="displayIdentifier" javaType="String"/>
+	        <result column="welcomeMessage" property="welcomeMessage" javaType="String"/>
+	        <result column="organizationtypeid" property="organizationType.organizationTypeId"/>
+		</association>
+		<association property="courseEnrollment" javaType="edu.ku.cete.domain.common.Category">
+            <id property="id" column="courseenrollmentstatusid" jdbcType="BIGINT"/>
+            <result property="categoryName" column="courseenrollmentstatus" jdbcType="VARCHAR"/>            
+        </association>
+        <association property="studentsTests" javaType="edu.ku.cete.domain.StudentsTests">
+        	<result property="testSessionId" column="testSessionId" jdbcType="BIGINT"/>
+        	<result property="status" column="status" jdbcType="BIGINT"/>
+        </association>
+        <association property="studentSpecialCircumstance" javaType="edu.ku.cete.domain.StudentSpecialCircumstance">
+        	<result property="specialCircumstanceId" column="specialcircumstanceid" jdbcType="BIGINT"/>
+        	<result property="status" column="specialcircumstancestatus" jdbcType="BIGINT" />
+        	<result property="statusName" column="specialcircumstancestatusname" jdbcType="VARCHAR" />
+        </association>
+    </resultMap>
+    
+    <resultMap id="autoRegisteredStudentsMap" type="edu.ku.cete.domain.enrollment.AutoRegisteredStudentsDTO">
+    	<id property="studentId" column="studentid" jdbcType="BIGINT" />
+    	<result property="studentTestId" column="studenttestid" jdbcType="BIGINT" />
+		<result property="specialCircumstanceId" column="specialcircumstanceid" jdbcType="BIGINT" /> 
+		<result property="specialCircumstanceStatus" column="sscstatus" jdbcType="VARCHAR" />
+		<result property="specialCircumstanceStatusId" column="sscsstatusid" jdbcType="BIGINT" />
+		<result property="testStatus" column="teststatus" jdbcType="VARCHAR" />
+		<result property="interimTheta" column="interimthetavalue" jdbcType="DOUBLE" />
+		<result property="pnpBrailleSelected" column="pnpbrailleselected" jdbcType="BOOLEAN" />
+		<result property="totalRecords" column="totalrecords" jdbcType="INTEGER" />
+		  
+    	<association property="student" javaType="edu.ku.cete.domain.student.Student">
+			<id property="id" column="studentid" jdbcType="BIGINT" />
+			<result property="stateStudentIdentifier" column="statestudentidentifier" jdbcType="VARCHAR" />
+			<result property="legalFirstName" column="legalfirstname" jdbcType="VARCHAR" />
+			<result property="legalMiddleName" column="legalmiddlename" jdbcType="VARCHAR" />
+			<result property="legalLastName" column="legallastname" jdbcType="VARCHAR" />
+			<result property="generationCode" column="generationcode" jdbcType="VARCHAR" />
+			<result property="gender" column="gender" jdbcType="INTEGER" />
+			<result property="dateOfBirth" column="dateofbirth" jdbcType="TIMESTAMP" />
+			<result property="comprehensiveRace" column="comprehensiverace" jdbcType="VARCHAR" />
+			<result property="primaryDisabilityCode" column="primarydisabilitycode" jdbcType="VARCHAR" />
+			<result property="firstLanguage" column="firstlanguage" jdbcType="VARCHAR" />
+			<!--  <result property="createdDate" column="studentcreateddate" jdbcType="TIMESTAMP" />
+			<result property="modifiedDate" column="studentmodifieddate" jdbcType="TIMESTAMP" />
+			<result property="createdUser" column="studentcreateduser" jdbcType="BIGINT" />
+			<result property="modifiedUser" column="studentmodifieduser" jdbcType="BIGINT" />-->
+		</association>  
+		 
+    </resultMap>
+    
+    
+   	<resultMap id="AutoRegResultMap" type="edu.ku.cete.domain.enrollment.Enrollment">
+		<id column="enrollmentid" property="id" jdbcType="BIGINT" />
+	    <result column="gradecourseid" property="currentGradeLevel" jdbcType="INTEGER" />
+	    <result column="currentschoolyear" property="currentSchoolYear" jdbcType="INTEGER" />
+	    <result column="studentid" property="studentId" jdbcType="BIGINT" />
+	    <result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" />
+	    <result column="aypschoolid" property="aypSchoolId" jdbcType="BIGINT" />
+	    <association property="attendanceSchool" javaType="edu.ku.cete.domain.common.Organization" column="attendanceSchoolId">
+	        <id column="attendanceschoolid" property="id" jdbcType="BIGINT"/>
+	        <result column="attendanceschoolname" property="organizationName" javaType="String"/>
+	        <result column="attendanceschoolidentifier" property="displayIdentifier" javaType="String"/>
+		</association>
+		<association property="student" javaType="edu.ku.cete.domain.student.Student" column="studentid">
+	        <id column="studentid" property="id" jdbcType="BIGINT"/>
+	        <result column="legalfirstname" property="legalFirstName" javaType="String"/>
+	        <result column="legallastname" property="legalLastName" javaType="String"/>
+	        <result column="statestudentidentifier" property="stateStudentIdentifier" javaType="String"/>
+		</association>
+        <association property="gradeCourse" javaType="edu.ku.cete.domain.content.GradeCourse">
+	        <id property="id" column="gradecourseid" jdbcType="BIGINT"/>
+		    <result column="gradeCourseName" jdbcType="VARCHAR" property="name" />
+		    <result column="abbreviatedName" jdbcType="VARCHAR" property="abbreviatedName" />
+		    <result column="gradeLevel" jdbcType="INTEGER" property="gradeLevel" />
+		    <result column="originationcode" property="originationCode" jdbcType="VARCHAR"/>
+    	</association>		
+	</resultMap>
+    
+    <resultMap type="edu.ku.cete.domain.enrollment.Enrollment" id="batchRegisteredEnrollment">
+    	<id column="enrollmentid" property="id" jdbcType="BIGINT" />
+    	<result column="previousenrollmentexists" property="previousEnrollmentExists" jdbcType="BOOLEAN" />
+    	<result column="aypschoolid" property="aypSchoolId" jdbcType="BIGINT" />
+    	<result column="aypschoolidentifier" property="aypSchoolIdentifier" jdbcType="VARCHAR" />
+	    <result column="residencedistrictidentifier" property="residenceDistrictIdentifier" jdbcType="VARCHAR" />
+	    <result column="currentgradelevel" property="currentGradeLevel" jdbcType="INTEGER" />
+	    <result column="currentgradelevelcode" property="currentGradeLevelCode" jdbcType="VARCHAR" />
+	    <result column="localstudentidentifier" property="localStudentIdentifier" jdbcType="VARCHAR" />
+	    <result column="currentschoolyear" property="currentSchoolYear" jdbcType="INTEGER" />
+	    <result column="schoolentrydate" property="schoolEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="districtentrydate" property="districtEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="stateentrydate" property="stateEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="exitwithdrawaldate" property="exitWithdrawalDate" jdbcType="TIMESTAMP" />
+	    <result column="exitwithdrawaltype" property="exitWithdrawalType" jdbcType="INTEGER" />
+	    <result column="specialcircumstancestransferchoice" property="specialCircumstancesTransferChoice" jdbcType="VARCHAR" />
+	    <result column="giftedstudent" property="giftedStudent" jdbcType="BIT" />
+	    <result column="specialedprogramendingdate" property="specialEdProgramEndingDate" jdbcType="TIMESTAMP" />
+	    <result column="qualifiedfor504" property="qualifiedFor504" jdbcType="VARCHAR" />
+	    <result column="studentid" property="studentId" jdbcType="BIGINT" />
+	    <result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" />
+	    <result column="restrictionid" property="restrictionId" jdbcType="BIGINT" />
+	    <result column="subjectareaid" property="subjectAreaId" jdbcType="BIGINT" />
+	    <result column="contentareaid" property="contentAreaId" jdbcType="BIGINT" />
+	    <association property="attendanceSchool" javaType="edu.ku.cete.domain.common.Organization">
+	        <id column="attendanceSchoolId" property="id" jdbcType="BIGINT"/>
+	        <result column="attendanceSchoolName" property="organizationName" javaType="String"/>
+	        <result column="attendanceSchoolIdentifier" property="displayIdentifier" javaType="String"/>
+	        <result column="welcomeMessage" property="welcomeMessage" javaType="String"/>
+	        <result column="organizationtypeid" property="organizationType.organizationTypeId"/>
+		</association>
+		<association property="student" javaType="edu.ku.cete.domain.student.Student">
+	        <id column="studentid" property="id" jdbcType="BIGINT"/>
+	        <result column="legalfirstname" property="legalFirstName" javaType="String"/>
+	        <result column="legallastname" property="legalLastName" javaType="String"/>
+	        <result column="finalelabandid" property="finalElaBandId" jdbcType="BIGINT"/>
+	        <result column="finalmathbandid" property="finalMathBandId" jdbcType="BIGINT"/>
+	        <result column="commbandid" property="commBandId" jdbcType="BIGINT"/>
+	        <result column="finalscibandid" property="finalSciBandId" jdbcType="BIGINT"/>
+	        <result column="statestudentidentifier" property="stateStudentIdentifier" javaType="String"/>
+	        <result column="studenttrackerbandid" property="studentTrackerBandId" jdbcType="BIGINT"/>
+	        <result column="studenttrackerid" property="studentTrackerId"/>
+		</association>
+		<association property="roster" javaType="edu.ku.cete.domain.enrollment.Roster">
+	        <id column="rosterId" property="id" jdbcType="BIGINT"/>
+	        <result column="coursesectionname" property="courseSectionName" jdbcType="VARCHAR" />
+			<result column="coursesectiondescription" property="courseSectionDescription" jdbcType="VARCHAR" />
+			<result column="teacherid" property="teacherId" jdbcType="BIGINT" />
+			<result column="attendanceSchoolId" property="attendanceSchoolId" jdbcType="BIGINT" />
+			<result column="statesubjectareaid" property="stateSubjectAreaId" jdbcType="BIGINT" />
+			<result column="courseenrollmentstatusid" property="courseEnrollmentStatusId" jdbcType="BIGINT" />
+			<result column="statecoursecode" property="stateCourseCode" jdbcType="VARCHAR" />
+			<result column="restrictionid" property="restrictionId" jdbcType="BIGINT" />
+			<result column="sourcetype" property="sourceType" jdbcType="VARCHAR" />
+			<association property="course" javaType="edu.ku.cete.domain.content.GradeCourse" column="statecoursesid">
+	  			<id column="statecoursesid" property="id" jdbcType="BIGINT"/>
+	  			<result column="courseabbreviatedname" property="abbreviatedName" jdbcType="VARCHAR"/>
+	  			<result column="coursename" property="name" jdbcType="VARCHAR"/>
+  			</association>
+		</association>
+    </resultMap>
+    
+    <resultMap id="TECExtractMap" type="edu.ku.cete.web.TECExtractDTO">
+    	<result column="state" property="state"/>
+    	<result column="district" property="district"/>
+    	<result column="school" property="school"/>
+    	<result column="statestudentidentifier" property="stateStudentIdentifier"/>
+    	<result column="schoolidentifier" property="attendanceSchoolIdentifier"/>
+    	<result column="testtypecode" property="testTypeCode"/>
+    	<result column="subjectcode" property="subjectCode"/>
+    	<result column="currentschoolyear" property="currentSchoolYear"/>
+    	<result column="grade" property="grade"/>
+    </resultMap>
+    <resultMap id="findStudentMap" type="edu.ku.cete.domain.enrollment.FindEnrollments">
+    	<id column="enrollmentid" property="id" jdbcType="BIGINT" />
+    	<result property="stateStudentIdentifier" column="statestudentidentifier" jdbcType="VARCHAR" />
+    	<result property="legalFirstName" column="firstname" jdbcType="VARCHAR" />
+		<result property="legalLastName" column="lastname" jdbcType="VARCHAR" />
+		<result property="middleName" column="middlename" jdbcType="VARCHAR" />
+    	<result column="status" property="active" jdbcType="BOOLEAN" />
+    	<result column="districtName" property="districtName" javaType="String"/>
+    	<result column="schoolname" property="schoolName" javaType="String"/>		
+    	<result column="gradename"  property="gradeName" jdbcType="VARCHAR"/>    	
+    	<result property="studentId" column="studentid" jdbcType="BIGINT"/>
+    	<result column="schooldistrictid" property="districtId" jdbcType="BIGINT" />
+    	<result column="schoolid" property="schoolId" jdbcType="BIGINT"/>
+    	<result column="schoolyear" property="schoolYear" jdbcType="INTEGER"/>
+    	<result property="gradeId" column="gradeid" jdbcType="VARCHAR"/>
+    	<result column="statename" property="stateName" javaType="String"/>
+		<result column="stateid" property="stateId" jdbcType="BIGINT" />
+		<result column="gender" property="gender" jdbcType="VARCHAR" />
+		 <result column="dateofbirth" property="dateOfBirth" jdbcType="TIMESTAMP" />
+		 <collection property="assessmentPrograms" ofType="java.lang.Long" javaType="list">
+           <result column="assessmentPrograms" />
+         </collection>
+    </resultMap>
+    
+    <resultMap type="edu.ku.cete.domain.enrollment.Enrollment" id="findSubjectEnrollmentMap">
+    	<id column="enrollmentid" property="id" jdbcType="BIGINT" />
+    	<result column="aypschoolid" property="aypSchoolId" jdbcType="BIGINT" />
+    	<result column="aypschoolidentifier" property="aypSchoolIdentifier" jdbcType="VARCHAR" />
+	    <result column="residencedistrictidentifier" property="residenceDistrictIdentifier" jdbcType="VARCHAR" />
+	    <result column="currentgradelevel" property="currentGradeLevel" jdbcType="INTEGER" />
+	    <result column="currentgradelevelcode" property="currentGradeLevelCode" jdbcType="VARCHAR" />
+	    <result column="localstudentidentifier" property="localStudentIdentifier" jdbcType="VARCHAR" />
+	    <result column="currentschoolyear" property="currentSchoolYear" jdbcType="INTEGER" />
+	    <result column="schoolentrydate" property="schoolEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="districtentrydate" property="districtEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="stateentrydate" property="stateEntryDate" jdbcType="TIMESTAMP" />
+	    <result column="exitwithdrawaldate" property="exitWithdrawalDate" jdbcType="TIMESTAMP" />
+	    <result column="exitwithdrawaltype" property="exitWithdrawalType" jdbcType="INTEGER" />
+	    <result column="specialcircumstancestransferchoice" property="specialCircumstancesTransferChoice" jdbcType="VARCHAR" />
+	    <result column="giftedstudent" property="giftedStudent" jdbcType="BIT" />
+	    <result column="specialedprogramendingdate" property="specialEdProgramEndingDate" jdbcType="TIMESTAMP" />
+	    <result column="qualifiedfor504" property="qualifiedFor504" jdbcType="VARCHAR" />
+	    <result column="studentid" property="studentId" jdbcType="BIGINT" />
+	    <result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" />
+	    <result column="restrictionid" property="restrictionId" jdbcType="BIGINT" />
+	    <result column="attendanceSchoolDistrictId" property="attendanceSchoolDistrictId" jdbcType="BIGINT"/>
+	    <result column="activeFlag" property="activeFlag" jdbcType="BIT" />
+		<result column="sourcetype" property="sourceType" jdbcType="VARCHAR" />
+	    <association property="attendanceSchool" javaType="edu.ku.cete.domain.common.Organization">
+	        <id column="attendanceSchoolId" property="id" jdbcType="BIGINT"/>
+	        <result column="attendanceSchoolName" property="organizationName" javaType="String"/>
+	        <result column="attendanceSchoolIdentifier" property="displayIdentifier" javaType="String"/>
+	        <result column="welcomeMessage" property="welcomeMessage" javaType="String"/>
+	        <result column="organizationtypeid" property="organizationType.organizationTypeId"/>
+		</association>
+		<collection property="subjectAreaList" ofType="edu.ku.cete.domain.enrollment.SubjectArea" javaType="list">
+			<id column="subjectareaid"  property="id" />  
+            <result column="subjectareacode" property ="subjectAreaCode" /> 
+            <result column="subjectareaname" property ="subjectAreaName" />  
+            <result column="active"  property ="active" />  
+         </collection>
+    </resultMap>
+    
+    <resultMap id="findEnrollmentMap" extends="AutoRegResultMap" type="edu.ku.cete.domain.enrollment.Enrollment">    
+    	<result column="aypschoolidentifier" property="aypSchoolIdentifier" jdbcType="VARCHAR" />
+    	<result column="sourcetype" property="sourceType" jdbcType="VARCHAR" />
+    	<collection property="subjectAreaList" ofType="edu.ku.cete.domain.enrollment.SubjectArea" javaType="list">
+   			<id column="subjectareaid"  property="id" />  
+            <result column="subjectareacode" property ="subjectAreaCode" /> 
+            <result column="subjectareaname" property ="subjectAreaName" />  
+         </collection>	      	
+	</resultMap>
+	
+	  
+    <resultMap id="findStudentExistMap" type="edu.ku.cete.domain.enrollment.Enrollment">  
+    	 <id column="enrollmentid" property="id" jdbcType="BIGINT" />  
+    	 <result column="studentid" property="studentId" jdbcType="BIGINT" />
+    	 <result column="assessmentprogramid" property="assessmentProgramId" jdbcType="BIGINT" />
+    	 <result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" /> 	
+    	 <result column="parentorganizationid" property="attendanceSchoolDistrictId" jdbcType="BIGINT" />
+    	 <result column="currentschoolyear" property="currentSchoolYear" jdbcType="INTEGER" />
+    	 <result column="activeFlag" property="activeFlag" jdbcType="BIT" />   
+    	 <result column="gradeid" property="currentGradeLevel" jdbcType="VARCHAR"/> 
+    	 <association property="student" javaType="edu.ku.cete.domain.student.Student">			
+			<result property="stateStudentIdentifier" column="statestudentidentifier" jdbcType="VARCHAR" />
+   		 </association>
+	</resultMap>
+	     
+    <sql id="find_student_Where_Clause">
+		<if test="enrollmentRecordCriteriaMap.stateStudentIdentifier != null">
+				AND stateStudentIdentifier ilike #{enrollmentRecordCriteriaMap.stateStudentIdentifier}
+		</if>
+		<if test="enrollmentRecordCriteriaMap.legalFirstName != null">
+				AND firstname ilike #{enrollmentRecordCriteriaMap.legalFirstName}
+		</if>
+		<if test="enrollmentRecordCriteriaMap.legalLastName != null">
+				AND lastname ilike #{enrollmentRecordCriteriaMap.legalLastName}
+		</if>
+		<if test="enrollmentRecordCriteriaMap.status != null">
+				AND status ilike #{enrollmentRecordCriteriaMap.status}
+		</if>		 
+		<if test="enrollmentRecordCriteriaMap.districtName != null">
+				AND districtname ilike #{enrollmentRecordCriteriaMap.districtName}
+		</if>
+		<if test="enrollmentRecordCriteriaMap.gradeName != null">
+				AND gradename ilike #{enrollmentRecordCriteriaMap.gradeName}
+		</if>
+	</sql>
+		<sql id="Example_Where_Clause">
+		    <!--
+		      WARNING - @mbggenerated
+		      This element is automatically generated by MyBatis Generator, do not modify.
+		      This element was generated on Wed Apr 25 16:51:12 CDT 2012.
+		    -->
+		    <where>
+		      <foreach collection="oredCriteria" item="criteria" separator="or">
+		        <if test="criteria.valid">
+		          <trim prefix="(" prefixOverrides="and" suffix=")">
+		            <foreach collection="criteria.criteria" item="criterion">
+		              <choose>
+		                <when test="criterion.noValue">
+		                  and ${criterion.condition}
+		                </when>
+		                <when test="criterion.singleValue">
+		                  and ${criterion.condition} #{criterion.value}
+		                </when>
+		                <when test="criterion.betweenValue">
+		                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+		                </when>
+		                <when test="criterion.listValue">
+		                  and ${criterion.condition}
+		                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+		                    #{listItem}
+		                  </foreach>
+		                </when>
+		              </choose>
+		            </foreach>
+		          </trim>
+		        </if>
+		      </foreach>
+		    </where>
+		  </sql>
+		  <sql id="Extended_Column_List">
+		    enrl.id,enrl.aypschoolidentifier,enrl.residencedistrictidentifier,enrl.aypschoolid,
+		    enrl.localstudentidentifier,enrl.currentgradelevel,
+		    enrl.currentschoolyear,
+		    enrl.schoolentrydate,
+		    enrl.districtentrydate,enrl.stateentrydate,enrl.exitwithdrawaldate,
+		    enrl.exitwithdrawaltype,enrl.specialcircumstancestransferchoice,
+		    enrl.giftedstudent,
+		    enrl.specialedprogramendingdate,enrl.qualifiedfor504,enrl.studentid, 
+		    enrl.restrictionid,
+		    enrl.activeFlag,
+		    enrl.sourcetype,
+		    st.id,
+		    st.statestudentidentifier,st.legalfirstname,st.legalmiddlename,
+		    st.legallastname,st.generationcode,
+		    st.comprehensiverace,st.primarydisabilitycode,
+		    st.dateofbirth,st.gender, st.stateid,
+		    attendanceSchool.id as attendanceschoolid,
+		    attendanceSchool.displayidentifier as attendanceschoolprogramidentifier,
+		    attendanceSchool.organizationname, attendanceSchool.welcomemessage,
+		    ot.id as "attendanceSchool.organizationType.organizationTypeId", 
+		    ot.typename as "attendanceSchool.organizationType.typeName",
+		    ot.typecode as "attendanceSchool.organizationType.typeCode", 
+		    ot.typelevel as "attendanceSchool.organizationType.typeLevel"
+		  </sql>
+		  
+		  <!--Changed during US16421 : to bring assessment Programs associated with student  -->
+		  <sql id="Extended_With_Roster_Column_List">
+		  	enrlRoster.id,
+		    enrl.residencedistrictidentifier,
+		    enrl.localstudentidentifier,
+		    enrl.currentschoolyear,
+		    enrl.studentid,
+		    gc.name as gradeCourseName,
+		    gc.abbreviatedName as abbreviatedName,
+		    r.id as rosterId,
+		    r.coursesectionname,
+		    stateCourse.name as stateCourseName,
+		    courseenrollment.categoryname as courseenrollmentstatus,
+    		au.firstname as educatorFirstName,
+    		au.middlename as educatorMiddleName,
+    		au.surname as educatorLastName,
+    		au.uniquecommonidentifier as educatorIdentifier,
+		    stateSubjectArea.name as stateSubjectAreaName,
+		    stateSubjectArea.abbreviatedname as stateSubjectAreaAbbreviatedName,
+		    stateSubjectArea.id as stateSubjectAreaId,
+		    st.statestudentidentifier,st.legalfirstname,st.legalmiddlename,
+		    st.legallastname,st.generationcode,
+		    (select categoryname from category where categorycode = st.comprehensiverace and categorytypeid in (SELECT id FROM categorytype WHERE typecode = 'COMPREHENSIVE_RACE')) as comprehensiverace,
+		    st.primarydisabilitycode,
+		    st.dateofbirth,st.gender,
+		    (select categoryname from category where categorycode = st.firstlanguage and categorytypeid in (SELECT id FROM categorytype WHERE typecode = 'FIRST_LANGUAGE')) as firstlanguage, 
+		    st.finalelabandid, st.finalmathbandid,
+		    <if test="testSessionId != null">
+		    	sTest.testSessionId as testSessionId,
+		    	sTest.status as status,
+		    	nvltest(testSessionId) as enrollmentStatus,
+		    	ssc.specialcircumstanceid as specialcircumstanceid,
+		    	ssc.status as specialcircumstancestatus,
+		    	scc.categoryname as specialcircumstancestatusname,
+			</if>	
+		    attendanceSchool.schoolid as attendanceschoolid,
+		    attendanceSchool.schooldisplayidentifier as attendanceSchoolIdentifier,
+		    attendanceSchool.schoolname as attendanceSchoolName,
+		    array_to_string(ARRAY(select distinct abbreviatedname from assessmentprogram ap inner join studentassessmentprogram sap on ap.id = sap.assessmentprogramid and  sap.studentid = st.id and sap.activeflag = true),', ') as programname
+		  </sql>
+		  
+		  <sql id="Extended_Auto_Registration_Students_Column_List">
+		  	s.id as studentId, 
+		  	s.stateStudentIdentifier as stateStudentIdentifier, 
+		  	s.legalfirstname as legalFirstName, 
+		  	s.legallastname as legalLastName
+		  </sql>
+		  
+		  <sql id="Extended_Roster_Where_Clause">
+		  	<if test="studentRosterCriteriaMap.enrollmentsRostersId != null">
+	    		AND (enrlRoster.id || '') ilike #{studentRosterCriteriaMap.enrollmentsRostersId}
+	    	</if>
+		  	<if test="studentRosterCriteriaMap.stateStudentIdentifier != null">
+	    		AND st.stateStudentIdentifier ilike #{studentRosterCriteriaMap.stateStudentIdentifier}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.localStudentIdentifier != null">
+	    		AND enrl.localstudentidentifier ilike #{studentRosterCriteriaMap.localStudentIdentifier}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.legalFirstName != null">
+	    		AND st.legalFirstName ilike #{studentRosterCriteriaMap.legalFirstName}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.legalMiddleName != null">
+	    		AND st.legalMiddleName ilike #{studentRosterCriteriaMap.legalMiddleName}
+	    	</if>   	
+	    	<if test="studentRosterCriteriaMap.legalLastName != null">
+	    		AND st.legalLastName ilike #{studentRosterCriteriaMap.legalLastName}
+	    	</if>	
+	    	<if test="studentRosterCriteriaMap.generationCode != null">
+	    		AND st.generationcode ilike #{studentRosterCriteriaMap.generationCode}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.gender != null">
+	    		AND (st.gender || '') ilike #{studentRosterCriteriaMap.gender}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.dateOfBirth != null">
+	    		AND to_char(dateofbirth, 'MM/DD/YYYY') ilike #{studentRosterCriteriaMap.dateOfBirth} 
+	    	</if>
+		  	<if test="studentRosterCriteriaMap.gradeCourseName != null">
+	    		AND gc.name ilike #{studentRosterCriteriaMap.gradeCourseName}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.stateSubjectAreaName != null">
+	    		AND stateSubjectArea.name ilike #{studentRosterCriteriaMap.stateSubjectAreaName}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.courseSectionName != null">
+	    		AND r.courseSectionName ilike #{studentRosterCriteriaMap.courseSectionName}
+	    	</if>	
+	    	<if test="studentRosterCriteriaMap.attendanceSchoolName != null">
+	    		AND attendanceSchool.schoolname ilike #{studentRosterCriteriaMap.attendanceSchoolName}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.currentSchoolYear != null">
+	    		AND (enrl.currentschoolyear || '') ilike #{studentRosterCriteriaMap.currentSchoolYear}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.firstLanguage != null">
+	    		AND st.firstlanguage ilike #{studentRosterCriteriaMap.firstLanguage}
+	    	</if>  
+	    	<if test="studentRosterCriteriaMap.comprehensiveRace != null">
+	    		AND st.comprehensiverace ilike #{studentRosterCriteriaMap.comprehensiveRace}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.residenceDistrictIdentifier != null">
+	    		AND enrl.residencedistrictidentifier ilike #{studentRosterCriteriaMap.residenceDistrictIdentifier}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.primaryDisabilityCode != null">
+	    		AND st.primarydisabilitycode ilike #{studentRosterCriteriaMap.primaryDisabilityCode}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.uniqueCommonIdentifier != null">
+	    		And au.uniquecommonidentifier ilike #{studentRosterCriteriaMap.uniqueCommonIdentifier}
+	    	</if>	    	
+	    	<if test="studentRosterCriteriaMap.educatorFirstName != null">
+	    		AND au.firstname ilike #{studentRosterCriteriaMap.educatorFirstName}
+	    	</if>	    	
+	    	<if test="studentRosterCriteriaMap.educatorLastName != null">
+	    		AND au.surname ilike #{studentRosterCriteriaMap.educatorLastName}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.courseEnrollmentStatus != null">
+	    		AND (courseenrollment.categoryname || '') ilike #{studentRosterCriteriaMap.courseEnrollmentStatus}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.rosterId != null">
+	    		AND (r.id || '') ilike #{studentRosterCriteriaMap.rosterId}
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.assessmentPrograms != null">	    	
+	    		AND ap.abbreviatedname ilike #{studentRosterCriteriaMap.assessmentPrograms} 
+	    	</if>
+	    	<if test="studentRosterCriteriaMap.attendanceSchoolIdentifier != null">	    	
+	    		AND attendanceSchool.schooldisplayidentifier ilike #{studentRosterCriteriaMap.attendanceSchoolIdentifier} 
+	    	</if>
+	    	  		    	
+		  </sql>
+
+		   <sql id="Extended_AR_Students_Where_Clause">
+			<if test="studentsCriteriaMap.stateStudentIdentifier != null">
+		 		AND s.stateStudentIdentifier ilike #{studentsCriteriaMap.stateStudentIdentifier}
+		 	</if>
+			<if test="studentsCriteriaMap.legalFirstName != null">
+		 		AND s.legalfirstname ilike #{studentsCriteriaMap.legalFirstName}
+		 	</if>
+		 	<if test="studentsCriteriaMap.legalLastName != null">
+		 		AND s.legallastname ilike #{studentsCriteriaMap.legalLastName}
+		 	</if>
+		 	
+		 	<if test="studentsCriteriaMap.studentTestId != null">
+	    		AND (t.externalid || '') ilike #{studentsCriteriaMap.studentTestId}
+	    	</if>
+			<if test="studentsCriteriaMap.testStatus != null">
+		 		AND cat.categoryname ilike #{studentsCriteriaMap.testStatus}
+		 	</if>                                  
+		 	
+		 	<if test="studentsCriteriaMap.interimTheta != null">
+		 		AND (st.interimtheta || '') ilike #{studentsCriteriaMap.interimTheta}
+		 	</if>
+		 	   
+		 	
+		  </sql>
+
+		  <select id="getByCriteria" parameterType="edu.ku.cete.domain.enrollment.EnrollmentExample" resultType="Enrollment">
+		    <!--
+		      WARNING - @mbggenerated
+		      This element is automatically generated by MyBatis Generator, do not modify.
+		      This element was generated on Wed Apr 25 16:51:12 CDT 2012.
+		    -->
+		    select
+		    <if test="distinct">
+		      distinct
+		    </if>
+		    <include refid="Extended_Column_List" />
+		    from
+		    Student st,
+		    Organization attendanceSchool,
+		    OrganizationType ot,
+		    enrollment enrl left join enrollmentsRosters enrlRoster on (enrlroster.enrollmentid = enrl.id and enrlRoster.activeflag is true)		     		    
+		    <if test="_parameter != null">
+		      <include refid="Example_Where_Clause" />		      
+	    	    and enrl.Studentid = st.id
+	    	    and attendanceSchool.id = enrl.attendanceschoolid
+	    	    and attendanceSchool.organizationtypeid = ot.id
+		    </if>
+		    <if test="_parameter == null">
+	    	    where enrl.Studentid = st.id
+	    	    and attendanceSchool.id = enrl.attendanceschoolid
+	    	    and attendanceSchool.organizationtypeid = ot.id
+		    </if>
+		    and st.activeflag is true
+		    
+		    <if test="orderByClause != null">
+		      order by ${orderByClause}
+		    </if>
+		  </select>
+			
+		  <select id = "DLMStudentReport_Students_Column_List"  resultMap="enrollmentWithRosterMap">
+		  	SELECT distinct enrl.studentid,
+		    gc.name as gradeCourseName,
+		    gc.abbreviatedName as abbreviatedName,
+		    stateSubjectArea.name as stateSubjectAreaName,
+		    stateSubjectArea.id as stateSubjectAreaId,
+		    st.statestudentidentifier,st.legalfirstname,st.legalmiddlename,
+		    st.legallastname,st.generationcode,
+		    st.comprehensiverace,st.primarydisabilitycode,
+		    st.dateofbirth,st.gender,st.firstlanguage, st.finalelabandid, st.finalmathbandid,
+		    attendanceSchool.schoolid as attendanceschoolid,
+		    attendanceSchool.schooldisplayidentifier as attendanceSchoolIdentifier,
+		    attendanceSchool.schoolname as attendanceSchoolName,
+		    array_to_string(ARRAY(select distinct abbreviatedname from assessmentprogram ap inner join studentassessmentprogram sap on ap.id = sap.assessmentprogramid and  sap.studentid = st.id and sap.activeflag = true),', ') as programname
+			    , CASE WHEN 'DLM' NOT IN (SELECT apinner.abbreviatedname FROM assessmentprogram apinner INNER JOIN studentassessmentprogram sapinner ON sapinner.studentid = st.id AND apinner.id = sapinner.assessmentprogramid AND sapinner.activeflag = TRUE)
+			       THEN false ELSE true END as dlmstudent
+			    <if test="studentRosterCriteriaMap.dlmOnly != null">	
+		    		,(CASE WHEN st.profilestatus = 'CUSTOM' THEN 'Custom' ELSE 'No Settings' END) as accessprofilestatus
+		    		,CASE WHEN 'DLM' NOT IN (SELECT apinner.abbreviatedname FROM assessmentprogram apinner INNER JOIN studentassessmentprogram sapinner ON sapinner.studentid = st.id AND apinner.id = sapinner.assessmentprogramid AND sapinner.activeflag = TRUE)
+						THEN 'Not Applicable'
+	    				WHEN survey.studentid is null
+						THEN 'Not Started'
+						WHEN survey.status is null
+						THEN 'Not Started'
+						ELSE surveystatuscategory.categoryname
+	    			END as firstcontact
+		    	</if>
+		    	<if test="studentRosterCriteriaMap.itiHistory != null">
+		    		,(select itsh.name from ititestsessionhistory itsh where itsh.activeflag = true and itsh.rosterid = r.id and itsh.studentid = st.id limit 1) AS history	
+		    	</if>	
+		    FROM
+		    	organizationtreedetail attendanceSchool 
+				<!-- JOIN OrganizationType ot ON attendanceSchool.organizationtypeid = ot.id   -->
+				JOIN enrollment enrl ON attendanceSchool.schoolid = enrl.attendanceschoolid 
+				JOIN enrollmentsRosters enrlRoster ON enrlroster.enrollmentid = enrl.id
+				JOIN Student st ON enrl.Studentid = st.id
+		    	<if test="studentRosterCriteriaMap.dlmOnly != null">
+					JOIN studentassessmentprogram stap ON stap.studentid = st.id and stap.activeflag = true
+					JOIN assessmentprogram ap ON stap.assessmentprogramid = ap.id and ap.abbreviatedname = 'DLM' 	
+		    	</if>
+				<if test="testSessionId != null">
+			 		 LEFT JOIN (Select * from StudentsTests where testSessionId = #{testSessionId} and activeflag IS true) sTest
+			 		 	ON (sTest.studentid=st.id)
+			    </if>  
+				JOIN roster r ON r.id = enrlroster.rosterid 
+				JOIN aartuser au ON r.teacherId = au.id
+				LEFT JOIN ContentArea stateSubjectArea ON (r.stateSubjectAreaId = stateSubjectArea.id) 
+				LEFT JOIN Category courseenrollment ON (r.courseenrollmentstatusid = courseenrollment.id) 
+				LEFT JOIN GradeCourse gc ON (enrl.currentgradelevel = gc.id)
+				 <if test="studentRosterCriteriaMap.dlmOnly != null">
+ 				 	LEFT JOIN survey survey ON (survey.studentid = st.id and survey.activeflag)
+	    			LEFT JOIN Category surveystatuscategory ON (survey.status = surveystatuscategory.id) 
+		    	 </if>	
+		    WHERE 
+	    		r.activeflag IS true
+	    		AND enrlRoster.activeflag IS true
+	    		AND enrl.activeflag IS true
+	    		AND st.activeflag IS true
+	    		AND au.activeflag IS true
+	    		AND enrl.currentschoolyear = #{currentSchoolYear, jdbcType=INTEGER} 	    		
+		    	<if test="testSessionId != null">
+	    			AND r.id = (Select rosterid from testsession where id=#{testSessionId})		
+				</if>			
+		    	<if test="schoolOrgId == null and userOrganizationId != null">
+<!-- 		    	    AND enrl.attendanceschoolid = ANY(ARRAY(	     -->
+<!-- 						select id from organization_children(#{userOrganizationId, jdbcType=BIGINT}) union select #{userOrganizationId, jdbcType=BIGINT}) -->
+<!-- 						) -->
+					AND (attendanceSchool.schoolid=#{userOrganizationId, jdbcType=BIGINT} 
+							OR attendanceSchool.districtid=#{userOrganizationId, jdbcType=BIGINT}
+							OR attendanceSchool.stateid=#{userOrganizationId, jdbcType=BIGINT})
+			    </if>
+		    	<if test="schoolOrgId != null">
+		    	    AND enrl.attendanceschoolid = #{schoolOrgId, jdbcType=BIGINT}
+			    </if>
+		    	<if test="! hasViewAllPermission">
+		    		AND r.teacherId=#{educatorId}
+		    	</if>	
+		    	 <if test="studentRosterCriteriaMap.dlmOnly != null">
+		    		and ap.abbreviatedname = 'DLM' 	
+		    	</if>	
+		    	 <if test="contentAreaId != null">
+		    		and r.statesubjectareaid = #{contentAreaId, jdbcType=BIGINT}	
+		    	</if>   
+		    	<include refid="Extended_Roster_Where_Clause" />		    
+			    <if test="sortByColumn != null">
+			      ORDER BY  
+			      
+			      	  <if test="sortByColumn.contains('enrollmentStatus')">
+			      	  	enrollmentStatus asc,  
+			      	  </if>
+			      	  <choose>  
+			            <when test="sortByColumn.contains('abbreviatedName')">abbreviatedName</when>
+			            <when test="sortByColumn.contains('accessProfileStatus')">accessprofilestatus</when>
+			            <when test="sortByColumn.contains('attendanceSchoolIdentifier')">attendanceSchool.displayidentifier</when>
+			            <when test="sortByColumn.contains('attendanceSchoolName')">attendanceSchool.organizationname</when>
+			            <when test="sortByColumn.contains('courseSectionName')">r.coursesectionname</when>
+			            <when test="sortByColumn.contains('comprehensiveRace')">st.comprehensiverace</when>
+			            <when test="sortByColumn.contains('courseEnrollmentStatus')">courseenrollment.categoryname</when>
+			            <when test="sortByColumn.contains('currentSchoolYear')">enrl.currentschoolyear</when> 
+			            <when test="sortByColumn.contains('dateOfBirth')">st.dateofbirth</when>
+			            <when test="sortByColumn.contains('dlmStudent')">dlmstudent</when>
+			            <when test="sortByColumn.contains('educatorFirstName')">au.firstname</when>
+			            <when test="sortByColumn.contains('educatorIdentifier')">au.uniquecommonidentifier</when>
+			            <when test="sortByColumn.contains('educatorLastName')">au.surname</when>
+			            <when test="sortByColumn.contains('educatorMiddleName')">au.middlename</when>
+			            <when test="sortByColumn.contains('finalElaBandId')">st.finalelabandid</when>
+			            <when test="sortByColumn.contains('finalMathBandId')">st.finalmathbandid</when>
+			            <when test="sortByColumn.contains('firstContact')">firstcontact</when>
+			            <when test="sortByColumn.contains('firstLanguage')">st.firstlanguage</when>
+			            <when test="sortByColumn.contains('gender')">st.gender</when>
+			            <when test="sortByColumn.contains('generationcode')">st.generationcode</when>
+			            <when test="sortByColumn.contains('gradeCourseName')">gc.name</when>
+			            <when test="sortByColumn.contains('history')">history</when>
+			            <when test="sortByColumn.contains('legallastname') and sortByColumn.contains('legalfirstname')">st.legallastname, st.legalfirstname</when>
+			            <when test="sortByColumn.contains('legalFirstName')">st.legalfirstname</when>
+			            <when test="sortByColumn.contains('legalLastName')">st.legallastname</when>
+			            <when test="sortByColumn.contains('legalMiddleName')">st.legalmiddlename</when>
+			            <when test="sortByColumn.contains('localStudentIdentifier')">enrl.localstudentidentifier</when> 
+			            <when test="sortByColumn.contains('primaryDisabilityCode')">st.primarydisabilitycode</when>
+			            <when test="sortByColumn.contains('residenceDistrictIdentifier')">enrl.residencedistrictidentifier</when> 
+			            <when test="sortByColumn.contains('rosterId')">r.id</when>		            			            
+			            <when test="sortByColumn.contains('stateStudentIdentifier')">stateStudentIdentifier</when>
+			            <when test="sortByColumn.contains('status') and testSessionId != null">sTest.status</when>
+			            <when test="sortByColumn.contains('studentid') or sortByColumn.contains('studentId')">enrl.studentid</when>                                                             
+			            <when test="sortByColumn.contains('testSessionId') and testSessionId != null">sTest.testSessionId</when>
+			            <when test="sortByColumn.contains('uniqueCommonIdentifier')">educatorIdentifier</when>
+			            <when test="sortByColumn.contains('stateSubjectAreaName')">stateSubjectArea.name</when>
+			            <when test="sortByColumn.contains('attendanceschoolid')">attendanceSchool.schoolid</when>
+			            <otherwise>
+			           	 st.legallastname, st.legalfirstname
+			            </otherwise>
+			            
+			      	  </choose>
+			      <choose>
+			      <when test="sortType != null and (sortType=='desc' or sortType=='DESC')">
+			      	DESC 
+			      </when>
+			      <otherwise>
+			      	ASC 
+			      </otherwise>
+			      </choose>
+			    </if>
+			    <if test="limit != null">
+		    	 limit #{limit}
+		   		</if>
+		    	<if test="offset != null">
+		    	  offset #{offset}
+		   		</if>
+		  </select>
+			
+			
+		   <!--Changed during US16421 : to bring assessment Programs associated with student  and change dlmsudent-->
+		  <select id="getEnrollmentWithRoster" resultMap="enrollmentWithRosterMap">
+		    SELECT
+			    <include refid="Extended_With_Roster_Column_List" />
+			    , CASE WHEN 'DLM' NOT IN (SELECT apinner.abbreviatedname FROM assessmentprogram apinner INNER JOIN studentassessmentprogram sapinner ON sapinner.studentid = st.id AND apinner.id = sapinner.assessmentprogramid AND sapinner.activeflag = TRUE)
+			       THEN false ELSE true END as dlmstudent
+			    <if test="studentRosterCriteriaMap.dlmOnly != null">	
+		    		,(CASE WHEN st.profilestatus = 'CUSTOM' THEN 'Custom' ELSE 'No Settings' END) as accessprofilestatus
+		    		,CASE WHEN 'DLM' NOT IN (SELECT apinner.abbreviatedname FROM assessmentprogram apinner INNER JOIN studentassessmentprogram sapinner ON sapinner.studentid = st.id AND apinner.id = sapinner.assessmentprogramid AND sapinner.activeflag = TRUE)
+						THEN 'Not Applicable'
+	    				WHEN survey.studentid is null
+						THEN 'Not Started'
+						WHEN survey.status is null
+						THEN 'Not Started'
+						ELSE surveystatuscategory.categoryname
+	    			END as firstcontact,
+	    			(SELECT pooltype FROM organization WHERE id = st.stateid) as orgpooltype
+		    	</if>
+		    	<if test="studentRosterCriteriaMap.itiHistory != null">
+		    		,(select itsh.name from ititestsessionhistory itsh where itsh.activeflag = true and itsh.rosterid = r.id and itsh.studentid = st.id limit 1) AS history	
+		    	</if>	
+		    FROM
+		    	organizationtreedetail attendanceSchool 
+<!-- 				JOIN OrganizationType ot ON attendanceSchool.organizationtypeid = ot.id   -->
+				JOIN enrollment enrl ON attendanceSchool.schoolid = enrl.attendanceschoolid 
+				JOIN enrollmentsRosters enrlRoster ON enrlroster.enrollmentid = enrl.id
+				JOIN Student st ON enrl.Studentid = st.id
+				<if test="studentRosterCriteriaMap.dlmOnly != null or assessmentProgramId != null" >
+					JOIN studentassessmentprogram stap ON stap.studentid = st.id and stap.activeflag = true
+					JOIN assessmentprogram ap ON stap.assessmentprogramid = ap.id 	
+		    	</if>
+				<if test="testSessionId != null">
+			 		 LEFT JOIN (Select * from StudentsTests where testSessionId = #{testSessionId} and activeflag IS true) sTest
+			 		 	ON (sTest.studentid=st.id)
+			 		 left outer join studentspecialcircumstance ssc on sTest.id = ssc.studenttestid and ssc.activeflag is true
+			 		 left join category scc on ssc.status = scc.id
+			    </if>  
+				JOIN roster r ON r.id = enrlroster.rosterid 
+				JOIN aartuser au ON r.teacherId = au.id
+				LEFT JOIN ContentArea stateSubjectArea ON (r.stateSubjectAreaId = stateSubjectArea.id) 
+				left JOIN gradecourse stateCourse on r.statecoursesid = stateCourse.id and stateCourse.course is true 
+				LEFT JOIN Category courseenrollment ON (r.courseenrollmentstatusid = courseenrollment.id) 
+				LEFT JOIN GradeCourse gc ON (enrl.currentgradelevel = gc.id)
+				 <if test="studentRosterCriteriaMap.dlmOnly != null or assessmentProgramId != null">
+ 				 	LEFT JOIN survey survey ON (survey.studentid = st.id) AND survey.activeflag IS true
+	    			LEFT JOIN Category surveystatuscategory ON (survey.status = surveystatuscategory.id) 
+		    	 </if>	
+		    WHERE 
+	    		r.activeflag IS true
+	    		AND enrlRoster.activeflag IS true
+	    		AND enrl.activeflag IS true
+	    		AND st.activeflag IS true
+	    		AND au.activeflag IS true
+	    		AND enrl.currentschoolyear = #{currentSchoolYear, jdbcType=INTEGER} 	    		
+	    		<if test="assessmentProgramId != null">
+	    			AND stap.assessmentprogramid= #{assessmentProgramId, jdbcType=BIGINT}
+	    		</if>	    		
+		    	<if test="testSessionId != null">
+	    			AND r.id = (Select rosterid from testsession where id=#{testSessionId})		
+				</if>			
+		    	<if test="schoolOrgId == null and userOrganizationId != null">
+<!-- 		    	    AND enrl.attendanceschoolid = ANY(ARRAY(	     -->
+<!-- 						select id from organization_children(#{userOrganizationId, jdbcType=BIGINT}) union select #{userOrganizationId, jdbcType=BIGINT}) -->
+<!-- 						) -->
+					AND (attendanceSchool.schoolid=#{userOrganizationId, jdbcType=BIGINT} 
+							OR attendanceSchool.districtid=#{userOrganizationId, jdbcType=BIGINT}
+							OR attendanceSchool.stateid=#{userOrganizationId, jdbcType=BIGINT})
+			    </if>
+		    	<if test="schoolOrgId != null">
+		    	    AND enrl.attendanceschoolid = #{schoolOrgId, jdbcType=BIGINT}
+			    </if>
+		    	<if test="! hasViewAllPermission">
+		    		AND r.teacherId=#{educatorId}
+		    	</if>	
+		    	 <if test="studentRosterCriteriaMap.dlmOnly != null">
+		    		and ap.abbreviatedname = 'DLM' 	
+		    	</if>	
+		    	 <if test="contentAreaId != null">
+		    		and r.statesubjectareaid = #{contentAreaId, jdbcType=BIGINT}	
+		    	</if>
+		    	<if test="studentRosterCriteriaMap.dlmOnly != null and studentRosterCriteriaMap.itiHistory != null">
+		    		and (stateSubjectArea.abbreviatedname = (SELECT CASE WHEN (select count(*) from firstcontactsurveysettings where organizationid = attendanceSchool.stateid 
+		    							and schoolyear = #{currentSchoolYear, jdbcType=INTEGER} and activeflag is true and scienceflag is true) > 0
+		    			THEN 
+							'Sci'
+						END)
+						OR stateSubjectArea.abbreviatedname = (SELECT CASE WHEN (select count(*) from firstcontactsurveysettings where organizationid = attendanceSchool.stateid 
+		    							and schoolyear = #{currentSchoolYear, jdbcType=INTEGER} and activeflag is true and mathflag is true) > 0
+		    			THEN
+							 'M'
+						END)
+						OR stateSubjectArea.abbreviatedname = (SELECT CASE WHEN (select count(*) from firstcontactsurveysettings where organizationid = attendanceSchool.stateid
+		    							and schoolyear = #{currentSchoolYear, jdbcType=INTEGER} and activeflag is true and elaflag is true) > 0
+		    			THEN
+							'ELA'
+						END))
+		    	</if>
+		    	   
+		    	<include refid="Extended_Roster_Where_Clause" />		    
+			    <if test="sortByColumn != null">
+			      ORDER BY  
+			      
+			      	  <if test="sortByColumn.contains('enrollmentStatus')">
+			      	  	enrollmentStatus asc,  
+			      	  </if>
+			      	  <choose>  
+			            <when test="sortByColumn.contains('abbreviatedName')">abbreviatedName</when>
+			            <when test="sortByColumn.contains('accessProfileStatus')">accessprofilestatus</when>
+			            <when test="sortByColumn.contains('attendanceSchoolIdentifier')">attendanceSchool.schooldisplayidentifier</when>
+			            <when test="sortByColumn.contains('attendanceSchoolName')">attendanceSchool.schoolname</when>
+			            <when test="sortByColumn.contains('courseSectionName')">r.coursesectionname</when>
+			            <when test="sortByColumn.contains('comprehensiveRace')">comprehensiverace</when>
+			            <when test="sortByColumn.contains('courseEnrollmentStatus')">courseenrollment.categoryname</when>
+			            <when test="sortByColumn.contains('currentSchoolYear')">enrl.currentschoolyear</when> 
+			            <when test="sortByColumn.contains('dateOfBirth')">st.dateofbirth</when>
+			            <when test="sortByColumn.contains('dlmStudent')">dlmstudent</when>
+			            <when test="sortByColumn.contains('educatorFirstName')">au.firstname</when>
+			            <when test="sortByColumn.contains('educatorIdentifier')">au.uniquecommonidentifier</when>
+			            <when test="sortByColumn.contains('educatorLastName')">au.surname</when>
+			            <when test="sortByColumn.contains('educatorMiddleName')">au.middlename</when>
+			            <when test="sortByColumn.contains('finalElaBandId')">st.finalelabandid</when>
+			            <when test="sortByColumn.contains('finalMathBandId')">st.finalmathbandid</when>
+			            <when test="sortByColumn.contains('firstContact')">firstcontact</when>
+			            <when test="sortByColumn.contains('firstLanguage')">firstlanguage</when>
+			            <when test="sortByColumn.contains('gender')">st.gender</when>
+			            <when test="sortByColumn.contains('generationcode')">st.generationcode</when>
+			            <when test="sortByColumn.contains('gradeCourseName')">gc.name</when>
+			            <when test="sortByColumn.contains('history')">history</when>
+			            <when test="sortByColumn.contains('legallastname') and sortByColumn.contains('legalfirstname')">st.legallastname, st.legalfirstname</when>
+			            <when test="sortByColumn.contains('legalFirstName')">st.legalfirstname</when>
+			            <when test="sortByColumn.contains('legalLastName')">st.legallastname</when>
+			            <when test="sortByColumn.contains('legalMiddleName')">st.legalmiddlename</when>
+			            <when test="sortByColumn.contains('localStudentIdentifier')">enrl.localstudentidentifier</when> 
+			            <when test="sortByColumn.contains('primaryDisabilityCode')">st.primarydisabilitycode</when>
+			            <when test="sortByColumn.contains('residenceDistrictIdentifier')">enrl.residencedistrictidentifier</when> 
+			            <when test="sortByColumn.contains('rosterId')">r.id</when>		            			            
+			            <when test="sortByColumn.contains('stateStudentIdentifier')">stateStudentIdentifier</when>
+			            <when test="sortByColumn.contains('status') and testSessionId != null">sTest.status</when>
+			            <when test="sortByColumn.contains('studentid') or sortByColumn.contains('studentId')">enrl.studentid</when>                                                             
+			            <when test="sortByColumn.contains('testSessionId') and testSessionId != null">sTest.testSessionId</when>
+			            <when test="sortByColumn.contains('uniqueCommonIdentifier')">educatorIdentifier</when>
+			            <when test="sortByColumn.contains('stateSubjectAreaName')">stateSubjectArea.name</when>
+			            <when test="sortByColumn.contains('attendanceschoolid')">attendanceSchool.schoolid</when>
+			            <otherwise>
+			           	 st.legallastname, st.legalfirstname
+			            </otherwise>
+			            
+			      	  </choose>
+			      <choose>
+			      <when test="sortType != null and (sortType=='desc' or sortType=='DESC')">
+			      	DESC 
+			      </when>
+			      <otherwise>
+			      	ASC 
+			      </otherwise>
+			      </choose>
+			      , enrlRoster.id ASC
+			    </if>
+			    <if test="limit != null">
+		    	 limit #{limit}
+		   		</if>
+		    	<if test="offset != null">
+		    	  offset #{offset}
+		   		</if>
+		  </select>
+		  
+		  <select id="simplifiedCountEnrollmentWithRoster" 
+		  	parameterType="edu.ku.cete.domain.enrollment.EnrollmentExample" resultType="java.lang.Integer" >
+			select count(1) from (
+				SELECT
+				    <if test="distinct">
+				      distinct
+				    </if>
+				    <include refid="Extended_With_Roster_Column_List" />
+				    , CASE WHEN 'DLM' IN (
+				      SELECT ap.abbreviatedname
+				      FROM assessmentprogram ap
+				      INNER JOIN studentassessmentprogram sap ON sap.studentid = st.id AND ap.id = sap.assessmentprogramid AND sap.activeflag = TRUE
+				    ) THEN TRUE ELSE FALSE END as dlmstudent
+			    FROM
+			    	organizationtreedetail attendanceSchool  
+					JOIN enrollment enrl ON attendanceSchool.schoolid = enrl.attendanceschoolid 
+					JOIN enrollmentsRosters enrlRoster ON enrlroster.enrollmentid = enrl.id
+					JOIN Student st ON enrl.Studentid = st.id
+					<if test="testSessionId != null">
+				 		 LEFT JOIN (Select * from StudentsTests where testSessionId = #{testSessionId} and activeflag IS true) sTest
+				 		 	ON (sTest.studentid=st.id)
+				    </if>  
+					JOIN roster r ON r.id = enrlroster.rosterid 
+					JOIN aartuser au ON r.teacherId = au.id
+					<!-- LEFT JOIN ContentArea stateSubjectArea ON (r.stateSubjectAreaId = stateSubjectArea.id) --> 
+					LEFT JOIN Category courseenrollment ON (r.courseenrollmentstatusid = courseenrollment.id) 
+					LEFT JOIN GradeCourse gc ON (enrl.currentgradelevel = gc.id)			
+			    WHERE 
+		    		r.activeflag IS true
+		    		AND enrlRoster.activeflag IS true
+		    		AND enrl.activeflag IS true
+		    		AND st.activeflag IS true
+		    		AND au.activeflag IS true 
+	    			AND enrl.currentschoolyear = organization_school_year(attendanceSchool.id)		    		
+			    	<if test="testSessionId != null">
+		    			AND r.id = (Select rosterid from testsession where id=#{testSessionId})		
+					</if>
+				    <if test="attendanceSchoolIds != null">
+			    	    AND enrl.attendanceschoolid = ANY(ARRAY
+					    <foreach collection="attendanceSchoolIds"
+						    item="attendanceSchoolId" open="[" close="]" separator="," >
+						    #{attendanceSchoolId}
+					    </foreach>)
+				    </if>
+			    	<if test="userOrganizationIds != null">
+			    	    AND enrl.attendanceschoolid  = ANY(ARRAY
+					    <foreach collection="userOrganizationIds"
+						    item="userOrganizationId" open="[" close="]" separator="," >
+						    #{userOrganizationId}
+					    </foreach>)
+				    </if>			    
+			    	<if test="! hasViewAllPermission">
+			    		AND r.teacherId=#{educatorId}
+			    	</if>	    		    	
+			    	<include refid="Extended_Roster_Where_Clause" />
+			    limit #{simplifiedLimit}
+			) students 	    
+		  </select>
+		  
+		  <select id="countEnrollmentWithRoster" 
+		  	parameterType="edu.ku.cete.domain.enrollment.EnrollmentExample" resultType="java.lang.Integer" >
+			select count(1)
+			FROM
+		    	organizationtreedetail attendanceSchool  
+				JOIN enrollment enrl ON attendanceSchool.schoolid = enrl.attendanceschoolid 
+				JOIN enrollmentsRosters enrlRoster ON enrlroster.enrollmentid = enrl.id
+				JOIN Student st ON enrl.Studentid = st.id
+				<if test="studentRosterCriteriaMap.dlmOnly != null or assessmentProgramId != null" >
+					JOIN studentassessmentprogram stap ON stap.studentid = st.id and stap.activeflag = true
+					JOIN assessmentprogram ap ON stap.assessmentprogramid = ap.id
+				</if>
+				<if test="testSessionId != null">
+			 		 LEFT JOIN (Select * from StudentsTests where testSessionId = #{testSessionId} and activeflag IS true) sTest
+			 		 	ON (sTest.studentid=st.id)
+			    </if>  
+				JOIN roster r ON r.id = enrlroster.rosterid 
+				JOIN aartuser au ON r.teacherId = au.id
+				LEFT JOIN ContentArea stateSubjectArea ON (r.stateSubjectAreaId = stateSubjectArea.id) 
+				LEFT JOIN Category courseenrollment ON (r.courseenrollmentstatusid = courseenrollment.id) 
+				LEFT JOIN GradeCourse gc ON (enrl.currentgradelevel = gc.id)			
+				<if test="studentRosterCriteriaMap.dlmOnly != null or assessmentProgramId != null">
+	 				LEFT JOIN survey survey ON (survey.studentid = st.id) AND survey.activeflag IS true
+		    		LEFT JOIN Category surveystatuscategory ON (survey.status = surveystatuscategory.id) 
+			     </if>		
+		    WHERE 
+	    		r.activeflag IS true
+	    		AND enrlRoster.activeflag IS true
+	    		AND enrl.activeflag IS true
+	    		AND st.activeflag IS true
+	    		AND au.activeflag IS true
+	    		AND enrl.currentschoolyear = #{currentSchoolYear, jdbcType=INTEGER}
+	    		<if test="assessmentProgramId != null">
+	    			AND stap.assessmentprogramid= #{assessmentProgramId, jdbcType=BIGINT}
+	    		</if>
+		    	<if test="testSessionId != null">
+	    			AND r.id = (Select rosterid from testsession where id=#{testSessionId})		
+				</if>
+		    	<if test="schoolOrgId == null and userOrganizationId != null">
+<!-- 		    	    AND enrl.attendanceschoolid = ANY(ARRAY(	     -->
+<!-- 						select id from organization_children(#{userOrganizationId, jdbcType=BIGINT}) union select #{userOrganizationId, jdbcType=BIGINT}) -->
+<!-- 						) -->
+					AND (attendanceSchool.schoolid=#{userOrganizationId, jdbcType=BIGINT} 
+							OR attendanceSchool.districtid=#{userOrganizationId, jdbcType=BIGINT}
+							OR attendanceSchool.stateid=#{userOrganizationId, jdbcType=BIGINT})
+			    </if>
+		    	<if test="schoolOrgId != null">
+		    	    AND enrl.attendanceschoolid = #{schoolOrgId, jdbcType=BIGINT}
+			    </if>		    
+		    	<if test="! hasViewAllPermission">
+		    		AND r.teacherId=#{educatorId}
+		    	</if>	    
+		    	<if test="studentRosterCriteriaMap.dlmOnly != null">
+		    		and ap.abbreviatedname = 'DLM' 	
+		    	</if>		    	
+		    	 <if test="contentAreaId != null">
+		    		and r.statesubjectareaid = #{contentAreaId, jdbcType=BIGINT}	
+		    	</if>
+		    	<if test="studentRosterCriteriaMap.dlmOnly != null and studentRosterCriteriaMap.itiHistory != null">
+		    		and (stateSubjectArea.abbreviatedname = (SELECT CASE WHEN (select count(*) from firstcontactsurveysettings where organizationid = attendanceSchool.stateid 
+		    							and schoolyear = #{currentSchoolYear, jdbcType=INTEGER} and activeflag is true and scienceflag is true) > 0
+		    			THEN 
+							'Sci'
+						END)
+						OR stateSubjectArea.abbreviatedname = (SELECT CASE WHEN (select count(*) from firstcontactsurveysettings where organizationid = attendanceSchool.stateid 
+		    							and schoolyear = #{currentSchoolYear, jdbcType=INTEGER} and activeflag is true and mathflag is true) > 0
+		    			THEN
+							 'M'
+						END)
+						OR stateSubjectArea.abbreviatedname = (SELECT CASE WHEN (select count(*) from firstcontactsurveysettings where organizationid = attendanceSchool.stateid
+		    							and schoolyear = #{currentSchoolYear, jdbcType=INTEGER} and activeflag is true and elaflag is true) > 0
+		    			THEN
+							'ELA'
+						END))
+		    	</if>
+		    	<include refid="Extended_Roster_Where_Clause" />
+		  </select>
+
+		  <select id="getByStudentSchoolRelation"
+		    resultMap="studentSchoolRelationInformationMap">
+		    select
+		    en.id as id,
+		    st.id as studentId,
+		    st.statestudentidentifier as stateStudentIdentifier,
+		    attendanceSchool.displayIdentifier as responsibleSchoolIdentifier,
+		    attendanceSchool.id as responsibleSchoolId		    
+		    from
+		    Student st,
+		    Organization attendanceSchool,
+		    enrollment en
+		    where
+		    st.id = en.studentId and
+		    en.attendanceSchoolId = attendanceSchool.id		     		    
+		    <if test="studentSchoolRelations != null">
+	    	    and (st.stateStudentIdentifier,attendanceSchool.displayIdentifier) in 
+		        <foreach collection="studentSchoolRelations" item="studentSchoolRelation" open="(" close=")" separator="," >
+		    	    	(#{studentSchoolRelation.stateStudentIdentifier},#{studentSchoolRelation.responsibleSchoolIdentifier})
+		        </foreach>	    	    
+	    	</if>
+	    	<if test="UserOrganizationIds != null">
+	    	    and attendanceSchool.id = ANY(ARRAY
+		        <foreach collection="UserOrganizationIds" item="UserOrganizationId" open="[" close="]" separator="," >
+		    	    	#{UserOrganizationId}
+		        </foreach>)    	    
+	    	</if> 
+		  </select>
+		  		  
+		  <select id="countRostersByTeacherId" resultType="java.lang.Integer" >
+		  	SELECT count(id) FROM roster WHERE teacherid=#{educatorId} AND activeflag=TRUE;
+		  </select>
+		  
+		  <select id="getAutoRegisteredTSStudents" resultMap="autoRegisteredStudentsMap">
+		  	select tsstudents.*, count(*) OVER() AS totalrecords from (SELECT
+		  		<include refid="Extended_Auto_Registration_Students_Column_List" />,ssc.specialcircumstanceid, 
+		  		sscs.categoryname as sscstatus, sscs.id as sscsstatusid,
+		  		t.externalid as studenttestid, cat.categoryname as teststatus, 
+		  		st.interimtheta as interimthetavalue,
+		  		(SELECT CASE WHEN (SELECT selectedvalue
+					FROM studentprofileitemattributevalue spiav
+					INNER JOIN profileitemattributenameattributecontainer pianac ON spiav.profileitemattributenameattributecontainerid = pianac.id
+					INNER JOIN profileitemattributecontainer piac ON pianac.attributecontainerid = piac.id
+					INNER JOIN profileitemattribute pia ON pianac.attributenameid = pia.id
+					AND spiav.activeflag = 't'
+					WHERE studentid = st.studentid
+					AND attributename = 'assignedSupport'
+					AND attributecontainer = 'Braille') = 'true' THEN 'true' ELSE 'false' END) as pnpbrailleselected<!--,
+					ROW_NUMBER() OVER (ORDER BY studentId) AS rowNum-->
+	
+		  	FROM student s 
+		  		JOIN studentstests st ON s.id = st.studentid
+		  		JOIN testsession ts ON ts.id=st.testsessionid and ts.activeflag = true and ts.schoolyear = #{currentSchoolYear}	<!--and ts.source='BATCHAUTO'-->
+		  		JOIN test t on t.id = st.testid
+		  		JOIN enrollment enrl on enrl.studentid=st.studentid and enrl.activeflag is true and enrl.currentschoolyear = #{currentSchoolYear}
+				JOIN organizationtreedetail orgtree on orgtree.schoolid = enrl.attendanceschoolid
+		  		JOIN category cat ON st.status = cat.id
+		  		LEFT JOIN studentspecialcircumstance ssc on st.id= ssc.studenttestid and ssc.activeflag is true
+		  		LEFT JOIN category sscs on sscs.id = ssc.status
+		  	WHERE (st.testsessionid = #{testSessionId} or st.transferedtestsessionid = #{testSessionId})
+		  		AND s.activeflag = true
+		  		AND st.activeflag = true
+		  		AND t.activeflag = true
+		  		AND (orgtree.schoolid = #{organizationId}
+					OR orgtree.districtid = #{organizationId}
+					OR orgtree.stateid = #{organizationId})
+		  		<if test="assessmentProgramAbbr == 'KAP'">
+		  		  AND st.status != (
+			        select id
+			        from category
+  			        where categorycode = 'pending' and categorytypeid = (select id from categorytype where typecode = 'STUDENT_TEST_STATUS')
+			      )
+		  		</if>
+		  		<include refid="Extended_AR_Students_Where_Clause" />
+	    	<if test="isTeacher">
+				AND s.id = ANY(ARRAY(	
+					select en.studentid
+					from roster r 
+					INNER JOIN enrollmentsrosters enrs on r.id = enrs.rosterid
+					INNER JOIN enrollment en on enrs.enrollmentid = en.id 
+					where r.teacherid=#{educatorId}
+				))
+	    	</if>			  		
+			<if test="orderByClause != null">
+			    ORDER BY ${orderByClause}
+			</if>
+			) tsstudents			    
+			<if test="limit != null">
+		    	LIMIT #{limit}
+		    </if>
+		    <if test="offset != null">
+		    	OFFSET #{offset}
+		    </if>		  		
+		  </select>
+
+		  <select id="countAutoRegisteredTSStudents" resultType="java.lang.Integer" >
+		  	SELECT count(s.id)
+		  	FROM student s 
+		  		JOIN studentstests st ON s.id = st.studentid
+		  		LEFT JOIN studentspecialcircumstance ssc on st.id= ssc.studenttestid and ssc.activeflag is true
+		  		JOIN category cat ON st.status = cat.id
+		  	WHERE st.testsessionid = #{testSessionId}
+		  		AND s.activeflag = true
+		  		AND st.activeflag = true
+		  		<include refid="Extended_AR_Students_Where_Clause" />
+	    	<if test="isTeacher">
+				AND s.id = ANY(ARRAY(	
+					select en.studentid
+					from roster r 
+					INNER JOIN enrollmentsrosters enrs on r.id = enrs.rosterid
+					INNER JOIN enrollment en on enrs.enrollmentid = en.id 
+					where r.teacherid=#{educatorId}
+				))
+	    	</if>		  		
+		  </select>
+		  
+	<insert id="add" parameterType="Enrollment" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+	INSERT INTO enrollment(
+            aypschoolidentifier, residencedistrictidentifier, localstudentidentifier, 
+            currentgradelevel, currentschoolyear, attendanceschoolid, 
+            schoolentrydate, districtentrydate, stateentrydate, exitwithdrawaldate, 
+            exitwithdrawaltype, specialcircumstancestransferchoice,  
+            giftedstudent, specialedprogramendingdate, 
+            qualifiedfor504, studentid, restrictionid, createddate, createduser, 
+            activeflag, modifieddate, modifieduser, aypSchoolId, sourcetype,accountabilitydistrictidentifier,accountabilitydistrictid)
+		    VALUES(
+		    #{aypSchoolIdentifier},#{residenceDistrictIdentifier},#{localStudentIdentifier},
+		    #{currentGradeLevel},#{currentSchoolYear},#{attendanceSchoolId},
+		    #{schoolEntryDate},#{districtEntryDate},#{stateEntryDate},#{exitWithdrawalDate},
+		    #{exitWithdrawalType},#{specialCircumstancesTransferChoice},
+		    #{giftedStudent},#{specialEdProgramEndingDate},
+		    #{qualifiedFor504},#{studentId}, #{restrictionId}, #{createdDate}, #{createdUser}, 
+		    #{activeFlag},#{modifiedDate},#{modifiedUser},
+		    <if test="aypSchoolId == 0"> 
+		        null, 
+		    </if>
+		    <if test="aypSchoolId != 0"> 
+		        #{aypSchoolId}, 
+		    </if>
+		    #{sourceType},#{accountabilityDistrictIdentifier},#{accountabilityDistrictId});
+	</insert>
+	
+	<select id="get" resultType="Enrollment" parameterType="String">
+		SELECT enrl.id,aypSchoolIdentifier, residenceDistrictIdentifier,
+			localStudentIdentifier, 
+	       currentGradeLevel, currentSchoolYear, 
+	       attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+	        attendanceSchool.id as attendanceSchoolId, 
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId,
+	       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGradeLevelCode
+		  FROM enrollment enrl ,Student st, Organization attendanceSchool
+		  WHERE
+		  enrl.Studentid = st.id and 
+		  attendanceSchool.id = enrl.attendanceschoolid and
+		  stateStudentIdentifier = #{stateStudentIdentifier} and 
+		  enrl.activeFlag = true
+	</select>
+	<select id="getBySsidAndState" resultType="Enrollment">
+		SELECT enrl.id,aypSchoolIdentifier, residenceDistrictIdentifier, aypSchoolId,
+			localStudentIdentifier, 
+	       currentGradeLevel, currentSchoolYear, 
+	       attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+	       attendanceSchool.id as attendanceSchoolId, 
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId,
+	       enrl.sourceType,
+	       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGradeLevelCode
+		  FROM enrollment enrl, Student st, Organization attendanceSchool
+		  WHERE
+		  enrl.Studentid = st.id and enrl.activeFlag = true and
+		  attendanceSchool.id = enrl.attendanceschoolid and
+		  stateStudentIdentifier = #{stateStudentIdentifier} and
+		  enrl.currentSchoolYear = #{currentSchoolYear} and
+		  st.stateid = #{stateId}
+	</select>
+	<select id="getBySsidAndOrgId" resultType="Enrollment">
+		SELECT enrl.id,aypSchoolIdentifier, residenceDistrictIdentifier, aypSchoolId,
+			localStudentIdentifier, 
+	       currentGradeLevel, currentSchoolYear, 
+	       attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+	       attendanceSchool.id as attendanceSchoolId, 
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId,
+	       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGradeLevelCode,
+	       enrl.sourceType,enrl.accountabilitydistrictid as accountabilityDistrictId, enrl.accountabilityDistrictIdentifier as accountabilityDistrictIdentifier
+		  FROM enrollment enrl, Student st, Organization attendanceSchool
+		  WHERE
+		  enrl.Studentid = st.id and enrl.activeFlag = true and
+		  attendanceSchool.id = enrl.attendanceschoolid and
+		  stateStudentIdentifier = #{stateStudentIdentifier} and
+		  enrl.currentSchoolYear = #{currentSchoolYear} and
+		  enrl.attendanceschoolid = #{selectedOrgId}
+	</select>
+	
+	<select id="getEnrollmentForAuto" resultType="Enrollment">
+		  SELECT distinct enrl.id,aypSchoolIdentifier, residenceDistrictIdentifier,localStudentIdentifier, 
+		       currentGradeLevel, enrl.currentSchoolYear, 
+			attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+			attendanceSchool.id as attendanceSchoolId, 
+		       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+		       exitWithdrawalType, specialCircumstancesTransferChoice, 
+		       giftedStudent, specialEdProgramEndingDate, 
+		       qualifiedFor504, studentId, enrl.restrictionId,
+		       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGradeLevelCode, enrl.createddate
+			  FROM enrollment enrl 
+				inner join student st on enrl.Studentid = st.id
+				inner join enrollmentsrosters er on er.enrollmentid = enrl.id 
+				inner join roster r on er.rosterid = r.id 
+				inner join organization attendanceSchool on attendanceSchool.id = enrl.attendanceschoolid
+			  WHERE stateStudentIdentifier = #{stateStudentIdentifier} and 
+			  enrl.activeFlag = true and r.activeFlag = true and
+			  r.statesubjectareaid IN (select id from contentarea ca where ca.abbreviatedname=#{subject}) and 
+			  enrl.currentGradeLevel is not null
+			  order by enrl.createddate desc
+	</select>	
+		<select id="getInactiveEnrollment" resultType="Enrollment">
+		SELECT enrl.id,aypSchoolIdentifier, residenceDistrictIdentifier, aypSchoolId,
+			localStudentIdentifier, 
+	       currentGradeLevel, currentSchoolYear, 
+	        attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+	        attendanceSchool.id as attendanceSchoolId,
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId
+		  FROM enrollment enrl ,Student st, Organization attendanceSchool
+		  WHERE
+		  enrl.Studentid = st.id and enrl.activeFlag = false and 
+		  attendanceSchool.id = enrl.attendanceschoolid and
+		  stateStudentIdentifier = #{stateStudentIdentifier} and
+		  enrl.currentSchoolYear = #{currentSchoolYear} and
+		  st.stateid = #{stateId}
+	</select>
+	
+	<select id="getInactiveEnrollmentByScoolId" resultType="Enrollment">
+		SELECT enrl.id,aypSchoolIdentifier, residenceDistrictIdentifier, aypSchoolId,
+			localStudentIdentifier, 
+	       currentGradeLevel, currentSchoolYear, 
+	        attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+	        attendanceSchool.id as attendanceSchoolId,
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId
+		  FROM enrollment enrl ,Student st, Organization attendanceSchool
+		  WHERE
+		  enrl.Studentid = st.id and enrl.activeFlag = false and 
+		  attendanceSchool.id = enrl.attendanceschoolid and
+		  stateStudentIdentifier = #{stateStudentIdentifier} and
+		  enrl.currentSchoolYear = #{currentSchoolYear} and
+		  enrl.attendanceschoolid= #{schoolId}
+	</select>
+	
+	<select id="lastid" resultType="java.lang.Long">
+		SELECT lastval() AS id
+	</select>
+		
+	<update id="update" parameterType="Enrollment">
+		UPDATE enrollment SET
+		aypSchoolIdentifier=#{aypSchoolIdentifier},
+		residenceDistrictIdentifier=#{residenceDistrictIdentifier},
+		<if test="localStudentIdentifier != null">
+			localStudentIdentifier=#{localStudentIdentifier},
+		</if>
+		<if test="currentGradeLevel != null">
+			currentGradeLevel=#{currentGradeLevel},
+		</if>
+		<if test="currentSchoolYear != null">
+			currentSchoolYear=#{currentSchoolYear},
+		</if>
+		<if test="attendanceSchoolId != null">
+			attendanceSchoolId=#{attendanceSchoolId},
+		</if>
+		<if test="schoolEntryDate != null">
+			schoolEntryDate=#{schoolEntryDate},
+		</if>
+		<if test="districtEntryDate != null">
+			districtEntryDate=#{districtEntryDate},
+		</if>
+		<if test="stateEntryDate != null">
+			stateEntryDate=#{stateEntryDate},
+		</if>
+		exitWithdrawalDate=#{exitWithdrawalDate},
+		<if test="exitWithdrawalType != null">
+			exitWithdrawalType=#{exitWithdrawalType},
+		</if>
+		specialCircumstancesTransferChoice=#{specialCircumstancesTransferChoice},
+		<if test="giftedStudent != null">
+			giftedStudent=#{giftedStudent},
+		</if>
+		specialEdProgramEndingDate=#{specialEdProgramEndingDate},
+		qualifiedFor504=#{qualifiedFor504},
+		<if test="studentId != null">
+			studentId=#{studentId},
+		</if>
+		restrictionId=#{restrictionId},
+		<if test="aypSchoolId == 0"> 
+		       aypschoolid = null, 
+		</if>
+		<if test="aypSchoolId != 0"> 
+		       aypschoolid = #{aypSchoolId}, 
+		</if>		
+		modifieddate = now(),
+		modifieduser = #{modifiedUser},
+		<if test="sourceType != null">
+			sourcetype = #{sourceType},
+		</if>
+		accountabilitydistrictidentifier = #{accountabilityDistrictIdentifier},
+		accountabilitydistrictid=#{accountabilityDistrictId},
+		activeflag = #{activeFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateGradeLevel" parameterType="Enrollment">
+		UPDATE enrollment
+		SET currentgradelevel = #{currentGradeLevel},
+		modifieddate = now(),
+		modifieduser = #{modifiedUser}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateByStudentInfo" parameterType="Enrollment">
+		UPDATE enrollment SET
+		aypSchoolIdentifier=#{aypSchoolIdentifier},
+		residenceDistrictIdentifier=#{residenceDistrictIdentifier},
+		localStudentIdentifier=#{localStudentIdentifier},
+		currentGradeLevel=#{currentGradeLevel},		
+		schoolEntryDate=#{schoolEntryDate},
+		districtEntryDate=#{districtEntryDate},
+		stateEntryDate=#{stateEntryDate},
+		exitWithdrawalDate=#{exitWithdrawalDate},
+		exitWithdrawalType=#{exitWithdrawalType},
+		specialCircumstancesTransferChoice=#{specialCircumstancesTransferChoice},
+		giftedStudent=#{giftedStudent},
+		specialEdProgramEndingDate=#{specialEdProgramEndingDate},
+		qualifiedFor504=#{qualifiedFor504},
+		studentId=#{studentId},
+		restrictionId=#{restrictionId},
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser},
+		accountabilitydistrictidentifier=#{accountabilityDistrictIdentifier},
+		accountabilitydistrictid=#{accountabilityDistrictId},
+		activeflag = #{activeFlag}		
+		WHERE 
+			attendanceschoolid = #{attendanceSchoolId} and
+		  	currentSchoolYear = #{currentSchoolYear} and
+		  	studentid = #{studentId}
+	</update>
+	<update id="updateOnStudentEdit" parameterType="java.util.Map">
+		UPDATE enrollment SET
+		currentGradeLevel = #{currentGrade},
+		modifiedUser = #{modifiedUserId},
+		modifiedDate = now()
+		WHERE studentid = #{studentId} and currentschoolyear = #{currentSchoolYear}
+	</update>
+	
+	<update id="updateOnStudentEnrollmentEdit" parameterType="java.util.Map">
+		UPDATE enrollment SET
+		<if test="schoolEntryDateEnrollment != null">
+			schoolentrydate = #{schoolEntryDateEnrollment},
+		</if>
+		localstudentidentifier = #{localStudentIdentifier},		
+		stateentrydate = #{stateEntryDateEnrollment},		
+		districtentrydate = #{districtEntryDateEnrollment},		
+		giftedStudent=#{giftedStudentEnrollment},			
+		modifiedUser = #{modifiedUserId},
+		modifiedDate = now()
+		WHERE studentid = #{studentId} and currentschoolyear = #{currentSchoolYear}
+	</update>
+	
+	<select id="findEnrollmentForStudentEdit" resultType="edu.ku.cete.domain.enrollment.Enrollment">
+			select o.schooldisplayidentifier as aypSchoolIdentifier, o.schoolname as schoolname,
+			o.districtdisplayidentifier as residenceDistrictIdentifier,	o.districtname,	otd.schooldisplayidentifier as accountabilitySchoolIdentifier,
+			otd.schoolname as accountabilitySchoolName,	otd.districtdisplayidentifier as accountabilityDistrictIdentifier,
+			otd.districtname as accountabilityDistrictName,	e.*
+			from enrollment e 
+			left JOIN organizationtreedetail o ON o.schoolid = e.attendanceschoolid
+			left JOIN organizationtreedetail otd ON otd.schoolid = e.aypschoolid
+			where e.studentid = #{studentId} 
+			and e.currentschoolyear = #{currentSchoolYear} and e.activeflag is true
+	</select>
+	
+	<select id="findEnrollmentForStudentActivate" resultType="edu.ku.cete.domain.enrollment.Enrollment">
+			select o.schooldisplayidentifier as aypSchoolIdentifier, o.schoolname as schoolname,
+			o.districtdisplayidentifier as residenceDistrictIdentifier,	o.districtname,
+			otd.schooldisplayidentifier as accountabilitySchoolIdentifier,
+			otd.schoolid as accountabilitySchoolId,
+			otd.schoolname as accountabilitySchoolName,	
+			otd.districtdisplayidentifier as accountabilityDistrictIdentifier,
+			otd.districtid as accountabilityDistrictId,
+			otd.districtname as accountabilityDistrictName, e.*
+			from enrollment e 
+			left JOIN organizationtreedetail o ON o.schoolid = e.attendanceschoolid
+			left JOIN organizationtreedetail otd ON otd.schoolid = e.aypschoolid
+			where e.id = #{enrollmentId} 			
+	</select>
+			
+  <select id="findEnrollmentsForBatchRegistration" resultMap="batchRegisteredEnrollment">	
+	SELECT DISTINCT en.id  AS enrollmentid, 
+                en.attendanceschoolid, 
+                en.currentgradelevel, 
+                en.currentschoolyear, 
+                en.studentid, 
+                st.legalfirstname, 
+                st.legallastname, 
+                en.attendanceschoolid, 
+                o.schoolname                   AS attendanceSchoolName, 
+                o.schooldisplayidentifier      AS attendanceSchoolIdentifier, 
+                ets.subjectareaid              AS subjectareaid, 
+                (SELECT CASE 
+                           WHEN Count(DISTINCT en2.id IS NOT NULL) = 0 THEN 
+                           false 
+                           ELSE true 
+                         end 
+                  FROM   enrollment en2 
+                        INNER JOIN enrollmenttesttypesubjectarea ets1 
+                                ON ets1.enrollmentid = en2.id 
+                                   AND ets1.testtypeid = ets.testtypeid 
+                                   AND ets1.subjectareaid = ets.subjectareaid 
+                 WHERE  en.studentid = en2.studentid 
+                        AND en.currentschoolyear = en2.currentschoolyear 
+                        AND en.currentgradelevel = en2.currentgradelevel 
+                        AND en.attendanceschoolid != en2.attendanceschoolid 
+                        AND en.id != en2.id) AS previousenrollmentexists
+                                                 
+	FROM enrollment en INNER JOIN student st ON st.id = en.studentid 
+	INNER JOIN enrollmenttesttypesubjectarea ets ON ets.enrollmentid = en.id 
+	INNER JOIN testtypesubjectarea ttsa ON ttsa.testtypeid = ets.testtypeid AND ttsa.subjectareaid = ets.subjectareaid 
+	INNER JOIN contentareatesttypesubjectarea cttsa ON cttsa.testtypesubjectareaid = ttsa.id
+	INNER JOIN organizationtreedetail o ON o.schoolid = en.attendanceschoolid
+	<if test="isInterim">
+	INNER JOIN studentstests sts ON sts.studentid = en.studentid AND sts.enrollmentid = en.id AND sts.activeflag is true AND sts.interimtheta is not null AND sts.status in 
+	(select cat.id from category cat, categorytype ctype where cat.categorytypeid=ctype.id and cat.categorycode = 'complete' and ctype.typecode='STUDENT_TEST_STATUS' and cat.activeflag is true and ctype.activeflag is true)
+	INNER JOIN testcollection tc ON tc.id = sts.testcollectionid and tc.contentareaid = cttsa.contentareaid and tc.stageid in (select id from stage stg where stg.code = 'Stg1' and stg.activeflag is true) 
+	</if>
+	WHERE en.activeflag is true AND ets.activeflag is true 
+	AND (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+	<choose>
+    	<when test="dlmOnly">
+      		AND 'DLM' in (
+      		  SELECT ap.abbreviatedname
+      		  FROM assessmentprogram ap
+      		  INNER JOIN studentassessmentprogram sap ON (sap.studentid = st.id AND ap.id = sap.assessmentprogramid)
+      		  WHERE sap.activeflag = true 
+      		)
+    	</when>
+	    <otherwise>
+    		AND 'DLM' not in (
+      		  SELECT ap.abbreviatedname
+      		  FROM assessmentprogram ap
+      		  INNER JOIN studentassessmentprogram sap ON (sap.studentid = st.id AND ap.id = sap.assessmentprogramid)
+      		  WHERE sap.activeflag = true 
+      		)
+    	</otherwise>
+  	</choose>
+	AND en.currentschoolyear = #{currentSchoolYear} AND o.stateid = #{contractingOrgId}
+	AND ets.testtypeid=#{testTypeId}
+	<if test="isInterim">
+		and #{jobLastSubmissionDate,jdbcType=TIMESTAMP} &lt; CASE WHEN sts.enddatetime is null THEN sts.modifieddate ELSE sts.enddatetime END
+	</if>
+	<if test="contentAreaId != null">and cttsa.contentareaid=#{contentAreaId}</if>
+	and ttsa.assessmentid=#{assessmentId}
+	<if test="gradeCourseId != null">and en.currentgradelevel in (select id from gradecourse where abbreviatedname = (select abbreviatedname from gradecourse where id=#{gradeCourseId}))</if>
+	order by en.id asc LIMIT #{pageSize} OFFSET #{offset}
+  </select>
+  
+  <select id="findEnrollmentsForPredictiveBatchRegistration" parameterType="map" resultMap="batchRegisteredEnrollment">	
+		/*NO LOAD BALANCE*/
+		WITH gradeids AS (
+			SELECT id FROM gradecourse WHERE abbreviatedname = (SELECT abbreviatedname FROM gradecourse WHERE id = #{gradeCourseId,jdbcType=BIGINT})
+		), students_to_exclude AS (
+			SELECT DISTINCT st.studentid
+			FROM testsession ts
+			JOIN organizationtreedetail otd ON ts.attendanceschoolid = otd.schoolid
+			JOIN studentstests st ON ts.id = st.testsessionid AND st.activeflag
+			JOIN testcollection tc ON ts.testcollectionid = tc.id
+			JOIN enrollment en ON st.studentid = en.studentid AND en.activeflag
+			JOIN enrollmentsrosters er ON en.id = er.enrollmentid AND er.activeflag
+			JOIN roster r ON er.rosterid = r.id AND r.statesubjectareaid = tc.contentareaid AND r.activeflag
+			WHERE ts.activeflag
+			AND ts.operationaltestwindowid = #{operationalTestWindowId,jdbcType=BIGINT}
+			AND ts.schoolyear = #{currentSchoolYear,jdbcType=INTEGER}
+			AND ts.name LIKE 'Predictive_%'
+			AND tc.contentareaid = #{contentAreaId,jdbcType=BIGINT}
+			AND tc.gradecourseid in (select id from gradeids)
+			<!--AND r.sourcetype = 'TASC'-->
+			AND otd.stateid = #{contractingOrgId,jdbcType=BIGINT}
+			AND (
+				<!-- same attendance school, but the enrollmentid is different -->
+				(ts.attendanceschoolid = en.attendanceschoolid AND st.transferedenrollmentid IS DISTINCT FROM en.id)
+				OR
+				<!-- different attendance school, but the enrollmentid is the same -->
+				(ts.attendanceschoolid != en.attendanceschoolid AND st.transferedenrollmentid IS NOT DISTINCT FROM en.id)
+			)
+		)
+		SELECT DISTINCT
+			en.id AS enrollmentid,
+			en.currentgradelevel,
+			en.currentschoolyear,
+			en.studentid,
+			s.legalfirstname,
+			s.legallastname,
+			en.attendanceschoolid,
+			o.schoolname AS attendanceSchoolName,
+			o.schooldisplayidentifier AS attendanceSchoolIdentifier,
+			(
+				SELECT (Count(DISTINCT en2.id IS NOT NULL) != 0)
+				FROM enrollment en2
+				INNER JOIN enrollmentsrosters ers ON ers.enrollmentid = en2.id 
+				WHERE en.studentid = en2.studentid
+				AND en.currentschoolyear = en2.currentschoolyear
+				AND en.currentgradelevel = en2.currentgradelevel
+				AND en.attendanceschoolid != en2.attendanceschoolid
+				AND en.id != en2.id
+			)
+			AS previousenrollmentexists
+		FROM gradeids g
+		JOIN enrollment en ON g.id = en.currentgradelevel AND en.activeflag
+		JOIN organizationtreedetail o ON o.schoolid = en.attendanceschoolid
+		JOIN student s ON s.id = en.studentid 
+		JOIN studentassessmentprogram sap ON s.id = sap.studentid AND sap.activeflag
+		JOIN enrollmentsrosters er ON en.id = er.enrollmentid AND er.activeflag
+		JOIN roster r ON er.rosterid = r.id AND r.activeflag
+		WHERE (en.exitwithdrawaldate IS NULL OR (en.exitwithdrawaldate &lt; en.schoolentrydate))
+		AND en.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}
+		AND o.stateid = #{contractingOrgId,jdbcType=BIGINT}
+		AND s.id NOT IN (SELECT ste.studentid FROM students_to_exclude ste)
+		AND sap.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+		<!--AND r.sourcetype = 'TASC'-->
+		AND r.statesubjectareaid = #{contentAreaId,jdbcType=BIGINT}
+		ORDER BY en.id
+		<if test="pageSize != null">LIMIT #{pageSize,jdbcType=INTEGER}</if>
+		<if test="offset != null">OFFSET #{offset,jdbcType=INTEGER}</if>
+  </select>
+  
+  <select id="findCPASSEnrollmentsForBatchRegistration" resultMap="batchRegisteredEnrollment">	
+	select distinct en.id as enrollmentid, en.attendanceschoolid, en.currentGradeLevel, 
+	en.currentSchoolYear, en.studentid, st.legalfirstname, st.legallastname,en.attendanceschoolid,
+	o.schoolname as attendanceSchoolName, o.schooldisplayidentifier as attendanceSchoolIdentifier, ets.subjectareaid as subjectareaid,
+	cttsa.contentareaid,
+	(CASE WHEN (en2.id is null) THEN false ELSE true END) as previousenrollmentexists
+	from enrollment en inner join student st on st.id=en.studentid 
+	left outer join enrollment en2 on en.studentid=en2.studentid and en.currentschoolyear = en2.currentschoolyear and en.currentgradelevel= en2.currentgradelevel and en.attendanceschoolid != en2.attendanceschoolid
+	inner join enrollmenttesttypesubjectarea ets on ets.enrollmentid=en.id 
+	inner join testtypesubjectarea ttsa on ttsa.testtypeid=ets.testtypeid and ttsa.subjectareaid=ets.subjectareaid 
+	inner join contentareatesttypesubjectarea cttsa on cttsa.testtypesubjectareaid=ttsa.id
+	inner join organizationtreedetail o on o.schoolid=en.attendanceschoolid
+	<if test="isInterim">
+	inner join studentstests sts on sts.studentid = en.studentid and sts.activeflag is true and sts.interimtheta is not null and sts.status in 
+	(select cat.id from category cat, categorytype ctype where cat.categorytypeid=ctype.id and cat.categorycode = 'complete' and ctype.typecode='STUDENT_TEST_STATUS' and cat.activeflag is true and ctype.activeflag is true)
+	inner join testcollection tc on tc.id = sts.testcollectionid and tc.stageid in (select id from stage stg where stg.sortorder = 1 and stg.activeflag is true) 
+	</if>
+	where en.activeflag is true and ets.activeflag is true 
+	and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+	<choose>
+    	<when test="dlmOnly">
+      		and 'DLM' in (
+      		  select ap.abbreviatedname
+      		  from assessmentprogram ap
+      		  inner join studentassessmentprogram sap on (sap.studentid = st.id and ap.id = sap.assessmentprogramid)
+      		  where sap.activeflag = true 
+      		)
+    	</when>
+	    <otherwise>
+    		and 'DLM' not in (
+      		  select ap.abbreviatedname
+      		  from assessmentprogram ap
+      		  inner join studentassessmentprogram sap on (sap.studentid = st.id and ap.id = sap.assessmentprogramid)
+      		  where sap.activeflag = true 
+      		)
+    	</otherwise>
+  	</choose>
+	and en.currentschoolyear = #{currentSchoolYear}
+	and o.stateid = ANY(ARRAY
+	<foreach collection="contractingOrgIds" open="[" close="]" separator="," item="contractingOrgId">
+	  #{contractingOrgId}
+	</foreach>)
+	and ets.testtypeid=#{testTypeId}
+	and ttsa.assessmentid=#{assessmentId}
+	order by en.id asc LIMIT #{pageSize} OFFSET #{offset}
+  </select>
+  
+  <select id="findMultiAssignEnrollments" resultMap="batchRegisteredEnrollment">	
+	select distinct st.commbandid, st.finalelabandid, st.finalmathbandid, st.finalscibandid, en.id as enrollmentid, en.attendanceschoolid, en.currentGradeLevel, 
+	en.currentSchoolYear, en.studentid, st.legalfirstname, st.legallastname,en.attendanceschoolid, gc.abbreviatedname as currentgradelevelcode,
+	o.schoolname as attendanceSchoolName, o.schooldisplayidentifier as attendanceSchoolIdentifier, st.statestudentidentifier
+	<if test='testEnrollmentMethod == "MLTASGNFT"'>
+	, ostbps.studenttrackerid
+	</if>
+ 	from enrollment en 
+ 	inner join student st on st.id=en.studentid
+ 	inner join studentassessmentprogram sap on st.id = sap.studentid and sap.activeflag = true
+ 	inner join assessmentprogram ap on sap.assessmentprogramid = ap.id and ap.abbreviatedname = 'DLM'
+ 	inner join organizationtreedetail o on o.schoolid=en.attendanceschoolid
+ 	<if test='testEnrollmentMethod != "MLTASGNFT"'>
+	inner join survey sry on st.id = sry.studentid and sry.status = (select id from category where categorycode = 'COMPLETE')
+	</if>
+    inner join gradecourse gc on gc.id = en.currentGradeLevel
+    <if test='testEnrollmentMethod == "MLTASGNFT"'>
+    	inner join studenttracker strack on st.id=strack.studentid and strack.contentareaid=#{contentAreaId} 
+    		and strack.schoolyear = #{currentSchoolYear} and strack.activeflag is true
+    	inner join studenttrackerband stband on stband.studenttrackerid = strack.id and stband.activeflag is true
+    	inner join studenttrackerblueprintstatus ostbps on strack.id = ostbps.studenttrackerid
+    	<if test="isInterim">
+    		and ostbps.createddate > (now() - interval '2 hours')
+    	</if>
+    	inner join operationaltestwindow otw on ostbps.operationalwindowid=otw.id
+    </if>
+	where en.activeflag is true
+	and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+	<if test='testEnrollmentMethod != "MLTASGNFT"'>
+		<if test='contentAreaAbbreviatedName == "ELA"'>
+		 and st.finalelabandid is not null
+		</if>
+		<if test='contentAreaAbbreviatedName == "M"'>
+		 and st.finalmathbandid is not null
+		</if>
+		<if test='contentAreaAbbreviatedName == "Sci"'>
+		 and st.finalscibandid is not null
+		</if>
+		<if test='contentAreaAbbreviatedName == "SS"'>
+		 and st.commbandid is not null
+		</if>
+	</if>
+	<if test='testEnrollmentMethod == "MLTASGNFT"'>
+    	and ostbps.statuscode='STCOMPLETED' and (otw.effectivedate &lt;= now() and now() &lt;= otw.expirydate)
+    	and (
+			select count(distinct inner_st.id)
+			from testsession inner_ts
+			join studentstests inner_st
+				on inner_ts.id = inner_st.testsessionid
+				and inner_st.studentid = st.id
+				and inner_st.activeflag = true
+			join testcollection inner_tc
+				on inner_st.testcollectionid = inner_tc.id
+				and inner_tc.contentareaid = strack.contentareaid
+				and (inner_tc.gradecourseid in (select id from gradecourse where abbreviatedname = gc.abbreviatedname)
+					or inner_tc.gradebandid in (select gbc.gradebandid from gradebandgradecourse gbc 
+												join gradecourse inner_gc on inner_gc.id = gbc.gradecourseid
+												where inner_gc.abbreviatedname = gc.abbreviatedname)) 
+			where inner_ts.activeflag = true
+			and inner_ts.operationaltestwindowid = #{operationalTestWindowId,jdbcType=BIGINT}
+		) &lt; #{multiAssignLimit,jdbcType=INTEGER}
+    </if>
+    and en.currentschoolyear = #{currentSchoolYear} and o.stateid = #{contractingOrgId}
+	order by en.id asc LIMIT #{pageSize} OFFSET #{offset}
+  </select>
+  
+  <select id="findNoEnrollmentOrganizations" resultType="java.lang.Long">
+	  with enrollments_schools AS (select distinct en.attendanceschoolid 
+		from enrollment en 
+		inner join student st on st.id=en.studentid 
+		inner join enrollmenttesttypesubjectarea ets on ets.enrollmentid=en.id 
+		inner join testtypesubjectarea ttsa on ttsa.testtypeid=ets.testtypeid and ttsa.subjectareaid=ets.subjectareaid 
+		inner join contentareatesttypesubjectarea cttsa on cttsa.testtypesubjectareaid=ttsa.id
+		inner join organizationtreedetail o on o.schoolid=en.attendanceschoolid
+		where en.activeflag is true and ets.activeflag is true 
+		and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+		and 'DLM' not in (
+      	  select ap.abbreviatedname
+      	  from assessmentprogram ap
+      	  inner join studentassessmentprogram sap on (sap.studentid = st.id and ap.id = sap.assessmentprogramid)
+      	  where sap.activeflag = true 
+      	) and en.currentschoolyear = #{currentSchoolYear} 
+		and o.stateid = #{contractingOrgId}
+		and ets.testtypeid=#{testTypeId} and cttsa.contentareaid=#{contentAreaId} and ttsa.assessmentid=#{assessmentId}
+		<if test="gradeCourseId != null">and en.currentgradelevel in (select id from gradecourse where abbreviatedname = (select abbreviatedname from gradecourse where id=#{gradeCourseId}))</if>
+	     group by en.attendanceschoolid having count(en.id) > 1)
+	   select distinct schoolid as id from organizationtreedetail where schoolid not in (select attendanceschoolid from enrollments_schools) and stateid = #{contractingOrgId}
+		<!--select id from organization_children_oftype(#{contractingOrgId}, 'SCH') where id not in (select attendanceschoolid from enrollments_schools) -->
+  </select>
+  
+  <select id="findEnrollmentsForBatchRegistrationKSBreakDay" resultMap="batchRegisteredEnrollment">
+  	select en.id as enrollmentid, en.aypSchoolIdentifier, en.residenceDistrictIdentifier, en.attendanceschoolid,
+		en.localStudentIdentifier, en.currentGradeLevel, en.currentSchoolYear, 
+	    en.schoolentrydate, en.districtentrydate, en.stateentrydate, en.exitwithdrawaldate, 
+	    en.exitwithdrawaltype, en.specialcircumstancestransferchoice, 
+	    en.giftedstudent, en.specialedprogramendingdate, 
+	    en.qualifiedfor504, en.studentid, en.restrictionid,
+	    o.schoolid as attendanceSchoolId,
+	    o.schoolname as attendanceSchoolName,
+	    o.schooldisplayidentifier as attendanceSchoolIdentifier,
+	    st.legalfirstname, st.legallastname
+  	from enrollment en inner join student st on st.id=en.studentid
+  	join organizationtreedetail o on en.attendanceschoolid = o.schoolid
+  	where en.currentgradelevel = ANY(ARRAY(select id from gradecourse where abbreviatedname = (select abbreviatedname from gradecourse where id=#{gradeCourseId})))
+  	 	and en.activeflag is true and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate))
+  	 	and 'DLM' not in (
+   		  select ap.abbreviatedname
+   		  from assessmentprogram ap
+   		  inner join studentassessmentprogram sap on (sap.studentid = st.id and ap.id = sap.assessmentprogramid)
+   		  where sap.activeflag = true 
+   		)
+  	 	and en.currentschoolyear = organization_school_year(#{contractingOrgId})
+		<!--  and en.attendanceschoolid = ANY(ARRAY(select id from organization_children(#{contractingOrgId}) where organizationtypeid=(select id from organizationtype where typecode='SCH'))) -->
+		and o.stateid = #{contractingOrgId}
+  </select>  
+
+  <select id="getStudentsByOrgId" resultType="Enrollment">
+   	SELECT  
+   		distinct enrl.id, st.statestudentidentifier, st.legalfirstname, st.legalmiddlename, st.legallastname, st.gender, gc.name as "gradeCourse.name", enrl.localstudentidentifier,gc.gradelevel as "gradeCourse.gradelevel"
+   		<if test="studentsCriteriaMap.rosterId != null">,(select rosterid from enrollmentsrosters er where er.activeflag=true AND er.enrollmentid=enrl.id AND er.rosterid = #{studentsCriteriaMap.rosterId} LIMIT 1) as rosterassigned</if>
+	FROM enrollment enrl 
+		JOIN Student st ON enrl.Studentid = st.id
+		JOIN studentassessmentprogram sap on sap.studentid = st.id and sap.assessmentprogramid = #{studentsCriteriaMap.assessmenProgramId} and sap.activeflag = true
+		JOIN Organization attendanceSchool ON  attendanceSchool.id = enrl.attendanceschoolid
+		LEFT JOIN gradecourse gc ON enrl.currentgradelevel = gc.id
+	WHERE 
+		enrl.activeflag = true
+		AND st.activeflag = true
+		<if test="currentSchoolYear != null"> AND enrl.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}</if>
+		<if test="studentsCriteriaMap.rosterId != null">
+			AND attendanceSchool.id = (select attendanceschoolid from roster where id =#{studentsCriteriaMap.rosterId})
+		</if>
+		<if test="studentsCriteriaMap.rosterId == null">
+			<if test="studentsCriteriaMap.orgChildrenIds != null">
+			 AND attendanceSchool.id = ANY(ARRAY 
+		        <foreach collection="studentsCriteriaMap.orgChildrenIds" item="UserOrganizationId" open="[" close="]" separator="," >
+		    	    	#{UserOrganizationId}
+		        </foreach>)	   
+			</if>
+		</if>
+    	<if test="studentsCriteriaMap.isTeacher">
+			AND st.id = ANY(ARRAY(	
+				select en.studentid
+				from roster r 
+				INNER JOIN enrollmentsrosters enrs on r.id = enrs.rosterid
+				INNER JOIN enrollment en on enrs.enrollmentid = en.id 
+				where r.teacherid=#{studentsCriteriaMap.educatorId}
+				AND enrs.activeflag is true
+				<if test="currentSchoolYear != null">
+					AND en.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}
+					AND r.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}
+				</if>
+			))
+    	</if>	
+		<if test="studentsCriteriaMap.stateStudentIdentifier != null"> AND upper(st.statestudentidentifier) like upper('%' || #{studentsCriteriaMap.stateStudentIdentifier} || '%')</if>
+		<if test="studentsCriteriaMap.legalFirstName != null"> AND upper(st.legalfirstname) like upper('%' || #{studentsCriteriaMap.legalFirstName} || '%')</if>
+		<if test="studentsCriteriaMap.legalLastName != null"> AND upper(st.legallastname) like upper('%' || #{studentsCriteriaMap.legalLastName} || '%')</if>
+		<if test="studentsCriteriaMap.name != null"> AND upper(gc.name) like upper('%' || #{studentsCriteriaMap.name} || '%')</if>
+		<if test="studentsCriteriaMap.genderStr != null"> AND cast(st.gender as char) Like #{studentsCriteriaMap.genderStr}</if>
+		
+		<!-- Changed During US16275 -->
+		<if test="studentsCriteriaMap.localStudentIdentifier != null"> AND upper(enrl.localStudentIdentifier) like upper('%' || #{studentsCriteriaMap.localStudentIdentifier} || '%')</if>
+		
+		<if test="studentsCriteriaMap.sortByColumn != null">
+    	ORDER BY
+    		<choose>
+	    	<when test="studentsCriteriaMap.sortByColumn.contains('rosterassigned')">
+	    		<choose>
+	    			<when test="studentsCriteriaMap.sortByColumn.contains('legalLastName,legalFirstName,legalMiddleName')">rosterassigned asc, legalLastName, legalFirstName, legalMiddleName</when>
+	    			<when test="studentsCriteriaMap.sortByColumn.contains('stateStudentIdentifier')">rosterassigned asc, stateStudentIdentifier</when>		      		
+	    			<when test="studentsCriteriaMap.sortByColumn.contains('legalFirstName')">rosterassigned asc, legalFirstName</when>
+		      		<when test="studentsCriteriaMap.sortByColumn.contains('legalMiddleName')">rosterassigned asc, legalMiddleName</when>
+		      		<when test="studentsCriteriaMap.sortByColumn.contains('legalLastName')">rosterassigned asc, legalLastName</when>
+		      		<when test="studentsCriteriaMap.sortByColumn.contains('gender')">rosterassigned asc, gender</when>
+		      		<when test="studentsCriteriaMap.sortByColumn.contains('name')">rosterassigned asc, gc.name</when>
+		      		<otherwise>enrl.id</otherwise>
+		      	</choose>
+		     </when>
+		     <otherwise>
+		     	<choose>
+		     		<when test="studentsCriteriaMap.sortByColumn == 'legalLastName,legalFirstName,legalMiddleName'">legalLastName, legalFirstName, legalMiddleName</when>
+	    			<when test="studentsCriteriaMap.sortByColumn == 'stateStudentIdentifier'">stateStudentIdentifier</when>
+		      		<when test="studentsCriteriaMap.sortByColumn == 'legalFirstName'">legalFirstName</when>
+		      		<when test="studentsCriteriaMap.sortByColumn == 'legalMiddleName'">legalMiddleName</when>
+		      		<when test="studentsCriteriaMap.sortByColumn == 'legalLastName'">legalLastName</when>
+		      		<when test="studentsCriteriaMap.sortByColumn == 'gender'">gender</when>
+		      		<when test="studentsCriteriaMap.sortByColumn == 'name'">gc.name</when> 
+		      		<otherwise>enrl.id</otherwise>
+		      	</choose>
+		      </otherwise>
+		     </choose>
+    	 	<if test="studentsCriteriaMap.sortType!=null and studentsCriteriaMap.sortType=='desc'">
+	    		desc
+    	 	</if>
+    	 	<if test="studentsCriteriaMap.sortType=='asc' or studentsCriteriaMap.sortType==null">
+    	 		asc
+    	 	</if>
+	    </if>
+
+    	LIMIT #{studentsCriteriaMap.limit}
+    	OFFSET #{studentsCriteriaMap.offset}
+  </select>
+
+  <select id="countStudentsByOrgId" resultType="java.lang.Integer">
+   	SELECT count(1)
+	FROM 
+		(
+		
+		(SELECT distinct enrl.id
+		FROM enrollment enrl 
+		JOIN Student st ON enrl.Studentid = st.id
+		JOIN studentassessmentprogram sap on sap.studentid = st.id and sap.assessmentprogramid = #{studentsCriteriaMap.assessmenProgramId} and sap.activeflag = true
+		JOIN Organization attendanceSchool ON  attendanceSchool.id = enrl.attendanceschoolid
+		LEFT JOIN gradecourse gc ON enrl.currentgradelevel = gc.id
+	WHERE 
+		enrl.activeflag = true
+		AND st.activeflag = true
+		<if test="currentSchoolYear != null"> AND enrl.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}</if>
+		<if test="studentsCriteriaMap.rosterId != null">
+			AND attendanceSchool.id = (select attendanceschoolid from roster where id =#{studentsCriteriaMap.rosterId})
+		</if>
+		<if test="studentsCriteriaMap.rosterId == null">
+			<if test="studentsCriteriaMap.orgChildrenIds != null">
+			 AND attendanceSchool.id = ANY(ARRAY 
+		        <foreach collection="studentsCriteriaMap.orgChildrenIds" item="UserOrganizationId" open="[" close="]" separator="," >
+		    	    	#{UserOrganizationId}
+		        </foreach>)	   
+			</if>
+		</if>
+    	<if test="studentsCriteriaMap.isTeacher">
+			AND st.id = ANY(ARRAY(	
+				select en.studentid
+				from roster r 
+				INNER JOIN enrollmentsrosters enrs on r.id = enrs.rosterid
+				INNER JOIN enrollment en on enrs.enrollmentid = en.id 
+				where r.teacherid=#{studentsCriteriaMap.educatorId}
+				AND enrs.activeflag is true
+				<if test="currentSchoolYear != null">
+					AND en.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}
+					AND r.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}
+				</if>
+			))
+    	</if>		
+		<if test="studentsCriteriaMap.stateStudentIdentifier != null"> AND upper(st.statestudentidentifier) like upper('%' || #{studentsCriteriaMap.stateStudentIdentifier} || '%')</if>
+		<if test="studentsCriteriaMap.legalFirstName != null"> AND upper(st.legalfirstname) like upper('%' || #{studentsCriteriaMap.legalFirstName} || '%')</if>
+		<if test="studentsCriteriaMap.legalLastName != null"> AND upper(st.legallastname) like upper('%' || #{studentsCriteriaMap.legalLastName} || '%')</if>
+		<if test="studentsCriteriaMap.name != null"> AND upper(gc.name) like upper('%' || #{studentsCriteriaMap.name} || '%')</if>
+		) 
+		<if test="studentsCriteriaMap._search and studentsCriteriaMap.rosterId != null">
+    		
+    		
+    		UNION
+    		
+    		(SELECT  enrl.id 
+			FROM enrollment enrl 
+				JOIN Student st ON enrl.Studentid = st.id
+				JOIN studentassessmentprogram sap on sap.studentid = st.id and sap.assessmentprogramid = #{studentsCriteriaMap.assessmenProgramId} and sap.activeflag = true
+				JOIN Organization attendanceSchool ON  attendanceSchool.id = enrl.attendanceschoolid
+				LEFT JOIN gradecourse gc ON enrl.currentgradelevel = gc.id
+			WHERE 
+				enrl.activeflag = true
+				AND st.activeflag = true
+				<if test="currentSchoolYear != null"> AND enrl.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}</if>
+				<if test="studentsCriteriaMap.orgChildrenIds != null">
+					 AND attendanceSchool.id = ANY(ARRAY 
+				        <foreach collection="studentsCriteriaMap.orgChildrenIds" item="UserOrganizationId" open="[" close="]" separator="," >
+				    	    	#{UserOrganizationId}
+				        </foreach>)	   
+				</if>
+		    	<if test="studentsCriteriaMap.isTeacher">
+					AND st.id = ANY(ARRAY(	
+						select en.studentid
+						from roster r 
+						INNER JOIN enrollmentsrosters enrs on r.id = enrs.rosterid
+						INNER JOIN enrollment en on enrs.enrollmentid = en.id 
+						where r.teacherid=#{studentsCriteriaMap.educatorId}
+					))
+		    	</if> 
+		    	AND (select rosterid from enrollmentsrosters er where er.activeflag=true AND er.enrollmentid=enrl.id AND er.rosterid = #{studentsCriteriaMap.rosterId} LIMIT 1) IS NOT NULL		    	
+	    	)
+    		
+    	</if>
+    	) a 
+    	
+  </select>
+   
+   <select id="getCurrentYearStudentsByOrgId" resultType="Enrollment">
+   	SELECT 
+   		enrl.id, st.statestudentidentifier, st.legalfirstname, st.legallastname
+	FROM enrollment enrl 
+		JOIN Student st ON enrl.Studentid = st.id
+		JOIN Organization attendanceSchool ON  attendanceSchool.id = enrl.attendanceschoolid
+		LEFT JOIN gradecourse gc ON enrl.currentgradelevel = gc.id
+	WHERE 
+		enrl.attendanceschoolid = #{organizationId} 
+		AND enrl.activeflag = true
+		AND st.activeflag = true
+		AND enrl.currentschoolyear = organization_school_year(#{organizationId})
+	<if test="orderByClause != null">
+		ORDER BY ${orderByClause}
+	</if>
+	<if test="limitCount != null">
+    	LIMIT #{limitCount}
+    </if>
+    <if test="offset != null">
+    	OFFSET #{offset}
+    </if>
+  </select>
+
+  <select id="countCurrentYearStudentsByOrgId" resultType="java.lang.Integer" parameterType="long">
+   	SELECT count(1)
+	FROM enrollment enrl 
+		JOIN Student st ON enrl.Studentid = st.id
+		JOIN Organization attendanceSchool ON  attendanceSchool.id = enrl.attendanceschoolid
+		LEFT JOIN gradecourse gc ON enrl.currentgradelevel = gc.id
+	WHERE 
+		enrl.attendanceschoolid = #{organizationId} 
+		AND enrl.activeflag = true
+		AND st.activeflag = true
+		AND enrl.currentschoolyear = organization_school_year(#{organizationId})
+  </select>
+   
+  <select id="getStudentEnrollmentsByRosterId" resultType="Enrollment">
+   	SELECT 
+   		enrl.id, st.statestudentidentifier, st.legalfirstname, st.legallastname, st.legalmiddlename, st.gender 
+	FROM enrollment enrl 
+		JOIN Student st ON enrl.Studentid = st.id
+		JOIN enrollmentsrosters er ON enrl.id = er.enrollmentid
+	WHERE 
+		er.rosterid = #{rosterId}
+		AND enrl.activeflag = true
+		AND st.activeflag = true
+		AND er.activeflag = true
+
+	<if test="stateStudentIdentifier != null"> AND upper(st.statestudentidentifier) like upper('%' || #{stateStudentIdentifier} || '%')</if>
+	<if test="legalFirstName != null"> AND upper(st.legalfirstname) like upper('%' || #{legalFirstName} || '%')</if>
+	<if test="legalLastName != null"> AND upper(st.legallastname) like upper('%' || #{legalLastName} || '%')</if>  
+	<if test="legalMiddleName != null"> AND upper(st.legalmiddlename) like upper('%' || #{legalMiddleName} || '%')</if>
+	<if test="orderByClause != null">
+		ORDER BY ${orderByClause}
+	</if>
+	<if test="limitCount != null">
+    	LIMIT #{limitCount}
+    </if>
+    <if test="offset != null">
+    	OFFSET #{offset}
+    </if>		  
+  </select>
+
+  <select id="countStudentEnrollmentsByRosterId" resultType="java.lang.Integer">
+   	SELECT count(1)
+	FROM enrollment enrl 
+		JOIN Student st ON enrl.Studentid = st.id
+		JOIN enrollmentsrosters er ON enrl.id = er.enrollmentid
+	WHERE 
+		er.rosterid = #{rosterId}
+		AND enrl.activeflag = true
+		AND st.activeflag = true
+		<if test="stateStudentIdentifier != null"> AND upper(st.statestudentidentifier) like upper('%' || #{stateStudentIdentifier} || '%')</if>
+		<if test="legalFirstName != null"> AND upper(st.legalfirstname) like upper('%' || #{legalFirstName} || '%')</if>
+		<if test="legalLastName != null"> AND upper(st.legallastname) like upper('%' || #{legalLastName} || '%')</if>		
+  </select>
+  
+  <select id="getStudentsByRosterId" resultType="Student">
+   	SELECT distinct st.id, st.statestudentidentifier, st.legalfirstname, st.legallastname, st.legalmiddlename 
+	FROM enrollment enrl 
+		JOIN Student st ON enrl.Studentid = st.id
+		JOIN enrollmentsrosters er ON enrl.id = er.enrollmentid
+		JOIN studentassessmentprogram sap ON sap.studentid = st.id
+	WHERE 
+		er.rosterid = #{rosterId}
+		AND enrl.activeflag = true
+		AND st.activeflag = true
+		AND er.activeflag = true
+		AND sap.assessmentprogramid = (select id from assessmentprogram where abbreviatedname = 'DLM')
+		AND sap.activeflag = true
+  ORDER BY legallastname asc, legalfirstname asc 			  
+</select>
+  
+  
+  <select id="getSubjectAreaByEnrollment" resultType="java.lang.String" parameterType="long">
+  	select subjectareacode from enrollmenttesttypesubjectarea ettsa
+			inner join subjectarea sa on ettsa.subjectareaid=sa.id
+			where enrollmentid=#{enrollmentId}
+  </select>
+  
+    <select id="getStudentNamesEnrolledInTestSession" resultType="java.lang.String" parameterType="long">
+		select distinct s.legalfirstname || ' ' || s.legallastname as name
+		from roster r
+		join testsession ts on r.id = ts.rosterid
+		join enrollmentsrosters er on er.rosterid = r.id
+		join enrollment e on er.enrollmentid = e.id
+		join student s on s.id = e.studentid
+		join studentstests st on st.studentid = s.id
+		where st.testsessionid=#{testSessionId} and st.activeflag is true;
+  </select>
+  <select id="getContractingOrgSchoolYear" resultType="java.lang.Integer" parameterType="long">
+   	select organization_school_year(#{organizationId})
+  </select>
+  
+  	<select id="getBySSIDYearAndSchool" resultType="Enrollment">
+		SELECT enrl.id, aypSchoolIdentifier, residenceDistrictIdentifier,
+			localStudentIdentifier, currentGradeLevel, currentSchoolYear, 
+	        attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+	        attendanceSchool.id as attendanceSchoolId, 
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId,
+	       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGradeLevelCode
+		  FROM enrollment enrl 
+		  join Student st on enrl.Studentid = st.id
+		  join Organization attendanceSchool on attendanceSchool.id = enrl.attendanceschoolid
+		  WHERE
+		  st.stateStudentIdentifier = #{stateStudentIdentifier} and
+		  enrl.currentschoolyear = #{schoolYear} and
+		  attendanceSchool.displayidentifier = #{attendanceSchoolProgramIdentifier} and
+		  enrl.activeFlag = #{activeFlag}
+	</select>
+	<update id="updateExitInfo">
+	update enrollment set exitwithdrawaldate=#{exitWithdrawalDate}, exitwithdrawaltype=#{exitWithdrawalType}, modifieduser=#{userId}, modifieddate=now(), activeflag=false, sourcetype=#{sourceType}
+	where id=#{id}
+	</update>
+	
+	<select id="getById" resultType="Enrollment">
+			 select
+		    <include refid="Extended_Column_List" />
+		    from
+		    Student st,
+		    Organization attendanceSchool,
+		    OrganizationType ot,
+		    enrollment enrl left join enrollmentsRosters enrlRoster on (enrlroster.enrollmentid = enrl.id)		     		    
+    	    where enrl.Studentid = st.id
+    	    and attendanceSchool.id = enrl.attendanceschoolid
+    	    and attendanceSchool.organizationtypeid = ot.id
+    	    and enrl.id = #{id}
+	</select>
+	
+	<select id="getAttendanceSchoolAndDistrictByEnrollmentId" resultType="Enrollment">
+			select en.*, otd.districtid as attendanceSchoolDistrictId
+		    from enrollment en
+		    join organizationtreedetail otd on en.attendanceschoolid = otd.schoolid  
+		    where en.id = #{id}
+	</select>
+	
+	<select id="allEnrollmentsWithSubjectDetailsForStudent" resultType="Enrollment">		
+  		select distinct en.*, otd.districtid as attendanceSchoolDistrictId
+		from enrollment en
+		INNER JOIN organizationtreedetail otd on en.attendanceschoolid = otd.schoolid  
+		left join enrollmenttesttypesubjectarea ets ON ets.enrollmentid = en.id and ets.activeflag is true
+		left join testtypesubjectarea ttsa ON ttsa.testtypeid = ets.testtypeid AND ttsa.subjectareaid = ets.subjectareaid and ttsa.activeflag is true  
+		left join contentareatesttypesubjectarea cttsa ON cttsa.testtypesubjectareaid = ttsa.id and cttsa.activeflag is true
+		where en.studentid = #{studentId,jdbcType=BIGINT} and en.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT} 
+			and cttsa.contentareaid = #{subjectId,jdbcType=BIGINT}
+			and en.activeflag is true
+  		
+	</select>
+	
+	<select id="getByEnrollmentId" resultType="Enrollment">
+			 select
+		    <include refid="Extended_Column_List" />
+		    from
+		    Student st,
+		    Organization attendanceSchool,
+		    OrganizationType ot,
+		    enrollment enrl	     		    
+    	    where enrl.Studentid = st.id
+    	    and attendanceSchool.id = enrl.attendanceschoolid
+    	    and attendanceSchool.organizationtypeid = ot.id
+    	    and enrl.id = #{enrollmentId,jdbcType=BIGINT}
+	</select>
+	
+	<update id="adjustStudentRoster">
+		UPDATE enrollmentsrosters
+		    SET activeflag=false,modifieddate = #{modifiedDate},modifieduser = #{modifiedUser} 
+		   WHERE rosterid in (
+		   select r.id from roster r
+		   join enrollmentsrosters enr on enr.rosterid = r.id
+		   where enr.activeflag is true and enr.enrollmentid = #{enrollmentId} and r.id != #{rosterId}
+		   and r.statesubjectareaid = (select statesubjectareaid from roster where id=#{rosterId})
+		   and r.sourcetype=#{sourceCode} and r.activeflag is true)
+	</update>	
+	
+	<select id="getCurrentEnrollmentsByStudentId" parameterType="map" resultType="Enrollment">
+		SELECT enrl.id,aypSchoolIdentifier, residenceDistrictIdentifier,
+			localStudentIdentifier, 
+	       currentGradeLevel, currentSchoolYear,
+	        attendanceSchool.schooldisplayidentifier as attendanceSchoolProgramIdentifier,
+	        attendanceSchool.schoolid as attendanceSchoolId, 
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId,
+	       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGradeLevelCode,
+	       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGrade,
+	       sourcetype, enrl.activeflag
+	       FROM enrollment enrl ,Student st, organizationtreedetail attendanceSchool
+		   WHERE
+		  enrl.Studentid = st.id and
+		  st.id = #{studentId,jdbcType=BIGINT} and 
+		  attendanceSchool.schoolid = enrl.attendanceschoolid and
+		  enrl.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER} and
+		  enrl.activeFlag = #{enrlActiveFlag,jdbcType=BIT} 
+		  <if test="organizationId != null">
+			  and (attendanceSchool.schoolid = #{organizationId,jdbcType=BIGINT}
+			  	OR attendanceSchool.districtid = #{organizationId,jdbcType=BIGINT}
+			  	OR attendanceSchool.stateid = #{organizationId,jdbcType=BIGINT})
+		  </if>
+	</select>
+	<select id="getTECExtractByOrg" parameterType="map" resultMap="TECExtractMap">
+		SELECT DISTINCT
+			e.id,
+			otd.statename as state,
+			otd.districtname as district,
+			otd.schoolname as school,
+			otd.schooldisplayidentifier as schoolidentifier,
+			s.statestudentidentifier,
+			tt.testtypecode,
+			ca.abbreviatedname AS subjectcode,
+			e.currentschoolyear,
+			gc.name AS grade
+		FROM student s
+			JOIN enrollment e on e.studentid = s.id
+			inner join organizationtreedetail otd on e.attendanceschoolid=otd.schoolid
+			JOIN enrollmenttesttypesubjectarea ettsa on e.id = ettsa.enrollmentid
+			JOIN testtype tt on ettsa.testtypeid = tt.id
+			JOIN testtypesubjectarea ttsa on ttsa.testtypeid = tt.id
+			JOIN contentareatesttypesubjectarea cattsa on cattsa.testtypesubjectareaid = ttsa.id
+			JOIN subjectarea sa on (ettsa.subjectareaid = sa.id and ttsa.subjectareaid = sa.id)
+			JOIN contentarea ca on cattsa.contentareaid = ca.id
+			JOIN gradecourse gc on e.currentgradelevel = gc.id
+		inner join studentassessmentprogram sap on sap.studentid = s.id and sap.activeflag = true
+			<if test="isTeacher">
+				JOIN enrollmentsrosters er on er.enrollmentid = e.id
+				JOIN roster r on er.rosterid = r.id
+			</if>
+		WHERE e.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER}
+			AND (otd.schoolid = #{organizationId,jdbcType=BIGINT}
+					OR otd.districtid = #{organizationId,jdbcType=BIGINT}
+					OR otd.stateid = #{organizationId,jdbcType=BIGINT})
+<!-- 			AND e.attendanceschoolid IN -->
+<!-- 				(SELECT id -->
+<!-- 				FROM organization_children(#{organizationId,jdbcType=BIGINT}) -->
+<!-- 				WHERE organizationtypeid = (SELECT id FROM organizationtype WHERE typecode = 'SCH') -->
+<!-- 				UNION SELECT #{organizationId,jdbcType=BIGINT}) -->
+			<if test="isTeacher">
+				AND r.teacherid = #{educatorId,jdbcType=BIGINT}
+			</if>		
+			AND (e.exitwithdrawaldate IS NULL OR e.exitwithdrawaldate &gt; now())
+			AND tt.testtypecode NOT IN ('C')
+			AND e.activeflag = TRUE AND ettsa.activeflag = TRUE
+			AND ttsa.activeflag = TRUE AND cattsa.activeflag = TRUE
+			AND tt.activeflag = TRUE AND sa.activeflag = TRUE AND ca.activeflag = TRUE and 
+			<if test="assessmentPrograms !=null">
+			sap.assessmentprogramid in 
+			<foreach collection="assessmentPrograms" item="assessmentprogramid" open="(" close=")" separator=",">
+			#{assessmentprogramid}
+			</foreach>
+			</if>
+		ORDER BY state, district, school, statestudentidentifier		
+	</select>
+
+	<resultMap id="ResourceMap" type="edu.ku.cete.domain.StudentTestResourceInfo">
+		<result column="studentstestsid" jdbcType="BIGINT" property="studentsTestsId" />
+		<result column="studentid" jdbcType="BIGINT" property="studentId" />
+	    <result column="testid" jdbcType="BIGINT" property="testId" />
+		<result column="testsessionid" jdbcType="BIGINT" property="testSessionId" />
+	    <result column="testsectionid" jdbcType="BIGINT" property="testSectionId" />
+	    <result column="stimulusvariantid" jdbcType="BIGINT" property="stimulusVariantId" />
+	    <result column="filelocation" jdbcType="VARCHAR" property="fileLocation" />
+	    <result column="filetype" jdbcType="BIGINT" property="fileType" />
+	    <result column="filename" jdbcType="BIGINT" property="fileName" />
+	</resultMap>
+  
+  <select id="selectResourceByStudentIdTestSessionId" resultMap="ResourceMap">
+	 select st.id, st.studentid, st.testid as testid, tss.id as testSessionId,
+	 	ts.id as testsectionid,tsr.id as stimulusvariantid,
+	  	sva.filelocation as filelocation, sva.filetype as filetype, sva.filename as filename
+	 from studentstests st 
+	 	join testsession tss on tss.testcollectionid = st.testcollectionid and st.testsessionid = tss.id
+	 	join testsection ts on ts.testid = st.testid
+	 	join testsectionresource tsr on tsr.testsectionid = ts.id
+	 	JOIN stimulusvariantattachment sva on sva.stimulusvariantid = tsr.stimulusvariantid
+	 where filetype='pdf' and st.activeflag is true  and st.enddatetime is null  
+	 	and tss.id = #{testSessionId} and st.studentid in 
+	 	<foreach close=")" collection="studentIds" item="item" open="(" separator=",">
+			#{item}
+		</foreach> 
+	  
+	 UNION
+	 
+	 select st.id, st.studentid, st.testid as testid, tss.id as testSessionId,
+	 	cg.id, bac.id,
+	 	acf.filelocation as filelocation,  bac.brailleabbreviation as filetype, acf.filename as filename
+	 from studentstests st 
+	 	join testsession tss on tss.testcollectionid = st.testcollectionid and st.testsessionid = tss.id
+	 	join contentgroup cg on cg.testid = st.testid
+		join brailleaccommodation bac on bac.contentgroupid = cg.id 
+		join accessibilityfile acf on acf.id = bac.accessibilityfileid
+		join studentprofileitemattributevalue spiav on spiav.studentid = st.studentid and spiav.activeflag = true
+		join profileItemAttributenameAttributeContainer pianc ON pianc.id = spiav.profileitemattributenameattributecontainerid and pianc.activeflag is true
+		join profileitemattributecontainer piac ON pianc.attributecontainerid = piac.id and piac.activeflag is true and piac.attributecontainer = 'Braille'
+		join profileitemattribute pia on pia.id = pianc.attributenameid and pia.activeflag is true and pia.attributename in ('ebaeFileType', 'uebFileType') 
+		and spiav.selectedvalue = 'true' and lower(bac.brailleabbreviation) = left(pia.attributename, -8)
+	 where st.activeflag is true and st.enddatetime is null  
+	 	and tss.id = #{testSessionId} and st.studentid in 
+	 	<foreach close=")" collection="studentIds" item="item" open="(" separator=",">
+			#{item}
+		</foreach>
+  </select>
+  
+  	<select id="getEnrollmentByStudentId" resultMap="AutoRegResultMap">		
+  		select distinct e.currentgradelevel as gradecourseid, e.id as enrollmentid, e.currentschoolyear, e.studentid, 
+			e.attendanceschoolid, o.schoolname as attendanceschoolname, o.schooldisplayidentifier as attendanceschoolidentifier,
+			gc.abbreviatedname as gradeCourseName, e.modifieddate, stu.legalfirstname, stu.legallastname, stu.statestudentidentifier
+			from enrollment e 
+			inner join organizationtreedetail o on o.schoolid=e.attendanceschoolid
+			inner join student stu on stu.id=e.studentid 
+			inner join gradecourse gc on gc.id=e.currentgradelevel
+			inner join enrollmentsrosters er on er.enrollmentid = e.id and er.activeflag is true
+			inner join roster r on r.id=er.rosterid and r.activeflag=true
+			where e.studentid=#{studentId,jdbcType=BIGINT} and e.activeflag is true
+			and e.currentschoolyear=#{currentSchoolYear,jdbcType=BIGINT}
+			and (e.exitwithdrawaldate is null or (e.exitwithdrawaldate &lt; e.schoolentrydate))
+			<!--and e.attendanceschoolid in (select id from organization_children_oftype(#{contractingOrganizationId,jdbcType=BIGINT}, 'SCH')) -->
+			and o.stateid=#{contractingOrganizationId,jdbcType=BIGINT}
+			and r.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT}
+			and r.statesubjectareaid=#{contentAreaId,jdbcType=BIGINT}
+			order by e.modifieddate desc limit 1
+	</select>
+	
+	<select id="getEnrollmentsByStudentId" resultMap="AutoRegResultMap">		
+  		select distinct e.currentgradelevel as gradecourseid, e.id as enrollmentid, e.currentschoolyear, e.studentid, 
+			e.attendanceschoolid, o.schoolname as attendanceschoolname, o.schooldisplayidentifier as attendanceschoolidentifier,
+			gc.abbreviatedname as gradeCourseName, e.modifieddate, stu.legalfirstname, stu.legallastname
+			from enrollment e 
+			inner join organizationtreedetail o on o.schoolid=e.attendanceschoolid
+			inner join student stu on stu.id=e.studentid 
+			inner join gradecourse gc on gc.id=e.currentgradelevel
+			inner join enrollmentsrosters er on er.enrollmentid = e.id and er.activeflag is true
+			inner join roster r on r.id=er.rosterid and r.activeflag=true
+			where e.studentid=#{studentId,jdbcType=BIGINT} and e.activeflag is true
+			and e.currentschoolyear=#{currentSchoolYear,jdbcType=BIGINT}
+			and (e.exitwithdrawaldate is null or (e.exitwithdrawaldate &lt; e.schoolentrydate))
+			and r.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT}
+			order by e.modifieddate desc
+	</select>
+	
+	<select id="getEnrollmentsByStudentIdInDistrictBySchool" resultMap="AutoRegResultMap">		
+  		select distinct e.currentgradelevel as gradecourseid, e.id as enrollmentid, e.currentschoolyear, e.studentid, 
+			e.attendanceschoolid, o.schoolname as attendanceschoolname, o.schooldisplayidentifier as attendanceschoolidentifier,
+			gc.abbreviatedname as gradeCourseName, e.modifieddate, stu.legalfirstname, stu.legallastname
+			from enrollment e 
+			inner join organizationtreedetail o on o.schoolid=e.attendanceschoolid
+			inner join student stu on stu.id=e.studentid 
+			inner join gradecourse gc on gc.id=e.currentgradelevel
+			inner join enrollmentsrosters er on er.enrollmentid = e.id and er.activeflag is true
+			inner join roster r on r.id=er.rosterid and r.activeflag=true
+			where e.studentid=#{studentId,jdbcType=BIGINT} and e.activeflag is true
+			and e.currentschoolyear=#{currentSchoolYear,jdbcType=BIGINT}
+			and (e.exitwithdrawaldate is null or (e.exitwithdrawaldate &lt; e.schoolentrydate))
+			and r.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT}
+			and e.attendanceschoolid in ( select schoolid from organizationtreedetail where districtid=(select districtid from organizationtreedetail where schoolid=#{schoolId,jdbcType=BIGINT}))
+			order by e.modifieddate desc
+	</select>
+
+	<select id="countEnrollmentsTestTypeSubjectArea" parameterType="map" resultType="int">
+	  SELECT COUNT(*)
+	  FROM enrollmenttesttypesubjectarea ettsa
+	  INNER JOIN testtype tt
+	    ON ettsa.testtypeid = tt.id
+	    AND tt.assessmentid = #{assessmentId,jdbcType=BIGINT}
+	    AND ettsa.enrollmentid = #{enrollmentId,jdbcType=BIGINT}
+	    AND ettsa.subjectareaid = #{subjectAreaId,jdbcType=BIGINT}
+	    AND tt.testtypecode = #{testTypeCode,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findByStudentTestTypeContentAreaGradeCourseAssessmentInOrg" parameterType="map" resultMap="batchRegisteredEnrollment">
+		select distinct en.id as enrollmentid, en.attendanceschoolid, en.currentGradeLevel, 
+		en.currentSchoolYear, en.studentid, st.legalfirstname, st.legallastname,en.attendanceschoolid,
+		o.organizationname as attendanceSchoolName, o.displayIdentifier as attendanceSchoolIdentifier
+		from enrollment en inner join student st on st.id=en.studentid 
+		inner join enrollmenttesttypesubjectarea ets on ets.enrollmentid=en.id 
+		inner join testtypesubjectarea ttsa on ttsa.testtypeid=ets.testtypeid and ttsa.subjectareaid=ets.subjectareaid 
+		inner join contentareatesttypesubjectarea cttsa on cttsa.testtypesubjectareaid=ttsa.id
+		inner join organization o on o.id=en.attendanceschoolid
+		where en.activeflag is true and ets.activeflag is true 
+		and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+	  	and st.id = #{studentId}
+		and en.currentschoolyear = #{currentSchoolYear} 
+		and en.attendanceschoolid in (select schoolid from organizationtreedetail where stateid=#{contractingOrgId})
+<!-- 		and en.attendanceschoolid in (select id from organization_children_oftype(#{contractingOrgId}, 'SCH')) -->
+		and ets.testtypeid=#{testTypeId} and cttsa.contentareaid=#{contentAreaId} and ttsa.assessmentid=#{assessmentId}
+		<if test="gradeCourseId != null">and en.currentgradelevel in (select id from gradecourse where abbreviatedname = (select abbreviatedname from gradecourse where id=#{gradeCourseId}))</if> 
+	</select>
+	
+  <select id="getDlmFixedAssignEnrollments" parameterType="map" resultMap="enrollmentWithRosterMap">
+  	select stu.id as studentid, stu.statestudentidentifier as statestudentidentifier, en.id as enrollmentid, r.id as rosterid,
+  	r.attendanceschoolid as attendanceSchoolId,en.currentgradelevel as currentgradelevel, gc.abbreviatedName, 
+  	ca.abbreviatedname as stateSubjectAreaAbbreviatedName, 
+  	(select displayidentifier from organization where id = r.attendanceschoolid) as attendanceSchoolIdentifier, stu.legalfirstname, stu.legallastname
+	from enrollment en
+	inner join student stu on en.studentid = stu.id
+	inner join enrollmentsrosters enr on enr.enrollmentid = en.id
+	join roster r on r.id = enr.rosterid
+	inner join studentassessmentprogram sap on stu.id = sap.studentid and sap.activeflag = true
+	inner join assessmentprogram ap on sap.assessmentprogramid = ap.id
+	inner join organizationtreedetail o on o.schoolid=r.attendanceschoolid
+	inner join gradecourse gc on gc.id = en.currentgradelevel
+	inner join contentarea ca on ca.id = r.statesubjectareaid
+	where stu.activeflag is true and en.activeflag is true and enr.activeflag is true  and r.activeflag is true
+	and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate))
+	and en.currentschoolyear = #{currentSchoolYear}
+	and gc.abbreviatedName = #{gradeAbbrName}
+	and o.stateid = #{contractingOrgId}
+	and r.statesubjectareaid = #{contentAreaId}
+	and ap.id = #{assessmentProgramId}
+	<if test="courseId != null">
+	  and r.statecoursesid = #{courseId}
+	</if>
+	order by enrollmentid asc LIMIT #{pageSize} OFFSET #{offset}
+  </select>
+  
+  <select id="findOtherHighStakesEnrollments" parameterType="map" resultMap="batchRegisteredEnrollment">
+    select distinct e.id as enrollmentid, e.aypschoolid, e.attendanceschoolid, e.currentschoolyear, e.studentid, e.activeflag
+    from enrollment e
+    join organizationtreedetail otd on e.aypschoolid = otd.schoolid
+    join enrollmenttesttypesubjectarea ettsa on e.id = ettsa.enrollmentid
+    join testtypesubjectarea ttsa on ettsa.testtypeid = ttsa.testtypeid and ettsa.subjectareaid = ttsa.subjectareaid
+    join contentareatesttypesubjectarea cattsa on ttsa.id = cattsa.testtypesubjectareaid
+    join contentarea ca on cattsa.contentareaid = ca.id
+    where e.activeflag = true and ettsa.activeflag = true and ttsa.activeflag = true and cattsa.activeflag = true and ca.activeflag = true
+    and e.id not in
+        <foreach collection="enrollmentIds" item="enrollmentId" open="(" close=")" separator=",">
+            #{enrollmentId}
+        </foreach>
+    and e.studentid = #{studentId}
+    and e.currentschoolyear = #{currentSchoolYear}
+    and otd.stateid = #{contractingOrgId}
+    and ca.abbreviatedname = #{contentAreaCode}
+    and ettsa.testtypeid in (
+        SELECT tt.id
+        FROM testtype tt
+        INNER JOIN assessment a ON tt.assessmentid = a.id AND tt.activeflag = TRUE AND a.activeflag = TRUE
+        INNER JOIN testingprogram tp ON a.testingprogramid = tp.id AND tp.activeflag = TRUE
+        WHERE tp.assessmentprogramid = (SELECT id FROM assessmentprogram WHERE abbreviatedname = #{assessmentProgramCode})
+        AND tp.highstake = TRUE
+    )
+  </select>
+  
+  <select id="getReportEnrollments" parameterType="map" resultMap="reportEnrollmentMap">
+    SELECT distinct 
+		en.id AS enrollmentid,
+		en.attendanceschoolid as attendanceschoolid,
+		org.districtid as attendanceschooldistrictid,
+		en.aypschoolid as aypschoolid,
+		(CASE WHEN en.activeflag = FALSE AND exitwithdrawaltype = 7
+			THEN TRUE
+			ELSE en.activeflag
+		END) as enrollmentactive,
+		exitwithdrawaltype,
+		(CASE WHEN en.activeflag = FALSE AND exitwithdrawaltype = 7
+			THEN NULL::TIMESTAMP WITH TIME ZONE
+			ELSE en.exitwithdrawaldate
+		END) as exitwithdrawaldate
+	FROM student st
+		JOIN studentstests sts on st.id = sts.studentid
+		JOIN enrollment en ON en.studentid = st.id and sts.enrollmentid=en.id
+		join organizationtreedetail org on org.schoolid = en.attendanceschoolid
+		JOIN test t ON t.id = sts.testid
+	WHERE st.stateid = #{contractOrgId,jdbcType=BIGINT}
+		AND (en.activeflag OR ((NOT en.activeflag) AND (en.exitwithdrawaltype IS NOT NULL)))
+		AND en.currentschoolyear = #{currentSchoolYear}
+		AND (sts.status = ANY(ARRAY
+		<foreach close="]" collection="testsStatusIds" item="testsStatusId" open="[" separator=",">
+			#{testsStatusId}
+		</foreach>
+		) AND sts.activeflag)
+		<if test="rawScaleExternalTestIds != null">
+			AND t.externalid = ANY(ARRAY
+			<foreach close="]" collection="rawScaleExternalTestIds" item="externalTestId" open="[" separator=",">
+				#{externalTestId}
+			</foreach>
+			)
+		</if>
+		and st.id = #{studentId}
+		ORDER BY exitwithdrawaldate DESC NULLS FIRST, en.id DESC
+  </select>
+  	<select id="findStudentAvilbility" resultMap="findStudentMap">
+	select * from (select enr.id as enrollmentid,stu.id as studentid,stu.statestudentidentifier,stu.legalfirstname as firstname,stu.legallastname as lastname,
+	enr.activeflag as status,
+	(select dorg.districtname from organizationtreedetail  dorg where dorg.schoolid=enr.attendanceschoolid) as districtname,
+	(select dorg.districtid from organizationtreedetail  dorg where dorg.schoolid=enr.attendanceschoolid) as schooldistrictid,
+	(select sorg.organizationname from organization sorg where sorg.id=enr.attendanceschoolid ) as schoolname,
+	enr.attendanceschoolid as schoolid,
+	(select gc.name  from gradecourse gc where gc.id=enr.currentgradelevel) as gradename,
+	(select abbreviatedname from gradecourse gc where gc.id=enr.currentgradelevel) as gradeid,
+	(select stateid from organizationtreedetail stateorg where stateorg.schoolid =enr.attendanceschoolid) as stateid,
+	(select statename from organizationtreedetail stateorg where stateorg.schoolid =enr.attendanceschoolid) as statename
+	from (select distinct studentid, orglist.schoolid from organizationtreedetail orglist 
+				inner join enrollment enrl on enrl.attendanceschoolid = orglist.schoolid 
+				WHERE  enrl.currentschoolyear =  #{currentSchoolYear, jdbcType=INTEGER}
+					AND (orglist.schoolid = #{orgId, jdbcType=BIGINT}
+				  	OR orglist.districtid = #{orgId, jdbcType=BIGINT}
+				  	OR orglist.stateid = #{orgId, jdbcType=BIGINT})) as slist
+	inner join enrollment enr on enr.attendanceschoolid = slist.schoolid and slist.studentid = enr.studentid
+	inner join student stu on enr.studentid = stu.id 
+	where
+		<if test="studentStateId != null and studentStateId != '' ">
+			statestudentidentifier = #{studentStateId,jdbcType=VARCHAR}
+		</if> 
+	) findStudent 
+	  where enrollmentID is not null
+	  <include refid="find_student_Where_Clause" />
+	  <if test="sortByColumn != null">
+	    	ORDER BY
+    		<choose>
+    		    <when test="sortByColumn == 'id'">enrollmentid</when>
+	    		<when test="sortByColumn == 'stateStudentIdentifier'">statestudentidentifier</when>
+	    		<when test="sortByColumn == 'legalFirstName'">firstname</when>
+	    		<when test="sortByColumn == 'legalLastName'">lastname</when>
+	      		<when test="sortByColumn == 'status'">status</when>
+	      		<when test="sortByColumn == 'districtName'">districtname</when>
+	      		<when test="sortByColumn == 'schoolName'">schoolname</when>
+	      		<when test="sortByColumn == 'gradeName'">gradename</when>
+	      		<otherwise>statestudentidentifier</otherwise>
+	       	</choose>
+    	 	<if test="sortType=='desc'">
+	    		desc
+    	 	</if>
+    	 	<if test="sortType=='asc' or sortType==null">
+    	 		asc
+    	 	</if>
+		</if> 
+	  <if test="limitCount != null">
+    	LIMIT #{limitCount}
+    </if>
+    <if test="offset != null">
+    	OFFSET #{offset}
+    </if>
+	</select>	
+	<select id="findStudentAvilbilityCount"  resultType="java.lang.Integer">
+	select count(enrollmentID) from (select enr.id as enrollmentid,stu.id as studentid,stu.statestudentidentifier,stu.legalfirstname as firstname,stu.legallastname as lastname,
+	(CASE WHEN enr.activeflag = true THEN 'Active' WHEN enr.activeflag = false
+    THEN 'Inactive' END) as status,
+	(select dorg.districtname from organizationtreedetail  dorg where dorg.schoolid=enr.attendanceschoolid) as districtname,
+	(select dorg.districtid from organizationtreedetail  dorg where dorg.schoolid=enr.attendanceschoolid) as schooldistrictid,
+	(select sorg.organizationname from organization sorg where sorg.id=enr.attendanceschoolid ) as schoolname,
+	enr.attendanceschoolid as schoolid,
+	(select gc.name  from gradecourse gc where gc.id=enr.currentgradelevel) as gradename,
+	currentgradelevel as gradeid,
+	(select stateid from organizationtreedetail stateorg where stateorg.schoolid =enr.attendanceschoolid) as stateid,
+	(select statename from organizationtreedetail stateorg where stateorg.schoolid =enr.attendanceschoolid) as statename
+	from (select distinct studentid, orglist.schoolid from organizationtreedetail orglist 
+				inner join enrollment enrl on enrl.attendanceschoolid = orglist.schoolid 
+				WHERE  enrl.currentschoolyear =  #{currentSchoolYear, jdbcType=INTEGER}
+					AND (orglist.schoolid = #{orgId, jdbcType=BIGINT}
+				  	OR orglist.districtid = #{orgId, jdbcType=BIGINT}
+				  	OR orglist.stateid = #{orgId, jdbcType=BIGINT})) as slist
+	inner join enrollment enr on enr.attendanceschoolid = slist.schoolid and slist.studentid = enr.studentid
+	inner join student stu on enr.studentid = stu.id
+	where
+		<if test="studentStateId != null and studentStateId != '' ">
+		 statestudentidentifier = #{studentStateId,jdbcType=VARCHAR}  
+		</if> 
+	) findStudent 
+	  where enrollmentID is not null
+	  <include refid="find_student_Where_Clause" />
+	   
+	</select>
+	
+	<select id="getEnrollmentByStudentIdAttendanceSchoolIdandCurrentSchoolYear" resultType = "edu.ku.cete.domain.enrollment.Enrollment" >
+		Select * from enrollment 
+		where 
+		studentid = #{studentId, jdbcType=BIGINT}
+		and attendanceschoolid = #{orgSchoolId, jdbcType=BIGINT} 
+		and currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT}
+	</select>
+
+  <select id="findStudentEnrollment"  resultMap="findStudentMap">
+  <!-- NOTE: any changes to this query will likely need to be made in the data warehouse equivalent -->
+	select enr.id as enrollmentid,stu.id as studentid,stu.statestudentidentifier,stu.legalfirstname as firstname,
+	stu.legalmiddlename as middlename,stu.legallastname as lastname, enr.activeflag as status, otd.districtname,
+	otd.districtid as schooldistrictid, otd.schoolname, otd.schoolid, enr.currentschoolyear as schoolyear,
+ 	gc.name as gradename, gc.id as gradeid, stu.stateid, otd.statename,
+ 	stu.dateofbirth,CASE WHEN stu.gender = 0 THEN 'Female' ELSE 'Male' END AS gender, 
+  	sap.assessmentprogramid as assessmentPrograms 
+  	from student stu
+  join enrollment enr on stu.id = enr.studentid
+  join organizationtreedetail otd on enr.attendanceschoolid = otd.schoolid 
+  	<if test="isTeacher">
+		inner join enrollmentsrosters enrlr on (enrlr.enrollmentid = enr.id )
+		inner join roster rs on (enrlr.rosterid=rs.id and rs.teacherid = #{educatorId}) 
+	</if>  
+  left join gradecourse gc on gc.id = enr.currentgradelevel and gc.activeflag is true 
+  left join studentassessmentprogram sap on sap.studentid = stu.id and sap.activeflag is true 
+  where
+  stu.activeflag is true
+  and  stu.stateid=#{stateId, jdbcType=BIGINT}
+  and  stu.statestudentidentifier = #{studentStateId,jdbcType=VARCHAR}
+  and enr.currentschoolyear in (
+	select distinct currentschoolyear from enrollment where studentid = stu.id order by currentschoolyear desc limit 1)
+  order by enr.currentschoolyear desc
+	</select>
+	
+  <select id="findSubjectEnrollmentsByStudentId" parameterType="map" resultMap="findSubjectEnrollmentMap">
+	select distinct en.id as enrollmentid, en.exitwithdrawaldate,en.aypschoolid, 
+		en.currentSchoolYear, en.studentid, en.attendanceschoolid, en.residenceDistrictIdentifier, en.localStudentIdentifier, 
+		en.specialCircumstancesTransferChoice, en.modifieddate, en.specialEdProgramEndingDate,en.qualifiedFor504, en.activeFlag,
+		o.schooldisplayidentifier as attendanceSchoolIdentifier, o.districtid as attendanceSchoolDistrictId, ets.subjectareaid,
+		en.schoolEntryDate, en.districtEntryDate, en.stateEntryDate, en.exitWithdrawalType, en.giftedStudent, en.aypSchoolIdentifier,
+		en.currentgradelevel, en.restrictionid, en.sourcetype, ets.activeflag as active
+	from enrollment en inner join student st on st.id=en.studentid 
+		inner join organizationtreedetail o on o.schoolid=en.attendanceschoolid
+		left join enrollmenttesttypesubjectarea ets on ets.enrollmentid=en.id and ets.activeflag is true
+		left join testtypesubjectarea ttsa on ttsa.testtypeid=ets.testtypeid and ttsa.subjectareaid=ets.subjectareaid 
+	where
+		st.id = #{studentId, jdbcType=BIGINT}
+		and en.currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT}
+		<if test="stateId != null">
+			and st.stateid = #{stateId}
+		</if>
+	order by en.schoolEntryDate desc, en.modifieddate desc
+	</select>
+	
+	<select id="getEnrollmentsByStudentIdForTasc" resultMap="findEnrollmentMap">		
+  		SELECT DISTINCT e.currentgradelevel as gradecourseid, e.id as enrollmentid, e.currentschoolyear, e.studentid, 
+			e.attendanceschoolid, o.schoolname as attendanceschoolname, o.schooldisplayidentifier as attendanceschoolidentifier,
+			gc.abbreviatedname as gradeCourseName, e.modifieddate, stu.legalfirstname, stu.legallastname, 
+			ca.id as subjectareaid, ca.abbreviatedname as subjectareacode, ca.name as subjectareaname, e.aypschoolidentifier, e.aypschoolid, e.sourcetype
+			FROM enrollment e 
+			JOIN organizationtreedetail o ON o.schoolid=e.attendanceschoolid
+			JOIN student stu ON stu.id=e.studentid 
+			JOIN gradecourse gc ON gc.id=e.currentgradelevel
+			LEFT JOIN enrollmenttesttypesubjectarea etsa ON etsa.enrollmentid=e.id
+			LEFT JOIN testtypesubjectarea tsa ON tsa.testtypeid = etsa.testtypeid AND tsa.subjectareaid=etsa.subjectareaid
+			LEFT JOIN contentareatesttypesubjectarea catsa ON catsa.testtypesubjectareaid=tsa.id
+			LEFT JOIN contentarea ca ON ca.id = catsa.contentareaid
+			WHERE e.studentid=#{studentId,jdbcType=BIGINT} and e.activeflag is true
+			AND e.currentschoolyear=#{currentSchoolYear,jdbcType=BIGINT}
+			AND (e.exitwithdrawaldate is null or (e.exitwithdrawaldate &lt; e.schoolentrydate))
+			ORDER BY e.modifieddate DESC
+	</select>
+	
+	<select id="getEnrollmentsByAypAndAttendanceSchool" resultType="Enrollment">
+		SELECT enrl.id, aypSchoolId, currentGradeLevel, currentSchoolYear, 
+			attendanceSchool.id as attendanceSchoolId, 
+			SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+			exitWithdrawalType,studentId, restrictionId, enrl.sourceType, enrl.activeFlag
+		FROM enrollment enrl, Student st, Organization attendanceSchool
+		WHERE
+			enrl.Studentid = st.id and enrl.activeFlag = true and
+			attendanceSchool.id = enrl.attendanceschoolid and 
+			attendanceSchool.id = #{attendanceSchoolId} and
+			stateStudentIdentifier = #{stateStudentIdentifier} and
+			enrl.currentSchoolYear = #{currentSchoolYear} and
+			enrl.aypSchoolId = #{aypSchoolId} and 
+			st.stateid = #{stateId}
+	</select>
+	
+	
+	<select id="getEnrollmentWithRosterForAssessmentPrograms" resultMap="enrollmentWithRosterMap">
+	    SELECT enrl.studentid, enrlRoster.enrollmentid as enrollmentid, enrlRoster.rosterid as rosterId, r.statesubjectareaid
+		FROM enrollment enrl 
+		INNER JOIN enrollmentsRosters enrlRoster ON enrlroster.enrollmentid = enrl.id AND enrlRoster.activeflag IS true
+		INNER JOIN studentassessmentprogram stap ON stap.studentid = enrl.studentid and stap.activeflag = true
+		INNER JOIN roster r ON enrlRoster.rosterid = r.id and r.activeflag = true
+		WHERE enrl.activeflag IS true  
+			AND enrl.currentschoolyear = #{schoolYear, jdbcType=INTEGER} 
+	   	 	<if test="assessmentProgramIds != null">
+	   			AND stap.assessmentprogramid = ANY(ARRAY
+					<foreach close="]" collection="assessmentProgramIds" item="assessmentProgramId" open="[" separator=",">
+						#{assessmentProgramId, jdbcType=BIGINT}
+					</foreach>
+					)
+	   		</if>	
+	   	 
+	   		AND enrl.studentid = #{studentId, jdbcType=BIGINT}
+	</select>
+	  
+	<update id="inactivateOldEnrollmentForNewEnrollmentUpload">
+		UPDATE enrollment 
+		SET modifieduser=#{userId}, modifieddate=now(), activeflag=false, sourcetype=#{sourceType}
+		WHERE id=#{id}
+	</update>
+
+	<select id="getEnrollementsByOrg" resultType="edu.ku.cete.domain.enrollment.Enrollment">
+		select e.*, stu.id, stu.statestudentidentifier from enrollment e, student stu  where stu.id = e.studentid and e.activeflag is true
+		and e.attendanceschoolid=#{sourceSchoolId, jdbcType=BIGINT} and e.currentschoolyear=#{currentSchoolYear, jdbcType=INTEGER}
+	</select>
+	<update id="transferEnrollment" parameterType="edu.ku.cete.domain.enrollment.Enrollment">
+		update enrollment set attendanceschoolid = #{attendanceSchoolId},
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where id = #{id}
+	</update>
+	
+	<update id="disableEnrollment" parameterType="edu.ku.cete.domain.enrollment.Enrollment">
+		update enrollment set activeflag = false,
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where id = #{id}
+	</update>
+	<select id="getCountByOrganizationId" resultType="java.lang.Long">
+		select count(1)  from enrollment e where e.activeflag is true
+		and e.attendanceschoolid=#{organizationId, jdbcType=BIGINT} and e.currentschoolyear=#{schoolYear, jdbcType=INTEGER}
+	</select>
+	
+	<select id="findEnrollmentsForKELPABatchRegistration" resultMap="batchRegisteredEnrollment">	
+	select distinct en.id as enrollmentid, en.attendanceschoolid, en.currentGradeLevel, 
+	en.currentSchoolYear, en.studentid, st.legalfirstname, st.legallastname,en.attendanceschoolid,
+	o.schoolname as attendanceSchoolName, o.schooldisplayidentifier as attendanceSchoolIdentifier, ets.subjectareaid as subjectareaid,
+	((select CASE WHEN count(distinct en2.id is not null) = 0 THEN FALSE ELSE TRUE END from enrollment en2 where en.studentid = en2.studentid AND en.currentschoolyear = en2.currentschoolyear 
+ 		AND en.currentgradelevel = en2.currentgradelevel AND en.attendanceschoolid != en2.attendanceschoolid  and en.id!=en2.id )  ) AS previousenrollmentexists
+	from enrollment en inner join student st on st.id=en.studentid 
+	inner join enrollmenttesttypesubjectarea ets on ets.enrollmentid=en.id 
+	inner join testtypesubjectarea ttsa on ttsa.testtypeid=ets.testtypeid and ttsa.subjectareaid=ets.subjectareaid 
+	inner join contentareatesttypesubjectarea cttsa on cttsa.testtypesubjectareaid=ttsa.id
+	inner join organizationtreedetail o on o.schoolid=en.attendanceschoolid	
+	where en.activeflag is true and ets.activeflag is true 
+	and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate))	    
+	and en.currentschoolyear = #{currentSchoolYear} and o.stateid = #{contractingOrgId}
+	and ets.testtypeid=#{testTypeId}
+		
+	<if test="contentAreaId != null">and cttsa.contentareaid=#{contentAreaId}</if>
+	and ttsa.assessmentid=#{assessmentId}
+	<if test="gradeCourseId != null">and en.currentgradelevel in (select id from gradecourse where abbreviatedname = (select abbreviatedname from gradecourse where id=#{gradeCourseId}))</if>
+	order by en.id asc LIMIT #{pageSize} OFFSET #{offset}
+  </select>
+  
+  <select id="findNoKELPAEnrollmentOrganizations" resultType="java.lang.Long">
+	  with enrollments_schools AS (select distinct en.attendanceschoolid 
+		from enrollment en 
+		inner join student st on st.id=en.studentid 
+		inner join enrollmenttesttypesubjectarea ets on ets.enrollmentid=en.id 
+		inner join testtypesubjectarea ttsa on ttsa.testtypeid=ets.testtypeid and ttsa.subjectareaid=ets.subjectareaid 
+		inner join contentareatesttypesubjectarea cttsa on cttsa.testtypesubjectareaid=ttsa.id
+		inner join organizationtreedetail o on o.schoolid=en.attendanceschoolid
+		where en.activeflag is true and ets.activeflag is true 
+		and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+		and en.currentschoolyear = #{currentSchoolYear} 
+		and o.stateid = #{contractingOrgId}
+		and ets.testtypeid=#{testTypeId} and cttsa.contentareaid=#{contentAreaId} and ttsa.assessmentid=#{assessmentId}
+		<if test="gradeCourseId != null">and en.currentgradelevel in (select id from gradecourse where abbreviatedname = (select abbreviatedname from gradecourse where id=#{gradeCourseId}))</if>
+	     group by en.attendanceschoolid having count(en.id) > 1)
+	   select distinct schoolid as id from organizationtreedetail where schoolid not in (select attendanceschoolid from enrollments_schools) and stateid = #{contractingOrgId}
+		
+  </select>
+   <select id="getBySsidAndUserOrgId" resultType="java.lang.Integer">
+	  SELECT count(*) from enrollment en
+			JOIN student st ON en.studentid = st.id
+			WHERE st.statestudentidentifier = #{stateStudentIdentifier}
+			and en.currentschoolyear = #{currentSchoolYear}
+			and en.activeflag is true
+			<if test="orgType != null and orgType == 'DT'">
+		      	AND (en.aypschoolid in(select schoolid from organizationtreedetail where districtid = #{organizationId} and statedisplayidentifier = 'KS') 
+		      	OR en.attendanceschoolid IN(select schoolid from organizationtreedetail where districtid = #{organizationId} and statedisplayidentifier = 'KS') )
+	        </if>
+	      
+	        <if test="orgType != null and orgType == 'SCH'">
+	      	  	AND (en.aypschoolid = #{organizationId} OR en.attendanceschoolid = #{organizationid})
+	        </if>
+		
+	</select>
+	<select id="getDeactivateCountByOrganizationId" resultType="java.lang.Long">
+		select count(1)  from enrollment e where e.activeflag is false
+		and e.attendanceschoolid=#{organizationId, jdbcType=BIGINT} and e.currentschoolyear=#{schoolYear, jdbcType=INTEGER}
+	</select>
+	
+	<resultMap id="dlmStudentResearchSurveyMap" type="edu.ku.cete.domain.enrollment.DLMStudentSurveyRosterDetailsDto">
+		<result column="statestudentidentifier" property="stateStudentIdentifier" />
+		<result column="studentid" property="studentId"/>
+		<result column="finalelabandid" property="finalElaBandId"/>
+		<result column="finalmathbandid" property="finalMathBandId"/>
+		<result column="finalscibandid" property="finalSciBandId"/>
+		<result column="enrollmentid" property="enrollmentId"/>
+		<result column="attendanceschoolid" property="attendanceSchoolId"/>
+		<result column="currentschoolyear" property="schoolYear"/>		
+		<result column="isStudentRostered" property="studentHaveRosters"/>
+		<result column="scienceflag" property="stateHaveScienceFlagSet"/>		
+		<result column="studentsurveystatus" property="studentSurveyStatus"/>
+		<result column="legalfirstname" property="studentFirstName"/>
+		<result column="legallastname" property="studentLastName"/>
+		<result column="abbreviatedname" property="currentGradeAbbrName"/>
+	</resultMap>
+	
+	<select id ="getDLMStudentsForResearchSurvey" parameterType="map" resultMap="dlmStudentResearchSurveyMap">
+		WITH testsessiondetails AS (SELECT distinct st.enrollmentid 
+       		FROM studentstests st
+       		join testsession ts on st.testsessionid = ts.id
+       		join organizationtreedetail otd on otd.schoolid = ts.attendanceschoolid       
+        	where otd.stateid = #{contractingOrganizationId}
+        	and ts.operationaltestwindowid = #{operationalWindowId}
+        	and ts.schoolyear = #{currentSchoolYear}
+        	and ts.activeflag is true 
+        	and st.activeflag is true
+        	and source = 'RESEARCHSURVEY')
+		SELECT stu.statestudentidentifier, stu.id as studentid, stu.finalelabandid, stu.finalmathbandid, stu.finalscibandid, stu.legalfirstname, stu.legallastname,
+			en.id as enrollmentid, en.attendanceschoolid, en.currentschoolyear,
+			case when count(enr.id) > 0 THEN true ELSE false END as isStudentRostered,
+        	fcs.scienceflag, surstatus.categorycode as studentsurveystatus, gc.abbreviatedname
+       from student stu
+       join enrollment en on en.studentid = stu.id
+       left join enrollmentsrosters enr on enr.enrollmentid = en.id and enr.activeflag is true
+       left join roster r on r.id = enr.rosterid and r.activeflag is true and r.currentschoolyear = #{currentSchoolYear}
+            <if test="contentAreaIds != null">
+			    and r.statesubjectareaid in
+			    	<foreach collection="contentAreaIds" item="contentAreaId" open="(" close=")" separator=",">
+		 	 		   #{contentAreaId}
+		 	 		</foreach>					  
+			</if>                  
+       join studentassessmentprogram sap on sap.studentid = stu.id       
+       left join survey sur on sur.studentid = stu.id and sur.activeflag is true
+       left join category surstatus on surstatus.id = sur.status
+       join organizationtreedetail otd on otd.schoolid = en.attendanceschoolid
+       join firstcontactsurveysettings fcs on fcs.organizationid = otd.stateid and fcs.schoolyear = en.currentschoolyear
+       join gradecourse gc on gc.id = en.currentgradelevel
+       where stu.activeflag is true and en.currentschoolyear =#{currentSchoolYear} 
+       and en.activeflag is true 
+       and (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate))
+       and sap.assessmentprogramid =  #{assessmentProgramId} and sap.activeflag is true
+       and otd.stateid = #{contractingOrganizationId}
+       and not exists(select id from roster where sourcetype ='TASC' and id = r.id)
+       and not exists(select enrollmentid from testsessiondetails where enrollmentid = en.id)
+       group by stu.statestudentidentifier, stu.id , stu.finalelabandid, stu.finalmathbandid, stu.finalscibandid,
+       en.id, en.attendanceschoolid, en.currentschoolyear, surstatus.categorycode, fcs.scienceflag, gc.abbreviatedname
+       LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+	<select id ="getEnrollmentById" parameterType="map" resultType="Enrollment">
+		select * from enrollment where id=#{id}
+	</select>	
+	
+	<select id ="getStudentEnrollmentWithoutAssessmentPrograms" parameterType="map" resultType="Enrollment">
+	 	select e.*
+			from  enrollment e 
+		left join studentassessmentprogram sap on sap.studentid = e.studentid and sap.activeflag is true
+		where sap.id is null and  e.activeflag is true and currentschoolyear = #{schoolYear} 
+		and e.attendanceschoolid in 
+		(select id from organization_children_active_or_inactive(#{organizationId}) where organizationtypeid = 7)
+	</select>
+	
+	<select id="getRosteredEnrollmentsByStudentIdSubjectSchYr" resultType="Enrollment">
+		select distinct en.*, otd.districtid as attendanceSchoolDistrictId from enrollment en
+			join enrollmentsrosters enr on enr.enrollmentid = en.id
+			join roster r on r.id = enr.rosterid
+			join organizationtreedetail otd on en.attendanceschoolid = otd.schoolid
+			where en.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT} 
+			and en.studentid = #{studentId,jdbcType=BIGINT}
+			and r.statesubjectareaid = #{subjectId,jdbcType=BIGINT}	  		
+	</select>
+
+	
+	<select id="getByStateStudentIDSchoolYearAndSchool" resultType="Enrollment">
+		SELECT enrl.id, aypSchoolIdentifier, residenceDistrictIdentifier,
+			localStudentIdentifier, currentGradeLevel, currentSchoolYear, 
+	        attendanceSchool.displayidentifier as attendanceSchoolProgramIdentifier,
+	        attendanceSchool.id as attendanceSchoolId, 
+	       SchoolEntryDate, districtEntryDate, stateEntryDate, exitWithdrawalDate, 
+	       exitWithdrawalType, specialCircumstancesTransferChoice, 
+	       giftedStudent, specialEdProgramEndingDate, 
+	       qualifiedFor504, studentId, restrictionId,
+	       (select abbreviatedname from gradecourse where id=currentGradeLevel) as currentGradeLevelCode,
+	       (select gradelevel from gradecourse where id=currentGradeLevel) as "gradeCourse.gradelevel"
+		  FROM enrollment enrl 
+		  join Student st on enrl.Studentid = st.id
+		  join Organization attendanceSchool on attendanceSchool.id = enrl.attendanceschoolid
+		  WHERE
+		  st.stateStudentIdentifier = #{stateStudentIdentifier} and
+		  enrl.currentschoolyear = #{schoolYear} and
+		  attendanceSchool.displayidentifier = #{attendanceSchoolProgramIdentifier} and
+		  enrl.activeFlag = #{activeFlag}
+	</select>
+	
+	<select id="findEnrollmentsForKAPAdaptiveBatchRegistration" resultMap="batchRegisteredEnrollment">	
+		SELECT DISTINCT en.id  AS enrollmentid, 
+	                en.attendanceschoolid, 
+	                en.currentgradelevel, 
+	                en.currentschoolyear, 
+	                en.studentid, 
+	                st.legalfirstname, 
+	                st.legallastname, 
+	                en.attendanceschoolid, 
+	                o.schoolname                   AS attendanceSchoolName, 
+	                o.schooldisplayidentifier      AS attendanceSchoolIdentifier, 
+	                ets.subjectareaid              AS subjectareaid, 
+	                (SELECT CASE 
+	                           WHEN Count(DISTINCT en2.id IS NOT NULL) = 0 THEN 
+	                           false 
+	                           ELSE true 
+	                         end 
+	                  FROM   enrollment en2 
+	                        INNER JOIN enrollmenttesttypesubjectarea ets1 
+	                                ON ets1.enrollmentid = en2.id 
+	                                   AND ets1.testtypeid = ets.testtypeid 
+	                                   AND ets1.subjectareaid = ets.subjectareaid 
+	                 WHERE  en.studentid = en2.studentid 
+	                        AND en.currentschoolyear = en2.currentschoolyear 
+	                        AND en.currentgradelevel = en2.currentgradelevel 
+	                        AND en.attendanceschoolid != en2.attendanceschoolid 
+	                        AND en.id != en2.id) AS previousenrollmentexists
+	                                                 
+		FROM enrollment en INNER JOIN student st ON st.id = en.studentid 
+		INNER JOIN enrollmenttesttypesubjectarea ets ON ets.enrollmentid = en.id 
+		INNER JOIN testtypesubjectarea ttsa ON ttsa.testtypeid = ets.testtypeid AND ttsa.subjectareaid = ets.subjectareaid 
+		INNER JOIN contentareatesttypesubjectarea cttsa ON cttsa.testtypesubjectareaid = ttsa.id
+		INNER JOIN organizationtreedetail o ON o.schoolid = en.attendanceschoolid
+		INNER JOIN studentassessmentprogram sap on sap.studentid = st.id AND sap.activeflag is true
+		INNER JOIN assessmentprogram ap ON ap.id = sap.assessmentprogramid AND ap.activeflag is true		
+		WHERE en.activeflag is true 
+			AND ets.activeflag is true 
+			AND (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+			AND ap.id = #{assessmentProgramId, jdbcType=BIGINT}		    	
+			AND en.currentschoolyear = #{currentSchoolYear} AND o.stateid = #{contractingOrgId}
+			AND ets.testtypeid=#{testTypeId}		
+			<if test="contentAreaId != null">
+				AND cttsa.contentareaid=#{contentAreaId}
+			</if>
+			AND ttsa.assessmentid=#{assessmentId}
+			<if test="gradeCourseId != null">
+				AND en.currentgradelevel in (select id from gradecourse where abbreviatedname = (select abbreviatedname from gradecourse where id=#{gradeCourseId}))
+			</if>
+			order by en.id asc LIMIT #{pageSize} OFFSET #{offset}
+  </select>
+
+  <select id="findEnrollmentsForKAPAdaptiveStage2Assignment" resultMap="batchRegisteredEnrollment">
+  	SELECT DISTINCT en.id  AS enrollmentid, 
+		en.attendanceschoolid, 
+		en.currentgradelevel, 
+		en.currentschoolyear, 
+		en.studentid, 
+		st.legalfirstname, 
+		st.legallastname, 
+		en.attendanceschoolid, 
+		otd.schoolname                   AS attendanceSchoolName, 
+		otd.schooldisplayidentifier      AS attendanceSchoolIdentifier, 
+		ts.subjectareaid              AS subjectareaid
+	
+		FROM enrollment en 
+		INNER JOIN student st ON st.id = en.studentid
+		INNER JOIN organizationtreedetail otd ON otd.schoolid = en.attendanceschoolid
+		INNER JOIN studentstests sts ON sts.studentid = en.studentid AND sts.enrollmentid = en.id AND sts.activeflag is true
+		INNER JOIN testsession ts ON ts.id = sts.testsessionid AND ts.activeflag is true
+		INNER JOIN testcollection tc ON tc.id = sts.testcollectionid AND ts.gradecourseid = tc.gradecourseid AND ts.stageid = tc.stageid 
+		<!-- INNER JOIN studentassessmentprogram sap ON sap.studentid = st.id AND sap.activeflag is true AND sap.assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT} -->
+	
+		WHERE en.currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT}
+			AND en.activeflag is true
+			AND (en.exitwithdrawaldate is null OR (en.exitwithdrawaldate &lt; en.schoolentrydate))
+			AND otd.stateid = #{contractingOrgId, jdbcType=BIGINT}
+			AND sts.interimtheta is not null 
+			AND sts.status = #{testCompletedStatusId, jdbcType=BIGINT}
+			AND ts.operationaltestwindowid = #{operationalTestWindowId, jdbcType=BIGINT} 
+			AND ts.gradecourseid = #{gradeCourseId, jdbcType=BIGINT}
+			AND tc.contentareaid = #{contentAreaId, jdbcType=BIGINT} 
+			AND tc.stageid = #{priorStageId, jdbcType=BIGINT} 
+			AND en.currentgradelevel IN (SELECT id FROM gradecourse WHERE abbreviatedname = (SELECT abbreviatedname FROM gradecourse WHERE id=#{gradeCourseId, jdbcType=BIGINT}))
+			AND #{jobLastSubmissionDate,jdbcType=TIMESTAMP} &lt; CASE WHEN sts.enddatetime is null THEN sts.modifieddate ELSE sts.enddatetime END
+			order by en.id asc LIMIT #{pageSize} OFFSET #{offset}	
+  </select>
+  
+ <select id ="findStudentBasedOnStateStudentIdentifier" resultMap="findStudentExistMap">
+       select enr.id as enrollmentid, stu.id as studentid, stu.statestudentidentifier, 
+       sap.assessmentprogramid, enr.attendanceschoolid, dis.parentorganizationid,
+       enr.currentschoolyear, enr.activeflag, gc.id as gradeid
+       from student stu
+       join enrollment enr on stu.id = enr.studentid
+  	   join organizationrelation dis on dis.organizationid = enr.attendanceschoolid 
+       join studentassessmentprogram sap on sap.studentid = stu.id and sap.activeflag is true
+       left join gradecourse gc on gc.id = enr.currentgradelevel and gc.activeflag is true 
+       left join organizationtreedetail otd on enr.attendanceschoolid = otd.schoolid 
+  	   where  stu.activeflag is true and stu.stateid = #{organizationId, jdbcType=BIGINT}
+  	   and stu.statestudentidentifier = #{stateStudentIdentifier, jdbcType=VARCHAR} 
+  	   order by enr.currentschoolyear desc, enr.activeflag desc, enr.createddate desc limit 1
+  </select>
+  
+    
+ <select id ="findEnrollmentBySSIDAndOrgId" resultType="int" > 
+	   select count(stu.id) from student stu
+       join enrollment enr on stu.id = enr.studentid
+       join studentassessmentprogram sap on sap.studentid = stu.id and sap.activeflag is true
+  	   where  stu.activeflag is true and stu.stateid =  #{stateId, jdbcType=BIGINT}
+  	   and stu.statestudentidentifier = #{stateStudentIdentifier, jdbcType=VARCHAR} 
+	   and enr.attendanceschoolid in (select id from organization_children(#{organizationId, jdbcType=BIGINT}) where organizationtypeid = (select id from organizationtype where typecode = 'SCH')
+	   Union select  #{organizationId, jdbcType=BIGINT}) 
+	   and enr.currentschoolyear = #{currentSchoolYear, jdbcType=BIGINT}
+	   and sap.assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+	   and enr.activeflag is true
+  </select>
+  
+  <update id="updateOnActivate" parameterType="Enrollment">
+		UPDATE enrollment SET		
+			aypSchoolIdentifier=#{aypSchoolIdentifier},		
+		    residenceDistrictIdentifier=#{residenceDistrictIdentifier},		
+			localStudentIdentifier=#{localStudentIdentifier},		
+			currentGradeLevel=#{currentGradeLevel},		
+			currentSchoolYear=#{currentSchoolYear},		
+			attendanceSchoolId=#{attendanceSchoolId},		
+			schoolEntryDate=#{schoolEntryDate},		
+			districtEntryDate=#{districtEntryDate},		
+			stateEntryDate=#{stateEntryDate},	
+		    exitWithdrawalDate=#{exitWithdrawalDate},	
+			exitWithdrawalType=#{exitWithdrawalType},		
+		    specialCircumstancesTransferChoice=#{specialCircumstancesTransferChoice},		
+			giftedStudent=#{giftedStudent},		
+		    specialEdProgramEndingDate=#{specialEdProgramEndingDate},
+		    qualifiedFor504=#{qualifiedFor504},
+		    <if test="studentId != null">
+			  studentId=#{studentId},
+		    </if>
+		    restrictionId=#{restrictionId},
+		    <if test="aypSchoolId == 0"> 
+		       aypschoolid = null, 
+		    </if>
+		    <if test="aypSchoolId != 0"> 
+		        aypschoolid = #{aypSchoolId}, 
+		    </if>			
+		    modifieddate = now(),
+		    modifieduser = #{modifiedUser},
+		    <if test="sourceType != null">
+			  sourcetype = #{sourceType},
+		    </if>		
+			accountabilitydistrictidentifier = #{accountabilityDistrictIdentifier},		
+		    accountabilitydistrictid=#{accountabilityDistrictId},		
+		    activeflag = #{activeFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getEnrollmentsForISmartBatchAuto" parameterType="map" resultMap="enrollmentWithRosterMap">
+	  	/*NO LOAD BALANCE*/
+		WITH students_to_exclude AS (
+			SELECT DISTINCT st.studentid
+			FROM testsession ts
+			JOIN organizationtreedetail otd ON ts.attendanceschoolid = otd.schoolid
+			JOIN studentstests st ON ts.id = st.testsessionid 
+			JOIN testcollection tc ON ts.testcollectionid = tc.id
+			JOIN enrollment en ON st.studentid = en.studentid
+			JOIN enrollmentsrosters er ON en.id = er.enrollmentid AND er.activeflag
+			JOIN roster r ON er.rosterid = r.id AND r.statesubjectareaid = tc.contentareaid 
+			WHERE st.activeflag is true
+				AND en.activeflag is true 
+				AND ts.activeflag is true
+				AND r.activeflag is true
+				AND ts.source != 'RESEARCHSURVEY'
+				AND ts.operationaltestwindowid = #{operationalTestWindowId,jdbcType=BIGINT}
+				AND ts.schoolyear = #{currentSchoolYear,jdbcType=BIGINT}
+				AND tc.contentareaid = #{contentAreaId,jdbcType=BIGINT}
+				AND ts.gradecourseid in (select distinct id from gradecourse where abbreviatedname = #{gradeAbbrName,jdbcType=VARCHAR} and activeflag is true)			
+				AND otd.stateid = #{contractingOrgId,jdbcType=BIGINT}			
+		)
+	  	SELECT stu.id as studentid, stu.statestudentidentifier as statestudentidentifier, en.id as enrollmentid, r.id as rosterid,
+	  	r.attendanceschoolid as attendanceSchoolId,en.currentgradelevel as currentgradelevel, gc.abbreviatedName, 
+	  	ca.abbreviatedname as stateSubjectAreaAbbreviatedName, 
+	  	(select displayidentifier from organization where id = r.attendanceschoolid) as attendanceSchoolIdentifier, stu.legalfirstname, stu.legallastname,
+	  	stu.finalscibandid as sciencebandid
+		FROM enrollment en
+		JOIN student stu ON en.studentid = stu.id
+		JOIN enrollmentsrosters enr ON enr.enrollmentid = en.id
+		JOIN roster r ON r.id = enr.rosterid
+		JOIN studentassessmentprogram sap ON stu.id = sap.studentid
+		JOIN assessmentprogram ap ON sap.assessmentprogramid = ap.id
+		JOIN organizationtreedetail otd ON otd.schoolid = r.attendanceschoolid
+		JOIN gradecourse gc ON gc.id = en.currentgradelevel
+		JOIN contentarea ca ON ca.id = r.statesubjectareaid
+		JOIN survey sur ON sur.studentid = stu.id 
+		JOIN category surstatus ON surstatus.id = sur.status
+		WHERE stu.activeflag is true 
+			AND en.activeflag is true 
+			AND enr.activeflag is true  
+			AND r.activeflag is true
+			AND sap.activeflag is true
+			AND sur.activeflag is true
+			AND (en.exitwithdrawaldate is null OR (en.exitwithdrawaldate &lt; en.schoolentrydate))
+			AND en.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT}
+			AND gc.abbreviatedName = #{gradeAbbrName,jdbcType=VARCHAR}
+			AND otd.stateid = #{contractingOrgId,jdbcType=BIGINT}
+			AND r.statesubjectareaid = #{contentAreaId,jdbcType=BIGINT}
+			AND ap.id = #{assessmentProgramId,jdbcType=BIGINT}
+			AND stu.id NOT IN (SELECT ste.studentid FROM students_to_exclude ste)
+			AND surstatus.categorycode = 'COMPLETE'
+			ORDER BY enrollmentid ASC LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+    
+  <update id="deactivateByStudentId" parameterType="map">
+    UPDATE enrollment
+    SET activeflag = FALSE,
+    modifieddate = now(),
+    modifieduser = #{userId,jdbcType=BIGINT}
+    WHERE activeflag IS TRUE
+    AND studentid = #{studentId,jdbcType=BIGINT}
+  </update>
+  
+  <resultMap type="edu.ku.cete.domain.enrollment.Enrollment" id="pltwBatchRegEnrollmentMap">
+    	<id column="enrollmentid" property="id" jdbcType="BIGINT" />
+	    <result column="currentgradelevel" property="currentGradeLevel" jdbcType="INTEGER" />
+	    <result column="currentschoolyear" property="currentSchoolYear" jdbcType="INTEGER" />
+	    <result column="studentid" property="studentId" jdbcType="BIGINT" />
+	    <result column="attendanceschoolid" property="attendanceSchoolId" jdbcType="BIGINT" />
+	    <result column="restrictionid" property="restrictionId" jdbcType="BIGINT" />
+	    <result column="previousenrollmentexists" property="previousEnrollmentExists" jdbcType="BOOLEAN" />
+	    <association property="attendanceSchool" javaType="edu.ku.cete.domain.common.Organization">
+	        <id column="attendanceSchoolId" property="id" jdbcType="BIGINT"/>
+	        <result column="attendanceSchoolName" property="organizationName" javaType="String"/>
+	        <result column="attendanceSchoolIdentifier" property="displayIdentifier" javaType="String"/>
+	        <result column="organizationtypeid" property="organizationType.organizationTypeId"/>
+		</association>
+		<association property="student" javaType="edu.ku.cete.domain.student.Student">
+	        <id column="studentid" property="id" jdbcType="BIGINT"/>
+	        <result column="legalfirstname" property="legalFirstName" javaType="String"/>
+	        <result column="legallastname" property="legalLastName" javaType="String"/>
+	        <result column="statestudentidentifier" property="stateStudentIdentifier" javaType="String"/>
+	        <result property="hispanicEthnicity" column="hispanicethnicity" jdbcType="VARCHAR" />
+			<result property="comprehensiveRace" column="comprehensiverace" jdbcType="VARCHAR" />
+		</association>
+		<association property="roster" javaType="edu.ku.cete.domain.enrollment.Roster">
+	        <id column="rosterId" property="id" jdbcType="BIGINT"/>
+	        <result column="coursesectionname" property="courseSectionName" jdbcType="VARCHAR" />
+			<result column="attendanceSchoolId" property="attendanceSchoolId" jdbcType="BIGINT" />
+			<result column="statesubjectareaid" property="stateSubjectAreaId" jdbcType="BIGINT" />
+			<result column="classroomid" property="classroomId" jdbcType="BIGINT" />
+		</association>
+    </resultMap>
+    
+	<!-- PLTW enrollments reader query -->
+	<select id="getEnrollmentsForPLTWBatchRegistration" parameterType="map" resultMap="pltwBatchRegEnrollmentMap">
+		/*NO LOAD BALANCE*/
+		WITH grades AS (
+		SELECT DISTINCT id FROM gradecourse WHERE abbreviatedname IN(
+			SELECT distinct gc.abbreviatedname FROM gradeband gb
+			JOIN gradebandgradecourse gbgc ON gbgc.gradebandid = gb.id
+			JOIN gradecourse gc ON gc.id = gbgc.gradecourseid
+			WHERE gb.id = #{gradeBandId,jdbcType=BIGINT}
+			AND gb.contentareaid = #{contentAreaId,jdbcType=BIGINT}))				
+		SELECT DISTINCT en.id  AS enrollmentid,
+			en.currentgradelevel, 
+			en.attendanceschoolid,
+			en.currentschoolyear, 
+			en.studentid, 
+			st.legalfirstname, 
+			st.legallastname, 
+			otd.schoolname                   AS attendanceSchoolName, 
+			otd.schooldisplayidentifier      AS attendanceSchoolIdentifier, 
+			r.statesubjectareaid, 
+			r.coursesectionname,
+			r.id AS rosterid,
+			r.classroomid,
+			st.comprehensiverace,
+			st.hispanicethnicity,			
+			(SELECT CASE 
+				WHEN Count(DISTINCT en2.id IS NOT NULL) = 0 THEN 
+				false 
+				ELSE true 
+				end 
+				FROM   enrollment en2 
+				JOIN enrollmentsrosters ers1 ON ers1.enrollmentid = en2.id
+				JOIN roster r1 on r1.id = ers1.rosterid 
+				WHERE  en.studentid = en2.studentid 
+				and r1.statesubjectareaid = r.statesubjectareaid
+				AND en.currentschoolyear = en2.currentschoolyear
+				AND en.attendanceschoolid != en2.attendanceschoolid 
+				AND en.id != en2.id) AS previousenrollmentexists
+			FROM enrollment en
+			JOIN student st ON st.id = en.studentid
+			JOIN enrollmentsrosters ers on ers.enrollmentid = en.id
+			JOIN roster r on r.id= ers.rosterid
+			JOIN organizationtreedetail otd ON otd.schoolid = en.attendanceschoolid
+			JOIN studentassessmentprogram sap ON sap.studentid = st.id	
+			WHERE en.activeflag is true AND ers.activeflag is true 
+				AND r.activeflag is true
+				AND (en.exitwithdrawaldate is null or (en.exitwithdrawaldate &lt; en.schoolentrydate)) 
+				AND en.currentgradelevel IN(select id from grades)
+				AND en.currentschoolyear = #{currentSchoolYear,jdbcType=INTEGER} 
+				AND otd.stateid = #{contractingOrgId,jdbcType=BIGINT}
+				AND sap.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+				AND r.statesubjectareaid = #{contentAreaId,jdbcType=BIGINT}
+				<!--
+					added the below comprehensiverace and hispanicethnicity checks because the
+					processing (and message retention in the dashboard messages and batchregistrationreason records)
+					was making the server fall over.
+					
+					Commented the hispanic ethnicity check because of some state in PLTW's org (Vermont, I think?) doesn't track it,
+					so...yeah...
+				-->
+				AND st.comprehensiverace IS NOT NULL
+				<!-- AND st.hispanicethnicity IS NOT NULL-->
+				ORDER BY enrollmentid ASC LIMIT #{pageSize} OFFSET #{offset}
+	</select>
+	
+</mapper> 

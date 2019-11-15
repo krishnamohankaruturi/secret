@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.GrfStateApproveAuditMapper" >
+	<insert id="insert" parameterType="edu.ku.cete.domain.GrfStateApproveAudit">
+		INSERT INTO grfstateapprove(
+            stateid, activeflag, updatedsuserid, updateddate, source, 
+            operation, createddate, createduser, modifieddate, modifieduser, 
+            schoolyear)
+		    VALUES (#{stateId,jdbcType=BIGINT}, #{activeFlag,jdbcType=BOOLEAN}, #{updatedUserId,jdbcType=BIGINT}, now(), #{source,jdbcType=VARCHAR}, 
+		            #{operation,jdbcType=VARCHAR}, now(), #{updatedUserId,jdbcType=BIGINT}, now(), #{updatedUserId,jdbcType=BIGINT}, 
+		            #{schoolYear,jdbcType=BIGINT});		
+	</insert>
+	
+	<select id="getByStateAndReportYear" resultType="edu.ku.cete.domain.GrfStateApproveAudit">
+	    	   select id, 
+	    	       operation, 
+	    	       updatedsuserid as updatedUserId,(select firstname||' '||surname from aartuser 
+	    	       where id = updatedsuserid) as userName, 
+	    	       to_char(createddate AT time zone 'US/Central', 'MM/DD/YYYY hh12:mi:ss AM') as updatedDateStr
+	               from grfstateapprove 
+	               where stateid = #{stateId,jdbcType=BIGINT}
+	               and schoolyear = #{reportYear,jdbcType=BIGINT}
+	             order by id desc limit 1;
+	</select>	
+</mapper>

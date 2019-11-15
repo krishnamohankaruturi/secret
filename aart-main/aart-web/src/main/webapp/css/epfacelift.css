@@ -1,0 +1,432 @@
+th.ui-state-default.ui-th-column-header.ui-th-ltr , .ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+    background-color: #5b5c5e;
+    background-image: none
+}
+
+
+.ui-jqgrid {
+    position: relative;
+    border: 1px solid #000 !important;
+    box-sizing: content-box;
+}
+
+.ui-jqdialog-titlebar .ui-icon-closethick,
+.ui-dialog-titlebar .ui-icon-closethick{
+	margin: -8px -8px;
+
+}
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.ui-button .ui-icon {
+    background-image: url(external/images/ui-icons_ffffff_256x240.png);
+}
+
+span.ui-button-icon.ui-icon.ui-icon-closethick{
+    background-image: url(external/images/ui-icons_ffffff_256x240.png);
+}
+
+#moveSchoolHeader, #mergeSchoolsHeader, #manageHelpContentHeader, #reactivateSchoolHeader, #inactiveAccountMgmtHeader{
+	text-align: center;
+	color: #82a53d;
+	font-size: 1em;
+	text-transform: uppercase;
+	font-weight: 400;
+}
+
+#viewInvalidUserButton{
+	margin-top: 10px;
+}	
+
+.wrap_bcg .panel_btn{
+	
+      background: #0e76bc url(../images/btn-bg.png) no-repeat center center;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+    border: 0;
+    display: inline-block;
+    margin: 0 0 20px 0;
+    padding: 10px 20px;
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 1em;
+    font-weight: 300;
+    line-height: 20px;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+    margin: 10px;
+}
+
+
+
+ .ui-dialog .bcg_select {
+	width: 250px !important;
+	position: relative;
+	vertical-align: middle;
+	white-space: nowrap;
+	height: 35px;
+} 
+
+button.ui-button.ui-corner-all.ui-widget.ui-button-icon-only.ui-dialog-titlebar-close{
+	height: 30px;
+    width: 30px;
+    margin-top: -15px;
+}
+
+table.ui-pg-table.ui-common-table.ui-pager-table{
+	width:100%;
+	table-layout:fixed;
+	height:100%;
+}
+
+.ui-state-default.ui-th-ltr{
+	background: #cdc9c9;
+}
+
+
+
+
+.input-append .input-file {
+margin-top: 10px;
+ height: 35px;
+ line-height: 24px;	
+ width: 225px !important;
+}
+
+._bcg .full_side {
+    margin-right: 4.992%;
+  }
+
+.input-append .add-on {
+	background-color:#FBB117;
+height: 35px;
+width: 35px;
+margin-top: 10px;
+}
+
+.add-on img{
+  width: 31px;
+margin-left: 1px;
+margin-top: -12px;
+}
+
+input, textarea, select, .uneditable-input {
+	height: 28px;
+
+	}
+	
+.wrap_bcg form .form-fields input :not(.input-file) {
+	height: 35px;
+    line-height: 24px;	
+    width: 250px !important;
+}
+
+.ui-dialog form .form-fields input {
+	height: 35px;
+    line-height: 24px;	
+}
+
+ .ui-dialog .bcg_select {
+	width: 250px !important;
+	position: relative;
+	vertical-align: middle;
+	white-space: nowrap;
+	height: 35px;
+} 
+
+.wordWrapText{
+		width:100%;
+	}
+
+/* It will override Mutilselect Dropdown Height  */
+.select2-selection--multiple .select2-search--inline .select2-search__field{
+	height: 20px !important;
+}
+
+.breadcrumb{
+	margin-bottom: 0px;
+	background-color: #ffffff;
+	padding: 0;
+}
+
+.ui-dialog-titlebar-close{
+	background: #0e76bc url(../images/btn-bg.png) no-repeat center center !important;
+}
+
+.ui-jqgrid-htable .clearsearchclass{
+ display :none;
+}
+
+.ui-jqgrid .ui-jqgrid-pager{
+  line-height: 1;
+}
+
+.select2-selection--multiple .select2-search--inline{
+	background-color: white;
+    color: #fff;
+}
+
+.col-choosen-ui-dialog + div .ui-dialog-buttonset{
+	float:unset !important;
+}
+
+.col-choosen-ui-dialog + div .ui-dialog-buttonset .ui-button{
+    padding: 10px 40px;
+    margin: 0 1.4em 0 0;
+}
+
+.col-choosen-ui-dialog .ui-icon-minus, .col-choosen-ui-dialog .ui-icon-plus{
+	position: unset;
+}
+
+.col-choosen-ui-dialog .add-all, .col-choosen-ui-dialog .remove-all{
+    color: #0e76bc;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.col-choosen-ui-dialog .count{
+	color: #0e76bc;
+    font-weight: normal;
+}
+
+ .col-choosen-ui-dialog .selected .actions, .col-choosen-ui-dialog .available .actions{
+	padding : 5px;
+}
+
+form[id^="ViewGrid_"]{
+overflow-y: scroll;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th div{
+	color: #ffffff;
+}
+
+input[id^="gs_"],select[id^="gs_"]{
+	width: 100%;
+}
+
+div[aria-describedby^="deactivate-testsession-confirm"]{
+	z-index:1000 !important;
+}
+label[id^="breadCrumMessage"]{
+	margin: 0px;
+}
+
+/* reports filter area */
+.report-filter-form .form-fields {
+	padding-bottom: 0.05rem;
+	margin: 0 0.35rem;
+}
+.report-filter-form select {
+	width: 210px;
+}
+.report-filter-form select[id*="reportYear"] {
+	width: 125px;
+}
+
+.ui-accordion .ui-state-active {
+	font-weight: bold;
+	color:#454545;
+}
+
+.ui-jqgrid .ui-search-toolbar .select2-selection__rendered{
+ white-space: normal !important;
+    height: 100%;
+}
+
+.tiny-text-side-bar{
+	border: 2px solid #e9e9e9;
+	float: left;
+	width: 100%;
+	min-height: 40px;
+	line-height: 25px;
+	text-align: left;
+}
+
+.tinyTextDiv{
+	font-size:14px;
+}
+
+
+.all-reports-for-student-search-padding {
+	padding-left:10px; 
+	padding-top:10px;
+}
+.all-reports-for-student-title {
+	padding-left:10px; 
+	padding-top:10px;
+	color: #0e76bc;
+}
+.select2-selection--multiple .select2-selection__choice {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;     
+}
+.select2-selection--multiple {
+ max-height: 150px;
+ overflow: auto;
+}
+.select2-selection--multiple .select2-selection__choice__remove{
+ float:right;
+ position: relative;
+ z-index: 1;
+}
+.select2-selection--multiple .select2-search--inline{
+ display: contents;
+}
+
+#instructionalToolsSupportDiv a {
+	color: #007bff;
+}
+.all-reports-for-student-search-padding {
+	padding-left:10px; 
+	padding-top:10px;
+}
+.all-reports-for-student-title {
+	padding-left:10px; 
+	padding-top:10px;
+	color: #0e76bc;
+}
+/* Removing the black solid out line for select-2 container */
+.select2-container--default.select2-container--focus .select2-selection--multiple,
+.select2-container--default.select2-container--focus .select2-selection--single {
+  border: black 1px;
+  outline: 0; }
+ 
+ /* Defining the box shadow border and color. New elements can be added as needed here. */ 
+ input:focus,
+ img[src]:focus,
+ a:focus,
+ button:focus,
+ select:focus,
+ .select2-container--focus,
+ div:focus {
+ box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+  outline: 1px solid rgba(81, 203, 238, 1);
+  /*border-radius: 4px;
+  outline: none;*/
+}
+ input[type="checkbox"]:focus{
+  box-shadow: 0 0 15px rgba(81, 203, 238, 10);
+  outline: 1px solid rgba(81, 203, 238, 1);
+ }
+ input[type="radio"]:focus{
+  box-shadow: 0 0 10px rgba(81, 203, 238, 10);
+  border-radius: 20px;
+  outline: 1px solid rgba(81, 203, 238, 1);
+ }
+ /* Color of highlighted row text JQGRID */ 
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight{
+	color: #333;
+}
+
+
+/* Below CSS for placeholder color changes */
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #444;
+}
+
+.select2-selection--multiple input.select2-search__field::-webkit-input-placeholder{
+	color: #444;
+	opacity: 1;	
+	font-size: 1em;
+}
+.select2-selection--multiple input.select2-search__field:-ms-input-placeholder{
+	color: #444;
+	opacity: 1;	
+	font-size: 1em;
+}
+.select2-selection--multiple input.select2-search__field::placeholder{
+	color: #444;
+	opacity: 1;	
+	font-size: 1em;
+}
+
+/*Grid filter color*/
+
+._bcg .kite-table table tr input {
+    color: #444;
+}
+
+/* Edit Student Editable fields text color make it as dark*/
+#editStudentContent input.text {
+    color: #444;
+}
+
+input[placeholder], [placeholder], *[placeholder] {
+	color: #444;
+	opacity: 1;	
+	font-size: 1em;	
+	
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #444;
+    float: left;
+}
+
+
+#tabs_reactivations .activeBtn{
+	 color: #444 !important;	
+}
+
+#tabs_outside_hours .activeBtn{
+	 color: #444 !important;	
+}
+
+input.hasDatepicker::-webkit-placeholder{
+ color: #444;
+ opacity: 1; 
+ font-size: 1em; 
+}
+
+input.hasDatepicker:-ms-placeholder{
+ color: #444;
+ opacity: 1; 
+ font-size: 1em; 
+}
+
+input.hasDatepicker::placeholder{
+ color: #444;
+ opacity: 1; 
+ font-size: 1em; 
+}
+
+#uploadRosterFilterForm .QuickHelpHint {
+    color: #444 !important;
+}
+.select2-container--default .select2-search--dropdown .select2-search__field{
+	color: #444 !important;
+}
+
+#gbox_testingSummaryTable .ui-th-column .ui-th-ltr .ui-state-default {
+	padding-top: 10px;
+}
+
+.ui-dialog .ui-button:hover{
+ color:white;
+}
+
+.ui-dialog .ui-button:focus{
+ color:white;
+ background-color: #0e76bc;
+}
+
+.ui-button:focus{
+ box-shadow: 0 0 10px #86d8ff;
+}
+
+.panel_btn:focus{
+ box-shadow: 0 0 10px #86d8ff;
+}
+
+

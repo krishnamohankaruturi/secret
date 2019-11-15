@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.help.HelpContentContextDao">
+
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.help.HelpContentContext">
+
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="assessmentprogramid" property="assessmentProgramId"
+			jdbcType="BIGINT" />
+		<result column="stateid" property="stateId" jdbcType="BIGINT" />
+		<result column="rolesid" property="rolesId" jdbcType="BIGINT" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+	</resultMap>
+
+	<insert id="saveHelpContentContext" parameterType="edu.ku.cete.domain.help.HelpContentContext"
+	useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into
+		helpcontentcontext
+		(helpcontentid,assessmentprogramid,stateid,
+		rolesid,activeflag,createduser,modifieduser,createddate,modifieddate)
+		values
+		(#{helpContentId,jdbcType=BIGINT},#{assessmentProgramId,jdbcType=BIGINT},#{stateId,jdbcType=BIGINT},#{rolesId,jdbcType=BIGINT},
+		#{activeFlag,jdbcType=BIT},#{createdUser,jdbcType=BIGINT},#{modifiedUser,jdbcType=BIGINT},#{createdDate,jdbcType=TIMESTAMP},
+		#{modifiedDate,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateHelpContentContext" parameterType="edu.ku.cete.domain.help.HelpContentContext">
+		update helpcontentcontext
+		<set>
+			<if test="helpTopicId != null">
+				helpcontentid = #{helpTopicId,jdbcType=BIGINT},
+			</if>
+			<if test="assessmentProgramId != null">
+				assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT},
+			</if>
+			<if test="stateId != null">
+				stateid = #{stateId,jdbcType=BIGINT},
+			</if>
+			<if test="rolesId != null">
+				rolesid = #{rolesId,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activeFlag != null">
+				activeflag = #{activeFlag,jdbcType=BIT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="deleteHelpContentContext" parameterType="edu.ku.cete.domain.help.HelpContentContext">
+		update helpcontentcontext
+		<set>
+			activeflag = FALSE,
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id};
+	</update>
+
+	<select id="getHelpContentContextById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select hcc.helpcontentid,hcc.assessmentprogramid,hcc.stateid,hcc.rolesid,hcc.activeflag,
+		hcc.createduser,hcc.modifieduser,hcc.createddate,hcc.modifieddate from
+		helpcontentcontext hcc
+		where hcc.activeflag is true and
+		hcc.id={#id}
+	</select>
+	<select id="getByApStateRoleIds" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select hcc.id,hcc.helpcontentid,hcc.assessmentprogramid,hcc.stateid,hcc.rolesid,hcc.activeflag,
+		hcc.createduser,hcc.modifieduser,hcc.createddate,hcc.modifieddate from
+		helpcontentcontext hcc
+		inner join helpcontent hc on hc.id = hcc.helpcontentid
+		where hcc.activeflag is true and hcc.assessmentprogramid =  #{apId}
+		and hcc.stateid =  #{stateId} and hcc.rolesid = #{roleId}
+		and hc.id = #{helpContentId}
+	</select>
+	
+	<select id="getByHelpContentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select hcc.helpcontentid,hcc.assessmentprogramid,hcc.stateid,hcc.rolesid,hcc.activeflag,
+		hcc.createduser,hcc.modifieduser,hcc.createddate,hcc.modifieddate from
+		helpcontentcontext hcc
+		where hcc.activeflag is true and hcc.helpcontentid = #{helpContentId}
+	</select>
+	
+	<update id="deleteHelpContentContextByIds">
+		update helpcontentcontext
+		<set>
+			activeflag = FALSE,
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+				modifieddate = now()
+			</if>
+		</set>
+		where helpcontentid = #{helpContentId} 
+		<if test="helpContextIds != null">
+    	    and id not in
+		    <foreach collection="helpContextIds"
+			    item="helpContextId" open="(" close=")" separator="," >
+			    #{helpContextId}
+		    </foreach>
+	    </if>
+	</update>
+</mapper>

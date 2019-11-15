@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.student.survey.SurveySettingsDao">
+	<resultMap id="FCSettingsResultMap" type="edu.ku.cete.domain.common.FirstContactSettings">
+		<result column="createdDate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="createdUser" property="createdUser" jdbcType="INTEGER" />
+		<result column="activeFlag" property="activeFlag" jdbcType="BIT" />
+		<result column="modifiedDate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="modifiedUser" property="modifiedUser" jdbcType="INTEGER" />
+		<result column="organizationId" property="organizationId" jdbcType="BIGINT" />
+		<result column="organizationname" property="organizationName" jdbcType="VARCHAR" />
+		<result column="categoryid" property="categoryId" jdbcType="BIGINT" />
+		<result column="categoryname" property="categoryName" jdbcType="VARCHAR" />
+		<result column="scienceFlag" property="scienceFlag" jdbcType="BIT" />
+		<result column="elaFlag" property="elaFlag" jdbcType="BIT" />
+		<result column="mathFlag" property="mathFlag" jdbcType="BIT" />
+	</resultMap>
+	<select id="getFirstContactSurveySettings" resultMap="FCSettingsResultMap">
+		select fcss.organizationId as organizationid, org.organizationname as organizationname, fcss.categoryid as categoryid,
+		c.categoryname as categoryname, fcss.createddate as createdDate, fcss.createduser as createdUser,
+		fcss.modifieddate as modifiedDate, fcss.modifieduser as modifiedUser,
+		fcss.activeflag as activeFlag, fcss.scienceflag as scienceFlag, fcss.elaflag as elaFlag, fcss.mathflag as mathFlag
+		from firstcontactsurveysettings fcss
+		join organization org on org.id = fcss.organizationid and fcss.schoolyear=organization_school_year(org.id)
+		join orgassessmentprogram orgs ON orgs.organizationid = org.id and orgs.activeflag is true
+		join category c on c.id = fcss.categoryid
+		where fcss.activeflag is true and org.activeflag is true and c.activeflag is true
+		and orgs.assessmentprogramid = (select id from assessmentprogram where abbreviatedname = 'DLM') 
+		order by org.organizationname
+	</select>
+
+	<update id="updateFirstContactSurveySettings" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		update firstcontactsurveysettings
+	    <set >
+	      <if test="categoryId != null" >
+	        categoryid = #{categoryId,jdbcType=BIGINT},
+	      </if>
+	      <if test="modifiedDate != null" >
+	        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="modifiedUser != null" >
+	        modifieduser = #{modifiedUser,jdbcType=INTEGER},
+	      </if>
+	      <if test="scienceFlag != null" >
+	      scienceflag = #{scienceFlag,jdbcType=BIT},
+	      </if>
+	      <if test="elaFlag != null" >
+	      elaflag = #{elaFlag,jdbcType=BIT},
+	      </if>
+	      <if test="mathFlag != null" >
+	      mathflag = #{mathFlag,jdbcType=BIT},
+	      </if>
+	    </set>
+    	where organizationid = #{organizationId,jdbcType=BIGINT}
+	        and (categoryid != #{categoryId,jdbcType=BIGINT}
+	        or scienceflag != #{scienceFlag,jdbcType=BIT}
+	        or elaflag != #{elaFlag,jdbcType=BIT}
+	        or mathflag != #{mathFlag,jdbcType=BIT})
+	        and activeflag is true
+	</update>
+	<select id="getFirstContactSurveySetting" resultMap="FCSettingsResultMap" parameterType="java.lang.Long">
+		select fcss.organizationId as organizationid, org.organizationname as organizationname, fcss.categoryid as categoryid,
+		c.categoryname, fcss.createddate as createdDate, fcss.createduser as createdUser,
+		fcss.modifieddate as modifiedDate, fcss.modifieduser as modifiedUser,
+		fcss.activeflag as activeFlag, fcss.scienceflag as scienceFlag, fcss.mathflag as mathflag, fcss.elaflag as elaflag
+		from firstcontactsurveysettings fcss
+		join organization org on org.id = fcss.organizationid
+		join category c on c.id = fcss.categoryid
+		where fcss.activeflag is true and org.activeflag is true and c.activeflag is true 
+		and fcss.organizationid  in (select id from organization where id in (
+		select id from organization_parent(#{organizationId,jdbcType=BIGINT}) where contractingorganization is true union
+		select id from organization where id=#{organizationId, jdbcType=BIGINT} and contractingorganization is true))
+		and fcss.schoolyear= organization_school_year(#{organizationId, jdbcType=BIGINT})
+	</select>
+	
+	<update id="updateFCSOnScienceEnrolement" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		update survey  set status=
+		(select c.id from category c
+		inner join categorytype ct on  ct.id=c.categorytypeid
+		where c.categorycode ='IN_PROGRESS' and ct.typecode='SURVEY_STATUS'),
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in
+		(select srv.id from survey srv
+		inner join student st on srv.studentid=st.id
+		inner join organization org on st.stateid=org.id
+		inner join category c  on c.id=srv.status
+		inner join categorytype ct on  ct.id=c.categorytypeid
+		where org.id=#{organizationId, jdbcType=BIGINT} and c.categorycode in('COMPLETE','READY_TO_SUBMIT') 
+		and ct.typecode='SURVEY_STATUS') and activeflag is true;
+		
+		update surveypagestatus set
+		activeflag=true,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+             where  surveyid in(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and globalPageNum=(select distinct globalpagenum from surveylabel sl
+            inner join surveysection ss on ss.id=sl.surveysectionid
+		    where ss.surveysectioncode='SCIENCE') and activeflag is false;
+
+		update survey  set 
+		includescienceflag = true,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in
+		(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and activeflag is true;
+	</update>
+	<update id="updateFCSScienceResponses" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		update surveypagestatus set
+		activeflag=false,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+             where  surveyid in(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and globalPageNum=(select distinct globalpagenum from surveylabel sl
+            inner join surveysection ss on ss.id=sl.surveysectionid
+		    where ss.surveysectioncode='SCIENCE') and activeflag is true and iscompleted is true;
+		
+		update survey set includescienceflag = false,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in (select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and activeflag is true ;
+	</update>
+	
+	<update id="updateFCSOnMathEnrolement" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		update survey  set status=
+		(select c.id from category c
+		inner join categorytype ct on  ct.id=c.categorytypeid
+		where c.categorycode ='IN_PROGRESS' and ct.typecode='SURVEY_STATUS'),
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in
+		(select srv.id from survey srv
+		inner join student st on srv.studentid=st.id
+		inner join organization org on st.stateid=org.id
+		inner join category c  on c.id=srv.status
+		inner join categorytype ct on  ct.id=c.categorytypeid
+		where org.id=#{organizationId, jdbcType=BIGINT} and c.categorycode in('COMPLETE','READY_TO_SUBMIT') 
+		and ct.typecode='SURVEY_STATUS') and activeflag is true;
+
+		update surveypagestatus set
+		activeflag=true,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+             where  surveyid in(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and globalPageNum=(select distinct globalpagenum from surveylabel sl
+            inner join surveysection ss on ss.id=sl.surveysectionid and sl.activeflag is true and ss.activeflag is true
+		    where ss.surveysectioncode='MATH') and activeflag is false;
+
+		update survey  set 
+		includemathflag = true,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in
+		(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and activeflag is true;
+	</update>
+	<update id="updateFCSMathResponses" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		update surveypagestatus set
+		activeflag=false,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+             where  surveyid in(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and globalPageNum=(select distinct globalpagenum from surveylabel sl
+            inner join surveysection ss on ss.id=sl.surveysectionid and sl.activeflag is true and ss.activeflag is true
+		    where ss.surveysectioncode='MATH') and activeflag is true and iscompleted is true;
+
+		update survey set includemathflag = false,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in (select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and activeflag is true ;
+	</update>
+	<update id="updateFCSOnElaEnrolement" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		update survey  set status=
+		(select c.id from category c
+		inner join categorytype ct on  ct.id=c.categorytypeid
+		where c.categorycode ='IN_PROGRESS' and ct.typecode='SURVEY_STATUS'),
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in
+		(select srv.id from survey srv
+		inner join student st on srv.studentid=st.id
+		inner join organization org on st.stateid=org.id
+		inner join category c  on c.id=srv.status
+		inner join categorytype ct on  ct.id=c.categorytypeid
+		where org.id=#{organizationId, jdbcType=BIGINT} and c.categorycode in('COMPLETE','READY_TO_SUBMIT') 
+		and ct.typecode='SURVEY_STATUS') and activeflag is true;
+
+		update surveypagestatus set
+		activeflag=true,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+             where  surveyid in(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and globalPageNum in (select distinct globalpagenum from surveylabel sl
+            inner join surveysection ss on ss.id=sl.surveysectionid and sl.activeflag is true and ss.activeflag is true
+		    where ss.surveysectioncode in ('READING','WRITING')) and activeflag is false;
+
+		update survey  set 
+		includeelaflag = true,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in
+		(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and activeflag is true;
+	</update>
+	<update id="updateFCSElaResponses" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		update surveypagestatus set <!-- iscompleted=false, -->
+		activeflag=false,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+             where  surveyid in(select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and globalPageNum in (select distinct globalpagenum from surveylabel sl
+            inner join surveysection ss on ss.id=sl.surveysectionid and sl.activeflag is true and ss.activeflag is true
+		    where ss.surveysectioncode in ('READING', 'WRITING')) and activeflag is true and iscompleted is true;
+
+		update survey set includeelaflag = false,
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+		where id in (select srv.id from survey srv
+			inner join student st on srv.studentid=st.id
+			inner join organization org on st.stateid=org.id
+			where org.id=#{organizationId, jdbcType=BIGINT}) and activeflag is true ;
+	</update>
+	<update id="auditSurveyToggleSetting" parameterType="edu.ku.cete.domain.student.survey.Survey">
+		update survey set allquestionsflag = #{allQuestionsFlag,jdbcType=BIT},
+	 	modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	modifieduser = #{modifiedUser,jdbcType=INTEGER}
+     	where id = #{id}
+	</update>
+	
+	<update id="resetFCSStatusOnOrgScienceContentFlag">
+		update survey  set status=#{newSurveyStatus},
+		modifieduser=#{modifiedUser},
+  		modifieddate=#{modifiedDate}
+		where id in
+		(select srv.id from survey srv
+		inner join student st on srv.studentid=st.id
+		inner join organization org on st.stateid=org.id
+		where org.id=#{organizationId, jdbcType=BIGINT} and srv.status=#{existingSurveyStatus})
+	</update>
+	
+	<select id="getCurrentSchYrFCScienceSettingByOrgId" resultMap="FCSettingsResultMap" >
+		SELECT organizationid, activeflag, categoryId, scienceflag 
+			FROM firstcontactsurveysettings
+			WHERE organizationid=#{organizationId, jdbcType=BIGINT}
+			AND schoolyear=#{schoolYear, jdbcType=BIGINT}
+			 <if test="currentSchoolYear != null" >
+			 	AND activeflag is true
+			 </if>
+			  <if test="prevSchoolYear != null" >
+			 	AND activeflag is false
+			 </if>
+			 order by createddate desc LIMIT 1
+	</select>	
+	
+	<update id="inactivateOtherSchoolYearRecords">
+		UPDATE firstcontactsurveysettings SET activeflag=false,
+			modifieduser=#{modifiedUser},
+  			modifieddate=now()
+			WHERE schoolyear != #{schoolYear, jdbcType=BIGINT} 
+			<if test="organizationId != null">
+				AND organizationid=#{organizationId, jdbcType=BIGINT} 
+			</if>
+			AND activeflag is true
+	</update>
+	
+	<insert id="insertFirstContactSettings" parameterType="edu.ku.cete.domain.common.FirstContactSettings">
+		INSERT INTO firstcontactsurveysettings(categoryid, organizationid, createddate, createduser, activeflag, 
+            	modifieddate, modifieduser, mathflag, elaflag, scienceflag, schoolyear)
+            VALUES (#{categoryId}, #{organizationId}, #{createdDate}, #{createdUser}, #{activeFlag},
+            	#{modifiedDate}, #{modifiedUser}, #{mathFlag}, #{elaFlag}, #{scienceFlag}, #{schoolYear} )
+	</insert>
+	
+	<select id="checkIfOrgSettingsExists" resultMap="FCSettingsResultMap" >
+		SELECT organizationid, activeflag, categoryId, scienceflag , elaflag, mathflag
+			FROM firstcontactsurveysettings
+			WHERE organizationid=#{organizationId, jdbcType=BIGINT}
+			AND schoolyear=#{schoolYear, jdbcType=BIGINT}					
+			AND activeflag is true LIMIT 1
+	</select>
+	
+</mapper>

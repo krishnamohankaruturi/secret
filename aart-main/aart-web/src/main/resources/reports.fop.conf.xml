@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE fop>
+<fop>
+	<renderers>
+		<renderer mime="application/pdf">
+			<fonts>
+				<font kerning="yes" embed-url="fonts/verdana.ttf">
+					<font-triplet name="Verdana" style="normal" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/verdanab.ttf">
+					<font-triplet name="Verdana" style="normal" weight="bold" />
+				</font>
+				<font kerning="yes" embed-url="fonts/verdanai.ttf">
+					<font-triplet name="Verdana" style="italic" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/verdanaz.ttf">
+					<font-triplet name="Verdana" style="italic" weight="bold" />
+				</font>
+		
+				<font kerning="yes" embed-url="fonts/arial.ttf">
+					<font-triplet name="Arial" style="normal" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/arial-bold.ttf">
+					<font-triplet name="Arial" style="normal" weight="bold" />
+				</font>
+				<font kerning="yes" embed-url="fonts/arial-italic.ttf">
+					<font-triplet name="Arial" style="italic" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/arial-bold-italic.ttf">
+					<font-triplet name="Arial" style="italic" weight="bold" />
+				</font>
+				
+				<font kerning="yes" embed-url="fonts/calibri.ttf">
+					<font-triplet name="Calibri" style="normal" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/Calibri-Bold.ttf">
+					<font-triplet name="Calibri" style="normal" weight="bold" />
+				</font>
+				<font kerning="yes" embed-url="fonts/Calibri-Italic.ttf">
+					<font-triplet name="Calibri" style="italic" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/Calibri-Bold-Italic.ttf">
+					<font-triplet name="Calibri" style="italic" weight="bold" />
+				</font>				
+				
+				<font kerning="yes" embed-url="fonts/Times-New-Roman-Normal.ttf">
+					<font-triplet name="Times New Roman" style="normal" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/Times-Bold.ttf">
+					<font-triplet name="Times New Roman" style="normal" weight="bold" />
+				</font>
+				<font kerning="yes" embed-url="fonts/Times-Italic.ttf">
+					<font-triplet name="Times New Roman" style="italic" weight="normal" />
+				</font>
+				<font kerning="yes" embed-url="fonts/Times-Bold-Italic.ttf">
+					<font-triplet name="Times New Roman" style="italic" weight="bold" />
+				</font>
+			</fonts>
+			<images native="true"/>
+		</renderer>
+	</renderers>
+	 <complex-scripts disabled="true"/> 
+</fop>

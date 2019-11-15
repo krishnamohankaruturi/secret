@@ -1,0 +1,179 @@
+.wrap_bcg #studentActions form .form-fields input .input-file{
+    width: 225px !important;
+}
+
+.wrap_bcg #studentActions form .form-fields input {
+ height: 35px;
+    line-height: 24px; 
+    width: 250px;
+}
+
+#activeStudentDiv .ui-dialog form .form-fields input, #editStudentDiv .ui-dialog form .form-fields input :not(.input-file) {
+	height: 35px;
+    line-height: 24px;	
+    width: 250px !important;
+}
+
+
+#accessProfileDiv ._bcg .panel_full .tabs li a{
+    border-top-left-radius: .25rem !important;
+    border-top-right-radius: .25rem !important;   
+    color: dimgray;
+    background: white !important;   
+    border-color: LightGray LightGray DimGray;
+    border-radius: 0px;
+    margin: 0px 1px;
+    padding: 0.7rem 1rem !important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+}
+
+#accessProfileDiv ._bcg .panel_full .tabs li {
+	    border-radius:0px !important;
+	    border-top-left-radius: .25rem !important;
+        border-top-right-radius: .25rem !important;
+        margin-left:0px !important;
+}
+
+#accessProfileDiv ._bcg #accessProfileTabs .tabs{
+	margin : 2.2rem 0 1.3rem 0;
+    padding: 0 .6rem 0 .8rem;
+    display: flex;
+    border-bottom: 1px solid DimGray;
+}
+
+#accessProfileDiv ._bcg .panel_full .tabs .ui-state-active a{
+    background: white !important;
+    color: #0e76bc !important;
+    border-bottom:0px; 
+    border-color: DimGray DimGray White !important;
+ }
+
+#accessProfileDiv ._bcg .panel_full .tabs li a.active:hover {
+	background-color: white !important;
+	border-color: DarkGray DarkGray DimGray !important;
+}
+
+#accessProfileDiv ._bcg .panel_full .tabs .ui-state-hover:not(.ui-state-active) a{
+	background-color: WhiteSmoke !important;
+	border-color: DarkGray DarkGray DimGray !important;
+}
+
+/* FCS Setting UI changes  */
+
+#firstContactResponseTabs .tabs li a{
+	border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;   
+    color: dimgray;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px; 
+    background: white !important;
+}
+
+#firstContactResponseTabs .tabs li {
+	border: 1px solid #c5c5c5;
+	border-radius: .25rem !important;
+	border-bottom: 1px solid #FFF;
+}
+
+#firstContactResponseTabs .tabs{
+	margin : 1.2rem 0 1.3rem 0;
+    padding: 0 .5rem 0 .5rem;
+    display: flex;
+    border-bottom: 1px solid DimGray;
+}
+
+#firstContactResponseTabs .tabs .ui-state-active a{
+    background: white !important;
+    color: #0e76bc !important;
+    border-bottom:0px; 
+    border-color: DimGray DimGray White !important;
+ }
+ 
+#firstContactResponseTabs .tabs .ui-state-hover:not(.ui-state-active) a{
+	background-color: WhiteSmoke !important;
+	border-color: DarkGray DarkGray DimGray !important;
+}
+
+/* Roles Tab Facelift UI changes  */
+
+#rolesPermissionTabs fieldset{
+	 display: block;
+    -webkit-margin-start: 2px;
+    -webkit-margin-end: 2px;
+    -webkit-padding-before: 0.35em;
+    -webkit-padding-start: 0.75em;
+    -webkit-padding-end: 0.75em;
+    -webkit-padding-after: 0.625em;
+    min-width: -webkit-min-content;
+    border-width: 2px;
+    border-style: groove;
+    border-color: threedface;
+    border-image: initial;
+}
+
+#rolesPermissionTabs legend{
+	display: block;
+	width: auto!important;
+    -webkit-padding-start: 2px;
+    -webkit-padding-end: 2px;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+}
+
+#rolesPermissionTabs .divNestedBlock{
+	color: #646567;
+    font-weight: 300;
+    margin-left: 5px;
+    padding: 5px;
+}
+
+#saveRolesBtnTop{
+	margin-top : 10px
+}
+
+#rolesPermissionTabs{
+   padding-bottom: 2.3em !important;
+}
+   
+ #rolesPermissionTabs .divBlockFont{
+    color: #0e76bc;
+    font-weight: bold;
+}  
+
+ #rolesPermissionTabs input[type="checkbox"] {
+    margin: 3px 3px 3px 4px;
+}  
+
+#rolesPermissionTabs #rolesPermissionTabsContent .nav-item{
+	background: white !important;
+    color: #0e76bc !important;
+    border-bottom:0px; 
+    border-color: DimGray DimGray White !important;
+  }
+  
+  #rolesPermissionTabs ul{
+  	padding: 0rem .5rem 0 .5rem;
+  }
+  
+ #rolesPermissionTabs .ui-state-active,
+ #rolesPermissionTabs .ui-widget-content .ui-state-active,  
+ #rolesPermissionTabs .ui-widget-header .ui-state-active,
+ #rolesPermissionTabs a.ui-button:active, 
+ #rolesPermissionTabs .ui-button:active,
+ #rolesPermissionTabs .ui-state-focus,
+ #rolesPermissionTabs .ui-button.ui-state-active:hover{
+ 	border:none;
+ }
+  
+  #set-academic-year div .error{
+	color:red;
+  }
+  
+  /* Quality Control Tab buttons Facelift UI changes  */ 
+ #markQcCompleteButton{   
+	    margin: 25px 0 0 0 !important;
+} 

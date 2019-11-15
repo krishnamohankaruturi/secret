@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.ActivationEmailTemplateStateDao" >
+	
+    <resultMap type="edu.ku.cete.domain.common.ActivationEmailTemplateState" id="resultMap">      
+        <result column="templateid" property="templateId" jdbcType="BIGINT" />        
+        <result column="stateid" property="stateId" jdbcType="BIGINT" />
+        <result column="activeflag" property="activeFlag" jdbcType="BIT" />          
+    </resultMap>
+
+	<resultMap type="edu.ku.cete.domain.common.ActivationEmailTemplateState" id="customResultMap">
+	    <id column="templateid" property="templateId" jdbcType="BIGINT"/>	        
+        <id column="stateids" property="stateIds" jdbcType="VARCHAR"/>
+         <association property="activationEmailTemplate" javaType="edu.ku.cete.domain.common.ActivationEmailTemplate">	
+	    	<id column="templatename" property="templateName" jdbcType="VARCHAR"/>
+	    	<id column="statenames" property="states" jdbcType="VARCHAR"/> 
+	    </association> 
+    </resultMap>
+    
+    
+    <sql id="Base_Column_List">
+    	templateid,stateid 
+    </sql>
+    
+	<insert id="add" useGeneratedKeys="true" parameterType="ActivationEmailTemplateState" keyColumn="id" keyProperty="id" flushCache="true">
+		insert into activationemailtemplatestate(templateid, stateid,createdDate,createdUser,modifiedDate,modifiedUser)
+		values(#{templateId,jdbcType=VARCHAR},#{stateId,jdbcType=BIGINT},#{createdDate,jdbcType=INTEGER},#{createdUser,jdbcType=INTEGER},
+		#{modifiedDate,jdbcType=TIMESTAMP},#{modifiedUser,jdbcType=TIMESTAMP})
+	</insert>
+	
+	<update id="update" parameterType="ActivationEmailTemplateState" flushCache="true">
+		UPDATE activationemailtemplatestate 
+	<set>      
+      <if test="modifiedDate != null">
+        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedUser != null">
+        modifieduser = #{modifiedUser,jdbcType=BIGINT},
+      </if>
+      <if test="activeFlag != null">
+        activeflag = #{activeFlag,jdbcType=BIT},
+      </if>
+    </set>    
+		WHERE templateid = #{templateId} and stateid = #{stateId}
+	</update>
+	
+	<update id="updateActiveFlagByStateIds" parameterType="map">
+		update activationemailtemplatestate 
+		 <if test="stateIds != null" > 
+		    <set>
+		     activeflag = false ,
+		     <if test="modifiedDate != null">
+       			 modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     		 </if>
+      		<if test="modifiedUser != null">
+       			 modifieduser = #{modifiedUser,jdbcType=BIGINT},
+     		 </if>
+     		 </set>
+		    where templateid = #{templateId} 
+			and stateid = ANY(ARRAY
+	        <foreach collection="stateIds" item="stateid" open="[" close="]" separator="," >
+	        	#{stateid}
+	        </foreach>)
+        </if>
+		
+		
+	</update>
+	
+	<select id="updateAndReturnByTemplateId" resultType="ActivationEmailTemplateState" parameterType="map" flushCache="true">
+		UPDATE activationemailtemplatestate  
+		<set> 
+		activeflag = false,
+		<if test="modifiedDate != null">
+       			 modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+     	</if>
+      	<if test="modifiedUser != null">
+       			 modifieduser = #{modifiedUser,jdbcType=BIGINT},
+     	</if>
+     	</set>
+		 WHERE templateid = #{templateId,jdbcType=BIGINT} RETURNING stateid 	
+	</select>
+	
+	<select id="getStatesByAssessmentProgramId" resultMap="customResultMap" parameterType="map" >	
+		select et.id as templateid,
+		array_to_string(array_agg(DISTINCT  ets.stateid ), ',')  as stateids,
+		et.templatename as templatename,
+		array_to_string(array_agg(DISTINCT  org.organizationname ), ', ')  as statenames 
+		from activationemailtemplatestate ets left join activationemailtemplate et on et.id = ets.templateid 
+		left join organization org on ets.stateid = org.id where et.isdefault = false and ets.activeflag = true 
+		and et.assessmentprogramid = #{assessmentProgramId} 
+		<if test="templateId != null" >
+			and ets.templateid not in (#{templateId})	
+		</if> 
+		<if test="states != null" >
+		AND	ets.stateid = ANY(ARRAY
+	        <foreach collection="states" item="stateid" open="[" close="]" separator="," >
+	        	#{stateid}
+	        </foreach>
+	        )
+        </if>
+		group by et.id 		    
+    </select>
+
+	<select id="getActiveStatesByTemplateId" resultType="ActivationEmailTemplateState" parameterType="Long" >
+    	SELECT
+        	<include refid="Base_Column_List"/>
+        FROM activationemailtemplatestate where activeflag = true and templateid = #{templateId}    
+    </select>
+    
+    <select id="getAllStateIdsByTemplateId" resultType="Long" parameterType="Long" >
+    	SELECT stateid FROM activationemailtemplatestate where templateid = #{templateId}   
+    </select>
+    
+    <select id="getByStateId" resultType="ActivationEmailTemplateState" parameterType="Long" >
+    	SELECT <include refid="Base_Column_List"/>
+    	FROM activationemailtemplatestate where stateid = #{stateId} and templateid = #{templateId} 
+    </select>
+    
+</mapper>

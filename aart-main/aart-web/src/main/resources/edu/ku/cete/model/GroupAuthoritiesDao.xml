@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.GroupAuthoritiesDao">
+    <sql id="selectFull">
+        SELECT ga.id, ga.groupid as groupId, ga.authorityid as authorityId, 
+        gr.organizationtypeid as "group.organizationTypeId", gr.id as "group.groupId", 
+        gr.organizationId as "group.organizationId", gr.groupname as "group.groupName", 
+        gr.defaultrole as "group.defaultRole", a.id as "authority.authoritiesId", 
+        a.authority as "authority.authority", a.displayname as "authority.displayName",
+        a.tabname as "authority.tabName", a.groupingname as "authority.groupingName",
+        a.labelname as "authority.labelName",a.level as "authority.level", 
+        a.sortOrder as "authority.sortOrder"
+    </sql>
+    <insert id="addGroupAuthorities" parameterType="GroupAuthorities" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO groupauthorities (groupid, authorityid, createddate, createduser, activeflag, modifieddate, modifieduser)
+        VALUES (#{groupId}, #{authorityId}, #{createdDate}, #{createdUser}, #{activeFlag},#{modifiedDate},#{modifiedUser})
+    </insert>
+    
+    <insert id="addByCombinedStateAssessmentProgram" parameterType="GroupAuthorities" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO groupauthorities (groupid, authorityid, createddate, createduser, activeflag, modifieddate, modifieduser,
+        	organizationid, assessmentprogramid)
+        VALUES (#{groupId}, #{authorityId}, #{createdDate}, #{createdUser}, #{activeFlag},#{modifiedDate},#{modifiedUser},
+        #{organizationId},#{assessmentProgramId})
+    </insert>
+    
+    <update id="updateGroupAuthorities" parameterType="GroupAuthorities">
+        UPDATE groupauthorities
+        SET groupid = #{groupId}, authorityid = #{authorityId},
+        modifieddate = #{modifiedDate},
+	    modifieduser = #{modifiedUser},
+		activeflag = #{activeFlag}
+        WHERE id = #{groupAuthoritiesId}
+    </update>
+
+    <update id="deleteGroupAuthorities" parameterType="long">
+        <!-- DELETE FROM groupauthorities WHERE id = #{groupAuthoritiesId} -->
+        UPDATE groupauthorities set activeflag = false where id = #{groupAuthoritiesId} and activeflag = true;
+    </update>
+    
+    <update id="updateDeletedGroupAuthorities" parameterType="GroupAuthorities">
+        UPDATE groupauthorities set modifieddate = #{groupAuthorities.modifiedDate},
+	    modifieduser = #{groupAuthorities.modifiedUser}, activeflag = true where id = #{groupAuthorities.id}
+    </update>
+    
+    <select id="getGroupAuthorities" resultType="GroupAuthorities" parameterType="long">
+        SELECT ga.id, ga.authorityid, ga.groupid
+        FROM groupauthorities ga
+        INNER JOIN authorities a on a.id = ga.authorityid and a.activeflag is true and ga.activeflag is true
+        WHERE ga.id = #{groupAuthoritiesId}
+    </select>
+    
+    <select id="getByAuthorityId" resultType="GroupAuthorities" parameterType="long">
+        SELECT ga.id, ga.authorityid, ga.groupid
+        FROM groupauthorities ga
+        INNER JOIN authorities a on a.id = ga.authorityid and a.activeflag is true and ga.activeflag is true
+        WHERE ga.authorityid = #{authorityId}
+    </select>
+    
+    <select id="getByGroups" resultType="GroupAuthorities" parameterType="long">
+        SELECT ga.id, ga.authorityid, ga.groupid
+        FROM groupauthorities ga
+        INNER JOIN authorities a on a.id = ga.authorityid and a.activeflag is true and ga.activeflag is true
+        <if test="groupsList != null" >
+        WHERE ga.groupid in 
+	        <foreach collection="groupsList" item="groups" open="(" close=")" separator="," >
+	        	#{groups.groupId}
+	        </foreach>
+        </if>            
+    </select>
+    
+    <select id="getByGroupIdAndDefaultRole" resultType="GroupAuthorities" parameterType="map">
+        <include refid="selectFull"/>
+        FROM groupauthorities as ga, groups as gr, authorities as a
+        WHERE ga.groupid = gr.id AND ga.authorityid = a.id AND ga.groupid = #{groupId} 
+        AND gr.defaultrole = #{defaultRole} 
+        AND ga.activeflag is true and a.activeflag is true and gr.activeflag is true
+        order by a.sortorder;
+    </select>
+    
+    <select id="getByCombinedStateAssessmentProgram" resultType="GroupAuthorities" parameterType="long">
+        SELECT ga.id, ga.authorityid, ga.groupid, ga.organizationId, ga.assessmentProgramId
+       	from groupauthorities ga 
+		INNER JOIN groups g on ga.groupid = g.id and g.activeflag is true and ga.activeflag is true
+		INNER JOIN organizationtype as orgtype on orgtype.id = g.organizationtypeid and orgtype.activeflag is true
+		INNER JOIN authorities a on a.id = ga.authorityid and a.activeflag is true
+		where ga.assessmentprogramid=#{assessmentProgramId} and ga.groupid = #{groupId} and ga.organizationid = #{organizationId} 
+		order by a.sortorder
+    </select>
+
+    <select id="getInactiveByCombinedStateAssessmentProgram" resultType="GroupAuthorities" parameterType="long">
+         SELECT ga.id, ga.authorityid, ga.groupid, ga.organizationId, ga.assessmentProgramId
+       	from groupauthorities ga 
+		INNER JOIN groups g on ga.groupid = g.id and g.activeflag is true and ga.activeflag is false
+		INNER JOIN organizationtype as orgtype on orgtype.id = g.organizationtypeid and orgtype.activeflag is true
+		INNER JOIN authorities a on a.id = ga.authorityid and a.activeflag is true
+		where ga.assessmentprogramid=#{assessmentProgramId} and ga.groupid = #{groupId} and ga.organizationid = #{organizationId}
+		order by a.sortorder
+    </select>
+ 	<select id="getAuthorityForCsap" resultType="edu.ku.cete.domain.Authorities">
+		select distinct a.id as authoritiesId, a.authority, a.displayname, 
+		a.tabname, a.groupingname,a.labelname, a.level, a.sortorder 
+		from authorities a 
+		INNER JOIN groupauthorities ga on ga.authorityid = a.id and a.activeflag is true and ga.activeflag is true 
+		where ga.groupid = #{groupId}  and ga.assessmentprogramid = #{assessmentProgramId}
+		and ga.organizationid = #{stateId}
+		and a.authority = #{authority}
+		order by a.sortorder
+    </select>
+    
+	<select id="getJsonFormatData" resultType="GroupAuthorities" parameterType="long">
+		SELECT ga.id, ga.authorityid, ga.groupid, ga.organizationId, ga.assessmentProgramId,
+		org.organizationname as orgName, ap.abbreviatedname as assessmentProgram,  
+		g.groupname as groupName, au.displayname as authorityName, ga.activeflag 
+		from groupauthorities ga 
+		INNER JOIN groups g on ga.groupid = g.id and g.activeflag is true and ga.activeflag is true
+		INNER JOIN authorities au on au.id = ga.authorityid and au.activeflag is true
+		INNER JOIN organization as org on org.id = ga.organizationid and org.activeflag is true
+		INNER JOIN assessmentprogram ap on ap.id = ga.assessmentprogramid and ap.activeflag is true
+		where ga.assessmentprogramid=#{assessmentProgramId} and ga.groupid = #{groupId} 
+		and ga.organizationid = #{organizationId} 
+		order by ga.id
+	</select>
+	
+	<select id="getPermissionsAndRolesExtractData" resultType="edu.ku.cete.web.PermissionsAndRolesDTO" parameterType="java.lang.Long">
+		select t1.* from ( select distinct ap.abbreviatedname as assessmentprogram, o.organizationname as state,a.tabname as tab,a.groupingname as grouping,
+		a.labelname as label,a.displayname as permission,
+		array_to_string(array_agg(g.groupname), ',') as roles, o.id as stateId, ap.id as assessmentProgramId , a.id as permissionId
+		from assessmentprogram ap
+		inner join groupauthorities ga on ga.assessmentprogramid=ap.id and ap.activeflag is true and ga.activeflag is true
+		inner join orgassessmentprogram oap on oap.organizationid=ga.organizationid and oap.assessmentprogramid=ga.assessmentprogramid and oap.activeflag is true
+		inner join authorities a on a.id=ga.authorityid and a.activeflag is true
+		inner join organization o on o.id=ga.organizationid and o.activeflag is true
+		inner join groups g on ga.groupid=g.id and g.activeflag is true
+		<if test="stateIds != null" >
+			where  o.id in
+			<foreach collection="stateIds" item="stateId" open="(" close=")" separator="," >
+				#{stateId}
+			</foreach>
+		</if> 
+		<if test="assessmentProgramIds != null" >
+			and ap.id in
+			<foreach collection="assessmentProgramIds" item="assessmentProgramId" open="(" close=")" separator="," >
+				#{assessmentProgramId}
+			</foreach>
+		</if>
+		group by ap.abbreviatedname, o.organizationname, a.tabname, a.groupingname, a.labelname, a.displayname, o.id, ap.id , a.id 
+	union 
+			
+	select distinct '' as assessmentprogram, '' as state,
+		a.tabname as tab,a.groupingname as grouping,
+		a.labelname as label,a.displayname as permission,
+		'' as roles, null::bigint as stateId,
+		null::bigint as assessmentProgramId, a.id as permissionId
+		from authorities a where a.id not in 
+		(select distinct 
+		 a.id 
+		from assessmentprogram ap
+		left join groupauthorities ga on ga.assessmentprogramid=ap.id and ap.activeflag is true and ga.activeflag is true
+		inner join orgassessmentprogram oap on oap.organizationid=ga.organizationid and oap.assessmentprogramid=ga.assessmentprogramid and oap.activeflag is true
+		inner join authorities a on a.id=ga.authorityid and a.activeflag is true
+		inner join organization o on o.id=ga.organizationid and o.activeflag is true
+		inner join groups g on ga.groupid=g.id and g.activeflag is true
+		<if test="stateIds != null" >
+			where  o.id in
+			<foreach collection="stateIds" item="stateId" open="(" close=")" separator="," >
+				#{stateId}
+			</foreach>
+		</if> 
+		<if test="assessmentProgramIds != null" >
+			and ap.id in
+			<foreach collection="assessmentProgramIds" item="assessmentProgramId" open="(" close=")" separator="," >
+				#{assessmentProgramId}
+			</foreach>
+		</if>
+		
+		)
+	and a.activeflag is true
+	and a.sortorder >0
+	) as t1
+	order by t1.assessmentprogram, t1.state, t1.tab, t1.grouping, t1.label, t1.permission
+	
+	</select>
+	
+	<select id="getAuthorityForAlternateAggregateReport" resultType="java.lang.String">
+		select distinct a.authority
+		from authorities a 
+		INNER JOIN groupauthorities ga on ga.authorityid = a.id and a.activeflag is true and ga.activeflag is true 
+		where ga.assessmentprogramid = #{assessmentProgramId}
+		and ga.organizationid = #{stateId}
+		<if test="authorities != null" >
+			and a.authority in
+			<foreach collection="authorities" item="authority" open="(" close=")" separator="," >
+				#{authority}
+			</foreach>
+		</if> 		
+		order by a.authority
+    </select>
+    <update id="updatePermission" parameterType="map"  >
+			update groupauthorities set activeflag=#{activeFlag},
+			modifieddate=now(),
+			modifieduser=#{userId,jdbcType=BIGINT}
+			 where
+			organizationid=#{stateId,jdbcType=BIGINT}
+			and assessmentprogramid=#{assessmentProgramId,jdbcType=BIGINT} and
+			authorityid=#{authorityId,jdbcType=BIGINT}
+			and groupid =#{groupId,jdbcType=BIGINT};
+	</update>
+	 <update id="updateExcludedGroupAuthorities" parameterType="GroupAuthorities">
+        UPDATE groupauthorities
+        SET activeflag = #{activeFlag}, modifieddate = now(),
+	    modifieduser = #{modifiedUser}
+        where 
+        groupid = #{groupId}
+       	and authorityid = #{authorityId,jdbcType=BIGINT}
+       	and assessmentprogramid=#{assessmentProgramId,jdbcType=BIGINT}
+       	and organizationid=#{organizationId,jdbcType=BIGINT}
+      </update>
+
+</mapper>

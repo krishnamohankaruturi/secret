@@ -1,0 +1,57 @@
+<p style="text-align: end;color:#eb5158;margin-right: 10px;"><span>* = required</span></p>
+
+<form id="feedback_form" style="width:100%">
+
+	<% if(QandAData != null && QandAData.length > 0){ %>
+		<div id='testletFeedbackId'>
+			<input id='input_testletFeedbackId' name='testletFeedbackId' type='hidden' value='<%= QandAData[0].testletFeedbackId %>'> </input>
+		</div>
+	<% } %>
+	
+	<% for(var i = 0; i < QandAData.length; i++){ %>
+		<div id='feedbackq_<%= QandAData[i].questionId %>' class='feedbackQuestion'> 
+			<label for='input_<%= QandAData[i].questionId %>'> <%= QandAData[i].questionText  %>
+			<% if(QandAData[i].required){ %>
+				<span id="feedback_required">*</span>
+			<% } %>
+			</label>
+			<input id='input_responseId_<%= QandAData[i].questionId %>' name='input_responseId_<%= QandAData[i].questionId %>' type='hidden' value='<%= QandAData[i].responseId %>'></input>
+			
+			
+			<% switch(QandAData[i].taskType){ 
+				case "CR": %>
+					<br/><input id='input_<%= QandAData[i].questionId %>' name='input_<%= QandAData[i].questionId %>' class='feedbackShortText' type='text' <%= (QandAData[i].required ? "required" : "") %>></input>
+				<% break;
+				case "ER": %>
+					<br/><textarea id='input_<%= QandAData[i].questionId %>' name='input_<%= QandAData[i].questionId %>' class='feedbackLongText' rows='4' type='text' <%=(QandAData[i].required ? "required" : "") %>></textarea>				
+				<% break;
+				case "MC-K": 
+					var questionOptions = QandAData[i].questionOptions;
+					questionOptions.sort(function(a,b) {
+		      			  if (a.index < b.index)
+		      			    return -1;
+		      			  if (a.index > b.index)
+		      			    return 1;
+		      			  return 0;
+	    			});
+	    			for(var j = 0; j < questionOptions.length; j++){ %>
+						<br/>
+						<input id='input_<%= QandAData[i].questionId+"_"+questionOptions[j].index %>' name='input_<%= QandAData[i].questionId %>' class='feedbackRadio' type='radio' <%= (QandAData[i].required ? "required" : "") %> value=<%= questionOptions[j].value %>>
+							<label for='input_<%= QandAData[i].questionId+"_"+questionOptions[j].index %>' class='feedbackRadioLabel'><%= questionOptions[j].label %></label>
+						</input>
+					<% } %>
+				<% break;
+				default:
+					break; 
+			} %>
+			
+		</div>
+	<% }  %>
+	
+</form>
+
+<span id="feedback_required_missing">Please answer all required questions!</span><br/>
+<br/>
+<br/>
+<button type="submit" id="feedback_submit" style="margin-left: 220px;" class="feedbackbuttons">Submit</button>
+<button id="feedback_cancel" style="margin-left: 80px;" class="feedbackbuttons">Cancel</button>

@@ -1,0 +1,54 @@
+<div id="feedback">
+	<h1 class="intro-header" style="width="80%"></h1>
+	<div id="feedback-description">
+		<h2 class="left">
+			<%= messages.testPage.feedBackHeaderMessage %> : <%= testName %>
+		</h2>
+		<br class="clear" />
+		
+		<div class="span2">
+			<p>
+				<% 
+				var displayScore = false;
+				var feedBackMessage = '';
+				if(outcometype != null && outcometype.toLowerCase() == 'percentage_right') { 
+					var pScore = (studentTestScore/maxTestScore)*100;					
+					for(item in feedbackRules){
+						 var feedbackRule = feedbackRules[item];
+						 if(pScore >= feedbackRule.minPercentage && pScore <= feedbackRule.maxPercentage){
+						 	displayScore = feedbackRule.displayScore;
+						 	feedBackMessage = feedbackRule.feedbackText;
+						 }
+					}
+					
+					if(displayScore) { %> 
+						<b><%= messages.testPage.feedBackPercentage %> : </b> <%=pScore%>%
+						<br> 
+					<% }
+				} else {
+					for(item in feedbackRules){
+						 var feedbackRule = feedbackRules[item];
+						 if(studentTestScore >= feedbackRule.minScore && studentTestScore <= feedbackRule.maxScore){
+						 	displayScore = feedbackRule.displayScore;
+						 	feedBackMessage = feedbackRule.feedbackText;
+						 }
+					}
+					if(displayScore) { %>  
+						<b><%= messages.testPage.feedBackScore %> : </b> <%=studentTestScore%> <%= messages.testPage.feedBackOutof %> <%=maxTestScore%> <%= messages.testPage.feedBackPoints %> 
+						<br> 					
+					<% } 
+				} %>
+				<%= feedBackMessage %>
+			</p>
+		</div>
+		
+		<br class="clear" />
+		<div class="feedback-btm">			
+			<div>
+				<p>
+					<a id="feedbackTestHome" class="btn" href="<%= contextPath %>/studentHome.htm"><img src="/images/arrow-sm-icon.png" alt="Home"/>Home Page</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="edu.ku.cete.model.StudentsTestScoreMapper" >
+	
+	<insert id="insert" parameterType="StudentsTestScore">
+		INSERT INTO studentstestscore(
+            studenttestid, taskvariantId, scorerid, score, nonscorereason, 
+            rubriccategoryid, activeflag, source, createddate, createduser, 
+            modifieddate, modifieduser)
+        VALUES (#{studentsTestId}, #{taskvariantId}, #{scorerId}, #{score}, #{nonScoreReason}, 
+            #{rubricCategoryId}, #{activeFlag}, #{source}, now(), #{scorerId}, 
+            now(), #{scorerId});		
+	</insert>
+	
+	<insert id="insertToHistory" parameterType="StudentsTestScore">
+		INSERT INTO studentstestscorehistory(
+            studenttestid, taskvariantId, rubriccategoryid, scorerid, nonscorereason, 
+            score, createddate, createduser, 
+            modifieddate, modifieduser)
+        VALUES (#{studentsTestId}, #{taskvariantId}, #{rubricCategoryId}, #{scorerId}, #{nonScoreReason}, 
+            #{score}, now(), #{scorerId}, 
+            now(), #{scorerId});				
+	</insert>
+	
+	<update id="update" parameterType="StudentsTestScore">
+		UPDATE studentstestscore
+	   <set>
+	       <if test="score != null">
+	           score = #{score},
+	       </if>
+	       <if test="source != null">
+	           source = #{source},
+	       </if>
+	       <if test="scorerId != null">               	         
+	           scorerid = #{scorerId},
+	           modifieduser = #{scorerId},
+	       </if>
+	       
+	           nonscorereason = #{nonScoreReason},
+	      
+	       modifieddate = now(),
+	   </set>
+	    where studenttestid = #{studentsTestId} 
+	      and taskvariantId = #{taskvariantId}
+	      and rubriccategoryid = #{rubricCategoryId}
+	      and activeflag is true
+	</update>
+	
+	<select id="getScoreByStudentsTestAndTaskvariantId" resultType="Integer">
+		select sum(score) from studentstestscore 
+		where studenttestid =#{studentsTestId} 
+		and taskvariantId = #{taskvariantId}
+		and rubriccategoryid = #{rubricCategoryId}
+		and activeflag is true
+	</select>
+	
+	<select id="findByTaskvariantIdAndRubriType" resultType="StudentsTestScore">
+		select distinct sts.*,sts.studenttestid as studentstestid 
+		from studentstestscore sts  
+		where  sts.activeflag is true 
+		     	and sts.taskvariantId = #{taskvariantId} 
+		   	 	and sts.rubriccategoryid = #{rubricId} 
+		  		and sts.studenttestid=#{studentsTestsId}
+	</select>
+	
+	<update  id="removeScore">
+		update studentstestscore set activeflag = false, modifieduser =  #{userId}, modifieddate = now() where studenttestid = #{studentsTestId}
+	</update>
+	
+	<update  id="moveScoreOnChangeRoster">
+		update studentstestscore set scorerid = #{newTeacherId}, modifieduser =  #{modifiedUser}, modifieddate = now() where studenttestid = #{studentsTestId} 
+		       and scorerid = #{oldTeacherId}
+	</update>
+	
+	<delete id="removeStudentsTestScore">
+		delete from studentstestscore where id = #{id}
+	</delete>
+</mapper>

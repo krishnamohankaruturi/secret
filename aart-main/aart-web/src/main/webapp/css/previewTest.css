@@ -1,0 +1,107 @@
+.previewContent {
+	width: 100%;
+}
+
+.testNameHeader {
+	width: 70%;
+	text-align: left;
+	float: left;
+	color: #3B74BA;
+}
+
+.testSectionsNumber {
+	text-align: right;
+	color: #3B74BA;
+	float: right;
+}
+
+.testGuidance {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #B5B5BD;
+	padding: 1%;
+}
+
+.testSectionName {
+	width: 70%;
+	text-align: left;
+	float: left;
+	color: #3B74BA;
+}
+
+.testSectionsNumber {
+	text-align: right;
+	color: #3B74BA;
+	float: right;
+}
+img {
+	max-width: 100%;
+	height: auto;
+	width: auto\9; /* ie8 */
+}
+
+.previewTest {
+	width: 100%;
+}
+
+.previewTest, th, td {
+	border: solid;
+	border-width: 1px;
+	border-collapse: collapse;
+	border-color: #B5B5BD;
+	padding: 3%;
+}
+
+.previewTest th {
+	border-bottom: 2px solid;
+	border-color: #B5B5BD;
+	border-bottom-width: 3px;
+}
+
+.optionContainer {
+	display: block;
+}
+
+.optionItem {
+	padding: 1% 0 0 0;
+}
+
+.optionItem  p {
+	margin: 0%;
+}
+
+.optionImage {
+	vertical-align: middle;
+	padding-top: 1%;
+	clear: both;
+}
+
+.optionImage>img {
+	height: 16px;
+	width: 16px;
+}
+
+.guidanceHeader {
+	margin-top: 5%;
+	font-weight: bold;
+}
+
+.indexColumn {
+	float: left !important;
+	width: auto !important;
+}
+
+.questionColumn {
+	float: right;
+	width: 96%;
+}
+
+.questionColumn p {
+	margin: 0 0 1%;
+}
+
+/* fix bootstrap trying to rob us of our tooltip class and screwing up how they look */
+.pagecontent.previewContent .tooltip {
+	position: relative;
+	opacity: 1;
+}

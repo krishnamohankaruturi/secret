@@ -1,0 +1,134 @@
+<div id= "studentsOfTest">
+<div class="container-fluid">
+    <div class="manage-table row table-responsive">
+        <table class="table table-bordered table-hover text-center">
+            <thead>
+                <tr>
+                    <th>FIRST NAME</th>
+                    <th>LAST NAME</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            
+             <%for(var i=0;i <studentsList.length; i++) {%>
+				<tr id="students">
+                    <td><%=studentsList[i].legalFirstName%></td>
+                    <td><%=studentsList[i].legalLastName%></td>
+                </tr>
+			<%}%>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>   
+   
+   
+   
+    <div id="rubric">
+       <div class="container-fluid">
+        <span class="pull-right" style="margin-top:10px;">
+                            <a href=""><i class="fa fa-arrow-circle-o-left  fa-lg"></i>Back to Interim Home</a></span>
+    <div class="row">
+        <h3>Score student performance</h3>
+        <div class="col-sm-12 student_info">
+            <h4>
+                ASSESEMENT PROGRAM: <span class="text-primary">Career Pathways Collaborative</span>
+                SUBJECT: <span class="text-primary">Agriculture, Food, and Natural Resources</span>
+                TEST: <span class="text-primary">CC0--Scorning1</span>
+            </h4>
+            <h4>
+                STUDENT NAME: <span class="text-primary">Siripurapu11, Jyothi11, Siva11</span>
+                STATE STUDENT ID: <span class="text-primary">1930003</span>
+            </h4>
+        </div>
+        <div class="col-sm-12 text-center">
+            <div class="col-sm-2">
+                <h4>Scoring Criteria</h4>
+            </div>
+            <div class="col-sm-8 student_progress_bar">
+                <h4>Mastery</h4>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" style="width: 35%">
+                        <span class="sr-only">35% Complete (success)</span>
+                    </div>
+                    <div class="progress-bar progress-bar-warning" style="width: 35%">
+                        <span class="sr-only">35% Complete (warning)</span>
+                    </div>
+                    <div class="progress-bar progress-bar-danger" style="width: 30%">
+                        <span class="sr-only">30% Complete (danger)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+        <div class="col-sm-12">
+            <div class="table-responsive">
+                <table class="table table_striped table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>4</th>
+                            <th>3</th>
+                            <th>2</th>
+                            <th>1</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-sm-2">1.RubricItem</td>
+                            <td class="col-sm-2">
+                                <input type="radio"><br/>
+                                <p>A scoring rubric is an attempt to communicate expectations of quality around a task. In many cases, scoring rubrics are used to delineate consistent criteria for grading. Because the criteria are public peer review. It is aimed at accurate and fair assessment, fostering understanding, and indicating a way to proceed with subsequent learning/teaching. This integration of performance and feedback is called ongoing assessment.</p>
+                            </td>
+                            <td class="col-sm-2">
+                                <input type="radio"><br/>
+                                <p>A scoring rubric is an attempt to communicate expectations of quality around a task. In many cases, scoring rubrics are used to delineate consistent criteria for grading. Because the criteria are public peer review. It is aimed at accurate and fair assessment, fostering understanding, and indicating a way to proceed with subsequent learning/teaching. This integration of performance and feedback is called ongoing assessment.</p>
+                            </td>
+                            <td class="col-sm-2">
+                                <input type="radio"><br/>
+                                <p>A scoring rubric is an attempt to communicate expectations of quality around a task. In many cases, scoring rubrics are used to delineate consistent criteria for grading. Because the criteria are public peer review. It is aimed at accurate and fair assessment, fostering understanding, and indicating a way to proceed with subsequent learning/teaching. This integration of performance and feedback is called ongoing assessment.</p>
+                            </td>
+                            <td class="col-sm-2">
+                                <input type="radio"><br/>
+                                <p>A scoring rubric is an attempt to communicate expectations of quality around a task. In many cases, scoring rubrics are used to delineate consistent criteria for grading. Because the criteria are public peer review. It is aimed at accurate and fair assessment, fostering understanding, and indicating a way to proceed with subsequent learning/teaching. This integration of performance and feedback is called ongoing assessment.</p>
+                            </td>
+                            <td class="col-sm-2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="form-group">
+                        <label class="col-sm-3 control-label">Answer</label>
+                        <div class="col-sm-9">
+                            <textarea rows="3" class="col-sm-12 form-control" name="answer" id="answer"></textarea>
+                        </div>
+                    </div>
+                 <div class="col-sm-offset-3 col-sm-9">
+                            <button id="completeScore" type="submit" class="btn btn-primary" style="float:right">Complete Scores</button>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+       <div id="completeScoress" class="modal" tabindex="-1" style="z-index: 2000;top: 50px;left:600px">
+<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				
+			</div>
+			<div class="modal-body">
+			<p>Are you sure you want to submit the scores?</p>
+			</div>
+			<div class="modal-footer">
+						<button type="button" class="btn group-okay"
+				style="margin-left: 40%; margin-top: 10px; height: 35px;">Cancel</button>
+			<button type="button" class="btn group-okayScore"
+				style="margin-left: 60%; margin-top: 10px; height: 35px;">Okay</button>
+				</div>
+		</div>

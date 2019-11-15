@@ -1,0 +1,18 @@
+<div id="ticketConfirmation" class="popupOverlay" style="font-size:9.6pt; font-family:Verdana,Arial,"Lucida Grande",sans-serif;">
+		<div class="overlay-content overlayShowing">
+			<div class="overlay-hdr">
+				<a class="destroy">X</a>
+				<p><%= messages.testPage.invalidTicketMsg %></p>
+			</div>
+			<div class="activation-form">
+			<h3><%= messages.testPage.welcomeTo %></h3>
+	   			<p><%= messages.testPage.ticket %></p>
+	   			<img src="/images/padlock-icon.png" alt="Secured Content" class="padlock" />
+	   			<div class="activation">
+	   				<label><%= messages.testPage.ticketNumber %></label>
+					<input type="text" id="ticketNumber" name="ticketNumber" maxlength="75"/>
+					<button type="button" id="validateTicket" class="btn-rev"><%= messages.testPage.letsGo %></button>
+				</div>
+			</div>
+    	</div>
+ 	</div>

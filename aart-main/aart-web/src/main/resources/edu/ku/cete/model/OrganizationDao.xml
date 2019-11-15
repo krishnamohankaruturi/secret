@@ -1,0 +1,1948 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.OrganizationDao">	
+    <resultMap type="edu.ku.cete.domain.common.Organization" id="resultMap">
+        <id column="id" property="id" javaType="long"/>
+        <result column="organizationname" property="organizationName" javaType="String"/>
+        <result column="displayidentifier" property="displayIdentifier" javaType="String"/>
+        <result column="welcomeMessage" property="welcomeMessage" javaType="String"/>
+        <result column="organizationtypeid" property="organizationType.organizationTypeId"/>
+        <result column="relatedOrganizationId" property="relatedOrganizationId" javaType="Long"/>
+        <result column="buildinguniqueness" property="buildingUniqueness" javaType="Long"/>
+        <result column="schoolstartdate" jdbcType="TIMESTAMP" property="schoolStartDate" />
+        <result column="schoolenddate" jdbcType="TIMESTAMP" property="schoolEndDate" />
+        <result column="parentOrgDisplayName" javaType="String" property="parentOrgDisplayName" />
+        <result column="parentOrgTypeCode" javaType="String" property="parentOrgTypeCode" />
+        <result column="contractingorganization" javaType="Boolean" property="contractingOrganization" />
+        <result column="expirepasswords" javaType="Boolean" property="expirePasswords" />
+        <result column="expirationdatetype" javaType="long" property="expirationDateType" />
+        <result column="expirationdatetypestring" javaType="String" property="expirationDateTypeString" />
+        <result column="assessmentprogramid" property="assessmentProgramId" javaType="String"/>
+        <result column="currentschoolyear" property="currentSchoolYear" javaType="Long"/>
+        <result column="pooltype" property="poolType" javaType="String"/>
+        <result column="reportyear" javaType="Integer" property="reportYear" />
+        <result column="testingmodel" javaType="long" property="testingModel" />
+        <result column="testingmodelname" javaType="String" property="testingModelName" />
+        <result column="parentorganizationname" javaType="String" property="parentOrganizationName" />
+        <result column="assessmentprogram" property="assessmentProgram" javaType="String"/>
+        <result column="sourceorgdisplayidentifier" property="sourceorgdisplayidentifier" javaType="String"/>
+	    <result column="activeflag" property="activeFlag" javaType="Boolean"/>
+	    <result column="externalid" property="externalid" javaType="String"/>
+	    <result column="testbegintime" jdbcType="TIMESTAMP" property="testBeginTime" />
+	    <result column="testendtime" jdbcType="TIMESTAMP" property="testEndTime" />
+	    <result column="testdays" jdbcType="VARCHAR" property="testDays" />
+        <association property="organizationType" javaType="edu.ku.cete.domain.common.OrganizationType">
+	        <result column="organizationTypeId" property="organizationTypeId" javaType="long"/>
+	        <result column="typename" property="typeName" javaType="String"/>
+	        <result column="typecode" property="typeCode" javaType="String"/>
+	        <result column="typelevel" property="typeLevel" javaType="Integer"/>
+	    </association>    
+    </resultMap>
+    
+    <resultMap type="edu.ku.cete.domain.common.OrganizationContractRelation" id="organizationContractRelationResultMap">
+	    <id column="id" property="id" javaType="long"/>
+	    <id column="relatedOrganizationId" property="relatedOrganizationId" javaType="Long"/>
+        <result column="isParent" property="isParent" javaType="Boolean"/>
+        <result column="currentlevel" property="currentLevel" javaType="Integer"/>
+        <result column="isContractPresent" property="isContractPresent" javaType="Boolean"/>
+        <association property="organization" javaType="edu.ku.cete.domain.common.Organization">
+	        <id column="id" property="id" javaType="long"/>
+	        <result column="organizationname" property="organizationName" javaType="String"/>
+	        <result column="displayidentifier" property="displayIdentifier" javaType="String"/>
+	        <result column="welcomeMessage" property="welcomeMessage" javaType="String"/>
+	        <result column="organizationtypeid" property="organizationTypeId" javaType = "Long"/>
+	        <result column="relatedOrganizationId" property="relatedOrganizationId" javaType="Long"/>
+	        <result column="buildinguniqueness" property="buildingUniqueness" javaType="Long"/>
+	        <result column="schoolstartdate" jdbcType="TIMESTAMP" property="schoolStartDate" />
+        	<result column="schoolenddate" jdbcType="TIMESTAMP" property="schoolEndDate" />
+        	<result column="contractingorganization" javaType="Boolean" property="contractingOrganization" />
+        	<result column="expirepasswords" javaType="Boolean" property="expirePasswords" />
+        	<result column="expirationdatetype" javaType="long" property="expirationDateType" />        	
+        </association>
+    </resultMap>
+    <resultMap type="edu.ku.cete.domain.common.OrganizationDetail" id="organizationDetailResultMap">
+    	<id column="id" property="id" javaType="Long"/>
+    	<result column="organizationid" property="organizationid" javaType="Long"/>
+    	<result column="organizationname" property="organizationName" javaType="String"/>
+    	<result column="itistartdate" jdbcType="TIMESTAMP" property="itiStartDate" />
+    	<result column="itienddate" jdbcType="TIMESTAMP" property="itiEndDate" />
+    	<result column="createddate" jdbcType="TIMESTAMP" property="createdDate" />
+    	<result column="createduser" javaType="Integer" property="createdUser" />
+        <result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+		<result column="modifieduser" javaType="Integer" property="modifiedUser" />
+		<result column="activeflag" jdbcType="BIT" property="activeFlag" />    	
+		
+		<result column="testingcycleid" jdbcType="BIGINT" property="testingCycleId" />
+		<result column="testingcyclename" jdbcType="VARCHAR" property="testingCycleName" />
+		<result column="windoweffectivedate" jdbcType="TIMESTAMP" property="windowEffectiveDate" />
+		<result column="windowexpirydate" jdbcType="TIMESTAMP" property="windowExpiryDate" />
+		<result column="instructionplannerwindow" jdbcType="BIT" property="instructionPlannerWindow" />
+		<result column="instructionplannerdisplayname" jdbcType="BIGINT" property="instructionPlannerDisplayName" />
+    </resultMap>
+        
+    <resultMap type="edu.ku.cete.domain.common.Organization" id="viewOrganizationMap">
+     	 <id column="id" property="id" jdbcType="BIGINT"/>
+	     <result column="relatedOrganizationId" property="relatedOrganizationId" jdbcType="BIGINT"/>
+	     <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+	     <result column="displayIdentifier" jdbcType="VARCHAR" property="displayIdentifier" />
+	     <result column="contractingorganization" jdbcType="BIT" property="contractingOrganization" />
+	     <result column="schoolstartdate" jdbcType="TIMESTAMP" property="schoolStartDate" />
+	     <result column="schoolenddate" jdbcType="TIMESTAMP" property="schoolEndDate" />
+	     <result column="expirepasswords" jdbcType="BIT" property="expirePasswords" />
+		 <result column="typename" jdbcType="VARCHAR" property="typeName" />
+		 <result column="typeCode" jdbcType="VARCHAR" property="typeCode" />
+		 <result column="parentorganizationname" jdbcType="VARCHAR" property="parentOrganizationName" />
+		 <result column="parentOrgDisplayName" jdbcType="VARCHAR" property="parentOrgDisplayName" />
+		 <result column="parentorgtypecode" jdbcType="VARCHAR" property="parentOrgTypeCode" />
+		 <result column="testingmodelname" jdbcType="VARCHAR" property="testingModelName" />
+		 <result column="activeflag" jdbcType="BIT" property="activeFlag" />
+	     <result column="programname" jdbcType="VARCHAR" property="assessmentProgram" /> 
+	     <result column="testbegintime" jdbcType="TIMESTAMP" property="testBeginTime" />
+	     <result column="testendtime" jdbcType="TIMESTAMP" property="testEndTime" />
+	     <result column="testdays" jdbcType="VARCHAR" property="testDays" />
+	  </resultMap>
+    <resultMap type="edu.ku.cete.domain.common.Organization" id="manageOrganizationMap">
+    	<id column="id" property="id" jdbcType="BIGINT"/>
+    	<result column="relatedOrganizationId" property="relatedOrganizationId" jdbcType="BIGINT"/>
+    	<result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+    	<result column="displayIdentifier" jdbcType="VARCHAR" property="displayIdentifier" />
+    	<result column="contractingorganization" jdbcType="BIT" property="contractingOrganization" />
+    	<result column="schoolstartdate" jdbcType="TIMESTAMP" property="schoolStartDate" />
+    	<result column="schoolenddate" jdbcType="TIMESTAMP" property="schoolEndDate" />
+        <result column="expirepasswords" jdbcType="BIT" property="expirePasswords" />
+		<result column="typename" jdbcType="VARCHAR" property="typeName" />
+		<result column="typeCode" jdbcType="VARCHAR" property="typeCode" />
+		<result column="parentOrgDisplayName" jdbcType="VARCHAR" property="parentOrgDisplayName" />
+		<result column="testingmodel" jdbcType="BIGINT" property="testingModel" />
+		<result column="organizaionstructure" jdbcType="VARCHAR" property="organizaionStructure" />
+		<result column="activeflag" jdbcType="BIT" property="activeFlag" />	
+    	<result column="reportyear" javaType="Integer" property="reportYear" />
+    	<result column="parenttypename" jdbcType="VARCHAR" property="parentOrgTypeName" />
+    	<result column="parentorganizationname" jdbcType="VARCHAR" property="parentOrganizationName" />
+    	<result column="currentschoolyear" jdbcType="BIGINT" property="currentSchoolYear" />
+    	<result column="testbegintime" jdbcType="TIMESTAMP" property="testBeginTime" />
+	    <result column="testendtime" jdbcType="TIMESTAMP" property="testEndTime" />
+	    <result column="testdays" jdbcType="VARCHAR" property="testDays" />
+    	
+		<collection property="assessmentPrograms" ofType="edu.ku.cete.domain.content.AssessmentProgram" javaType="list">
+		     <id column="assessmentporgramid" property="id" jdbcType="BIGINT"/>
+		     <result column="abbreviatedname" jdbcType="VARCHAR" property="abbreviatedname" />
+		     <result column="programname" jdbcType="VARCHAR" property="programName" />		     
+		 </collection>				
+    	
+    </resultMap>
+    
+    <sql id="BaseColumnSet">
+        o.id, o.organizationname, o.displayidentifier, ot.id, ot.typename, ot.typecode, ot.typelevel,o.buildinguniqueness,o.schoolstartdate,o.schoolenddate,o.contractingorganization,
+        o.expirepasswords, o.expirationdatetype
+    </sql>
+
+	<insert id="add" useGeneratedKeys="true" parameterType="Organization" keyColumn="id" keyProperty="id">
+		INSERT INTO organization(organizationName, displayIdentifier, organizationTypeId, 
+            welcomeMessage, createddate, createduser, activeflag, modifieddate, modifieduser,buildinguniqueness,schoolstartdate,schoolenddate,contractingorganization,
+            expirepasswords,expirationdatetype,pooltype,testingmodel,reportyear,externalid,timezoneid,testbegintime,testendtime,testdays)
+		 values(#{organizationName},#{displayIdentifier},#{organizationTypeId},#{welcomeMessage},#{createdDate},#{createdUser},#{activeFlag},
+		  #{modifiedDate},#{modifiedUser},#{buildingUniqueness},#{schoolStartDate},#{schoolEndDate},#{contractingOrganization},
+		  #{expirePasswords},#{expirationDateType},(select categorycode from category where id = #{testingModel}),#{testingModel},#{reportYear},#{externalid},#{timezoneid},
+		  #{testBeginTime},#{testEndTime},#{testDays})
+	</insert>
+	
+	<select id="lastid" resultType="java.lang.Long">
+		/*NO LOAD BALANCE*/
+		SELECT lastval() AS id
+	</select>
+
+	<delete id="delete">
+		DELETE FROM organization WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteSchoolFromOrgTreeDetail">
+		DELETE FROM organizationtreedetail WHERE schoolid = #{schoolid}
+	</delete>
+	
+ 	<select id="getOrgDetailsForSummmaryReport" resultType="Organization" parameterType="Long" flushCache="true" useCache="false" >
+		SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, org.buildinguniqueness, org.schoolstartdate, org.schoolenddate,org.createddate,org.createduser,
+            org.modifieddate,org.modifieduser,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization,
+            org.expirepasswords, org.expirationdatetype, c.categorycode as expirationdatetypestring, 
+            EXTRACT(YEAR from schoolenddate) as currentschoolyear, org.pooltype, org.multitestassignment, 
+            org.reportprocess, org.reportyear, shortOrg.shortorgname
+			FROM organization as org
+			JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+			LEFT OUTER JOIN category c ON c.id = org.expirationdatetype
+			LEFT JOIN reportorganizationshortname as shortOrg ON shortOrg.organizationid = org.id and shortOrg.activeflag is true
+			WHERE  org.id = #{organizationId} limit 1
+	</select>
+ 
+	<select id="get" resultType="Organization" parameterType="Long" flushCache="true" useCache="false" >
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, org.buildinguniqueness, org.schoolstartdate, org.schoolenddate,org.createddate,org.createduser,
+            org.modifieddate,org.modifieduser,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization,
+            org.expirepasswords, org.expirationdatetype, c.categorycode as expirationdatetypestring, 
+            EXTRACT(YEAR from schoolenddate) as currentschoolyear, org.pooltype, org.multitestassignment, 
+            org.reportprocess, org.reportyear,org.activeflag
+		FROM organization as org
+			JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+			LEFT OUTER JOIN category c ON c.id = org.expirationdatetype
+		WHERE
+		    org.id = #{organizationId}
+	</select>
+	
+	
+		<select id="getOrgByExternalID" resultType="Organization" flushCache="true" useCache="false" >
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, org.buildinguniqueness, org.schoolstartdate, org.schoolenddate,org.createddate,org.createduser,
+            org.modifieddate,org.modifieduser,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization,
+            org.expirepasswords, org.expirationdatetype, c.categorycode as expirationdatetypestring, 
+            EXTRACT(YEAR from schoolenddate) as currentschoolyear, org.pooltype, org.multitestassignment, 
+            org.reportprocess, org.reportyear,org.externalid,org.activeflag
+		FROM organization as org
+			JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+			LEFT OUTER JOIN category c ON c.id = org.expirationdatetype
+		WHERE
+		    org.externalid = #{organizationExternalId, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getOrgByExternalIDAndTypeCode" resultType="Organization" flushCache="true" useCache="false" >
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, org.buildinguniqueness, org.schoolstartdate, org.schoolenddate,org.createddate,org.createduser,
+            org.modifieddate,org.modifieduser,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization,
+            org.expirepasswords, org.expirationdatetype, c.categorycode as expirationdatetypestring, 
+            EXTRACT(YEAR from schoolenddate) as currentschoolyear, org.pooltype, org.multitestassignment, 
+            org.reportprocess, org.reportyear,org.externalid
+		FROM organization as org
+			JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+			LEFT OUTER JOIN category c ON c.id = org.expirationdatetype
+		WHERE
+		    org.externalid = #{organizationExternalId} and orgtype.typecode = #{organizationTypeCode}
+	</select>
+	
+	 <select id="getOrganizationDetailsByOrgId" resultMap="manageOrganizationMap" parameterType="Long" useCache="false" flushCache="true">						
+			SELECT parent.id as relatedOrganizationId,org.id, org.organizationName, org.displayIdentifier,
+			org.contractingorganization, org.schoolstartdate, org.schoolenddate,org.expirepasswords,
+			EXTRACT(YEAR from org.schoolenddate) as currentschoolyear,
+			orgtype.typename as typename,
+			orgtype.typecode as typeCode,
+			parent.displayidentifier as parentOrgDisplayName, 
+			parent.organizationname as parentorganizationname,
+			pot.typename as parenttypename,
+			asp.id as assessmentporgramid,
+			asp.abbreviatedname,
+			asp.programname,
+			array_to_string(ARRAY(select upper(typename) from organizationtype ort
+			                              inner join organizationhierarchy orgh on orgh.organizationtypeid = ort.id 
+			                              where orgh.organizationid = #{organizationId} and ort.typecode not in ('CONS') order by id asc 
+					),', ') as organizaionstructure,
+			org.testingmodel,org.activeflag,org.reportyear, org.testbegintime,org.testendtime,org.testdays
+			FROM organization as org
+			JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+			inner join orgassessmentprogram oras ON oras.organizationid = org.id and oras.activeflag is true
+			inner join assessmentprogram asp ON asp.id = oras.assessmentprogramid and asp.activeflag is true
+			LEFT OUTER JOIN organizationrelation orgrel ON org.id = orgrel.organizationid 
+			LEFT OUTER JOIN organization parent ON orgrel.parentorganizationid = parent.id
+			LEFT OUTER JOIN organizationtype pot ON parent.organizationtypeid = pot.id 			
+			WHERE
+			    org.id = #{organizationId}
+			   order by asp.programname
+	</select>
+	 
+	<select id="getViewOrganizationDetailsByOrgId" resultMap="viewOrganizationMap" parameterType="Long" useCache="false" flushCache="true">      
+	   SELECT parent.id as relatedOrganizationId,org.id, org.organizationName, org.displayIdentifier,
+	   org.contractingorganization, org.schoolstartdate, org.schoolenddate,org.expirepasswords,
+	   orgtype.typename as typename,
+	   orgtype.typecode as typeCode,
+	   pot.typename as parentorgtypecode,
+	   parent.organizationname as parentorganizationname, 
+	   parent.displayIdentifier as parentOrgDisplayName,	   
+	    array_to_string(ARRAY(
+	   			select distinct on (ap.programname) programname from assessmentprogram ap 
+	   			inner join orgassessmentprogram orgprg on orgprg.assessmentprogramid = ap.id and orgprg.activeflag is true
+	   			inner join ((select id from organization_parent(#{organizationId}) where contractingorganization is true) 
+	   			union select #{organizationId}) orgp
+	   			 on orgp.id = orgprg.organizationid 
+	   			order by ap.programname
+	   ),', ') as programname,
+
+	    array_to_string(ARRAY(
+	   			 select categoryname from category where id in (select testingmodel from organization 
+	   			 where id in (select id from organization_parent(#{organizationId}) 
+				 where contractingorganization is true union select #{organizationId}))
+	   ),', ') as testingmodelname,		  
+	   org.activeflag, org.testbegintime, org.testendtime,org.testdays
+	   FROM organization as org
+	   JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id	  
+	   LEFT OUTER JOIN organizationrelation orgrel ON org.id = orgrel.organizationid 
+	   LEFT OUTER JOIN organization parent ON orgrel.parentorganizationid = parent.id    
+	   LEFT OUTER JOIN organizationtype pot ON parent.organizationtypeid = pot.id 
+	   WHERE org.id = #{organizationId} limit 1
+	 </select>
+	 
+	<select id="getParentOrgDetailsById" resultType="edu.ku.cete.domain.common.Organization" parameterType="Long">	
+	
+		select parent.id as id,parent.organizationName as organizationName
+			from organization as org
+			LEFT OUTER JOIN organizationrelation orgrel ON org.id = orgrel.organizationid 
+			LEFT OUTER JOIN organization parent ON orgrel.parentorganizationid = parent.id
+			where org.id = #{organizationId}
+			
+	</select>
+
+	
+	<select id="getImmediateParents" resultType="Organization" parameterType="Long">
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id,org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, org.contractingorganization
+		FROM organization org,organizationrelation orgRel
+		WHERE
+			org.id = orgRel.parentorganizationid and
+			orgRel.organizationid = #{organizationId}
+			and org.activeflag = true
+	</select>
+	
+	<select id="getInterimSchoolsInDistrict" resultType="Organization">
+	<if test="predictiveStudentScore == true">
+		select distinct otd.schoolid as id,otd.schoolname as organizationName
+		from organizationtreedetail otd where otd.schoolid in
+		(
+			SELECT 	
+			case when sr.id is null then otd1.schoolid else otd2.schoolid end
+			FROM interimstudentreport isr
+			INNER JOIN enrollment e on isr.studentid=e.studentid and isr.status is true and e.currentschoolyear= #{currentSchoolYear,jdbcType=BIGINT}
+			INNER JOIN organizationtreedetail otd1 on otd1.schoolid=isr.attendanceschoolid
+			LEFT OUTER JOIN studentreport sr on sr.studentid = e.studentid and sr.schoolyear=#{currentSchoolYear,jdbcType=BIGINT} and sr.assessmentProgramid= #{assessmentProgramId, jdbcType=BIGINT}
+			LEFT OUTER JOIN organizationtreedetail otd2 on otd2.schoolid=sr.attendanceschoolid
+			where (otd1.districtId=#{districtId,jdbcType=BIGINT} or otd2.districtId=#{districtId,jdbcType=BIGINT})
+			and (e.activeflag is true or sr.id is not null)
+		)
+		and otd.districtId=#{districtId,jdbcType=BIGINT}
+		order by otd.schoolName
+		
+	</if>
+	<if test="predictiveStudentScore == false">
+		select distinct otd.schoolid as id,otd.schoolname as organizationName
+		FROM organizationtreedetail otd
+		INNER JOIN enrollment e on e.attendanceschoolid=otd.schoolid and e.currentschoolyear= #{currentSchoolYear,jdbcType=BIGINT}
+		INNER JOIN studentstests st on st.studentid=e.studentid and st.activeflag is true
+		INNER JOIN test t on st.testid=t.id and t.activeflag is true
+		INNER JOIN testspecstatementofpurpose tssop on t.testspecificationid = tssop.testspecificationid and tssop.activeflag is true
+		INNER JOIN category c on tssop.statementofpurposeid = c.id
+		where otd.districtId=#{districtId,jdbcType=BIGINT}
+		and (t.is_interim_test is true or c.categorycode = 'PRDCTN') and e.activeflag is true
+		order by otd.schoolName
+	</if>
+	
+	</select>
+	
+	<select id="getInterimDistrictsInState" resultType="Organization">
+	<if test="predictiveStudentScore == true">
+		select distinct otd.districtid as id,otd.districtname as organizationName
+		from organizationtreedetail otd where otd.districtid in
+		(
+			SELECT 	
+			case when sr.id is null then otd1.districtid else otd2.districtid end
+			FROM interimstudentreport isr
+			INNER JOIN enrollment e on isr.studentid=e.studentid and isr.status is true and e.currentschoolyear= #{currentSchoolYear,jdbcType=BIGINT}
+			INNER JOIN organizationtreedetail otd1 on otd1.schoolid=isr.attendanceschoolid
+			LEFT OUTER JOIN studentreport sr on sr.studentid = e.studentid and sr.schoolyear=#{currentSchoolYear,jdbcType=BIGINT} and sr.assessmentProgramid= #{assessmentProgramId, jdbcType=BIGINT}
+			LEFT OUTER JOIN organizationtreedetail otd2 on otd2.schoolid=sr.attendanceschoolid
+			where (otd1.stateid=#{stateId,jdbcType=BIGINT} or otd2.stateid=#{stateId,jdbcType=BIGINT})
+			and (e.activeflag is true or sr.id is not null)
+			)
+		and otd.stateid=#{stateId,jdbcType=BIGINT}
+		order by otd.districtname
+		
+	</if>
+	<if test="predictiveStudentScore == false">
+		select distinct otd.districtid as id,otd.districtname as organizationName
+		FROM organizationtreedetail otd
+		INNER JOIN enrollment e on e.attendanceschoolid=otd.schoolid and e.currentschoolyear= #{currentSchoolYear,jdbcType=BIGINT}
+		INNER JOIN studentstests st on st.studentid=e.studentid and st.activeflag is true
+		INNER JOIN test t on st.testid=t.id and t.activeflag is true
+		INNER JOIN testspecstatementofpurpose tssop on t.testspecificationid = tssop.testspecificationid and tssop.activeflag is true
+		INNER JOIN category c on tssop.statementofpurposeid = c.id
+		where otd.stateid=#{stateId,jdbcType=BIGINT} and
+		(t.is_interim_test is true) and e.activeflag is true
+		order by otd.districtname
+	</if>
+	
+	</select>
+	
+	<select id="getImmediateChildrenByParentId" resultType="Organization" parameterType="Long">
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id,org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage,orgRel.parentorganizationid as relatedOrganizationId,
+            orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization,
+            org.schoolstartdate, org.schoolenddate, org.buildinguniqueness
+        FROM organization as org 
+        	JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+        	JOIN organizationrelation orgRel ON org.id = orgRel.organizationid
+		WHERE
+           orgRel.parentorganizationid = #{organizationId}
+           and org.activeflag = true
+		ORDER BY org.displayIdentifier
+	</select>
+	
+	<select id="getImmediateChildren" resultType="Organization" parameterType="Long">
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id,org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage,orgRel.parentorganizationid as relatedOrganizationId,
+            orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization
+        FROM organization as org, organizationtype as orgtype,organizationrelation orgRel
+		WHERE
+            org.organizationtypeid = orgtype.id
+			AND org.id = orgRel.organizationid
+			AND org.activeflag = true
+        <if test="organizations != null" >
+		AND	orgRel.parentorganizationid = ANY(ARRAY
+	        <foreach collection="organizations" item="organization" open="[" close="]" separator="," >
+	        	#{organization.id}
+	        </foreach>
+        </if>)
+        order by org.organizationName
+	</select>
+	
+	<select id="getOrgHierarchyByUserId" resultType="Organization" parameterType="Long">
+		/*NO LOAD BALANCE*/
+		WITH RECURSIVE OrgHierarchy AS (
+		SELECT org.id,org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage,orgRel.parentorganizationid as relatedOrganizationId,
+            orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization
+        FROM organization as org, organizationtype as orgtype,organizationrelation orgRel
+		WHERE
+            org.organizationtypeid = orgtype.id
+			AND org.id = orgRel.organizationid
+			AND org.activeflag = true
+			AND orgRel.parentorganizationid = ANY(ARRAY(SELECT
+            o.id
+        FROM organization AS o, usersorganizations as uo, aartuser as au, organizationtype as orgtype
+        WHERE
+            o.organizationtypeid = orgtype.id AND
+            o.id = uo.organizationid AND
+            uo.aartuserid = au.id AND
+            au.id = #{userId} AND
+			au.activeFlag is true AND
+			uo.activeflag = true))
+		Union all
+		SELECT org.id,org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage,orgRel.parentorganizationid as relatedOrganizationId,
+            orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization
+        FROM organization as org, organizationtype as orgtype,organizationrelation orgRel
+        join OrgHierarchy h on orgRel.parentorganizationid = h.id
+		WHERE
+            org.organizationtypeid = orgtype.id
+			AND org.id = orgRel.organizationid
+			AND org.activeflag = true)
+		SELECT * FROM OrgHierarchy oh
+	</select>
+	
+	<select id="getDistrictBySchoolOrgId" resultType="Organization" parameterType="Long">
+		SELECT * FROM organization_parent(#{organizationId})
+	     WHERE organizationtypeid = (SELECT id FROM organizationtype WHERE typecode='DT' LIMIT 1)
+	</select>
+	
+	<select id="getDistrictBySchoolOrgIdForSummaryReport" resultType="Organization" parameterType="Long">
+		select * from (
+			SELECT * FROM organization_parent(#{organizationId}) 
+			WHERE organizationtypeid = (SELECT id FROM organizationtype 
+			WHERE typecode='DT' LIMIT 1)
+		) org
+		LEFT JOIN reportorganizationshortname as shortOrg 
+		ON shortOrg.organizationid = org.id and shortOrg.activeflag is true limit 1
+	</select>
+		
+	<select id="getTree" resultMap="organizationContractRelationResultMap" parameterType="Long">
+		/*NO LOAD BALANCE*/
+		select * from organization_parent_tree(#{organizationId},10)
+		union all
+		select org.id,org.organizationname,org.displayidentifier,org.organizationtypeid,org.welcomemessage,
+		null as relatedorganizationid,null as isParent,10 as currentlevel from organization org where id=#{organizationId}		
+		union all
+		select * from organization_child_tree(#{organizationId},10)
+	</select>	
+
+	<select id="getContractingOrganizationIds" resultType="Long">
+	/*NO LOAD BALANCE*/
+	Select distinct organizationid from orgassessmentprogram where activeflag = true 	
+	</select>	
+	
+	<select id="getAllParents" resultMap="resultMap" parameterType="Long">
+	/*NO LOAD BALANCE*/
+	select * from organization_parent(#{organizationId}) op
+	join organizationtype ot on op.organizationtypeid=ot.id		
+	</select>	
+	<select id="getAllChildren" resultMap="resultMap" parameterType="Long">
+	/*NO LOAD BALANCE*/
+	select * from organization_children(#{organizationId})
+	</select>
+	<select id="getByDisplayIdentifier" resultMap="resultMap" parameterType="String">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, welcomeMessage, 
+			parentorganizationid as relatedOrganizationId, contractingorganization<!-- , EXTRACT(YEAR from schoolenddate) as currentschoolyear-->
+		FROM organization, organizationrelation  
+		WHERE
+			displayIdentifier = #{displayIdentifier} and id = organizationid
+	</select>
+	<select id="getByDisplayIdentifierAndOrganizationName" resultType="Organization" parameterType="String">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, 
+            welcomeMessage, contractingorganization
+		FROM organization 
+		WHERE
+			upper(displayIdentifier) = upper(#{displayIdentifier})
+			and organizationName = #{organizationName}
+	</select>	
+	<!-- TODO convert display identifiers to caps before inserting it. -->
+	<select id="getByDisplayIdentifierAndParent" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, 
+            welcomeMessage, contractingorganization
+		FROM organization 
+		WHERE
+			upper(displayIdentifier) = upper(#{displayIdentifier}) and
+			( ( id in ( select id
+			 from organization_children(#{userOrganizationId}) ) ) or
+			id =  #{userOrganizationId}
+			)
+	</select>	
+	<!-- TODO convert display identifiers to caps before inserting it. -->
+	<select id="getByDisplayIdentifierAndChild" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, 
+            welcomeMessage, contractingorganization
+		FROM organization 
+		WHERE
+			upper(displayIdentifier) = upper(#{displayIdentifier}) and
+			( ( id in ( select id
+			 from organization_parent(#{userOrganizationId}) ) ) or
+			id =  #{userOrganizationId}
+			)
+	</select>
+	<select id="getAll" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT id, organizationName, displayIdentifier, organizationTypeId, 
+       	welcomeMessage, contractingorganization
+		FROM organization where activeflag = true
+		order by organizationName
+	</select>
+	
+	<select id="getAllChildrenByTypeForEditSSA" resultMap="resultMap" parameterType="map">
+	/*NO LOAD BALANCE*/
+	select org.*,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel 
+		from organization_children(
+		(select id from organization where organizationname ilike 'CETE Organization' and activeflag is true limit 1)) org
+		JOIN organization o on o.id = org.id and o.activeflag is true
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		WHERE orgtype.typecode = #{organizationTypeCode}
+		order by org.organizationname
+	</select>
+	
+	<select id="getAllChildrenByType" resultMap="resultMap" parameterType="map">
+	/*NO LOAD BALANCE*/
+	select org.*,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel 
+		from organization_children(#{organizationId}) org
+		JOIN organization o on o.id = org.id and o.activeflag is true
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		WHERE orgtype.typecode = #{organizationTypeCode}
+		order by org.organizationname
+	</select>
+	
+	
+	<select id="getAllChildrenWithParentByType" resultMap="resultMap" parameterType="map">
+		/*NO LOAD BALANCE*/
+		select org.*,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel from 
+		(select * from organization where id in (select id from organization_children(#{organizationId})
+		union select #{organizationId}) and activeflag is true) org
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		WHERE orgtype.typecode = #{organizationTypeCode}
+	</select>
+	
+	<select id="getByTypeId" resultType="Organization" parameterType="map">
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, orgtype.typeName, orgtype.typeCode, orgtype.typeLevel,org.contractingorganization
+		FROM organization as org JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		WHERE org.activeflag = true and orgtype.typecode = #{organizationTypeCode}
+		<choose>
+	      	<when test="sortByCol == 'name'">ORDER BY org.organizationName</when>
+	      	<otherwise>ORDER BY org.displayIdentifier</otherwise>
+      	</choose>
+	</select>
+	
+	<select id="getByTypeAndUserId" resultType="Organization" parameterType="map">	
+		/*NO LOAD BALANCE*/
+			SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization
+		FROM organization as org 
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		JOIN usersorganizations as uo on org.id = uo.organizationid
+		WHERE orgtype.typecode = #{organizationTypeCode} and uo.aartuserid = #{userId} and org.activeflag = true and uo.activeflag = true
+		ORDER BY org.organizationName	
+	</select>
+	
+	<select id="getByTypeAndUserIdInParent" resultType="Organization" parameterType="map">	
+		/*NO LOAD BALANCE*/
+			SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization
+		FROM organization as org 
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		JOIN usersorganizations as uo on org.id = uo.organizationid
+		JOIN (SELECT id FROM organization_children_active_or_inactive(#{parentId,jdbcType=BIGINT})) childrenids ON org.id = childrenids.id
+		WHERE orgtype.typecode = #{organizationTypeCode} and uo.aartuserid = #{userId} <!-- and org.activeflag = true --> and uo.activeflag = true
+		ORDER BY org.organizationName
+	</select>
+	
+	
+	<select id="getByTypeAndUserIdInParentByReportYear" resultType="Organization" parameterType="map">	
+		/*NO LOAD BALANCE*/
+			SELECT
+			distinct(org.id), org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization
+		FROM organization as org 
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		JOIN usersorganizations as uo on org.id = uo.organizationid
+		JOIN (SELECT id FROM organization_children_active_or_inactive(#{parentId,jdbcType=BIGINT})) childrenids ON org.id = childrenids.id
+		JOIN organizationreportdetails ord ON ord.organizationid = org.id
+		WHERE orgtype.typecode = #{organizationTypeCode} and uo.aartuserid = #{userId} and uo.activeflag = true and ord.schoolyear = #{reportYear}
+		ORDER BY org.organizationName
+	</select>
+	
+	
+	<select id="getLoggedInUserOrganizationHierarchy" resultType="Organization">	
+		/*NO LOAD BALANCE*/
+		select t.id, t.organizationname, t.displayidentifier, t.organizationtypeid, ot.typecode, ot.typelevel 
+		from organizationtype ot 
+		inner join (select id, organizationname, displayidentifier, organizationtypeid 
+		from organization_parent_tree(#{organizationId},0) 
+	    union 
+	    select id, organizationname, displayidentifier, organizationtypeid  
+		from organization where id = #{organizationId} and activeflag is true) t on ot.id=t.organizationtypeid where ot.typecode = #{organizationTypeCode}		 
+	</select>
+		
+	<select id="getContractingOrganization" resultType="Organization" parameterType="Long">	
+		/*NO LOAD BALANCE*/
+		select * from (select id,organizationname,displayidentifier,contractingorganization from organization_parent(#{organizationId}) 
+		union select id,organizationname,displayidentifier,contractingorganization from organization where id=#{organizationId} and activeflag = true) result 
+		where contractingorganization is true;	
+	</select>
+	
+	<update id="update" parameterType="Organization">
+		UPDATE organization 
+	<set>
+      <if test="organizationName != null">
+        organizationName = #{organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="displayIdentifier != null">
+        displayIdentifier = #{displayIdentifier,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationTypeId != null">
+        organizationTypeId = #{organizationTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="welcomeMessage != null">
+        welcomeMessage = #{welcomeMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modifieddate = now(),
+      </if>
+      <if test="modifiedUser != null">
+        modifieduser = #{modifiedUser,jdbcType=BIGINT},
+      </if>
+      <if test="activeFlag != null">
+        activeflag = #{activeFlag,jdbcType=BIT},
+      </if>
+      <if test="buildingUniqueness != null">
+        buildinguniqueness = #{buildingUniqueness,jdbcType=BIGINT},
+      </if>
+      <if test="contractingOrganization != null">
+        contractingorganization = #{contractingOrganization,jdbcType=BIT},
+      </if>    
+      <if test="reportYear != null">
+        reportyear = #{reportYear,jdbcType=INTEGER},
+      </if>
+       <if test="testingModel != null">
+        testingmodel = #{testingModel,jdbcType=BIGINT},
+        pooltype = (select categorycode from category where id = #{testingModel}),
+      </if>      
+		testbegintime = #{testBeginTime,jdbcType=TIMESTAMP},
+       	testendtime = #{testEndTime,jdbcType=TIMESTAMP},
+       	testdays = #{testDays,jdbcType=VARCHAR},    
+    </set>    
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateOrganization" parameterType="Organization">
+		UPDATE organization 
+	  <set>
+      <if test="organizationName != null">
+        organizationName = #{organizationName,jdbcType=VARCHAR},
+      </if>
+      <if test="displayIdentifier != null">
+        displayIdentifier = #{displayIdentifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedDate != null">
+        modifieddate = now(),
+      </if>
+      <if test="modifiedUser != null">
+        modifieduser = #{modifiedUser,jdbcType=BIGINT},
+      </if>
+      <if test="reportYear != null">
+        reportyear = #{reportYear,jdbcType=BIGINT},
+      </if>
+       	testbegintime = #{testBeginTime,jdbcType=TIMESTAMP},
+       	testendtime = #{testEndTime,jdbcType=TIMESTAMP},
+       	testdays = #{testDays,jdbcType=VARCHAR},   
+    </set> 
+    ,testingmodel = #{testingModel,jdbcType=BIGINT}
+    ,pooltype = (select categorycode from category where id = #{testingModel})    
+	WHERE id = #{id}
+	</update>
+		
+	<update id="updateOrgnameInOrgTreeDetail" parameterType="Organization">
+		UPDATE organizationtreedetail 
+	      <if test="organizationType.typeCode == 'SCH' ">
+	      <set>
+	        <if test="organizationName != null">
+	          schoolname = #{organizationName,jdbcType=VARCHAR}
+	        </if>
+	        <if test="displayIdentifier != null">
+	          ,schooldisplayidentifier = #{displayIdentifier,jdbcType=VARCHAR}
+	        </if> 
+	        WHERE schoolid = #{id}
+	     </set> 
+	    </if>
+	      
+	     <if test="organizationType.typeCode == 'ST' ">
+	     <set>
+	       	<if test="organizationName != null">
+	          statename = #{organizationName,jdbcType=VARCHAR}
+	        </if>
+	        <if test="displayIdentifier != null">
+	          ,statedisplayidentifier = #{displayIdentifier,jdbcType=VARCHAR},
+	        </if>  
+	     </set>
+	        WHERE stateid = #{id}
+	     </if>
+	      
+	    <if test="organizationType.typeCode == 'DT' ">
+	      <set>
+	      	<if test="organizationName != null">
+	          districtname = #{organizationName,jdbcType=VARCHAR}
+	        </if>
+	        <if test="displayIdentifier != null">
+	          ,districtdisplayidentifier = #{displayIdentifier,jdbcType=VARCHAR},
+	        </if> 
+	      </set>
+	        WHERE districtid = #{id}
+	    </if>	   
+	</update>
+	
+	<update id="updateParentOrganization" parameterType="map">
+	    UPDATE organizationrelation 
+	    SET parentorganizationid = #{org.relatedOrganizationId}, 
+	    modifieddate = #{org.modifiedDate},
+	    modifieduser = #{org.modifiedUser},
+	    activeflag = #{org.activeFlag} 
+	    WHERE organizationid = #{org.id} AND parentorganizationid = #{oldParentOrganizationId}
+	</update>
+	
+	<insert id="addParentOrganizationByOrg" parameterType="Organization">
+		INSERT INTO organizationrelation (organizationid, parentorganizationid, createddate, createduser, activeflag, modifieddate, modifieduser) 
+		values (#{org.id},#{org.relatedOrganizationId},#{org.createdDate},#{org.createdUser},#{org.activeFlag},#{org.modifiedDate},#{org.modifiedUser})
+	</insert>
+	
+	<select id="checkForDLM" resultType="Long">
+		/*NO LOAD BALANCE*/
+		select distinct os.organizationid from orgassessmentprogram os 
+		where 
+			os.assessmentprogramid = (select id from assessmentprogram where programname=#{userOrgDLM})
+			AND os.organizationid= #{userOrganizationId} AND os.activeflag = true;
+	</select>
+	<select id="getAllChildrenDLM" resultMap="resultMap">
+	/*NO LOAD BALANCE*/
+	select * from organization_children(#{userOrganizationId}) where id in (select distinct attendanceSchool.id from Organization attendanceSchool
+	JOIN orgassessmentprogram os ON os.organizationid = attendanceSchool.id AND os.activeflag = true
+	where attendanceSchool.activeflag = true and os.assessmentprogramid = (select id from assessmentprogram where programname=#{userOrgDLM}));
+	</select>
+
+	<select id="getByDisplayIdAndType" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, welcomeMessage,contractingorganization,reportyear
+		FROM organization  
+		WHERE
+			upper(displayIdentifier) = upper(#{displayIdentifier})
+			AND organizationtypeid = #{typeId} and activeflag = true
+			<if test="contractingOrgId != null">
+				AND id IN (select id from organization_children(#{contractingOrgId}) where organizationtypeid = #{typeId})
+			</if>
+	</select>
+	
+	<select id="getOrganizationByDisplayIDAndTypeCode" resultType="java.lang.Integer">
+		/*NO LOAD BALANCE*/
+		Select count(orgrel.organizationid) from organizationrelation  orgrel 
+		inner join organization stateorg on stateorg.id = orgrel.parentorganizationid
+		<if test="typeCode == 'DT'">	
+			inner join organization dtorg on dtorg.id = orgrel.organizationid
+			and upper(dtorg.displayidentifier) = upper(#{displayIdentifier}) and stateorg.id = #{stateId,jdbcType=BIGINT}
+		</if>
+		<if test="typeCode == 'SCH'">	
+			inner join organizationrelation disorgrel on disorgrel.parentorganizationid = orgrel.organizationid
+			inner join organization org on org.id = disorgrel.organizationid
+			and upper(org.displayidentifier) = upper(#{displayIdentifier}) and stateorg.id = #{stateId,jdbcType=BIGINT}
+		</if>
+  	</select>
+  	
+	<select id="getByDisplayIdRelationAndType" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, welcomeMessage, parentorganizationid as relatedOrganizationId,
+			contractingorganization
+		FROM organization org, organizationrelation  
+		WHERE
+			upper(displayIdentifier) = upper(#{displayIdentifier}) AND id = organizationid
+			AND organizationtypeid = #{typeId}
+			and org.activeflag = true
+	</select>
+	
+	<sql id="findSelfAndChildrenSelect">
+		SELECT oc.*, c.categoryname as expirationdatetypestring ,ot.typename,ot.typecode, ot.typelevel, orgrel.parentorganizationid as relatedOrganizationId,
+				parent.displayidentifier as parentOrgDisplayName, pot.typecode as parentOrgTypeCode,
+				parent.organizationname as parentorganizationname,
+				cat.categoryname as testingmodelname,
+				array_to_string(array(select distinct mergedorg.sourceorgdisplayidentifier
+  					from organizationoperationaldetail mergedorg where oc.id = mergedorg.targetorgid 
+  					AND mergedorg.activeflag = true ),', ') As sourceorgdisplayidentifier,
+				array_to_string(array_agg(DISTINCT  ap.abbreviatedname ), ', ')  as assessmentprogram , org.testbegintime, org.testendtime, org.testdays 
+			FROM organization_children(#{organizationId}) oc 
+					JOIN organizationtype ot ON oc.organizationtypeid = ot.id 
+					INNER JOIN organization org on org.id = oc.id
+					LEFT OUTER JOIN category c ON c.id = oc.expirationdatetype
+					LEFT OUTER JOIN category cat ON cat.id = org.testingmodel
+					LEFT OUTER JOIN organizationrelation orgrel ON oc.id = orgrel.organizationid
+					LEFT OUTER JOIN organization parent ON orgrel.parentorganizationid = parent.id
+					LEFT OUTER JOIN organizationtype pot ON parent.organizationtypeid = pot.id
+					LEFT JOIN orgassessmentprogram orgap on orgap.organizationid = oc.id and orgap.activeflag is true
+					LEFT JOIN assessmentprogram ap on ap.id = orgap.assessmentprogramid
+			GROUP BY oc.id,oc.organizationname,oc.displayidentifier,oc.organizationtypeid,oc.welcomemessage,
+				    oc.contractingorganization,oc.schoolstartdate,oc.schoolenddate,oc.expirepasswords,oc.expirationdatetype,
+				    c.categoryname,ot.typename,ot.typecode,ot.typelevel,orgrel.parentorganizationid,
+				    parent.organizationname,parent.displayidentifier,pot.typecode,cat.categoryname, org.testbegintime, org.testendtime, org.testdays
+			UNION
+			SELECT o.id, o.organizationname, o.displayidentifier, o.organizationtypeid, o.welcomemessage, 
+				o.contractingorganization, o.schoolstartdate, o.schoolenddate, o.expirepasswords, o.expirationdatetype,
+				c.categoryname as expirationdatetypestring,
+				ot.typename,ot.typecode, ot.typelevel,
+				orgrel.parentorganizationid as relatedOrganizationId,
+				parent.organizationname as parentOrgDisplayName, pot.typecode as parentOrgTypeCode,
+				parent.organizationname as parentorganizationname,
+				cat.categoryname as testingmodelname,
+				array_to_string(array(select distinct mergedorg.sourceorgdisplayidentifier 
+      				from organizationoperationaldetail mergedorg where o.id = mergedorg.targetorgid AND mergedorg.activeflag = true ),', ') 
+      				As sourceorgdisplayidentifier,
+				array_to_string(array_agg(DISTINCT  ap.abbreviatedname ), ', ')  as assessmentprogram, o.testbegintime, o.testendtime, o.testdays
+			FROM organization o 
+					JOIN organizationtype ot ON o.organizationtypeid = ot.id 
+					LEFT OUTER JOIN category c ON c.id = o.expirationdatetype
+					LEFT OUTER JOIN category cat ON cat.id = o.testingmodel 
+					LEFT OUTER JOIN organizationrelation orgrel ON o.id = orgrel.organizationid 
+					LEFT OUTER JOIN organization parent ON orgrel.parentorganizationid = parent.id
+					LEFT OUTER JOIN organizationtype pot ON parent.organizationtypeid = pot.id 
+					LEFT JOIN orgassessmentprogram orgap on orgap.organizationid = o.id and orgap.activeflag is true
+					LEFT JOIN assessmentprogram ap on ap.id = orgap.assessmentprogramid
+			WHERE o.id = #{organizationId}
+			GROUP BY o.id,c.categoryname,ot.typename,ot.typecode,ot.typelevel,orgrel.parentorganizationid,
+				parent.organizationname,pot.typecode,cat.categoryname
+	</sql>
+	<sql id="findSelfAndChildrenWhere">
+		WHERE 1=1
+			<if test="id != null">AND cast(id as varchar) = #{id}</if>
+			<if test="displayIdentifier != null">AND upper(displayidentifier) like upper('%' || #{displayIdentifier} || '%')</if>
+			<if test="organizationName != null">AND upper(organizationname) like upper('%' || #{organizationName} || '%')</if>
+			<if test="typeCode != null">AND upper(typecode) like upper('%' || #{typeCode} || '%')</if>
+			<if test="parentOrgDisplayName != null">AND upper(parentOrgDisplayName) like upper('%' || #{parentOrgDisplayName} || '%')</if>
+			<if test="parentOrgTypeCode != null">AND upper(parentOrgTypeCode) like upper('%' || #{parentOrgTypeCode} || '%')</if>
+			
+			<if test="schoolStartDate != null">
+				<choose>
+					<when test="schoolStartDate == 'NA'">
+						AND schoolStartDate is null
+					</when>
+					<otherwise>
+						AND to_char(schoolStartDate, 'MM/DD/YYYY') ilike '%' || #{schoolStartDate} ||'%'
+					</otherwise>
+				</choose>				
+			</if>
+			<if test="schoolEndDate != null">
+				<choose>
+					<when test="schoolEndDate == 'NA'">
+						AND schoolEndDate is null
+					</when>
+					<otherwise>
+						AND to_char(schoolEndDate, 'MM/DD/YYYY') ilike '%' || #{schoolEndDate} ||'%'
+					</otherwise>
+				</choose>				
+			</if>
+			<if test="expirePasswords != null">
+				<choose>
+					<when test="expirePasswords == '-1'">
+						AND expirePasswords is null
+					</when>
+					<otherwise>
+						AND expirePasswords= CAST(#{expirePasswords} as BOOLEAN) 
+					</otherwise>
+				</choose>
+			</if>
+			<if test="expirationDateType != null">
+				<choose>
+					<when test="expirationDateType == 'NA'">
+						AND expirationdatetypestring is null
+					</when>
+					<otherwise>
+						AND upper(expirationdatetypestring) like upper('%' || #{expirationDateType} || '%')
+					</otherwise>
+				</choose>
+				
+			</if>
+			<if test="contractingOrganization != null">
+				<choose>
+					<when test="contractingOrganization == '-1'">
+						AND contractingOrganization is null
+					</when>
+					<otherwise>
+						AND contractingOrganization= CAST(#{contractingOrganization} as BOOLEAN) 
+					</otherwise>
+				</choose>
+			</if>
+			<if test="parentOrganizationName != null">AND upper(parentorganizationname) like upper('%' || #{parentOrganizationName} || '%')</if>
+			<if test="assessmentProgram != null">AND upper(assessmentprogram) like upper('%' || #{assessmentProgram} || '%')</if>
+			<if test="testingModelName != null">AND upper(testingmodelname) like upper('%' || #{testingModelName} || '%')</if>
+			<!-- <if test="sourceorgdisplayidentifier != null">AND '${sourceorgdisplayidentifier}' = ANY (sourceorgdisplayidentifier)</if>  in array searching-->
+			<if test="sourceorgdisplayidentifier != null">AND upper(sourceorgdisplayidentifier) like upper('%' || ${sourceorgdisplayidentifier} || '%')</if>
+	</sql>
+	<select id="findSelfAndChildren" resultMap="resultMap" parameterType="hashmap"  useCache="false">
+		/*NO LOAD BALANCE*/
+		SELECT * FROM (<include refid="findSelfAndChildrenSelect"/>) AS ORGS
+		<include refid="findSelfAndChildrenWhere"/>
+		<if test="sortByColumn != null">
+    	ORDER BY 
+    		<choose>
+	      		<when test="sortByColumn == 'id'">id</when>
+	      		<when test="sortByColumn == 'displayIdentifier'">displayIdentifier</when>
+	      		<when test="sortByColumn == 'organizationName'">organizationName</when>
+	      		<when test="sortByColumn == 'typeCode'">typeCode</when>
+	      		<when test="sortByColumn == 'parentOrgDisplayName'">parentOrgDisplayName</when>
+	      		<when test="sortByColumn == 'parentOrgTypeCode'">parentOrgTypeCode</when>
+	      		<when test="sortByColumn == 'contractingOrganization'">contractingOrganization</when>
+	      		<when test="sortByColumn == 'schoolStartDate'">schoolStartDate</when>
+	      		<when test="sortByColumn == 'schoolEndDate'">schoolEndDate</when>
+	      		<when test="sortByColumn == 'expirePasswords'">expirePasswords</when>
+	      		<when test="sortByColumn == 'expirationDateType'">expirationDateType</when>
+	      		<when test="sortByColumn == 'parentOrganizationName'">parentOrganizationName</when>
+	      		<when test="sortByColumn == 'assessmentProgram'">assessmentProgram</when>
+	      		<when test="sortByColumn == 'testingModelName'">testingModelName</when>
+	      		<when test="sortByColumn == 'sourceorgdisplayidentifier'">sourceorgdisplayidentifier</when>
+	      		<when test="sortByColumn == 'parentOrgDisplayName,organizationName'">parentOrgDisplayName, organizationName</when>
+	      		<when test="sortByColumn == 'testBeginTime'">testBeginTime</when>
+	      		<when test="sortByColumn == 'testEndTime'">testEndTime</when>
+	      		<when test="sortByColumn == 'testDays'">testDays</when>
+	      	</choose>
+	      	<if test="sortType=='desc'">
+    			desc
+   	 		</if>
+   	 		<if test="sortType=='asc' or sortType==null">
+   	 			asc
+   	 		</if>
+		</if>
+		
+    	LIMIT #{limit}
+    	OFFSET #{offset}
+	</select>
+	
+	<select id="countFindSelfAndChildren" resultType="java.lang.Integer" parameterType="hashmap"  useCache="false">
+		/*NO LOAD BALANCE*/
+   		SELECT count(1) FROM (<include refid="findSelfAndChildrenSelect"/>) AS ORGS
+   			<include refid="findSelfAndChildrenWhere"/>
+  	</select>
+  	
+  	<select id="getContractingOrg" resultType="Organization" parameterType="map">
+  		/*NO LOAD BALANCE*/	
+		select op.*, c.categorycode as expirationdatetypestring, EXTRACT(YEAR from schoolenddate) as currentschoolyear,
+		(select reportyear from organization where id=op.id), (select pooltype from organization where id=op.id)
+		from organization_parent(#{orgId}) op
+		left join category c on c.id = op.expirationdatetype  where contractingorganization=true
+		UNION
+		select o.id, o.organizationname, o.displayidentifier, o.organizationtypeid, 
+		o.welcomemessage, o.buildinguniqueness, o.schoolstartdate, o.schoolenddate, 
+		o.contractingorganization, o.expirepasswords, o.expirationdatetype, 
+		c.categorycode as expirationdatetypestring, EXTRACT(YEAR from schoolenddate) as currentschoolyear,reportyear, pooltype
+		from organization o
+		left join category c on c.id = o.expirationdatetype 
+		where o.id = #{orgId} and o.activeflag =true and contractingorganization=true
+		limit 1
+	</select>	
+  	
+  	
+  	<select id="getDistrictInState" resultType="Organization">	
+  		/*NO LOAD BALANCE*/
+		select * from organization_children((SELECT op.id
+                              FROM organization_parent(#{orgId}) op
+                              JOIN organizationtype ot ON op.organizationtypeid=ot.id
+                              WHERE ot.typecode='ST'
+                              UNION SELECT o.id from organization o inner join  organizationtype ot ON o.organizationtypeid=ot.id
+                              WHERE ot.typecode='ST' and o.id=#{orgId})) oc 
+		join organizationtype ot2 on oc.organizationtypeid=ot2.id 
+		where upper(displayidentifier)=upper(#{districtDisplayIdentifier}) and ot2.typecode='DT'
+	</select>
+	
+	<select id="getSchoolInState" resultType="edu.ku.cete.domain.common.OrganizationTreeDetail">	
+  		/*NO LOAD BALANCE*/
+		select * from organizationtreedetail where upper(schooldisplayidentifier) = upper(#{schoolDisplayIdentifier}) and stateid = #{stateId}
+	</select>		
+	
+	<select id="getPoolType" resultType="String">	
+		/*NO LOAD BALANCE*/
+		select pooltype from organization 
+		where displayidentifier = (select displayidentifier from organization_parent(#{attendenceSchoolId}) op 	where op.organizationtypeid=2)
+		and organizationtypeid=2
+	</select>	
+	
+	<select id="checkPoolTypes" resultType="String">
+		/*NO LOAD BALANCE*/	
+		select displayidentifier from organization 
+		where pooltype is null and organizationtypeid=2 
+		and displayidentifier  in ('AK','CO','IL','MI','NJ','OK','PA','WA','WV','WI','IA','KS','MS','MO','NC','ND','UT','VT','VA')
+	</select>
+	
+	<select id="getAllChildrenOrgIds" resultType="java.lang.Long">
+			/*NO LOAD BALANCE*/
+			select id from organization_children(#{organizationId,jdbcType=BIGINT})
+	</select>
+	
+	<select id="getOrgParentsForStudentEnrollmentRecord" parameterType="java.lang.Long" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT id, organizationname, organizationtypeid
+		FROM organization_parent(
+			(SELECT attendanceschoolid
+			FROM enrollment
+			WHERE studentid = #{studentId,jdbcType=BIGINT} AND activeflag = TRUE
+			LIMIT 1))
+		UNION
+		SELECT o.id, o.organizationname, o.organizationtypeid
+		FROM organization o
+		INNER JOIN enrollment e ON e.attendanceschoolid = o.id AND e.studentid = #{studentId,jdbcType=BIGINT} AND e.activeflag = TRUE
+	</select>
+	<select id="getContractingOrgsByAssessmentProgramId" parameterType="java.lang.Long" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		select o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear
+		 from assessmentprogram ap
+			join orgassessmentprogram oap on ap.id=oap.assessmentprogramid
+			join organization o on o.id=oap.organizationid
+		 where ap.id = #{assessmentProgramId,jdbcType=BIGINT}
+		  and ap.activeflag is true and o.contractingorganization is true
+		  and o.activeflag is true
+	</select>
+	
+	<select id="getDLMStatesWithMultiEEs" useCache="false" resultType="Organization" >
+		/*NO LOAD BALANCE*/
+	   	select o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear, oa.assessmentprogramid      
+	   	from organization o
+		inner join orgassessmentprogram oa on o.id = oa.organizationid
+		inner join assessmentprogram ap on oa.assessmentprogramid = ap.id
+		where contractingorganization is true and o.activeflag is true and ap.activeflag is true 
+		and ap.abbreviatedname='DLM' and pooltype in ('MULTIEEOFG', 'MULTIEEOFC')
+	</select>
+	
+	<select id="getDLMStatesWithPooltype" useCache="false" resultType="Organization" >
+		/*NO LOAD BALANCE*/
+	   	select o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear, oa.assessmentprogramid      
+	   	from organization o
+		inner join orgassessmentprogram oa on o.id = oa.organizationid
+		inner join assessmentprogram ap on oa.assessmentprogramid = ap.id
+		where contractingorganization is true and o.activeflag is true and ap.activeflag is true 
+		and ap.abbreviatedname=#{assessmentProgram,jdbcType=VARCHAR} and pooltype is not null
+		<if test="multiAssignment != null">
+			and o.multitestassignment = #{multiAssignment}
+		</if>
+	</select>	
+	
+	<select id="getDLMStatesWithPooltypeAndOperationalWindow" useCache="false" resultType="Organization" >
+		/*NO LOAD BALANCE*/
+	   	select otw.id as operationalwindowid, o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear, oa.assessmentprogramid      
+	   	from organization o
+		inner join orgassessmentprogram oa on o.id = oa.organizationid
+		inner join assessmentprogram ap on oa.assessmentprogramid = ap.id
+		join operationaltestwindowstate otws on otws.stateid = o.id 
+		join operationaltestwindow otw on otw.id = otws.operationaltestwindowid
+		join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid
+		where contractingorganization is true and o.activeflag is true and ap.activeflag is true 
+		and ap.abbreviatedname=#{assessmentProgram,jdbcType=VARCHAR} and pooltype is not null
+		<if test="multiAssignment != null">
+			and o.multitestassignment = #{multiAssignment}
+		</if>
+		<if test="operationalWindowId != null">
+			and otw.id =  #{operationalWindowId}
+		</if>
+		<if test="operationalWindowId == null">
+		 and otw.activeflag is true and now()  &gt;= otw.effectivedate and now()  &lt;= otw.expirydate
+		</if>
+		and otw.testenrollmentflag is true
+		and tem.methodcode = 'STDNTTRKR'
+	</select>	
+	
+	<select id="getStatesByOperationalTestWindowId" useCache="false" resultType="Organization">
+		select o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear
+		from organization o
+		inner join operationaltestwindowstate otws on o.id = otws.stateid
+		where o.activeflag = true
+		and otws.operationaltestwindowid = #{operationalTestWindowId}
+	</select>
+	
+	<select id="getAllChildrenIdsByType" resultType="java.lang.Long">
+		/*NO LOAD BALANCE*/
+		select id
+		from organization_children(#{organizationId,jdbcType=BIGINT})
+		where organizationtypeid =
+			(select id from organizationtype where typecode = #{typeCode,jdbcType=VARCHAR})
+	</select>
+	
+	<update id="refreshOrgDetails">
+		/*NO LOAD BALANCE*/ SELECT refresh_organization_detail();
+	</update>
+	
+	<select id="getStatesBasedOnassessmentProgramId" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		select org.* from organization org
+		inner join orgassessmentprogram orga on orga.organizationid = org.id
+		where orga.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+		 and orga.activeflag = true 
+		and org.activeflag = true 
+		and organizationtypeid = (select id from organizationtype where typecode = 'ST')
+		order by org.organizationname
+	</select>
+	
+	<select id="getAllSchoolsByOrganization" resultType="java.lang.Long">
+	  /*NO LOAD BALANCE*/
+	  SELECT schoolid FROM organizationtreedetail 
+	     WHERE stateid = #{organizationId} OR districtid = #{organizationId}	
+	</select>
+	
+	<select id="getSchoolYearByOrganization" resultType="java.lang.Long">
+	  /*NO LOAD BALANCE*/
+	  SELECT EXTRACT(YEAR from schoolenddate) as currentschoolyear
+	  	FROM organization
+	     WHERE id = #{organizationId,jdbcType=BIGINT} and activeflag is true	
+	</select>
+	<select id="getAllStatesByUserId" resultType="java.lang.Long">
+		select distinct otd.stateid  from aartuser artu inner join
+	    usersorganizations uorg on artu.id=uorg.aartuserid and uorg.activeflag is true
+	    inner join userorganizationsgroups uorggrp on uorg.id = uorggrp.userorganizationid and uorggrp.activeflag is true 
+	    inner join organizationtreedetail otd on  ( otd.districtid = uorg.organizationid  or otd.schoolid = uorg.organizationid or otd.stateid = uorg.organizationid )
+	    where artu.id = #{userId,jdbcType=BIGINT}
+	</select>
+		
+	
+	<select id="getOrganizationDetailBySchoolId" resultType="edu.ku.cete.domain.common.OrganizationTreeDetail">
+	  SELECT schoolId, schoolName, schoolDisplayIdentifier, districtId, districtName, districtDisplayIdentifier, stateId, stateName, stateDisplayIdentifier
+	  	FROM organizationtreedetail
+	  WHERE schoolid = #{schoolId,jdbcType=BIGINT}
+	</select>	
+	
+	<select id="getOrganizationDetailById" resultType="edu.ku.cete.domain.common.OrganizationTreeDetail">
+		SELECT DISTINCT
+			otd.stateid, otd.statename, otd.statedisplayidentifier,
+			CASE
+				WHEN ot.typecode IN ('DT', 'SCH') THEN otd.districtid
+				ELSE NULL
+			END AS districtid,
+			CASE
+				WHEN ot.typecode IN ('DT', 'SCH') THEN otd.districtname
+				ELSE NULL
+			END AS districtname,
+			CASE
+				WHEN ot.typecode IN ('DT', 'SCH') THEN otd.districtdisplayidentifier
+				ELSE NULL
+			END AS districtdisplayidentifier,
+			CASE
+				WHEN ot.typecode = 'SCH' THEN otd.schoolid
+				ELSE NULL
+			END AS schoolid,
+			CASE
+				WHEN ot.typecode = 'SCH' THEN otd.schoolname
+				ELSE NULL
+			END AS schoolname,
+			CASE
+				WHEN ot.typecode = 'SCH' THEN otd.schooldisplayidentifier
+				ELSE NULL
+			END AS schooldisplayidentifier
+		FROM organization o
+		JOIN organizationtype ot ON o.organizationtypeid = ot.id
+		JOIN organizationtreedetail otd ON (
+			CASE
+			WHEN ot.typecode = 'SCH' THEN o.id = otd.schoolid
+			WHEN ot.typecode = 'DT' THEN o.id = otd.districtid
+			WHEN ot.typecode = 'ST' THEN o.id = otd.stateid
+			ELSE FALSE
+			END
+		)
+		WHERE o.id = #{orgId,jdbcType=BIGINT}
+	</select>
+	
+	<update id="deleteOrganization" parameterType="edu.ku.cete.domain.common.Organization">
+		update organization set activeflag = false, ismerged = #{isMerged},
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where id = #{id, jdbcType=BIGINT}
+	</update>
+	
+  <update id="moveSchool">
+	update organizationrelation set parentorganizationid=#{destinationDistrict, jdbcType=BIGINT},
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where organizationid = #{sourceSchool};
+	update organizationtreedetail 
+	set districtid=#{destinationDistrict, jdbcType=BIGINT},
+	districtname=(select organizationname from organization where id=#{destinationDistrict, jdbcType=BIGINT}),
+	districtdisplayidentifier=(select displayidentifier from organization where id=#{destinationDistrict, jdbcType=BIGINT})
+	where schoolid = #{sourceSchool};
+	
+	update externalstudentreports set districtid = #{destinationDistrict, jdbcType=BIGINT},
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where schoolid  = #{sourceSchool};
+	<!-- and schoolyear = #{currentSchoolYear} -->
+	
+	update studentreport set districtid = #{destinationDistrict, jdbcType=BIGINT}
+	where attendanceschoolid  = #{sourceSchool};
+	<!-- and schoolyear = #{currentSchoolYear} -->
+  </update>
+  
+    <select id="getDeactivateChildrenByOrgTypeCode" resultMap="resultMap" parameterType="map">
+	select org.*,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel 
+		from (WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+		SELECT organizationid, parentorganizationid FROM organizationrelation WHERE parentorganizationid =#{organizationId}
+		UNION
+		SELECT
+		organizationrelation.organizationid, organizationrelation.parentorganizationid
+		FROM organizationrelation, organization_relation as parentorganization_relation
+		WHERE organizationrelation.parentorganizationid = parentorganization_relation.organizationid)
+		SELECT o.id, o.organizationname, o.displayidentifier, o.organizationtypeid, o.welcomemessage, o.contractingorganization, o.schoolstartdate, o.schoolenddate, o.expirepasswords,  o.expirationdatetype 
+		from organization o where o.id in (Select organizationid FROM organization_relation)) org
+		JOIN organization o on o.id = org.id and o.activeflag is false
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		WHERE orgtype.typecode = #{orgTypeCode}
+		order by org.organizationname
+	</select>
+	
+	<select id="getLoggedInUserDeactivateOrganizationHierarchy" resultType="Organization">	
+		/*NO LOAD BALANCE*/
+		select t.id, t.organizationname, t.displayidentifier, t.organizationtypeid, ot.typecode, ot.typelevel 
+		from organizationtype ot 
+		inner join (select org.id, org.organizationname, org.displayidentifier, org.organizationtypeid 
+		  from(WITH RECURSIVE organization_parent_tree_relation(organizationid, parentorganizationid,currentlevel) AS (
+		          SELECT organizationid, parentorganizationid,(0 - 1) as currentLevel FROM organizationrelation WHERE organizationid = #{organizationId}
+		          UNION
+		          SELECT
+		            organizationrelation.organizationid, organizationrelation.parentorganizationid,
+		            (parentorganization_parent_tree_relation.currentLevel - 1) as currentlevel
+		          FROM organizationrelation, organization_parent_tree_relation as parentorganization_parent_tree_relation
+		          WHERE organizationrelation.organizationid = parentorganization_parent_tree_relation.parentorganizationid)
+		        SELECT id, organizationname, displayidentifier, organizationtypeid, welcomemessage,
+		           organization_parent_tree_relation.organizationid,false as isparent,
+		          organization_parent_tree_relation.currentLevel as currentLevel        
+		         FROM organization org,organization_parent_tree_relation where
+		          org.id=organization_parent_tree_relation.parentorganizationid) as org
+	    union 
+	    select id, organizationname, displayidentifier, organizationtypeid  
+		from organization where id = #{organizationId} and activeflag is false) t on ot.id=t.organizationtypeid where ot.typecode = #{orgTypeCode}		 
+	</select>
+	
+	<update id="enableOrganization" parameterType="edu.ku.cete.domain.common.Organization">
+		update organization set activeflag = true,
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where id = #{id, jdbcType=BIGINT}
+	</update>
+	
+	<update id="deactiveMergedOperation" parameterType="edu.ku.cete.domain.common.Organization">
+		update organizationoperationaldetail set activeflag = false,
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where sourceorgid = #{id, jdbcType=BIGINT}
+	</update>
+		
+	<select id="getAllDeactiveChildrenByOrgTypeCode" resultMap="resultMap" parameterType="map">
+	/*NO LOAD BALANCE*/
+	select org.*,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel 
+		from organization_children(#{organizationId}) org
+		JOIN organization o on o.id = org.id and o.activeflag is false
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		WHERE orgtype.typecode = #{orgTypeCode}
+		order by org.organizationname
+	</select>
+	
+	<select id="getChildrenWithDLMStudentsEnrolled" resultMap="resultMap" parameterType="map">
+	  SELECT DISTINCT org.id, org.organizationname, org.displayidentifier,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel
+	  FROM organization_children(#{parentId,jdbcType=BIGINT}) org
+	  JOIN organizationtype orgtype ON org.organizationtypeid = orgtype.id
+	  JOIN organizationtreedetail otd ON
+	    <if test="childType == 'SCH'">org.id = otd.schoolid</if>
+	    <if test="childType == 'DT'">org.id = otd.districtid</if>
+	    <if test="childType == 'ST'">org.id = otd.stateid</if>
+	  JOIN enrollment e ON e.attendanceschoolid = otd.schoolid
+	  JOIN studentassessmentprogram sap ON e.studentid = sap.studentid
+	  JOIN assessmentprogram ap ON sap.assessmentprogramid = ap.id
+	  WHERE e.activeflag = TRUE
+	  AND sap.activeflag = TRUE
+	  AND ap.abbreviatedname = 'DLM'
+	  AND e.currentschoolyear = #{schoolYear,jdbcType=BIGINT}
+	  ORDER BY org.organizationname
+	</select>
+	
+	<select id="getDLMStatesForResearchSurvey" useCache="false" resultType="Organization" >
+		/*NO LOAD BALANCE*/
+	   	select otw.id as operationalwindowid, o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear, oa.assessmentprogramid      
+	   	from organization o
+		inner join orgassessmentprogram oa on o.id = oa.organizationid
+		inner join assessmentprogram ap on oa.assessmentprogramid = ap.id
+		join operationaltestwindowstate otws on otws.stateid = o.id 
+		join operationaltestwindow otw on otw.id = otws.operationaltestwindowid
+		join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid
+		where contractingorganization is true and o.activeflag is true and ap.activeflag is true 
+		and ap.abbreviatedname=#{assessmentProgram,jdbcType=VARCHAR} and pooltype is not null		
+		<if test="operationalWindowId != null">
+			and otw.id =  #{operationalWindowId}
+		</if>
+		<if test="operationalWindowId == null">
+		 and otw.activeflag is true and now()  &gt;= otw.effectivedate and now()  &lt;= otw.expirydate
+		</if>
+		and otw.testenrollmentflag is true
+		and tem.methodcode = 'RESEARCHSURVEY'
+	</select>
+	
+	<select id="getContractingOrgsByAssessmentProgramIdOTWId" useCache="false" resultType="Organization" >
+		/*NO LOAD BALANCE*/
+	   	select otw.id as operationalwindowid, otw.effectivedate as operationalwindoweffectivedate,
+	   	  o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear, oa.assessmentprogramid      
+	   	from organization o
+		inner join orgassessmentprogram oa on o.id = oa.organizationid
+		inner join assessmentprogram ap on oa.assessmentprogramid = ap.id
+		join operationaltestwindowstate otws on otws.stateid = o.id 
+		join operationaltestwindow otw on otw.id = otws.operationaltestwindowid
+		join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid
+		where contractingorganization is true and o.activeflag is true and ap.activeflag is true 
+		and ap.id = #{assessmentProgramId}
+		<if test="operationalTestWindowId != null">
+			and otw.id =  #{operationalTestWindowId}
+		</if>
+		<if test="operationalTestWindowId == null">
+		 and otw.activeflag is true and now()  &gt;= otw.effectivedate and now()  &lt;= otw.expirydate
+		</if>
+		and otw.testenrollmentflag is true
+		and tem.methodcode = #{enrollmentMethod}
+	</select>
+	
+	<select id="getBundledReportOrg" resultType="Organization" useCache="false">	
+		select distinct ord.id, ord.organizationName 
+                        from organization_children_active_or_inactive(#{districtId}) ord 
+                        inner join organizationtype as orgtype ON ord.organizationtypeid = orgtype.id	
+		<if test="assessmentProgCode == 'DLM' or assessmentProgCode == 'CPASS'">
+			inner join externalstudentreports esr on esr.schoolid = ord.id and  esr.activeflag = true 
+			where  orgtype.typecode = 'SCH'
+			and esr.schoolyear = #{schoolYear} 
+			<if test="reportType != null">
+				and esr.reporttype = #{reportType,jdbcType=VARCHAR}
+			</if>
+			and esr.assessmentprogramid = #{assessmentProgId} order by ord.organizationName
+		</if>
+		<if test="assessmentProgCode == 'KAP' or assessmentProgCode == 'KELPA2' ">
+			inner join studentreport sr on sr.attendanceschoolid = ord.id	 
+			where  orgtype.typecode = 'SCH' and sr.schoolyear = #{schoolYear} and sr.assessmentprogramid = #{assessmentProgId} order by ord.organizationName
+		</if>	
+	</select>
+
+    <select id="getOrganizationDetails" resultMap="organizationDetailResultMap" parameterType="Long">
+		SELECT
+			od.id, od.organizationid, o.organizationname, od.createddate, od.createduser,
+			od.modifieddate, od.modifieduser, od.activeflag, od.itistartdate, od.itienddate, od.testingcycleid,
+			otw.effectivedate AS windoweffectivedate, otw.expirydate AS windowexpirydate, otw.instructionplannerwindow, otw.instructionplannerdisplayname,
+			od.testingcycleid, tc.testingcyclename
+		FROM organization o
+		JOIN organizationdetail od ON o.id = od.organizationid AND od.activeflag IS TRUE
+		JOIN testingcycle tc ON od.testingcycleid = tc.id AND tc.activeflag IS TRUE
+		JOIN operationaltestwindow otw ON tc.operationaltestwindowid = otw.id AND otw.activeflag IS TRUE
+		WHERE o.activeflag IS TRUE
+		<if test="id != null">
+			AND od.id = #{id,jdbcType=BIGINT}
+		</if>
+		ORDER BY tc.sortorder, o.organizationname
+	</select>
+	
+	<select id="getOrganizationDetailByOrgId" resultMap="organizationDetailResultMap" parameterType="map">
+		SELECT
+			od.id, od.organizationid, o.organizationname, od.createddate, od.createduser,
+			od.modifieddate, od.modifieduser, od.activeflag, od.itistartdate, od.itienddate, od.testingcycleid, otw.instructionplannerdisplayname,
+			od.testingcycleid, tc.testingcyclename, otw.effectivedate AS windoweffectivedate, otw.expirydate AS windowexpirydate
+		FROM organization o
+		JOIN operationaltestwindowstate otws
+			ON o.id = otws.stateid
+			AND otws.activeflag IS TRUE
+		JOIN operationaltestwindow otw
+			ON otws.operationaltestwindowid = otw.id
+			AND otw.activeflag IS TRUE
+		JOIN testingcycle tc
+			ON otw.id = tc.operationaltestwindowid
+			AND otw.assessmentprogramid = tc.assessmentprogramid
+			AND tc.activeflag IS TRUE
+		JOIN testingprogram tp
+			ON tc.testingprogramid = tp.id
+			AND otw.assessmentprogramid = tp.assessmentprogramid
+			AND tp.activeflag IS TRUE
+		JOIN organizationdetail od
+			ON tc.id = od.testingcycleid
+			AND otws.stateid = od.organizationid
+			AND od.activeflag IS TRUE
+		WHERE otws.activeflag IS TRUE
+		AND otw.instructionplannerwindow IS TRUE
+		AND o.id = #{orgId,jdbcType=BIGINT}
+		<if test="testingCycleId != null">
+			AND tc.id = #{testingCycleId,jdbcType=BIGINT}
+		</if>
+		AND tp.highstake IS FALSE
+		AND tp.programabbr IN ('S', 'I', 'F')
+		ORDER BY tc.sortorder, o.organizationname
+	</select>
+	
+	<insert id="addOrganizationDetails" parameterType="organizationDetail" useGeneratedKeys="true" keyProperty="organizationDetail.id" keyColumn="id"> 
+		<!--
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      		SELECT nextval('organizationdetail_id_seq')
+    	</selectKey>
+    	-->
+        INSERT INTO organizationdetail(organizationid, createddate, createduser, modifieddate,
+			 modifieduser, activeflag, itistartdate, itienddate, testingcycleid)
+		VALUES(#{organizationId}, #{createdDate}, #{createdUser}, #{modifiedDate}, 
+			#{modifiedUser}, #{activeFlag}, #{itiStartDate}, #{itiEndDate}, #{testingCycleId})
+	</insert>
+	
+	<update id="updateOrganizationDetails" parameterType="organizationDetail"> 
+		UPDATE organizationdetail
+		<set>
+	      <if test="orgDetails.organizationId != null">
+	        organizationid = #{orgDetails.organizationId},
+	      </if>
+	      <if test="orgDetails.modifiedDate != null">
+	        modifieddate = #{orgDetails.modifiedDate},
+	      </if>
+	      <if test="orgDetails.modifiedUser != null">
+	        modifieduser = #{orgDetails.modifiedUser},
+	      </if>
+	       <if test="orgDetails.activeFlag != null">
+	        activeflag = #{orgDetails.activeFlag,jdbcType=BIT},
+	      </if>
+	      <if test="orgDetails.itiStartDate != null">
+	        itistartdate = #{orgDetails.itiStartDate, jdbcType=DATE},
+	      </if>
+	      <if test="orgDetails.itiEndDate != null">
+	        itienddate = #{orgDetails.itiEndDate, jdbcType=DATE},
+	      </if>      
+	    </set>    
+		WHERE id = #{orgDetails.id}
+	</update>
+
+	<select id="getOrgAssessmentProgramIds" resultType="java.lang.Long">
+		select assessmentprogramid from orgassessmentprogram  where organizationid =#{schoolId} and activeflag is true;  
+	</select>
+	
+	<update id="disableAssessmentProgramByOrgId">
+	update orgassessmentprogram set activeflag=false,
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+			where organizationid=#{sourceSchool} 
+			and assessmentProgramId =#{sourceAssessmentprogramId};
+	</update>
+	
+	<update id="moveOrganization">
+	update interimgroup set organizationid=#{destinationSchool},
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where organizationid = #{sourceSchool};
+	
+	update interimtest set organizationid=#{destinationSchool},
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where organizationid = #{sourceSchool};
+	
+	update communicationmessage  set organizationid =#{destinationSchool}
+	where organizationid = #{sourceSchool};
+	
+	<!-- F633-Merged Schools Enhancement  -->
+	<!-- update organizationreportdetails  set organizationid =#{destinationSchool}
+	where organizationid = #{sourceSchool}; -->
+	
+	update restrictionsorganizations set organizationid=#{destinationSchool},
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where organizationid = #{sourceSchool};
+	
+	update reportspercentbylevel set organizationid =#{destinationSchool} where organizationid = #{sourceSchool};
+	
+	update reportsmedianscore set organizationid =#{destinationSchool} where organizationid = #{sourceSchool};
+	
+	update kelpastatestudentscore  set schoolname=(select organizationname from organization where id =#{destinationSchool}),
+	schoolnumber=(select displayidentifier from organization  where id =#{destinationSchool}),
+	districtname=(WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+	SELECT organizationid, parentorganizationid FROM organizationrelation WHERE organizationid =
+	(select id from organization where id=#{destinationSchool})
+	UNION SELECT organizationrelation.organizationid, organizationrelation.parentorganizationid
+	FROM organizationrelation, organization_relation AS parentorganization_relation
+	WHERE organizationrelation.organizationid = parentorganization_relation.parentorganizationid)
+	SELECT organizationname FROM organization WHERE id IN (SELECT parentorganizationid FROM organization_relation) and organizationtypeid = 5),
+	districtnumber=(WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+	SELECT organizationid, parentorganizationid FROM organizationrelation WHERE organizationid =
+	(select id from organization where id=#{destinationSchool})
+	UNION SELECT organizationrelation.organizationid, organizationrelation.parentorganizationid
+	FROM organizationrelation, organization_relation AS parentorganization_relation
+	WHERE organizationrelation.organizationid = parentorganization_relation.parentorganizationid)
+	SELECT displayidentifier FROM organization WHERE id IN (SELECT parentorganizationid FROM organization_relation) and organizationtypeid = 5)
+	where schoolname=(select organizationname from organization where id =#{sourceSchool});
+	
+	update kelpastudentpreid  set schoolname=(select organizationname from organization where id =#{destinationSchool}),
+	schoolnumber=(select displayidentifier from organization  where id =#{destinationSchool}),
+	districtname=(WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+	SELECT organizationid, parentorganizationid FROM organizationrelation WHERE organizationid =
+	(select id from organization where id=#{destinationSchool})
+	UNION SELECT organizationrelation.organizationid, organizationrelation.parentorganizationid
+	FROM organizationrelation, organization_relation AS parentorganization_relation
+	WHERE organizationrelation.organizationid = parentorganization_relation.parentorganizationid)
+	SELECT organizationname FROM organization WHERE id IN (SELECT parentorganizationid FROM organization_relation) and organizationtypeid = 5),
+	districtnumber=(WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+	SELECT organizationid, parentorganizationid FROM organizationrelation WHERE organizationid =
+	(select id from organization where id=#{destinationSchool})
+	UNION SELECT organizationrelation.organizationid, organizationrelation.parentorganizationid
+	FROM organizationrelation, organization_relation AS parentorganization_relation
+	WHERE organizationrelation.organizationid = parentorganization_relation.parentorganizationid)
+	SELECT displayidentifier FROM organization WHERE id IN (SELECT parentorganizationid FROM organization_relation) and organizationtypeid = 5)
+	where schoolname=(select organizationname from organization where id =#{sourceSchool});
+	
+	<!-- F633-Merged Schools Enhancement  -->
+	<!-- update externalstudentreports set schoolid =#{destinationSchool},
+	districtid=(WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+	SELECT organizationid, parentorganizationid FROM organizationrelation WHERE organizationid =
+	(select id from organization where id =#{destinationSchool})
+	UNION SELECT organizationrelation.organizationid, organizationrelation.parentorganizationid
+	FROM organizationrelation, organization_relation AS parentorganization_relation
+	WHERE organizationrelation.organizationid = parentorganization_relation.parentorganizationid)
+	SELECT id FROM organization WHERE id IN (SELECT parentorganizationid FROM organization_relation) and organizationtypeid = 5),
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where schoolid =#{sourceSchool}
+	and schoolyear = #{currentSchoolYear}; -->
+	
+	update projectedtestingdate set schoolid =#{destinationSchool},
+	districtid=(WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+	SELECT organizationid, parentorganizationid FROM organizationrelation WHERE organizationid =
+	(select id from organization where id =#{destinationSchool})
+	UNION SELECT organizationrelation.organizationid, organizationrelation.parentorganizationid
+	FROM organizationrelation, organization_relation AS parentorganization_relation
+	WHERE organizationrelation.organizationid = parentorganization_relation.parentorganizationid)
+	SELECT id FROM organization WHERE id IN (SELECT parentorganizationid FROM organization_relation) and organizationtypeid = 5),
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where schoolid =#{sourceSchool};
+	
+	<!-- F633-Merged Schools Enhancement  -->
+	<!-- update studentreport set attendanceschoolid  =#{destinationSchool},
+	districtid=(WITH RECURSIVE organization_relation(organizationid, parentorganizationid) AS (
+	SELECT organizationid, parentorganizationid FROM organizationrelation WHERE organizationid =
+	(select id from organization where id =#{destinationSchool})
+	UNION SELECT organizationrelation.organizationid, organizationrelation.parentorganizationid
+	FROM organizationrelation, organization_relation AS parentorganization_relation
+	WHERE organizationrelation.organizationid = parentorganization_relation.parentorganizationid)
+	SELECT id FROM organization WHERE id IN (SELECT parentorganizationid FROM organization_relation) and organizationtypeid = 5)
+	where attendanceschoolid =#{sourceSchool} and schoolyear = #{currentSchoolYear}; -->
+	
+	update orgassessmentprogram set organizationid =#{destinationSchool},
+	modifieddate = #{modifiedDate},
+	modifieduser = #{modifiedUser}
+	where organizationid =#{sourceSchool} and activeflag=true;
+	</update>
+	
+	<select id="getByDisplayIdentifierAndParent_ActiveOrInactive" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, 
+            welcomeMessage, contractingorganization, activeflag
+		FROM organization 
+		WHERE
+			upper(displayIdentifier) = upper(#{displayIdentifier}) and
+			( ( id in ( select id
+			 from organization_children_active_or_inactive(#{parentOrgId}) ) ) or
+			id =  #{parentOrgId}
+			)
+	</select>
+	
+	<select id="getByDisplayIdentifierAndType" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			o.id, o.organizationName, o.displayIdentifier,o.organizationTypeId, o.welcomeMessage,o.contractingorganization,o.reportyear
+		FROM organization o
+		JOIN organizationtype ot ON ot.id= o.organizationtypeid
+		WHERE
+			upper(o.displayIdentifier) = upper(#{displayIdentifier})
+			AND upper(ot.typecode) = upper(#{typeCode})
+	</select>
+	
+	<select id='getStateCodeByStateId' resultType="String" >
+		select distinct statedisplayidentifier from organizationtreedetail where stateid = 	#{stateId, jdbcType=BIGINT}
+	</select>	
+	
+	<select id='getStateNameByStateId' resultType="String" >
+		select distinct statename  from organizationtreedetail where stateid  = #{stateId, jdbcType=BIGINT}
+	</select>
+	<resultMap type="edu.ku.cete.domain.common.Organization" id="operationalTestWindowState">
+        <result property="organizationName" column="organizationname"></result>
+		<result property="id" column="id"></result>
+     </resultMap>   
+	<select id="getStateByAssessmentProgramIdForUploadResults" resultMap="operationalTestWindowState" >
+		select o.organizationname as organizationName,o.id as id from organization o
+		inner join usersorganizations uo on uo.organizationid = o.id 
+		inner join aartuser au on au.id = uo.aartuserid 
+		inner join orgassessmentprogram ua on  ua.organizationid = uo.organizationid 
+		where organizationtypeid =(select id from organizationtype where typecode='ST')
+		and ua.activeflag='t' and uo.activeflag = true
+		<if test="assessmentProgramId != null" > 
+    			and ua.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+        </if>
+        <if test="userId != null" > 
+    			and uo.aartuserid = #{userId,jdbcType=BIGINT}
+    	</if> 
+    	order by o.organizationname asc
+	</select>	
+	
+	<select id="getStateByNameAndType" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			o.id, o.organizationName, o.displayIdentifier,o.organizationTypeId, o.welcomeMessage,o.contractingorganization,o.reportyear
+		FROM organization o
+		JOIN organizationtype ot ON ot.id= o.organizationtypeid
+		WHERE
+			TRIM(upper(o.organizationName)) = upper(#{state})
+			AND upper(ot.typecode) = upper(#{typeCode})
+			AND o.activeflag is true
+	</select>
+	<select id="getOrgByDisplayIdAndParentId" resultType="Organization">
+		SELECT distinct id, organizationName, displayIdentifier, organizationTypeId, welcomeMessage, contractingorganization,
+		reportyear, activeflag 
+		  FROM organization 
+		  WHERE upper(displayIdentifier) = upper(#{residenceDistrictIdentifier}) and organizationtypeid = #{orgTypeID}
+		  and ( ( id in ( select id from organization_children_active_or_inactive(#{orgId}))) or id =  #{orgId})
+			order by activeflag desc,id desc limit 1;
+	</select>
+		<select id="getStateByUserIdForAuditHistoryLog" resultMap="operationalTestWindowState" >
+	select o.organizationname as organizationName,o.id as id from organization o
+		inner join usersorganizations uo on uo.organizationid = o.id 
+		inner join aartuser au on au.id = uo.aartuserid 
+		where organizationtypeid =(select id from organizationtype where typecode='ST')
+		and  uo.activeflag = true
+		<if test="userId != null" > 
+    			and uo.aartuserid = #{userId,jdbcType=BIGINT}
+    	</if> 
+    	order by o.organizationname asc
+	</select>
+	<select id="getChildOrganizations" resultType="java.lang.Long">
+	select distinct id  from organization_children_active_or_inactive(#{orgId,jdbcType=BIGINT})
+	where organizationtypeid=#{orgTypeId, jdbcType=INTEGER}
+		order by id
+	</select>
+	<select id="getInactiveActiveParentOrgDetailsById" resultType="Organization">
+	select org.id,concat(org.organizationname,'(',displayidentifier,')') as organizationname,orgtype.typecode from (
+	select id,organizationname,displayidentifier,organizationtypeid from organization_parent_active_or_inactive(#{orgId,jdbcType=BIGINT})
+	union 
+	select id,organizationname,displayidentifier,organizationtypeid from organization where id=#{orgId,jdbcType=BIGINT}
+		)org
+	inner join organizationtype orgtype on orgtype.id=org.organizationtypeid
+	where orgtype.typecode !='CONS'
+	</select>	
+	
+		<select id="getSnapshotDetails" resultType="edu.ku.cete.domain.OrganizationSnapshot">
+				select org.id as organizationid,
+		       org.organizationname,
+		       org.displayidentifier,
+		       org.organizationtypeid,
+		       null as parentsnapshotid,
+		       parent.id as parentorganiationid,
+		       parent.organizationtypeid,
+		       parent.displayidentifier as parentdisplayidentifier,
+		       array_to_string(ARRAY(select distinct abbreviatedname from
+					 orgassessmentprogram oap 
+					inner join assessmentprogram ap on ap.id = oap.assessmentprogramid
+					where oap.organizationid = org.id and oap.activeflag is true 
+					),', ') as assessmentprograms,
+			org.testingmodel,
+			org.schoolstartdate,
+			org.schoolenddate,
+			org.contractingorganization,
+			EXTRACT (YEAR FROM org.schoolenddate) as schoolyear,
+			now() as snapshotcreateddate,
+		     #{userId} as snapshotcreateduser,
+		        org.activeflag
+		        from organization org
+		        LEFT OUTER JOIN organizationrelation orgrel ON org.id = orgrel.organizationid 
+			LEFT OUTER JOIN organization parent ON orgrel.parentorganizationid = parent.id
+		where org.id in (WITH RECURSIVE subordinates AS (
+		 SELECT organizationid FROM organizationrelation WHERE organizationid =  #{orgId}
+		 UNION
+		 SELECT e.organizationid FROM organizationrelation e
+		 INNER JOIN subordinates s ON s.organizationid = e.parentorganizationid
+		) SELECT
+		 *
+		FROM
+		 subordinates)and org.activeflag is true  order by org.organizationtypeid ,org.id
+	</select>
+	<select id="getAllActiveAndInactiveChildrenByType" resultMap="resultMap" parameterType="map">
+	  /*NO LOAD BALANCE*/
+	  select org.*,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel,o.activeflag 
+	   from organization_children_active_or_inactive(#{organizationId}) org
+	   JOIN organization o on o.id = org.id 
+	   JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+	   WHERE orgtype.typecode = #{organizationTypeCode}
+	   order by org.organizationname
+ 	</select>
+ 	<select id="getJsonOrganization" resultType="Organization" parameterType="Long" flushCache="true" useCache="false" >
+		/*NO LOAD BALANCE*/
+		SELECT
+			org.id, org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, org.buildinguniqueness, org.schoolstartdate, org.schoolenddate,org.createddate,org.createduser,
+            org.modifieddate,org.modifieduser,orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization,
+            org.expirepasswords, org.expirationdatetype, c.categorycode as expirationdatetypestring, 
+            EXTRACT(YEAR from schoolenddate) as currentschoolyear, org.pooltype, org.multitestassignment, 
+            org.reportprocess, org.reportyear,
+            array_to_string(ARRAY(select distinct abbreviatedname from
+					 orgassessmentprogram oap 
+					inner join assessmentprogram ap on ap.id = oap.assessmentprogramid
+					where oap.organizationid = org.id and oap.activeflag is true order by abbreviatedname
+					),', ') as assessmentProgram,
+			(select categoryname from category where id = org.testingmodel) as testingModelName
+		FROM organization as org
+			JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+			LEFT OUTER JOIN category c ON c.id = org.expirationdatetype
+		WHERE
+		    org.id = #{id}
+	</select>
+	
+	<insert id="addOrganizationtreeDetail" parameterType="OrganizationTreeDetail">
+		INSERT INTO organizationtreedetail(
+            schoolid, schoolname, schooldisplayidentifier, districtid, districtname, 
+            districtdisplayidentifier, stateid, statename, statedisplayidentifier, 
+            createddate)
+         VALUES (#{schoolId}, #{schoolName}, #{schoolDisplayIdentifier}, #{districtId}, #{districtName}, 
+            #{districtDisplayIdentifier}, #{stateId}, #{stateName}, #{stateDisplayIdentifier}, 
+            now());
+		
+	</insert>
+	
+	<select id="getOrganizationByIdExcludingGivenDispalyIdentifiers"  resultType="Organization">
+	select * from organization where id=#{organizationId} 
+	<if test="stateDisplayIdentifiersList != null and stateDisplayIdentifiersList.length > 0">
+			 and displayidentifier not in
+			<foreach collection="stateDisplayIdentifiersList" item="displayIdentifier" open="(" close=")" separator=",">
+		 	 #{displayIdentifier}
+		 	 </foreach>
+    </if>
+	 
+	</select>
+	
+	<select id="checkForOrganizationAssessmentProgram" resultType="Long">
+		/*NO LOAD BALANCE*/
+		SELECT DISTINCT os.organizationid FROM orgassessmentprogram os 
+			WHERE os.assessmentprogramid = (SELECT id FROM assessmentprogram WHERE abbreviatedname = #{apAbbreviatedName})
+			AND os.organizationid= #{userOrganizationId} AND os.activeflag is true;
+	</select>
+	
+	<insert id="saveMergedOrgDetails" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		INSERT INTO organizationoperationaldetail (sourceorgid,sourceorgdisplayidentifier,sourceorgname,targetorgid,activeflag,action,
+					schoolyear,reportyear,createddate,modifieddate,createduser,modifieduser) 
+			   values (#{sourceSchool}, #{sourceorgdisplayidentifier},#{sourceorgname},#{destinationSchool},#{activeflag},#{action},
+					#{currentSchoolYear}, #{reportYear},#{createdDate},#{modifiedDate},#{createdUser},#{modifiedUser})
+	</insert>
+	
+	<select id="getContractingOrgsForPredictiveReports" useCache="false" resultType="Organization">				
+		select otw.id as operationalwindowid, otw.effectivedate as operationalwindoweffectivedate, otw.expirydate as operationaltestwindowexpirydate,
+	   	  		o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear, oa.assessmentprogramid      
+		   	from organization o
+			inner join orgassessmentprogram oa on o.id = oa.organizationid
+			inner join assessmentprogram ap on oa.assessmentprogramid = ap.id
+			join operationaltestwindowstate otws on otws.stateid = o.id 
+			join operationaltestwindow otw on otw.id = otws.operationaltestwindowid
+			join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid and tem.assessmentprogramid = otw.assessmentprogramid
+				AND tem.methodcode = 'PREDICTIVE' 
+	       JOIN testingcycle tc ON tc.assessmentprogramid = otw.assessmentprogramid 
+	            AND tc.operationaltestwindowid = otw.id 
+	            AND tc.schoolyear = EXTRACT(YEAR from schoolenddate)
+			WHERE  contractingorganization is true and o.activeflag is true and ap.activeflag is true
+		       AND oa.assessmentprogramid = otw.assessmentprogramid
+		       AND otw.activeflag IS TRUE 
+		       AND otw.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+		       AND tc.testingprogramid = #{testingProgramId,jdbcType=BIGINT}
+		       AND tc.testingcyclename = #{testingCycle,jdbcType=VARCHAR} 
+	</select>
+	
+	<select id="getContractingOrgByAssessmentProgramIdOrgId" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		select o.*, EXTRACT(YEAR from schoolenddate) as currentschoolyear
+		 from assessmentprogram ap
+			join orgassessmentprogram oap on ap.id=oap.assessmentprogramid
+			join organization o on o.id=oap.organizationid
+		 where ap.id = #{assessmentProgramId,jdbcType=BIGINT}
+		  and o.id = #{organizationId,jdbcType=BIGINT}
+		  and ap.activeflag is true and o.contractingorganization is true
+		  and o.activeflag is true
+	</select>
+	
+	<select id="getTimeZoneForOrg" resultType="String">
+		SELECT c.categorycode
+		FROM organization o
+		JOIN category c ON o.timezoneid = c.id
+		WHERE o.id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getReportYear" resultType="Long">
+		select reportyear from orgassessmentprogram where assessmentprogramid = #{assessmentProgramId} and organizationid = #{orgId}
+	</select>
+	
+	
+	
+	<select id="updateOrganizationMergeRelation">
+			update organizationoperationaldetail set activeflag = false where sourceorgid in 
+		(select org.id from organization_children_active_or_inactive(#{stateId,jdbcType=BIGINT}) org
+			inner join organizationtype orgtype on orgtype.id = org.organizationtypeid
+			where orgtype.typecode = #{orgType} AND org.id in (select id from organization where displayidentifier = #{orgDisplayId} AND activeflag is false))
+	</select>
+	
+	<select id="isChildOf" parameterType="map" resultType="Boolean">
+		SELECT EXISTS (
+			SELECT id
+			FROM organization_child_tree(#{parentOrgId,jdbcType=BIGINT}, 0)
+			WHERE id = #{childOrgId,jdbcType=BIGINT}
+		)
+	</select>
+	
+	<select id="getCeteOrganization" resultType="Organization">
+		select o.id, o.organizationname, o.displayidentifier, o.organizationtypeid, 
+		o.welcomemessage, o.buildinguniqueness, o.schoolstartdate, o.schoolenddate, 
+		true as contractingorganization, o.expirepasswords, o.expirationdatetype, reportyear,
+		(select max(EXTRACT(YEAR from schoolenddate)) from organization sts 
+			where sts.contractingorganization is true and sts.activeflag is true 
+			and sts.organizationtypeid=(select id from organizationtype where typecode='ST')) as currentschoolyear
+        from organization o 
+        where o.displayidentifier='CETE' 
+        and o.organizationtypeid=(select id from organizationtype where typecode='CONS');
+	</select>
+	
+	<select id="getPermittedStateIds" resultType="Organization">
+		select distinct o.id as id,o.organizationname as organizationName from authorities a 
+		inner join groupauthorities ga on ga.authorityid = a.id and a.activeflag is true and ga.activeflag is true
+		inner join usersorganizations uo on uo.organizationid=ga.organizationid and uo.activeflag is true
+		inner join organization o on o.id=uo.organizationid and ga.organizationid=o.id and o.activeflag is true
+		inner join userorganizationsgroups uog on uog.userorganizationid=uo.id and uog.groupid=ga.groupid and uog.activeflag is true
+		inner join userassessmentprogram uap on uap.userorganizationsgroupsid=uog.id 
+		and uap.assessmentprogramid=ga.assessmentprogramid and uap.activeflag is true
+		where uo.aartuserid = #{userId}
+		and a.authority='PERMISSIONS_AND_ROLES_EXTRACT';
+	</select>
+	
+	<update id="setReportYearToSchoolYear">
+	   update organization set 
+	          modifieddate = now(), 
+	          modifieduser =  #{userId,jdbcType=BIGINT},
+			  reportyear = 	EXTRACT(YEAR from schoolenddate)  
+	   where id = #{stateId,jdbcType=BIGINT}
+	   and activeflag is true       	
+	</update>
+	
+	<select id="getByDisplayIdentifierAndTypeId" resultType="Organization">
+		select id, organizationname, displayidentifier from organization where organizationtypeid = #{typeId,jdbcType=BIGINT} and  displayidentifier  = #{displayIdentifier}
+	</select>
+	
+	<select id="getParentOrganizationsByOrgId" resultMap="resultMap" parameterType="Long">
+		SELECT * from organization_parent(#{organizationId}) order by organizationtypeid desc;
+	</select>
+	
+	<select id="getOrganizationByDisplayIdentifierAndRelationalOrgnizationId" resultType="Organization">
+		/*NO LOAD BALANCE*/
+		SELECT
+			id, organizationName, displayIdentifier, organizationTypeId, 
+            welcomeMessage, contractingorganization
+		FROM organization 
+		WHERE
+			upper(displayIdentifier) = upper(#{displayIdentifier,jdbcType=VARCHAR}) and
+			( ( id in ( select id
+			 from organization_children(#{userOrganizationId,jdbcType=BIGINT})
+			 union 
+			  select id
+			 from organization_parent(#{userOrganizationId,jdbcType=BIGINT}) ) ) or
+			id =  #{userOrganizationId,jdbcType=BIGINT}
+		)
+	</select>
+	
+	<select id="getSchoolStartDate" resultType="Date" parameterType="Long">
+		SELECT schoolstartdate FROM organization WHERE id = #{orgId,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getSchoolEndDate" resultType="Date" parameterType="Long">
+		SELECT schoolenddate FROM organization WHERE id = #{orgId,jdbcType=BIGINT}
+	</select>
+		
+	<select id="getTestBeginTime" resultType="Date" parameterType="Long">
+		SELECT testbegintime FROM organization WHERE id = #{orgId,jdbcType=BIGINT}
+	</select>
+		
+	<select id="getTestEndTime" resultType="Date" parameterType="Long">
+		SELECT testendtime FROM organization WHERE id = #{orgId,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getTestDays" resultType="String" parameterType="Long">
+		SELECT testdays FROM organization WHERE id = #{orgId,jdbcType=BIGINT}
+	</select>
+	
+	<select id="isUserMappedToGivenState" resultType="java.lang.Boolean">
+		/*NO LOAD BALANCE*/
+		SELECT distinct	o.id
+		FROM organization o
+		JOIN usersorganizations uorg ON uorg.organizationid=o.id
+		JOIN aartuser artu on artu.id=uorg.aartuserid and uorg.activeflag is true
+	  	inner join userorganizationsgroups uorggrp on uorg.id = uorggrp.userorganizationid and uorggrp.activeflag is true 
+	    inner join organizationtreedetail otd on  ( otd.districtid = uorg.organizationid  or otd.schoolid = uorg.organizationid or otd.stateid = uorg.organizationid )
+		WHERE
+			o.id = upper(#{stateId})
+			AND artu.id = #{userId,jdbcType=BIGINT}
+	</select>
+	
+	<select id="isGivenOrganizationIdIsState" resultType="java.lang.Boolean">
+		
+		SELECT count(1) > 0 
+		FROM organization 
+		WHERE id = #{currentOrganizationId} 
+			AND organizationtypeid = (SELECT id from organizationtype WHERE typecode = 'ST')
+	</select>
+	
+</mapper>

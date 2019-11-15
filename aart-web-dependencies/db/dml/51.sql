@@ -1,0 +1,8 @@
+
+INSERT INTO fieldspecification (fieldname, allowablevalues, minimum, maximum, fieldlength,rejectifempty, rejectifinvalid, formatregex, mappedname, showerror, createddate, createduser, activeflag, modifieddate, modifieduser, iskeyvaluepairfield)VALUES ('dlmStatus', NULL, NULL, NULL, 5, false, false, NULL, 'DLM_Status', false, now(), (Select id from aartuser where username = 'cetesysadmin'), true, now(), (Select id from aartuser where username = 'cetesysadmin'), false);
+
+INSERT INTO fieldspecificationsrecordtypes SELECT id,(Select id from category where categorycode='ENRL_RECORD_TYPE'), now(), (select id from aartuser where username='cetesysadmin'), true, now(), (select id from aartuser where username='cetesysadmin')FROM fieldspecification WHERE (fieldname,mappedname) in (('dlmStatus',  'DLM_Status'));
+
+INSERT INTO fieldspecificationsrecordtypes SELECT id,(Select id from category where categorycode='TEST_RECORD_TYPE'), now(), (select id from aartuser where username='cetesysadmin'), true, now(), (select id from aartuser where username='cetesysadmin')FROM fieldspecification WHERE (fieldname,mappedname) in (('dlmStatus',  'DLM_Status'));
+
+INSERT INTO fieldspecificationsrecordtypes SELECT id,(Select id from category where categorycode='SCRS_RECORD_TYPE'), now(), (select id from aartuser where username='cetesysadmin'), true, now(), (select id from aartuser where username='cetesysadmin')FROM fieldspecification WHERE (fieldname,mappedname) in (('dlmStatus',  'DLM_Status'));

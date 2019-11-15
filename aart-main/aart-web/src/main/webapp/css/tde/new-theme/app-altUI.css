@@ -1,0 +1,124 @@
+@font-face
+{
+font-family: "Didact Gothic";
+src: url('/css/fonts/DidactGothic.ttf');
+}
+
+* { margin:0; padding:0; }
+body { background:#f0f0f0; letter-spacing:.05em; font-size: 100%; color: #272727; }
+
+html, button, input, select, textarea { 
+   font-family: "Didact Gothic", sans-serif, Arial, Verdana, "Trebuchet MS";
+   font-weight: 300; color: #222; }
+
+.clear { clear:both; }
+.left { float:left; }
+.last { margin: 0 !important; }
+
+.load-overlay {  position:absolute; left:0; top:0; right:0; bottom: 0; z-index:9999; display:none; background: rgba(255,255,255,.8) url('/images/kite-loader.gif') no-repeat 50% 30%;  }
+
+.alt-header, .alt-footer { width:80%; margin: 20px auto; }
+	.alt-header h1 { font-size: 2em; color: #206fa9; float:right; }
+
+.alt-footer { text-align: right; }
+
+#test-description { width:80%; background: #fff; -moz-box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); -moz-border-radius:4px; box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); border-radius:4px; margin: 20px auto; overflow:hidden; padding:20px;}
+	#test-description .span2 { display:inline; width:45%; float:left; margin-left: 2%; background:#fff; margin:0 8% 0 0; float:left; }
+		#test-description h4 { clear:left; margin: 20px 0 5px; }
+		
+.w { margin:0 auto; overflow:hidden; width:90%; } 
+
+p { color:#272727; font-size:1.1em; padding:10px 0;  }
+
+a, a:focus { outline: 0; }
+a, a:visited { color:#383838; }
+a:hover { color:#000; }
+
+h1 { font-size:28px; font-weight:100; color:#272727; margin:0; }
+h2 { font-size:24px; margin:0; font-weight:300; color:#000000; }
+
+h4 { margin:0; font-weight:300; color:#206fa9; border-bottom: 1px solid #206fa9; }
+
+.btn {background: url('/images/btn-highlight.png') no-repeat center center; color:#fff;}
+.btn:hover {background-image:none; color:#fff;}
+.btn:visited { color:#fff; }
+
+.green-btn { border-radius: 6px; background-color:rgb(111,151,42); color:#fff; border: 1px solid #577622; font-size: 1.2em; padding: 10px 20px; text-transform: uppercase; margin-bottom: 20px; font-weight:300; text-decoration:none; }
+.blue-btn { border-radius: 6px; background-color:rgb(65,132,181); color:#fff; border: 1px solid #295270; font-size: 1.2em; padding: 10px 20px; text-transform: uppercase; font-weight:300; text-decoration:none; margin-top: 10px; }
+.red-btn { border-radius: 6px; background-color:rgb(176,41,52); color:#fff; border: 1px solid #95242d; font-size: 1.2em; padding: 10px 20px; text-transform: uppercase; font-weight:300; text-decoration:none; margin-top: 10px; }
+
+.alt-ui-logo { display: block; float: left; border-radius: 3px; -moz-border-radius: 3px; -moz-box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); box-shadow:0px 0px 1px 1px rgba(0,0,0,.2);}
+	.alt-ui-logo img {  }
+
+#tde-content { position: absolute; top: 70px; right: 20px; left: 105px; bottom: 50px; }
+
+/*
+	ERASE
+\/\/\/\/\/  */
+.span1, .span2 { display:none; }
+
+#tde-content div:last-child { margin-right:0; }
+
+	#tde-content .span1 { width:96%; min-height: 400px; margin:0 2% 2% 0; -moz-box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); -moz-border-radius:4px; box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); border-radius:4px; padding: 2%; }
+	#tde-content .span2 { width:45%; float:left; margin-left: 2%; margin:0 2% 0 0; -moz-box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); -moz-border-radius:4px; box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); border-radius:4px; padding: 2%; float:left; }
+	
+	#tde-content div h2 { font-size: 2em; }
+	
+	#tde-content-answers { list-style: none; padding: 0; }
+	#tde-content-answers li {  background-color: #e8f0f6; border: 1px solid #d6e1ea; border-radius: 6px; color: #1b3c55; font-size: 1.4em;
+	    padding: 20px; text-transform: uppercase; margin-bottom: 20px; font-weight:300; }
+	    
+	#tde-content-answers li:hover { background-color: #cfe3f2; border-color: #6D86AD #647A9E #546685; border-style: solid; border-width: 1px;
+	     cursor: pointer; color:#0e202d; }
+	     
+	#tde-content-answers li:active { border: 1px solid #546685; box-shadow: 0 0 8px 2px #7E8DA6 inset, 0 1px 0 0 #EEEEEE; background-color: yellow;}
+	
+	#tde-content-answers li.selected { background:rgb(111,151,42); color:#fff; border: 1px solid #577622; }
+	
+	#confirm-answer { display:none; position: absolute; bottom: -5px; right:20px; z-index: 8000;border-radius: 6px; background-color:rgb(111,151,42);
+		color:#fff; border: 1px solid #577622; font-size: 1.1em; padding: 5px 10px; text-transform: uppercase; margin-bottom: 20px;
+		font-weight:300; text-decoration:none; }
+		
+		#confirm-answer:hover { background:#5f8224; }
+
+.tde-controls-c { position:fixed; bottom: 0; right: 0; left: 95px; background: rgba(240,240,240,.9); box-shadow: 0 -1px 6px 3px rgba(0, 0, 0, 0.1);padding:10px 0; z-index:8888; }
+	.tde-controls-c ul.span2-nav { float:left; margin:0 0 0 20px; padding:0; }
+		.tde-controls-c ul.span2-nav li { display:inline; float:left; }
+			.tde-controls-c ul.span2-nav li a { display:block; font-size:.8em; padding:10px; border-left: 1px solid #ccc; text-decoration:none; }
+				.tde-controls-c ul.span2-nav li a:hover, .tde-controls-c ul.span2-nav li a.active  { background:#fff; color:#272727; }
+				
+.tde-controls { position:relative; float:right; margin-right: 30px; }
+	.tde-controls ul {  background: #fff; -moz-box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); -moz-border-radius:4px; box-shadow:0px 0px 1px 1px rgba(0,0,0,.2); border-radius:4px; margin: 0; padding: 0; overflow:hidden;}
+		.tde-controls ul li { display:inline; float:left; }
+			.tde-controls ul li a { display:block; padding: 10px 20px; text-decoration:none; line-height: 20px; text-decoration: none; color: #272727; }
+			
+			.tde-controls-back a:hover, .tde-controls-next a:hover { background: #bebebe; }
+			.tde-controls-clear a:hover { background: #f8e1e1; }
+			.tde-controls-markreview a:hover, .tde-controls-markreview.active a { background: #4184b5; color: #fff; }
+			.tde-controls-reviewend a:hover { background: #f79898; }
+			
+math {
+  font-family: "Didact Gothic", sans-serif, Arial, Verdana, "Trebuchet MS";
+ font-size: 20px !important;
+}
+
+math * {
+  font-family: "Didact Gothic", sans-serif, Arial, Verdana, "Trebuchet MS";
+ font-size: 20px !important;
+}
+
+mn {
+  font-family: "Didact Gothic", sans-serif, Arial, Verdana, "Trebuchet MS";
+ font-size: 20px !important;
+}
+
+mfrac {
+  font-family: "Didact Gothic", sans-serif, Arial, Verdana, "Trebuchet MS";
+ font-size: 20px !important;
+}
+
+mi {
+  font-family: "Didact Gothic", sans-serif, Arial, Verdana, "Trebuchet MS";
+ font-size: 20px !important;
+}
+	

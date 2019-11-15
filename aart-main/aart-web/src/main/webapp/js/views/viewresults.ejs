@@ -1,0 +1,193 @@
+<div class="container-fluid bg_gray">
+    <div class="row">
+        <div class="col-sm-4">
+            <span class="pull-left" style="margin-top:24px;">
+                <a href="interim.htm" title="Back to Interim Home">
+                    <i class="fa fa-arrow-circle-o-left  fa-lg">
+                    </i>Back to Interim Home &gt;
+                </a>
+            </span>
+        </div>
+        <div class="col-sm-4">
+            <h3>Generate Reports</h3>
+        </div>
+        <div class="col-sm-4">
+            <select id="dynamicStudentReports" class="dynamicStudentReports" title="Please Select a Report from Dropdown">
+            </select>
+        </div>
+    </div>
+
+    <div class="reports-table row table-responsive kite-table" style="width:1027px;">
+        <table id="resultstable">
+            <tr>
+                <td />
+            </tr>
+        </table>
+        <div id="pager"></div>
+    </div>
+</div>
+
+<div id="full-group-description">
+    <p id="js-fulldescription"></p>
+</div>
+
+<div id="testSummary-view" style="display:none;">
+    <h4>Test Summary Report for
+        <span id="testSummaryLabel"></span>
+    </h4>
+    <a href="#" id="CSVTestSummary">Export CSV</a>
+    <a href="#" id="refreshTestSummary">Refresh Grid</a>
+    <div id="testSummaryGridDiv">
+        <table id="testSummaryGrid">
+            <tr>
+                <td />
+            </tr>
+        </table>
+        <div id="testSummaryPager"></div>
+    </div>
+</div>
+
+<div id="itemReports-view" style="display:none">
+    <h4>Item Report for
+        <span id="itemReportLabel"></span>
+    </h4>
+    <a href="#" id="CSVItemReports" title="Export CSV">Export CSV</a>
+    <a href="#" id="refreshItemReport" title="Refresh Grid">Refresh Grid</a>
+    <span style="float: right; color:darkgray; font-size: 12px">In response columns, * indicates the correct answer. Technology enhanced items (e.g., matching) show &quot;N/A&quot;
+        .
+    </span>
+    <div id="itemReportsGridDiv">
+
+        <table id="itemReportsGrid">
+            <tr>
+                <td />
+            </tr>
+        </table>
+        <div id="itemReportsPager"></div>
+    </div>
+
+</div>
+
+<div id="studentReports-view" style="display:none">
+    <h4>Student Report for
+        <span id="studentReportLabel"></span>
+    </h4>
+    <a href="#" id="CSVStudentReports" title="Export CSV">Export CSV</a>
+    <a href="#" id="refreshStudentReport" title="Refresh Grid">Refresh Grid</a>
+    <span style="float: right; color:darkgray; font-size: 12px">In &quot;correct answer&quot; column, technology enhanced items (e.g., matching) show &quot;N/A.&quot; </span>
+
+    <div id="studentReportsGridDiv">
+
+        <table id="studentReportsGrid">
+            <tr>
+                <td />
+            </tr>
+        </table>
+        <div id="studentReportsPager"></div>
+    </div>
+
+</div>
+
+
+<div id="studentActivityRep-view" style="display:none; overflow-x:hidden">
+    <div class="row">
+        <div class="col-sm-3" id="districtDiv">
+            <label>DISTRICT
+                <span class="text_red">*</span>
+            </label>
+            <div class="studentactivity-select" style="min-height:30px">
+                <select data-placeholder="Select District" id="districtDropdown" class="form-control" title="District"  style="width:100%;">
+                    <%for(var i=0;i < districtsArray.organizations.length; i++) {%>
+                        <option value="<%=districtsArray.organizations[i].id%>">
+                            <%=districtsArray.organizations[i].organizationName%>
+                        </option>
+                        <%}%>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-3" id="schoolDiv">
+            <label>SCHOOL
+                <span class="text_red">*</span>
+            </label>
+            <div class="studentactivity-select">
+                <select multiple="true" data-placeholder="Select School" id="schoolDropdown" class="form-control" style="width:100%;" title="School">
+                    <%for(var i=0;i <orgainzationsArray.organizations.length; i++) {%>
+                        <option value="<%=orgainzationsArray.organizations[i].id%>">
+                            <%=orgainzationsArray.organizations[i].organizationName%>
+                        </option>
+                        <%}%>
+                </select>
+            </div>
+            <input type="checkbox" id="checkboxSchool" title="School Select All">Select All
+
+        </div>
+        <div class="col-sm-3" id="subjectDiv">
+        	<%if (currentAssessmentProgramName == 'PLTW'){%>
+                	<label>COURSE <span class="text_red">*</span></label>
+                  	<%}%>
+                  	<%if (currentAssessmentProgramName != 'PLTW'){%>
+                	<label>SUBJECT <span class="text_red">*</span></label>
+                  	<%}%>
+            <div class="studentactivity-select">
+                <select multiple="true" data-placeholder="Select Subject" id="subjectDropdown" class="form-control" title="Subject" style=" width:100%; ">
+                    <%for(var i=0;i <subjectsArray.subjects.length; i++) {%>
+                        <option value="<%=subjectsArray.subjects[i].id%>">
+                            <%=subjectsArray.subjects[i].name%>
+                        </option>
+                        <%}%>
+                </select>
+            </div>
+            <input type="checkbox" id="checkboxSubject" title="Subject Select All">Select All
+        </div>
+        <div class="col-sm-3" id="gradeDiv">
+            <label>GRADE
+                <span class="text_red">*</span>
+            </label>
+            <div class="studentactivity-select">
+                <select multiple="true" data-placeholder="Select Grade" id="gradeDropdown" class="form-control" title="Grade" style="width:100%;">
+                    <%for(var i=0;i <gradesArray.grades.length; i++) {%>
+                        <option value="<%=gradesArray.grades[i].id%>">
+                            <%=gradesArray.grades[i].name%>
+                        </option>
+                        <%}%>
+                </select>
+            </div>
+            <input type="checkbox" id="checkboxGrade" title="Grade Select All">Select All
+        </div>
+        <div class="col-sm-3" id="studentDiv">
+            <label>STUDENT
+                <span class="text_red">*</span>
+            </label>
+            <div class="studentactivity-select">
+                <select multiple="true" data-placeholder="Select Student" id="studentDropdown" class="form-control" title="Student" style="width:100%;">
+                    <%for(var i=0;i <studentArray.students.length; i++) {%>
+                        <option value="<%=studentArray.students[i].id%>">
+                            <%=studentArray.students[i].legalFirstName%>
+                        </option>
+                        <%}%>
+                </select>
+            </div>
+            <input type="checkbox" id="checkboxStudent" title="Student Select All">Select All
+
+        </div>
+
+        <div class="col-sm-2">
+            <label></label>
+            <button id="searchStudents" type="button" class="btn btn-primary" style="margin-top:25px">Search</button>
+        </div>
+    </div>
+    <h4 id="labelSAR" style="display:none">
+        <span id="studentActivityReportLabel"></span>
+    </h4>
+    <a href="#" id="CSVexportStudentActRep" title="Export CSV" style="display:none">Export CSV</a>
+    <a href="#" id="refreshStudentActReport" title="Refresh Grid" style="display:none">Refresh Grid</a>
+    <div id="studentActivityGridDiv">
+        <table id="studentActivityRepGrid">
+            <tr>
+                <td />
+            </tr>
+        </table>
+        <div id="studentActivityRepPager"></div>
+    </div>
+
+</div>

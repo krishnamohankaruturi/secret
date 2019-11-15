@@ -1,0 +1,1 @@
+ALTER TABLE aartuser ADD COLUMN orgfilters text;

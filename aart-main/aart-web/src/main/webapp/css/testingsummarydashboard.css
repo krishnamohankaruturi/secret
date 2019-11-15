@@ -1,0 +1,53 @@
+.ui-jqgrid tr.jqgrow td { height: 20px; padding-top: 0px; font-size: 13px}
+
+.ui-jqgrid tr.ui-row-ltr td { border-bottom-color: black; }
+.ui-jqgrid tr.ui-row-ltr td { border-right-color: black; }
+
+.textalignright { text-align:right !important; }
+.textalignleft { text-align:left  !important; }
+
+.ui-jqgrid .ui-jqgrid-bdiv {
+  position: relative; 
+  margin: 0em; 
+  padding:0;  
+  overflow-x:hidden; 
+  overflow-y:auto; 
+  text-align:left;
+}
+
+#buttons {
+	float: right;
+}
+
+#headers {
+	font-size: 120%;
+	clear: both;
+}
+
+#headers #orgLabel {
+	float:left;
+}
+
+#headers #asOf {
+	float: right;
+}
+
+.testingSummary {
+	clear: both;
+}
+	
+#tabs_testing_summary .ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+    padding-top:10px; 
+    font-size : 15px;
+}
+	
+#tabs_testing_summary .ui-jqgrid tr.jqgrow td {
+    padding-left: 3px;
+}
+
+
+#headers #asOf {
+    font-size: 1rem;
+    margin-right: 10px;
+}
+	

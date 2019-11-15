@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.InterimGroupDao">
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.content.InterimGroup">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<id column="organizationid" property="organizationId" jdbcType="BIGINT" />
+		<result column="groupname" property="groupName" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+
+	</resultMap>
+	<!-- <resultMap id="BaseResultMap" type="edu.ku.cete.domain.content.InterimGroupStudent.java"> 
+		<id column="id" property="id" jdbcType="BIGINT" /> <result column="studentid" 
+		property="studentId" jdbcType="BIGINT" /> <result column="interimgroupid" 
+		property="interimGroupId" jdbcType="BIGINT" /> <result column="createduser" 
+		property="createdUser" jdbcType="BIGINT" /> <result column="createddate" 
+		property="createdDate" jdbcType="TIMESTAMP" /> </resultMap> -->
+
+	<insert id="insertInterimGroup" parameterType="edu.ku.cete.domain.content.InterimGroup"
+		useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+
+		insert into
+		interimgroup (groupname, createddate, modifieddate, createduser,
+		modifieduser, activeflag,organizationid)
+		values (#{groupName,jdbcType=VARCHAR},
+		#{createdDate,jdbcType=TIMESTAMP},#{modifiedDate,jdbcType=TIMESTAMP},
+		#{createdUser,jdbcType=BIGINT},
+		#{modifiedUser,jdbcType=BIGINT},#{activeFlag,jdbcType=BIT},
+		#{organizationId,jdbcType=BIGINT})
+	</insert>
+
+	<insert id="addInterimGroupStudents" parameterType="edu.ku.cete.domain.content.InterimGroupStudent">
+		insert into
+		interimgroupstudent (studentid, interimgroupid, createduser,
+		createddate, activeflag)
+		values (#{studentId,jdbcType=BIGINT},
+		#{interimGroupId,jdbcType=BIGINT},
+		#{createdUser,jdbcType=BIGINT},
+		#{createdDate,jdbcType=TIMESTAMP},#{activeFlag,jdbcType=BIT})
+	</insert>
+
+	<update id="deleteStudents">
+		update
+		interimgroupstudent set activeflag=false,
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where interimgroupid = #{interimGroupId}
+	</update>
+	<update id="updateGroup">
+		update interimgroup set
+		groupname=#{groupName,jdbcType=VARCHAR} ,
+		modifieddate=#{modifiedDate,jdbcType=TIMESTAMP},
+		modifieduser=#{modifiedUser,jdbcType=BIGINT}
+		where id =#{interimGroupId,jdbcType=BIGINT} and activeflag=true
+	</update>
+
+	<update id="deleteGroup">
+		update interimgroup set activeflag=false, 
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where id = #{interimGroupId,jdbcType=BIGINT}
+	</update>
+
+	<select id="getStudentsByGroup" resultType="long"
+		parameterType="long">
+		select igs.studentid from interimgroupstudent igs
+		join interimgroup ig on ig.id=igs.interimgroupid
+		where interimgroupid = #{interimGroupId} and igs.activeflag=true
+	</select>
+    <select id="getGroups" resultType="edu.ku.cete.domain.content.InterimGroup">
+        select * from interimgroup ig
+        join organization og on og.id=ig.organizationid
+        inner join aartuser au on au.id=ig.createduser 
+        where ig.activeflag=true
+        and (au.firstname||' '||au.surname) ilike #{userName,jdbcType=VARCHAR} and ig.groupname ilike #{groupName,jdbcType=VARCHAR}
+        and ig.organizationid=#{organizationId,jdbcType=BIGINT}
+        and ig.createduser= ANY(ARRAY 
+		        <foreach collection="userIds" item="userId" open="[" close="]" separator="," >
+		    	    	#{userId,jdbcType=BIGINT}
+		        </foreach>)
+		 order by groupname asc
+    </select>
+    
+    <select id="getGroupsByUser" resultType="edu.ku.cete.domain.content.InterimGroup">
+        select * from interimgroup ig
+        join organization og on og.id=ig.organizationid
+        where
+        ig.organizationid=#{organizationId,jdbcType=BIGINT}
+        and ig.activeflag=true
+        and
+        ig.createduser= ANY(ARRAY 
+		        <foreach collection="userIds" item="userId" open="[" close="]" separator="," >
+		    	    	#{userId,jdbcType=BIGINT}
+		        </foreach>)
+    </select>
+    <update id="deleteOnRosterChange">
+        update
+        interimgroupstudent set activeflag=false,
+        modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+        where
+        createduser=#{currentContextUserId,jdbcType=BIGINT} and
+        studentid=#{studentId,jdbcType=BIGINT}
+    </update>
+     <update id="deleteOnStudent">
+        update
+        interimgroupstudent set activeflag=false,
+        modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+        where
+        studentid=#{studentId,jdbcType=BIGINT}
+    </update>
+   
+    
+    
+	<select id="getAllGroups" resultType="edu.ku.cete.domain.content.InterimGroup">
+        select * from interimgroup  where activeflag=true;
+    </select>
+
+	<update id="removeInterimGroups">
+		UPDATE interimgroup 
+			SET activeflag = false, 
+			modifieddate = now(), 
+			modifieduser = #{modifiedUser}
+	</update>
+	
+	<update id="removeInterimGroupStudent">
+		UPDATE interimgroupstudent 
+			SET activeflag = false,
+			modifieddate = #{modifiedDate},
+			modifieduser = #{modifiedUser}
+	</update>
+</mapper>

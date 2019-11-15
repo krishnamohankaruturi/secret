@@ -1,0 +1,1 @@
+update student set activeflag=true where activeflag is null;

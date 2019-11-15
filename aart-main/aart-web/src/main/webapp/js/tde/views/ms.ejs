@@ -1,0 +1,11 @@
+<% if(answers.indexOf(task['foils'][i].id) != -1) { %>
+	<input type="checkbox" id="answer_<%= qNum+'_'+i %>" name="answer_<%= qNum %>" value="<%= i %>" checked="checked"/>
+	<% if(showtick) { %>
+		<label class="paginateAnswered"></label>
+	<% } %>
+<% } else { %>
+	<input type="checkbox" id="answer_<%= qNum+'_'+i %>" name="answer_<%= qNum %>" value="<%= i %>" />
+	<% if(showtick) { %>
+		<label></label>
+	<% } %>
+<% } %>

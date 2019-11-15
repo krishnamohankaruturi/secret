@@ -1,0 +1,5 @@
+-- 537.sql DML
+-- US17061: DLM Lockdown Service Desk Data Scripts
+-- Scenario: 9: Add New Enrollment
+-- SELECT addNewEnrollment(statestudent_identifier :=, localState_StuId :=, aypSch :=, attSch :=, district :=, schoolyear :=, 
+        -- schEntryDate :=, distEntryDate :=, state_EntryDate := , grade := , stateDisplayidentifier :=);

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.warehouse.model.DashboardMapper" >
+  
+  
+  <sql id="reactivationsDetailWhereClause">
+	<if test="criteria.assessmentProgram != null">
+			AND assessmentprogram ilike '%' || #{criteria.assessmentProgram} || '%'
+	</if>
+	<if test="criteria.district != null">
+			AND districtname ilike '%' || #{criteria.district} || '%'
+	</if>
+	<if test="criteria.school != null">
+			AND schoolname ilike '%' || #{criteria.school} || '%'
+	</if>
+	<if test="criteria.testName != null">
+			AND testname ilike '%' || #{criteria.testName} || '%'
+	</if>
+	<if test="criteria.student != null">
+			AND studentName ilike '%' || #{criteria.student} || '%'
+	</if>
+	<if test="criteria.reactivatedBy != null">
+			AND reactivatedbyname ilike '%' || #{criteria.reactivatedBy} || '%'
+	</if>
+  </sql>
+
+ 
+
+  <select id="getTestingSummary" resultType="edu.ku.cete.domain.report.DashboardTestingSummary">
+           select assessmentprogram, assessmentprogramid, contentarea, contentareaid,
+           		sum(countsessionscompletedtoday) as countsessionscompletedtoday,
+           		sum(countsessionscompletedlastschoolday) as countsessionscompletedlastschoolday, 
+                sum(countsessionscompletedthisyear) as countsessionscompletedthisyear,
+            	sum(countstudentsassignedthisyear) as countstudentsassignedthisyear, 
+                sum(countstudentscompletedthisyear) as countstudentscompletedthisyear,
+                (cast(sum(countstudentscompletedthisyear) as float)/cast(sum(countstudentsassignedthisyear) as float))*100 
+                		as studentspercentcompletedthisyear,
+                sum(countreactivatedlastschoolday) as countreactivatedlastschoolday, 
+                sum(countreactivatedthisyear) as countreactivatedthisyear, modifieddate, statename, stateid
+                <if test="districtOrgId != null">
+                , districtname, districtid
+                </if>
+                <if test="schoolOrgId != null">
+                , schoolname, schoolid
+                </if>
+                <if test="showClassroomId">
+                ,classroomid
+                </if>
+            from dashboardtestingsummary 
+            where status = 'COMPLETE' 
+            and stateid=#{stateOrgId} 
+            <if test="districtOrgId != null">
+            	and districtid=#{districtOrgId}
+            </if>
+            <if test="schoolOrgId != null">
+            	and schoolid=#{schoolOrgId}
+            </if>
+            <if test="classroomIds != null and classroomIds.size>0">
+            	and classroomid = ANY(ARRAY
+      			<foreach collection="classroomIds" item="cid" open="[" close="]" separator=",">
+        			#{cid,jdbcType=BIGINT}
+      			</foreach>
+      			)
+            </if>
+            and assessmentprogramid = ANY(ARRAY
+      			<foreach collection="assessmentProgramIds" item="id" open="[" close="]" separator=",">
+        			#{id,jdbcType=VARCHAR}
+      			</foreach>
+      			)
+            group by assessmentprogram, assessmentprogramid, contentarea,  contentareaid, statename, stateid 
+            	<if test="districtOrgId != null">,districtname, districtid</if> 
+            	<if test="schoolOrgId != null">,schoolname, schoolid</if>
+            	<if test="showClassroomId">,classroomid</if> 
+            	,modifieddate
+            order by assessmentprogram, assessmentprogramid, contentarea,  contentareaid, statename, stateid 
+            <if test="districtOrgId != null">, districtname, districtid</if> 
+            <if test="schoolOrgId != null">,schoolname, schoolid</if>
+            <if test="showClassroomId">,classroomid</if>   
+  </select>
+
+  <select id="getScoringSummary" parameterType="map" resultType="edu.ku.cete.domain.report.DashboardScoringSummary">
+    SELECT
+      assessmentprogram, assessmentprogramid, modifieddate,
+      CASE
+        WHEN assessmentprogram = 'KELPA2' THEN stagename
+        ELSE contentarea
+      END AS contentarea,
+      sum(countsessionsscoredtoday) AS countsessionsscoredtoday,
+      sum(countsessionsscoredlastschoolday) AS countsessionsscoredlastschoolday,
+      sum(countsessionsscoredthisyear) AS countsessionsscoredthisyear,
+      sum(countsessionscompletednotscored) AS countsessionscompletednotscored,
+      sum(countsessionsassignedthisyear) AS countsessionsassignedthisyear,
+      (cast(sum(countsessionsscoredthisyear) as float)/cast(sum(countsessionsassignedthisyear) as float))*100 
+                		as percentcompletedthisyear
+    FROM dashboardscoringsummary dash
+    WHERE status = 'COMPLETE'
+    AND assessmentprogramid IN
+      <foreach collection="assessmentProgramIds" item="assessmentProgramId" open="(" close=")" separator=",">
+        #{assessmentProgramId,jdbcType=BIGINT}
+      </foreach>
+    AND (
+      stateid = #{orgId,jdbcType=BIGINT}
+      OR districtid = #{orgId,jdbcType=BIGINT}
+      OR schoolid = #{orgId,jdbcType=BIGINT}
+    )
+    GROUP BY assessmentprogram, assessmentprogramid, modifieddate, CASE WHEN assessmentprogram = 'KELPA2' THEN stagename ELSE contentarea END
+    ORDER BY assessmentprogram, contentarea
+  </select> 
+  
+  <select id="getReactivationsSummary" resultType="edu.ku.cete.domain.report.DashboardReactivations">
+  		SELECT 
+  			distinct count(id) as count, assessmentprogram, 
+  			schoolname, testname, schoolid, districtname, districtid, statename, stateid,
+  			reactivatedbyname, createddate, modifieddate
+  		FROM
+  			dashboardreactivations
+  		WHERE
+  			 (
+  			 	stateid = #{orgId,jdbcType=BIGINT}
+		      	OR districtid = #{orgId,jdbcType=BIGINT}
+		      	OR schoolid = #{orgId,jdbcType=BIGINT}
+		     )
+		    <if test='timeframe != null and "today".equals(timeframe)'>
+		     	AND (reactivateddate AT TIME ZONE #{orgTimeZone})::DATE = (select (now() AT TIME ZONE #{orgTimeZone})::DATE)
+		     </if> 
+		     <if test='timeframe != null and "yesterday".equals(timeframe)'>
+		     	AND (reactivateddate AT TIME ZONE #{orgTimeZone})::DATE = (select ((now()-interval '1 day' ) AT TIME ZONE  #{orgTimeZone})::DATE)
+		     </if>
+		      <if test='timeframe != null and "year".equals(timeframe)'>
+      				and reactivateddate >= #{schoolStartDate}::DATE 
+    		 </if>
+		     and assessmentprogramid = ANY(ARRAY
+      			<foreach collection="apIds" item="id" open="[" close="]" separator=",">
+        			#{id,jdbcType=VARCHAR}
+      			</foreach>
+      		 )
+      	GROUP BY
+      		assessmentprogram, testname, schoolname, schoolid, districtname, districtid, statename, stateid, reactivatedbyname, createddate, modifieddate
+      		
+      	ORDER BY assessmentprogram, districtname, schoolname, reactivatedbyname
+  </select>
+  
+  <select id="getReactivationsDetail" resultType="edu.ku.cete.domain.report.DashboardReactivations">
+  		SELECT 
+  			assessmentprogram, schoolname, schoolid, districtname, districtid, statename, stateid, testname,
+  			studentid, studentName, statestudentidentifier, reactivatedbyname, reactivateddate, createddate, modifieddate
+  		FROM
+  			dashboardreactivations
+  		WHERE
+  			 (
+  			 	stateid = #{orgId,jdbcType=BIGINT}
+		      	OR districtid = #{orgId,jdbcType=BIGINT}
+		      	OR schoolid = #{orgId,jdbcType=BIGINT}
+		     )
+		     <if test='timeframe != null and "today".equals(timeframe)'>
+		     	AND (reactivateddate AT TIME ZONE #{orgTimeZone})::DATE = (select (now() AT TIME ZONE #{orgTimeZone})::DATE)
+		     </if> 
+		     <if test='timeframe != null and "yesterday".equals(timeframe)'>
+		     	AND (reactivateddate AT TIME ZONE #{orgTimeZone})::DATE = (select ((now()-interval '1 day' ) AT TIME ZONE  #{orgTimeZone})::DATE)
+		     </if>
+		     
+	    	 <if test='criteria != null'>
+		     	<include refid="reactivationsDetailWhereClause" />
+		     </if>
+		      <if test='timeframe != null and "year".equals(timeframe)'>
+      				and reactivateddate >= #{schoolStartDate}::DATE 
+    		 </if>
+		     and assessmentprogramid = ANY(ARRAY
+      			<foreach collection="apIds" item="id" open="[" close="]" separator=",">
+        			#{id,jdbcType=VARCHAR}
+      			</foreach>
+      		 )
+		<choose>    
+     	<when test='sortByColumn != null and !"".equals(sortByColumn)'>
+     		<choose>
+  				<when test='"assessmentProgram".equals(sortByColumn)'>
+  					ORDER BY assessmentprogram <if test='sortType != null and "desc".equals(sortType)'> desc </if>
+  					,districtname, schoolname, legallastname, legalfirstname, reactivatedbyname, testname, reactivateddate
+  					 
+  				</when>
+  				<when test='"district".equals(sortByColumn)'>
+  					ORDER BY districtname <if test='sortType != null and "desc".equals(sortType)'> desc </if>
+  					,assessmentprogram, schoolname, legallastname, legalfirstname, reactivatedbyname, testname, reactivateddate
+  				</when>
+  				<when test='"school".equals(sortByColumn)'>
+  					ORDER BY schoolname <if test='sortType != null and "desc".equals(sortType)'> desc </if>
+  					,assessmentprogram, districtname, legallastname, legalfirstname, reactivatedbyname, testname, reactivateddate
+  				</when>
+  				<when test='"testName".equals(sortByColumn)'>
+  					ORDER BY testname <if test='sortType != null and "desc".equals(sortType)'> desc </if>
+  					,assessmentprogram, districtname, schoolname, legallastname, legalfirstname, reactivatedbyname, reactivateddate
+  				</when>
+  				<when test='"student".equals(sortByColumn)'>
+  					ORDER BY legallastname <if test='sortType != null and "desc".equals(sortType)'> desc </if>
+  					,legalfirstname,assessmentprogram, districtname, schoolname, reactivatedbyname, testname, reactivateddate
+  				</when>
+  				<when test='"reactivatedBy".equals(sortByColumn)'>
+  					ORDER BY reactivatedbyname <if test='sortType != null and "desc".equals(sortType)'> desc </if>
+  					,assessmentprogram, districtname, schoolname, legallastname, legalfirstname, testname, reactivateddate
+  				</when>
+  				<when test='"reactivatedDate".equals(sortByColumn)'>
+  					ORDER BY reactivateddate <if test='sortType != null and "desc".equals(sortType)'> desc </if>
+  					,assessmentprogram, districtname, schoolname, legallastname, legalfirstname, reactivatedbyname, testname
+  				</when>
+  			</choose> 	  	
+     	  	</when>
+     	  	<otherwise>
+     				ORDER BY assessmentprogram, districtname, schoolname, legallastname, legalfirstname, reactivatedbyname, testname, reactivateddate
+     		</otherwise>
+     	
+     	</choose>
+     			     
+		<if test='limitCount != null'>
+			limit #{limitCount}
+		</if>
+		<if test='skipCount != null'>
+			offset #{skipCount}
+		</if>
+		     
+  </select>
+  
+  <select id="getReactivationsDetailCount" resultType="java.lang.Long">
+  		SELECT 
+  			count(id)
+  		FROM
+  			dashboardreactivations
+  		WHERE
+  			 (
+  			 	stateid = #{orgId,jdbcType=BIGINT}
+		      	OR districtid = #{orgId,jdbcType=BIGINT}
+		      	OR schoolid = #{orgId,jdbcType=BIGINT}
+		     )
+		     <if test='timeframe != null and "today".equals(timeframe)'>
+		     	AND (reactivateddate AT TIME ZONE #{orgTimeZone})::DATE = (select (now() AT TIME ZONE #{orgTimeZone})::DATE)
+		     </if> 
+		     <if test='timeframe != null and "yesterday".equals(timeframe)'>
+		     	AND (reactivateddate AT TIME ZONE #{orgTimeZone})::DATE = (select ((now()-interval '1 day' ) AT TIME ZONE  #{orgTimeZone})::DATE)
+		     </if>   
+		     <if test='criteria != null'>
+		     	<include refid="reactivationsDetailWhereClause" />
+		     </if>
+		     <if test='timeframe != null and "year".equals(timeframe)'>
+      				and reactivateddate >= #{schoolStartDate}::DATE 
+    		 </if>
+		     AND assessmentprogramid = ANY(ARRAY
+      			<foreach collection="apIds" item="id" open="[" close="]" separator=",">
+        			#{id,jdbcType=VARCHAR}
+      			</foreach>
+      		 )
+		       
+  </select>
+  
+  <select id="getTestingOutsideHours" resultType="edu.ku.cete.domain.report.DashboardTestingOutsideHours">
+  		SELECT 
+  			id, assessmentprogram, assessmentprogramid, contentarea, contentareaid, 
+  			grade, gradecourseid, gradeband, gradebandid, studentid, studentname, statestudentidentifier, 
+  			schoolname, schoolid, districtname, districtid, statename, stateid,
+  			startdatetime, enddatetime, studentstestsid, testname, testsessionid, 
+  			stagename, createddate, modifieddate, legallastname, legalfirstname
+  		FROM
+  			dashboardtestingoutsidehours
+  		WHERE
+  			 (
+  			 	stateid = #{orgId,jdbcType=BIGINT}
+		      	OR districtid = #{orgId,jdbcType=BIGINT}
+		      	OR schoolid = #{orgId,jdbcType=BIGINT}
+		      )
+		      
+		      	<if test='timeframe != null and "today".equals(timeframe)'>
+		      		AND (
+    				CASE WHEN enddatetime IS NOT NULL THEN enddatetime
+   						 ELSE startdatetime
+    					END
+   					 AT TIME ZONE #{orgTimeZone}
+					)::DATE = (select (now() AT TIME ZONE #{orgTimeZone})::date)
+		      	</if>		     
+		     	<if test='timeframe != null and "yesterday".equals(timeframe)'>
+		     		AND (
+    				CASE WHEN enddatetime IS NOT NULL THEN enddatetime
+   						 ELSE startdatetime
+    					END
+   					 AT TIME ZONE #{orgTimeZone}
+					)::DATE = (select ((now()-interval '1 day' ) AT TIME ZONE  #{orgTimeZone})::date)
+		     	 </if>
+		     	 <if test='timeframe != null and "year".equals(timeframe)'>
+      				and startdatetime >= #{schoolStartDate}::DATE 
+    			</if>
+		      and assessmentprogramid = ANY(ARRAY
+      			<foreach collection="apIds" item="id" open="[" close="]" separator=",">
+        			#{id,jdbcType=VARCHAR}
+      			</foreach>
+      		 )
+      	ORDER BY assessmentprogram, districtname, schoolname, legallastname, legalfirstname, testname		 
+      
+  </select>
+  
+  <select id="getShortDurationTesting" resultType="edu.ku.cete.domain.report.DashboardShortDurationTesting">
+  		SELECT 
+  			id, assessmentprogram, assessmentprogramid, contentarea, contentareaid, grade, 
+  			gradecourseid, gradeband, gradebandid, studentid, studentname, teachername, 
+  			statestudentidentifier, schoolname, schoolid, districtname, districtid, statename, stateid,
+  			startdatetime, enddatetime, studentstestsid, testname, testsessionid, stagename, createddate, 
+  			modifieddate, testitemcount, allcorrectindicator, testtimespan, rostername, studentfirstname, studentlastname
+  		FROM
+  			dashboardshortdurationtesting
+  		WHERE
+  			 (
+  			 	stateid = #{orgId,jdbcType=BIGINT}
+		      	OR districtid = #{orgId,jdbcType=BIGINT}
+		      	OR schoolid = #{orgId,jdbcType=BIGINT}
+		      )
+		      
+		      	<if test='timeframe != null and "today".equals(timeframe)'>
+		      		AND (
+    				CASE WHEN enddatetime IS NOT NULL THEN enddatetime
+   						 ELSE startdatetime
+    					END
+   					 AT TIME ZONE #{orgTimeZone}
+					)::DATE = (select (now() AT TIME ZONE #{orgTimeZone})::date)
+		      	</if>		     
+		     	<if test='timeframe != null and "yesterday".equals(timeframe)'>
+		     		AND (
+    				CASE WHEN enddatetime IS NOT NULL THEN enddatetime
+   						 ELSE startdatetime
+    					END
+   					 AT TIME ZONE #{orgTimeZone}
+					)::DATE = (select ((now()-interval '1 day' ) AT TIME ZONE  #{orgTimeZone})::date)
+		     	 </if>
+		     	 <if test='timeframe != null and "year".equals(timeframe)'>
+      				and startdatetime >= #{schoolStartDate}::DATE 
+    			</if> 
+		      and assessmentprogramid = ANY(ARRAY
+      			<foreach collection="apIds" item="id" open="[" close="]" separator=",">
+        			#{id,jdbcType=VARCHAR}
+      			</foreach>
+      		 )
+      	ORDER BY assessmentprogram, districtname, schoolname, studentlastname, studentfirstname, testname		 
+      
+  </select>
+  
+
+  <select id="hasMiddayRunCompleted" resultType="boolean">
+	  select case when configvalue='true' then true else false end 
+	  from dashboardconfig 
+	  where dashboardentityname='General' and configcode='middayruncomplete'
+  </select>
+  
+  <select id="getMostRecentRunTime" resultType="Date">
+    SELECT endtime
+    FROM etllogdetails
+    WHERE endtime IS NOT NULL
+    AND transformation = 'dailydashboard_EP'
+    ORDER BY etllogdetailsid DESC
+    LIMIT 1
+  </select>
+  
+  <select id="getTestingSummaryAllStates" resultType="edu.ku.cete.domain.report.DashboardTestingSummary">
+           select assessmentprogram, assessmentprogramid, contentarea, contentareaid,
+           		sum(countsessionscompletedtoday) as countsessionscompletedtoday,
+           		sum(countsessionscompletedlastschoolday) as countsessionscompletedlastschoolday, 
+                sum(countsessionscompletedthisyear) as countsessionscompletedthisyear,
+            	sum(countstudentsassignedthisyear) as countstudentsassignedthisyear, 
+                sum(countstudentscompletedthisyear) as countstudentscompletedthisyear,
+                (cast(sum(countstudentscompletedthisyear) as float)/cast(sum(countstudentsassignedthisyear) as float))*100 
+                		as studentspercentcompletedthisyear,
+                sum(countreactivatedlastschoolday) as countreactivatedlastschoolday, 
+                sum(countreactivatedthisyear) as countreactivatedthisyear, modifieddate, statename, stateid
+				, districtname, districtid
+                <if test="showClassroomId">
+                ,classroomid
+                </if>
+            from dashboardtestingsummary 
+            where status = 'COMPLETE' 
+            and stateid=#{stateOrgId} 
+            <if test="classroomIds != null and classroomIds.size>0">
+            	and classroomid = ANY(ARRAY
+      			<foreach collection="classroomIds" item="cid" open="[" close="]" separator=",">
+        			#{cid,jdbcType=BIGINT}
+      			</foreach>
+      			)
+            </if>
+            and assessmentprogramid = ANY(ARRAY
+      			<foreach collection="assessmentProgramIds" item="id" open="[" close="]" separator=",">
+        			#{id,jdbcType=VARCHAR}
+      			</foreach>
+      			)
+      		and districtid = ANY(ARRAY
+      			<foreach collection="districtIds" item="dstid" open="[" close="]" separator=",">
+        			#{dstid,jdbcType=BIGINT}
+      			</foreach>
+      			)
+            group by assessmentprogram, assessmentprogramid, contentarea,  contentareaid, statename, stateid, 
+            		districtname, districtid
+            	<if test="showClassroomId">,classroomid</if> 
+            	,modifieddate
+            order by assessmentprogram, assessmentprogramid, contentarea,  contentareaid, statename, stateid, 
+            		districtname, districtid
+            <if test="showClassroomId">,classroomid</if>   
+  </select>
+</mapper>

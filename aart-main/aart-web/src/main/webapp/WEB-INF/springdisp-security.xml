@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!-- Allows security annotations to be read. -->
+	<!-- <global-method-security pre-post-annotations="enabled"/> -->
+	<global-method-security pre-post-annotations="enabled" />
+	<beans:bean id="nullRequestCacheAwareFilter"
+		class="org.springframework.security.web.savedrequest.NullRequestCache" />
+	
+	<beans:bean id="requestCache" class="org.springframework.security.web.savedrequest.HttpSessionRequestCache" />
+
+    <beans:bean id="preAuthFilter" class="edu.ku.cete.security.PreAuthenticatedFilter">
+    	<beans:property name="authenticationManager" ref="authenticationManager" />
+    </beans:bean>
+    
+    <beans:bean id="csrfRequestMatcher" class="edu.ku.cete.security.CsrfRequestMatcher">
+    	<beans:constructor-arg>
+    		<beans:array>
+    			<beans:value>/j_spring_security_check</beans:value>
+    			<beans:value>/j_spring_security_logout</beans:value>
+    			<beans:value>/ksde/getKSDEReturnExtract.htm</beans:value>
+    			<beans:value>/questar/**</beans:value>
+    			<beans:value>/sif/**</beans:value>
+    			<beans:value>/api/**</beans:value>
+    			<beans:value>/openid_connect_login</beans:value>
+    		</beans:array>
+    	</beans:constructor-arg>
+    </beans:bean>
+    
+	<http name="loginPageAuth" use-expressions="true" auto-config="false" access-decision-manager-ref="unanimousBased">
+		<csrf request-matcher-ref="csrfRequestMatcher"/>
+		<headers>
+        	<cache-control />
+        	<content-type-options />
+        	<hsts />
+        	<frame-options policy="SAMEORIGIN" />
+        	<xss-protection />
+    	</headers>
+		<request-cache ref="requestCache" />
+		<custom-filter position="PRE_AUTH_FILTER" ref="compositeAuthFilter" />
+		<intercept-url pattern="/healthCheck.htm" access="permitAll" />
+		<intercept-url pattern="/api/ping" access="permitAll" />
+		<intercept-url pattern="/api/students" access="permitAll" />
+		<intercept-url pattern="/api/rosters" access="permitAll" />
+		<intercept-url pattern="/api/users" access="permitAll" />
+		<intercept-url pattern="/api/organizations" access="permitAll" />
+		<intercept-url pattern="/api/enrollments" access="permitAll" />
+		<intercept-url pattern="/nojs.htm" access="permitAll" />
+		<intercept-url pattern="/favicon.ico" access="permitAll" />
+		<intercept-url pattern="/index.jsp" access="permitAll" />
+		<intercept-url pattern="/logIn.htm*" access="permitAll" />
+		<intercept-url pattern="/images/**" access="permitAll" />
+		<intercept-url pattern="/js/**" access="permitAll" />
+		<intercept-url pattern="/css/**" access="permitAll" />
+		<intercept-url pattern="/j_spring_security_logout" access="permitAll" />
+		<intercept-url pattern="/sessionTimedOut.htm" access="permitAll" />
+		<intercept-url pattern="/activateUser.htm*" access="permitAll" />
+		<intercept-url pattern="/activate.htm*" access="permitAll" />
+		<intercept-url pattern="/generalError.htm" access="permitAll" />
+		<intercept-url pattern="/permissionDenied.htm" access="permitAll" />
+		<intercept-url pattern="/authError.htm" access="permitAll" />
+		<intercept-url pattern="/management.htm" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/user/getByUserName" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/user/setEnabled" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/userTest/findByUser" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/userTest/setActive" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/manageOrgAssessmentPrograms.htm" access="hasRole('PERM_MANAGEORGASSESSPROG_VIEW')" />
+		<intercept-url pattern="/syncStudents.htm" access="hasRole('CETE_SYS_ADMIN')" />
+		<intercept-url pattern="/createAccount/**" access="permitAll" />
+		<intercept-url pattern="/forgotPassword/**" access="permitAll" />
+		<intercept-url pattern="/getAllStates.htm" access="permitAll" />
+		<intercept-url pattern="/getChildOrgsForFilter.htm" access="permitAll" />	
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+
+		<custom-filter position="LOGOUT_FILTER" ref="customLogoutFilter" />
+		<session-management invalid-session-url="/logIn.htm" 
+			session-fixation-protection="newSession" session-authentication-error-url="/logIn.htm">
+			<concurrency-control expired-url="/logIn.htm" max-sessions="1" error-if-maximum-exceeded="false"/>
+		</session-management>
+		<access-denied-handler error-page="/permissionDenied.htm" />
+		<form-login login-page="/logIn.htm" default-target-url="/logIn.htm"
+			authentication-failure-url="/logIn.htm?error=true" 
+			authentication-success-handler-ref="EPAuthenticationSuccessHandler"/>
+	</http>
+	<beans:bean id="EPAuthenticationSuccessHandler"
+        class="edu.ku.cete.web.EPAuthenticationSuccessHandler" >
+        </beans:bean>
+
+	<!-- The AuthenticationManager is the entry point into authentication portion 
+		of the security model -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="authenticationProvider" />
+		<authentication-provider ref="openIdConnectAuthenticationProvider" />
+	</authentication-manager>
+
+	<!-- The UnanimousBased is the accessDecisionManager used for the authorization -->
+	<beans:bean id="unanimousBased"
+		class="org.springframework.security.access.vote.UnanimousBased">
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:ref bean="webExpressionVoter" />
+				<beans:ref bean="roleVoter" />
+				<beans:ref bean="authenticatedVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<!-- The WebExpressionVoter makes sure that the user has the correct permissions. -->
+	<beans:bean id="webExpressionVoter"
+		class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+
+	<!-- The RoleVoter makes sure that the user has the correct permissions. -->
+	<beans:bean id="roleVoter"
+		class="org.springframework.security.access.vote.RoleVoter">
+	</beans:bean>
+
+	<!-- The AuthenticatedVoter makes sure that the user is authenticated. -->
+	<beans:bean id="authenticatedVoter"
+		class="org.springframework.security.access.vote.AuthenticatedVoter" />
+
+	<beans:bean id="customLogoutFilter" class="edu.ku.cete.security.LogoutFilterWrapper">
+		<beans:property name="logoutSuccessfulUrls">
+			<beans:map>
+				<beans:entry key="internal" value="/logIn.htm"/>
+				<beans:entry key="sso" value="${logout.success.url}"/>
+			</beans:map>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="shaPasswordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<beans:constructor-arg value="512" />
+	</beans:bean>
+
+	<beans:bean
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource"
+		id="saltSource">
+		<beans:property name="userPropertyToUse" value="salt" />
+	</beans:bean>
+
+	<beans:bean id="userDetailsService"
+		class="edu.ku.cete.service.impl.UserDetailsServiceImpl" />
+
+	<beans:bean id="authenticationProvider"
+		class="edu.ku.cete.service.impl.AuthenticationProviderImpl">
+		<beans:property ref="userDetailsService" name="userDetailsService" />
+		<beans:property ref="shaPasswordEncoder" name="passwordEncoder" />
+		<beans:property ref="saltSource" name="saltSource" />
+	</beans:bean>
+
+	<beans:bean class="edu.ku.cete.security.DatabasePasswordSecurerBean"
+		init-method="secureDatabase" depends-on="dataSource">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+	
+	<beans:bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<beans:property name="targetClass" value="org.springframework.security.core.context.SecurityContextHolder"/> 
+		<beans:property name="targetMethod" value="setStrategyName"/> 
+		<beans:property name="arguments">
+		    <beans:list>
+		        <beans:value>MODE_INHERITABLETHREADLOCAL</beans:value>
+		    </beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	
+	<!-- configuration added for SSO via MITRE OpenID Connect Client (F816) -->
+	
+	<beans:bean id="compositeAuthFilter" class="org.springframework.web.filter.CompositeFilter">
+	    <beans:property name="filters">
+	        <beans:list>
+	            <beans:ref bean="preAuthFilter"/>
+	            <beans:ref bean="openIdConnectAuthenticationFilter"/>
+	        </beans:list>
+	    </beans:property>
+	</beans:bean>
+	<context:component-scan base-package="org.mitre.web" />
+	
+    <mvc:interceptors>
+		<beans:bean id="userInfoInterceptor" class="org.mitre.openid.connect.web.UserInfoInterceptor" />
+	</mvc:interceptors>  	
+
+	<beans:bean id="openIdAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+	     <beans:constructor-arg name="loginFormUrl" value="/openid_connect_login" />
+	</beans:bean>
+
+	<beans:bean id="openIdConnectAuthenticationProvider" class="edu.ku.cete.security.AlternateOIDCAuthenticationProvider"/> 
+
+	<!-- Implicit Flow Filter Class - edu.ku.cete.security.ImplicitFlowOIDCAuthenticationFilter -->
+	<!-- Authorization Code Flow Filter Class - org.mitre.openid.connect.client.OIDCAuthenticationFilter -->
+	<beans:bean id="openIdConnectAuthenticationFilter" class="org.mitre.openid.connect.client.OIDCAuthenticationFilter"> 
+	     <beans:property name="authenticationManager" ref="authenticationManager" /> 
+	     <beans:property name="issuerService" ref="staticIssuerService" /> 
+	     <beans:property name="serverConfigurationService" ref="staticServerConfigurationService" /> 
+	     <beans:property name="clientConfigurationService" ref="staticClientConfigurationService" /> 
+	     <beans:property name="authRequestOptionsService" ref="staticAuthRequestOptionsService" /> 
+	     <beans:property name="authRequestUrlBuilder" ref="plainAuthRequestUrlBuilder" /> 
+	     <beans:property name="authenticationFailureHandler" ref="simpleUrlAuthenticationFailureHandler"/> 
+	</beans:bean>
+
+	<beans:bean id="simpleUrlAuthenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"> 
+	     <beans:constructor-arg name="defaultFailureUrl" value="/authError.htm" /> 
+	</beans:bean>
+
+	<beans:bean class="org.mitre.openid.connect.client.service.impl.StaticSingleIssuerService" id="staticIssuerService"> 
+	     <beans:property name="issuer" value="${openid.issuer}" /> 
+	</beans:bean>
+
+	<beans:bean class="org.mitre.openid.connect.client.service.impl.StaticServerConfigurationService" id="staticServerConfigurationService"> 
+	     <beans:property name="servers"> 
+	          <beans:map> 
+	               <beans:entry key="${openid.issuer}"> 
+	                    <beans:bean class="org.mitre.openid.connect.config.ServerConfiguration"> 
+	                         <beans:property name="issuer" value="${openid.issuer}"/> 
+	                         <beans:property name="authorizationEndpointUri" value="${openid.authorization.uri}"/> 
+	                         <beans:property name="tokenEndpointUri" value="${openid.token.uri}"/> 
+	                         <beans:property name="userInfoUri" value="${openid.userinfo.uri}"/> 
+	                         <beans:property name="jwksUri" value="${openid.jwks.uri}"/> 
+	                    </beans:bean> 
+	               </beans:entry> 
+	     	</beans:map> 
+	     </beans:property> 
+	 </beans:bean>
+ 
+	<beans:bean class="org.mitre.openid.connect.client.service.impl.StaticClientConfigurationService" id="staticClientConfigurationService">
+	     <beans:property name="clients">
+	          <beans:map>
+	               <beans:entry key="${openid.issuer}">
+	                    <beans:bean class="org.mitre.oauth2.model.RegisteredClient">
+	                         <beans:property name="clientId" value="${openid.clientid}" />
+	                         <beans:property name="clientSecret" value="${openid.client.secret}" />
+	                         <beans:property name="scope">
+	                              <beans:bean class="org.springframework.util.StringUtils" factory-method="commaDelimitedListToSet">
+	                                   <beans:constructor-arg type="java.lang.String" value="${openid.scopes}"/>
+	                               </beans:bean>
+	                         </beans:property>
+	                         <beans:property name="tokenEndpointAuthMethod" value="SECRET_BASIC" />
+	                         <beans:property name="redirectUris">
+	                              <beans:set>
+	                                   <beans:value>${openid.redirect.uri}</beans:value>
+	                              </beans:set>
+	                         </beans:property>
+	                    </beans:bean>
+	               </beans:entry>
+	          </beans:map>
+	     </beans:property>
+	</beans:bean>
+	
+	<beans:bean class="org.mitre.openid.connect.client.service.impl.StaticAuthRequestOptionsService" id="staticAuthRequestOptionsService">
+	     <beans:property name="options">
+	          <beans:map>
+	               <!-- Entries in this map are sent as key-value parameters to the auth request -->
+	          </beans:map>
+	     </beans:property>
+	</beans:bean>
+	
+	<beans:bean class="org.mitre.openid.connect.client.service.impl.PlainAuthRequestUrlBuilder" id="plainAuthRequestUrlBuilder" />
+ 
+</beans:beans>

@@ -1,0 +1,1221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.InterimTestMapper">
+
+
+
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.interim.InterimTest">
+
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="gradecourseid" property="gradeCourseId"
+			jdbcType="BIGINT" />
+		<result column="contentareaid" property="contentAreaId"
+			jdbcType="BIGINT" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="minitestids" property="miniTestIdsString"
+			jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result column="datecreated" property="dateCreated" jdbcType="TIMESTAMP" />
+		<result column="testtestid" property="testTestId" jdbcType="BIGINT" />
+		<result column="testcollectionId" property="testCollectionId"
+			jdbcType="BIGINT" />
+		<result column="istestassigned" property="isTestAssigned"
+			jdbcType="BOOLEAN" />
+		<!-- <collection property="miniTestIds" javaType="ArrayList" column="miniTestIds" 
+			ofType="java.lang.Long" select="getInterimTestsByUser"/> -->
+	</resultMap>
+
+	<resultMap id="autoAssignResultMap" type="edu.ku.cete.domain.interim.AutoAssignInterim">
+
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="gradecourseid" property="gradeCourseId"
+			jdbcType="BIGINT" />
+		<result column="testsessionid" property="testSessionId"
+			jdbcType="BIGINT" />
+		<result column="contentareaid" property="contentAreaId"
+			jdbcType="BIGINT" />
+		<result column="rosterid" property="rosterId" jdbcType="BIGINT" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+	</resultMap>
+
+	<resultMap id="studentActivityResultMap"
+		type="edu.ku.cete.domain.interim.StudentActivityReport">
+
+		<id column="studentid" property="studentId" jdbcType="VARCHAR" />
+		<result column="firstname" property="firstName" jdbcType="VARCHAR" />
+		<result column="lastname" property="lastName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR"
+			javaType="java.lang.String" />
+		<result column="test" property="test" jdbcType="VARCHAR"
+			javaType="java.lang.String" />
+		<result column="totalpoints" property="totalPoints" jdbcType="VARCHAR"
+			javaType="java.lang.String" />
+		<result column="testAssigneddate" property="testAssignedDate"
+			jdbcType="TIMESTAMP" />
+		<result column="testCompletiondate" property="testCompletionDate"
+			jdbcType="TIMESTAMP" />
+		<result column="totalpercentage" property="totalPercentage"
+			jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result column="studentgrade" property="studentGrade" jdbcType="VARCHAR" />
+		<result column="testsubject" property="testSubject" jdbcType="VARCHAR" />
+		<result column="testgrade" property="testGrade" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="interimPredictiveStudentScoresResultMap"
+		type="edu.ku.cete.domain.interim.InterimPredictiveStudentScore">
+  	<result column="schoolyear" jdbcType="BIGINT" property="schoolYear" />
+  	<result column="statestudentidentifier" jdbcType="VARCHAR" property="stateStudentIdentifier" />
+  	<result column="legalfirstname" jdbcType="VARCHAR" property="studentLegalFirstName" />
+  	<result column="legallastname" jdbcType="VARCHAR" property="studentLegalLastName" />
+  	<result column="subject" jdbcType="VARCHAR" property="subject" />
+  	<result column="districtidentifier" jdbcType="VARCHAR" property="districtIdentifer" />
+  	<result column="districtname" jdbcType="VARCHAR" property="districtName" />
+   	<result column="schoolidentifier" jdbcType="VARCHAR" property="schoolIdentifier" />
+  	<result column="schoolname" jdbcType="VARCHAR" property="schoolName" />
+  	<result column="grade" jdbcType="VARCHAR" property="grade" />
+  	<result column="summativescalescore" jdbcType="VARCHAR" property="summativeScaleScore" />
+  	<result column="summativelevel" jdbcType="VARCHAR" property="summativeLevel" />
+  	<collection property="interimPredictiveStudentScoreRange" ofType="edu.ku.cete.domain.interim.InterimPredictiveStudentScoreRange">  		
+  		<result column="testingcyclename" jdbcType="VARCHAR" property="testingCycleName" />
+  		<result column="low" jdbcType="VARCHAR" property="low" />
+  		<result column="high" jdbcType="VARCHAR" property="high" />
+  	</collection>
+  </resultMap>
+
+	<select id="getInterimTestsByUser" resultMap="BaseResultMap">
+		select it.name,
+		it.id, it.description, it.testtestid,
+		it.testcollectionid,it.gradecourseid,it.contentareaid,it.istestassigned,
+		au.displayname as assembledby,
+		array_to_string(array_agg(itt.testid),',') as minitestids,
+		to_char(it.createddate, 'MM/DD/YYYY') as datecreated
+		from interimtest
+		it
+		join aartuser au on it.createduser= au.id
+		left join interimtesttest
+		itt on itt.interimtestid=it.id
+		where au.id= it.createduser and
+		it.activeflag=true and au.activeflag=true and itt.activeflag is true
+		GROUP BY it.name, it.id, it.description, au.displayname
+	</select>
+	<select id="getInterimTestsByNameAndUser" resultMap="BaseResultMap">
+		select
+		it.name
+		from interimtest it
+		where
+		it.activeflag is true
+		and
+		(it.createduser=#{userId,jdbcType=BIGINT} or
+		it.modifieduser=#{userId,jdbcType=BIGINT})
+		and
+		name ilike #{testName,jdbcType=VARCHAR}
+		and
+		it.currentschoolyear=#{schoolYear}
+		and it.organizationid=#{orgId}
+	</select>
+
+	<select id="getInterimTest" resultType="edu.ku.cete.domain.interim.InterimTest">
+		select * from interimtest
+		it
+		where it.id= #{interimTestId,jdbcType=BIGINT}
+
+	</select>
+
+	<select id="getInterimTestByTestTestId" resultType="edu.ku.cete.domain.interim.InterimTest">
+		select
+		distinct it.*,ct.id as purposeid,ct.categoryname as purposename
+		from
+		interimtest it
+		join test t on t.id=it.testtestid
+		join
+		testspecstatementofpurpose tstop on tstop.testspecificationid =
+		t.testspecificationid
+		join category ct on ct.id=
+		tstop.statementofpurposeid
+		where it.testtestid =
+		#{testTestId,jdbcType=BIGINT} and tstop.activeflag is
+		true
+		limit 1
+	</select>
+	<select id="getCompleteScores" resultType="java.lang.Long">
+		select
+		count(studentid) from interimtest it
+		where it.testtestid =
+		#{testTestId,jdbcType=BIGINT}
+	</select>
+	<insert id="save" parameterType="edu.ku.cete.domain.interim.InterimTest"
+		useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+
+		insert into
+		interimtest (name,
+		description, createddate, createduser,
+		activeflag,gradecourseid,contentareaid,testtestid,
+		testcollectionid,organizationid,istestcopied,currentschoolyear
+		)
+		values
+		(#{name,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{createdDate,jdbcType=TIMESTAMP},#{createdUser,jdbcType=BIGINT},
+		#{activeFlag,jdbcType=BIT},#{gradeCourseId,jdbcType=BIGINT},#{contentAreaId,jdbcType=BIGINT},
+		#{testTestId,jdbcType=BIGINT},
+		#{testCollectionId,jdbcType=BIGINT},#{organizationId,jdbcType=BIGINT},
+		#{isTestCopied,jdbcType=BOOLEAN},#{currentSchoolYear,jdbcType=BIGINT});
+
+	</insert>
+	<update id="updateById" parameterType="edu.ku.cete.domain.interim.InterimTest">
+		update interimtest
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			istestcopied=false
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+
+	</update>
+
+	<update id="softDeleteInterimTestByInterimTestID" parameterType="Long">
+		update interimtesttest
+		<set>
+			activeflag = FALSE,
+		</set>
+		where interimtestid = #{interimTestId};
+	</update>
+	<update id="deleteById" parameterType="Long">
+		update interimtest
+		<set>
+			activeflag = FALSE,
+		</set>
+		where id = #{id};
+	</update>
+	<insert id="saveInterimTestMapping" parameterType="edu.ku.cete.domain.interim.InterimTestTests"
+		useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into
+		interimtesttest (interimtestid, testid,
+		createddate, testtype,
+		createduser, activeflag
+		)
+		values (#{interimTestId,jdbcType=BIGINT},
+		#{testId,jdbcType=BIGINT},
+		#{createdDate,jdbcType=TIMESTAMP},#{testType,jdbcType=VARCHAR},
+		#{createdUser,jdbcType=BIGINT}, #{activeFlag,jdbcType=BIT});
+	</insert>
+
+	<delete id="deleteInterimtTestTestByInterimTestId"
+		parameterType="java.lang.Long">
+		delete from interimtesttest
+		where testid =
+		#{interimTestId,jdbcType=BIGINT}
+	</delete>
+	<select id="getTotalTests" resultMap="InterimTestDTOMap">
+		select test.id,test.testname,test.numitems, test.externalid,
+		test.createdate, test.modifieddate, test.directions, test.uitypecode,
+		test.reviewtext, test.begininstructions,test.endinstructions,
+		test.gradecourseid, test.contentareaid, test.status,
+		test.originationcode, test.qccomplete, test.tutorialflag,
+		test.maxscore,test.testinternalname, it.id as interimtestid,
+		it.description as testDescription, au.displayname as assembledby
+		, CASE WHEN f.feedbackallowed IS TRUE THEN TRUE ELSE FALSE END AS feedbackallowed
+		from
+		test test, interimtest it, aartuser au
+		LEFT OUTER JOIN (SELECT DISTINCT testid, TRUE AS feedbackallowed FROM test t 
+		JOIN testsection ts ON ts.testid = t.id 
+		JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id 
+		JOIN testlet tl ON tl.id = tstv.testletid
+		JOIN testletfeedback tfb ON tfb.testletexternalid = tl.externalid
+		WHERE 
+			tfb.id IS NOT NULL
+			AND tfb.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+			AND tfb.startdate &lt; now() AND tfb.enddate &gt; now())
+		f on f.testid = test.id
+		where test.activeflag is true
+		and test.is_interim_test is true and
+		it.testtestid=test.id and
+		it.createduser=au.id and
+		it.currentschoolyear=#{schoolYear}
+		<if test="sortByColumn != null and sortByColumn != 'invid' ">
+			ORDER BY
+			<choose>
+
+				<when test="sortByColumn == 'testId'">test.id</when>
+				<when test="sortByColumn == 'testName'">test.messagetitle</when>
+				<when test="sortByColumn == 'createdDate'">test.createddate</when>
+				<when test="sortByColumn == 'messageStatus'">test.messageStatus</when>
+			</choose>
+			<if test="sortType=='desc'">
+				desc
+			</if>
+			<if test="sortType=='asc' or sortType==null or sortByColumn =='invid'">
+				asc
+			</if>
+		</if>
+		limit #{limitCount}
+		offset #{offset}
+	</select>
+
+	<select id="getTotalTestsForTeacher" resultMap="InterimTestDTOMap">
+		with rostered_students as (
+			select distinct e.studentid, ca.id as subjectid
+			from roster r
+			join enrollmentsrosters er on r.id = er.rosterid and er.activeflag and r.activeflag is true
+			join enrollment e on er.enrollmentid = e.id and r.currentschoolyear = e.currentschoolyear and e.activeflag
+			inner join student st on e.studentid=st.id and st.activeflag is true
+			inner join studentassessmentprogram sap on sap.studentid = st.id and sap.activeflag is true 
+			and sap.assessmentprogramid = #{assessmentProgramId}
+			join contentarea ca on ca.id=r.statesubjectareaid and ca.activeflag is true
+			where r.teacherid = #{userId,jdbcType=BIGINT}
+			and r.currentschoolyear = #{schoolYear,jdbcType=BIGINT}
+			and e.attendanceschoolid = #{organizationId,jdbcType=BIGINT}
+		),
+		tests_with_feedback as (
+			SELECT DISTINCT testid, TRUE AS feedbackallowed FROM test t
+			JOIN testsection ts ON ts.testid = t.id
+			JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id
+			JOIN testlet tl ON tl.id = tstv.testletid
+			JOIN testletfeedback tfb ON tfb.testletexternalid = tl.externalid
+			WHERE tfb.id IS NOT NULL
+			AND tfb.assessmentprogramid = #{assessmentProgramId}
+			AND tfb.startdate &lt; now() AND tfb.enddate &gt; now()
+		)
+		select distinct
+		ts.id as testsessionid,test.id,test.testname,test.numitems,
+		test.externalid, test.createdate, test.modifieddate, test.uitypecode,
+		test.gradecourseid, test.contentareaid, test.status,
+		test.originationcode, test.qccomplete, it.id as interimtestid,
+		otw.expirydate, otw.effectivedate, ts.suspend, it.description as
+		testDescription, it.istestassigned as istestassigned,
+		org.organizationname as schoolname, (au.firstname||' '||au.surname) as
+		assembledby, ts.id as testsessionid,
+		(
+		select count(st.id) as studentsassigned
+		from studentstests st 
+		inner join test t on st.testid=t.id and st.activeflag is true and t.activeflag is true 
+		inner join interimtest it on it.testtestid=t.id and it.activeflag is true and it.currentschoolyear = #{schoolYear}
+		inner join rostered_students rs on rs.studentid=st.studentid 
+		where st.testsessionid = ts.id
+		and st.studentid in (select studentid from rostered_students)
+		and (rs.subjectid=t.contentareaid)
+		),
+		(
+		select count(distinct st.studentid) as studentsattempted
+		from studentstests st 
+		inner join test t on st.testid=t.id and st.activeflag is true and t.activeflag is true 
+		inner join interimtest it on it.testtestid=t.id and it.activeflag is true and it.currentschoolyear = #{schoolYear}
+		inner join rostered_students rs on rs.studentid=st.studentid 
+		where st.testsessionid = ts.id 
+		and st.studentid in (select studentid from rostered_students)
+		and (st.startdatetime is not null)
+		and (rs.subjectid=t.contentareaid)
+		),
+		(
+		select tct.testcollectionid as testcollectionid
+		from testcollectionstests tct
+		where testid = test.id
+		limit 1
+		), aai.testsessionid as autoassignid, 
+		0 as generatedreportcount,false as
+		predictiveautoassigned, it.createduser,
+		0 as schoolreportcount, 
+  		0 as districtreportcount,
+  		false as windowcomplete 
+  		,(twfb.feedbackallowed IS TRUE) AS feedbackallowed
+		from test test 
+		join interimtest it on test.id = it.testtestid and it.activeflag is true and it.currentschoolyear = #{schoolYear}
+		join aartuser au on it.createduser = au.id 
+		join organization org on it.organizationid= org.id 
+		left outer join testsession ts on it.testtestid = ts.testid and ts.activeflag is true and ts.schoolyear = #{schoolYear}
+		left outer join autoassigninterim aai on ts.id = aai.testsessionid and aai.activeflag is true 
+		left outer join operationaltestwindow otw on ts.operationaltestwindowid = otw.id 
+		inner join assessmentstestcollections atc ON atc.testcollectionid = it.testcollectionid 
+		and atc.activeflag is true
+   		inner join assessment ass ON ass.id = atc.assessmentid and ass.activeflag is true 
+   		inner join testingprogram tp ON tp.id = ass.testingprogramid and tp.activeflag is true 
+   		inner join assessmentprogram ap ON ap.id = tp.assessmentprogramid and ap.activeflag is true 
+		and ap.id = #{assessmentProgramId}
+		LEFT OUTER JOIN tests_with_feedback twfb on twfb.testid = test.id
+		where test.activeflag is true
+		and test.is_interim_test is true and it.currentschoolyear=#{schoolYear}
+		and it.createduser = #{userId} 
+		or 
+		test.id in (
+			select distinct t.id
+			from studentstests sts
+			join testcollection tc on sts.testcollectionid = tc.id and tc.activeflag is true and sts.activeflag is true
+			join testcollectionstests tct on tc.id = tct.testcollectionid
+			join test t on tct.testid = t.id and sts.testid = t.id and t.activeflag is true
+			join interimtest it on t.id = it.testtestid and it.activeflag is true and it.currentschoolyear = #{schoolYear} and t.createduser!=#{userId}
+			join rostered_students rs on sts.studentid = rs.studentid
+			join contentarea catest on t.contentareaid=catest.id and catest.activeflag is true
+			join assessmentstestcollections atc ON atc.testcollectionid = sts.testcollectionid and atc.activeflag is true
+			join assessment ass ON ass.id = atc.assessmentid and ass.activeflag is true
+			join testingprogram tp ON tp.id = ass.testingprogramid and tp.activeflag is true
+			join assessmentprogram ap ON ap.id = tp.assessmentprogramid and ap.activeflag is true
+			and ap.id = #{assessmentProgramId}
+			where t.is_interim_test is true and catest.id=rs.subjectid
+			and t.contentareaid = rs.subjectid
+		)
+	
+		Union
+		select distinct
+		ts.id as testsessionid,
+		t.id,
+		t.testname,
+		t.numitems,
+		t.externalid, 
+		t.createdate, 
+		t.modifieddate, 
+		t.uitypecode,
+		t.gradecourseid, 
+		t.contentareaid, 
+		t.status,
+		t.originationcode, 
+		t.qccomplete, 
+		0 as interimtestid,
+		otw.expirydate, 
+		otw.effectivedate, 
+		ts.suspend, 
+		ts.name as testDescription, 
+		false as istestassigned,
+		odt.schoolname as schoolname, 
+		null::text as assembledby, 
+		ts.id as testsessionid,
+		count(distinct st.studentid) as studentsassigned,
+		count(distinct case when st.startdatetime is not null then
+			st.studentid else null end) as studentsattempted,
+		ts.testcollectionid,
+		0 as autoassignid, 
+		count(distinct case when isr.id is not null then
+		isr.id else null end) as generatedreportcount,
+		true as predictiveautoassigned, 
+		ts.createduser,
+		(select count(id) from predictivereportcreditpercent where organizationid = ts.attendanceschoolid and testid = t.id and schoolyear = ts.schoolyear and assessmentprogramid = #{assessmentProgramId}) as schoolreportcount,
+		(select count(id) from predictivereportcreditpercent where organizationid = odt.districtid and testid = t.id and schoolyear = ts.schoolyear and assessmentprogramid = #{assessmentProgramId}) as districtreportcount,
+		otw.expirydate &lt; now() as windowcomplete
+		,(twfb.feedbackallowed IS TRUE) AS feedbackallowed
+		from testsession ts
+		inner join studentstests st on st.testsessionid = ts.id and st.activeflag is true
+		inner join test t on st.testid = t.id and t.is_interim_test is false
+		inner join organizationtreedetail odt on odt.schoolid = ts.attendanceschoolid
+		inner join operationaltestwindow otw on otw.id = ts.operationaltestwindowid and otw.assessmentprogramid = #{assessmentProgramId}
+		inner join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid and tem.assessmentprogramid = #{assessmentProgramId} and methodcode = 'PREDICTIVE'
+		inner join aartuser au on au.id = ts.createduser
+		left join interimstudentreport isr on isr.studentid = st.studentid and isr.testid = st.testid and isr.generated is true and isr.filepath is not null 
+		inner join assessmentstestcollections atc ON atc.testcollectionid = st.testcollectionid and atc.activeflag is true
+		inner join assessment ass ON ass.id = atc.assessmentid and ass.activeflag is true 
+		inner join testingprogram tp ON tp.id = ass.testingprogramid and tp.activeflag is true
+		inner join assessmentprogram ap ON ap.id = tp.assessmentprogramid and ap.activeflag is true
+		and ap.id = #{assessmentProgramId}
+		LEFT OUTER JOIN tests_with_feedback twfb on twfb.testid = t.id
+		where ts.activeflag is true and ts.schoolyear = #{schoolYear}
+		and st.studentid in (select studentid from rostered_students where subjectid = t.contentareaid) 
+		and (odt.stateid = #{organizationId} or odt.districtid = #{organizationId} or odt.schoolid = #{organizationId})
+		group by t.id, t.testname, t.numitems, t.externalid,
+			t.createdate, t.modifieddate, t.uitypecode,
+			t.gradecourseid,
+			t.contentareaid, t.status,
+			t.originationcode, t.qccomplete, interimtestid, otw.expirydate,
+			otw.effectivedate, ts.suspend,
+			testDescription, odt.schoolname,
+			assembledby, ts.id, ts.createduser, autoassignid ,odt.districtid, twfb.feedbackallowed
+		order by createdate desc, testname
+	</select>
+
+
+
+	
+		<select id="getTotalTestsByUserId" resultMap="InterimTestDTOMap">
+		select
+		test.id,test.testname,test.numitems, test.externalid, test.createdate, test.modifieddate,test.uitypecode,
+		test.gradecourseid, test.contentareaid, test.status, test.originationcode, test.qccomplete, it.id as
+		interimtestid,otw.expirydate,otw.effectivedate,ts.suspend,
+		it.description as testDescription, org.organizationname as schoolname,
+		(au.firstname||' '||au.surname) as assembledby, ts.id as testsessionid,
+		it.createduser as createduser, aai.testsessionid as autoassignid,
+		(select count(st.id) as studentsassigned 
+			from studentstests st 
+			inner join interimtest it on it.testtestid=st.testid and it.activeflag is true 
+			and it.currentschoolyear = #{schoolYear}
+			where st.testsessionid = ts.id and st.activeflag is true),
+		(select count(distinct st.studentid) as studentsattempted 
+			from studentstests st 
+			inner join interimtest it on it.testtestid=st.testid and it.activeflag is true 
+			and it.currentschoolyear = #{schoolYear}
+			where st.testsessionid = ts.id and (st.startdatetime is not null)
+			and (st.activeflag is true)),
+		(select tct.testcollectionid as testcollectionid from testcollectionstests
+		tct where testid = test.id limit 1),
+		0 as generatedreportcount,
+		false as predictiveautoassigned,
+		0 as schoolreportcount, 
+  		0 as districtreportcount,
+  		false as windowcomplete
+  		, CASE WHEN f.feedbackallowed IS TRUE THEN TRUE ELSE FALSE END AS feedbackallowed
+		from test
+		join interimtest it on test.id = it.testtestid and it.activeflag is true
+		inner join assessmentstestcollections atc ON atc.testcollectionid = it.testcollectionid 
+		and atc.activeflag is true
+		inner join assessment ass ON ass.id = atc.assessmentid and ass.activeflag is true 
+		inner join testingprogram tp ON tp.id = ass.testingprogramid and tp.activeflag is true
+		inner join assessmentprogram ap ON ap.id = tp.assessmentprogramid and ap.activeflag is true
+		and ap.id = #{assessmentProgramId}
+		join aartuser au on it.createduser = au.id
+		join organization org on it.organizationid = org.id
+		left outer join testsession ts on it.testtestid = ts.testid and ts.activeflag is true and ts.schoolyear = #{schoolYear}
+		left outer join autoassigninterim aai on ts.id = aai.testsessionid 
+		and aai.activeflag is true
+		left outer join operationaltestwindow otw on ts.operationaltestwindowid = otw.id
+		LEFT OUTER JOIN (SELECT DISTINCT testid, TRUE AS feedbackallowed FROM test t 
+		JOIN testsection ts ON ts.testid = t.id 
+		JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id 
+		JOIN testlet tl ON tl.id = tstv.testletid
+		JOIN testletfeedback tfb ON tfb.testletexternalid = tl.externalid
+		WHERE 
+			tfb.id IS NOT NULL
+			AND tfb.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+			AND tfb.startdate &lt; now() AND tfb.enddate &gt; now())
+		f on f.testid = test.id
+		where test.activeflag is true
+		and test.is_interim_test is true
+		and it.testtestid = test.id
+		and it.createduser = au.id
+		and it.organizationid = #{organizationId}
+		and it.currentschoolyear = #{schoolYear}
+		and it.createduser = ANY(ARRAY
+		<foreach collection="userIds" item="userId" open="[" close="]"
+			separator=",">
+			#{userId}
+		</foreach>
+		)
+		
+		Union
+		select distinct t.id,
+		t.testname,
+		t.numitems, 
+		t.externalid, 
+		ts.createddate, 
+		t.modifieddate,
+		t.uitypecode, 
+		t.gradecourseid, 
+		t.contentareaid, 
+		t.status, 
+		t.originationcode, 
+		t.qccomplete,
+		0 as interimtestid,
+		otw.expirydate,
+		otw.effectivedate,
+		ts.suspend, 
+		ts.name as testDescription,
+		odt.schoolname as schoolname ,
+		null::text as assembledby,
+		ts.id as testsessionid, 
+		ts.createduser as createduser,
+		0 as autoassignid,
+		count(distinct st.studentid) as studentsassigned,
+		count(distinct case when st.startdatetime is not null then
+			st.studentid else null end) as studentsattempted,
+		ts.testcollectionid,
+		count(distinct case when isr.id is not null then
+		isr.id else null end) as generatedreportcount,
+		true as predictiveautoassigned, 		
+		(select count(id) from predictivereportcreditpercent where organizationid = ts.attendanceschoolid and testid = t.id and schoolyear = ts.schoolyear and assessmentprogramid = #{assessmentProgramId}) as schoolreportcount,
+		(select count(id) from predictivereportcreditpercent where organizationid = odt.districtid and testid = t.id and schoolyear = ts.schoolyear and assessmentprogramid = #{assessmentProgramId}) as districtreportcount,
+		otw.expirydate &lt; now() as windowcomplete
+		, CASE WHEN f.feedbackallowed IS TRUE THEN TRUE ELSE FALSE END AS feedbackallowed
+		from testsession ts
+		inner join studentstests st on st.testsessionid = ts.id and st.activeflag is true
+		inner join test t on st.testid = t.id and t.is_interim_test is false
+		inner join organizationtreedetail odt on odt.schoolid = ts.attendanceschoolid
+		inner join operationaltestwindow otw on otw.id = ts.operationaltestwindowid and otw.assessmentprogramid = #{assessmentProgramId}
+		inner join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid and tem.assessmentprogramid = #{assessmentProgramId} and methodcode = 'PREDICTIVE'
+		inner join aartuser au on au.id = ts.createduser 
+		left join interimstudentreport isr on isr.studentid = st.studentid and isr.testid = st.testid and isr.generated is true and isr.filepath is not null
+		inner join assessmentstestcollections atc ON atc.testcollectionid = st.testcollectionid 
+		and atc.activeflag is true
+		inner join assessment ass ON ass.id = atc.assessmentid and ass.activeflag is true 
+		inner join testingprogram tp ON tp.id = ass.testingprogramid and tp.activeflag is true
+		inner join assessmentprogram ap ON ap.id = tp.assessmentprogramid and ap.activeflag is true
+		and ap.id = #{assessmentProgramId}
+		LEFT OUTER JOIN (SELECT DISTINCT testid, TRUE AS feedbackallowed FROM test t 
+		JOIN testsection ts ON ts.testid = t.id 
+		JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id 
+		JOIN testlet tl ON tl.id = tstv.testletid
+		JOIN testletfeedback tfb ON tfb.testletexternalid = tl.externalid
+		WHERE 
+			tfb.id IS NOT NULL
+			AND tfb.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+			AND tfb.startdate &lt; now() AND tfb.enddate &gt; now())
+		f on f.testid = t.id
+		where ts.activeflag is true and ts.schoolyear = #{schoolYear} 
+		and ts.attendanceschoolid = #{organizationId,jdbcType=BIGINT}
+		group by t.id, t.testname, t.numitems, t.externalid,
+			t.createdate, t.modifieddate, t.uitypecode,
+			t.gradecourseid,
+			t.contentareaid, t.status,
+			t.originationcode, t.qccomplete, interimtestid, otw.expirydate,
+			otw.effectivedate, ts.suspend,
+			testDescription, odt.schoolname,
+			assembledby, ts.id, ts.createduser, autoassignid ,odt.districtid, f.feedbackallowed
+		order by createdate desc, testname
+	</select>
+
+	<select id="getTotalTestSessionDetails" resultMap="InterimTestDTOMap">
+		select
+		distinct test.id,test.testname,test.numitems, test.externalid,
+		test.createdate, test.modifieddate,test.uitypecode,
+		test.gradecourseid,test.contentareaid, test.status,
+		test.originationcode, test.qccomplete,
+		it.id as interimtestid,otw.expirydate,otw.effectivedate,
+		ts.suspend, it.description as testDescription,
+		it.istestassigned as istestassigned,
+		org.organizationname as schoolname ,au.displayname as assembledby, 
+		ts.id as testsessionid,
+		(
+			select count(st.id) as	studentsassigned 
+			from studentstests st where st.testsessionid=ts.id and st.activeflag is true
+		),
+		(
+			select count(distinct st.studentid) as studentsattempted from
+			studentstests st where st.testsessionid=ts.id and (st.startdatetime is not null) 
+			and	(st.activeflag is true)
+		),
+		(
+			select tct.testcollectionid as testcollectionid from testcollectionstests tct
+			where testid=test.id limit 1
+		),
+		it.createduser as createduser,
+		CASE 
+			WHEN f.feedbackallowed IS TRUE 
+			THEN TRUE 
+			ELSE FALSE 
+		END AS feedbackallowed
+		from
+		test test 
+		join interimtest it on test.id=it.testtestid
+		join aartuser au on it.createduser=au.id
+		join organization org on it.organizationid=org.id
+		left outer join testsession ts on it.testtestid=ts.testid
+		join operationaltestwindow otw on ts.operationaltestwindowid=otw.id
+		LEFT OUTER JOIN (SELECT DISTINCT testid, TRUE AS feedbackallowed FROM test t 
+		JOIN testsection ts ON ts.testid = t.id 
+		JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id 
+		JOIN testlet tl ON tl.id = tstv.testletid
+		JOIN testletfeedback tfb ON tfb.testletexternalid = tl.externalid
+		WHERE 
+			tfb.id IS NOT NULL
+			AND tfb.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+			AND tfb.startdate &lt; now() AND tfb.enddate &gt; now())
+		f on f.testid = test.id
+		where
+		test.activeflag is true
+		and (ts.activeflag is true or ts.activeflag is null)
+		and test.is_interim_test is true and
+		it.testtestid=test.id and
+		it.createduser=au.id
+		and ts.id=#{testSessionId,jdbcType=BIGINT}
+		limit 1
+	</select>
+
+	<select id="getSchoolNames" resultType="java.lang.String">
+		select
+		distinct(org.organizationname) from interimtest it
+		inner join organization org on
+		org.id=it.organizationid and it.activeflag is true and org.activeflag is true and
+		it.organizationid is not NULL
+		where it.organizationid in (
+		select id from organization_children((SELECT op.id
+		from organization_parent(#{organizationId}) op
+		inner join organizationtype ot ON op.organizationtypeid=ot.id
+		where ot.typecode='DT'
+		union
+		select o.id from organization o
+		inner join organizationtype ot ON o.organizationtypeid=ot.id
+		where ot.typecode='DT' and o.id=#{organizationId})) oc
+		union select distinct districtid from organizationtreedetail where schoolid=#{organizationId}
+        union select o.id from organization o
+		inner join organizationtype ot ON o.organizationtypeid=ot.id
+		where ot.typecode='DT' and o.id=#{organizationId}) and
+		it.currentSchoolYear=#{schoolYear,jdbcType=BIGINT}
+		order by org.organizationname asc;
+	</select>
+
+	<resultMap id="InterimTestDTOMap" type="edu.ku.cete.controller.InterimTestDTO">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="interimtestid" property="interimTestId"
+			jdbcType="BIGINT" />
+		<result column="testname" property="testName" jdbcType="VARCHAR" />
+		<result column="testdescription" property="testDescription"
+			jdbcType="VARCHAR" />
+		<result column="numitems" property="numItems" jdbcType="INTEGER" />
+		<result column="externalid" property="externalId" jdbcType="BIGINT" />
+		<result column="createdate" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="assembledby" property="assembledBy" jdbcType="VARCHAR" />
+		<result column="uitypecode" property="uiTypeCode" jdbcType="VARCHAR" />
+		<result column="schoolname" property="schoolName" jdbcType="VARCHAR" />
+		<result column="gradecourseid" property="gradeCourseId"
+			jdbcType="BIGINT" />
+		<result column="contentareaid" property="contentAreaId"
+			jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="BIGINT" />
+		<result column="originationcode" property="originationCode"
+			jdbcType="VARCHAR" />
+		<result column="qccomplete" property="qcComplete" jdbcType="BOOLEAN" />
+		<result column="tutorialflag" property="tutorialFlag" jdbcType="BOOLEAN" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="testsessionid" property="testSessionId"
+			jdbcType="BIGINT" />
+		<result column="studentsassigned" property="studentsAssigned"
+			jdbcType="BIGINT" />
+		<result column="studentsattempted" property="studentsAttempted"
+			jdbcType="BIGINT" />
+		<result column="testcollectionid" property="testCollectionId"
+			jdbcType="BIGINT" />
+		<result column="istestassigned" property="isTestAssigned"
+			jdbcType="BOOLEAN" />
+		<result column="suspend" property="suspend" jdbcType="BOOLEAN" />
+		<result column="autoassignid" property="autoAssignId" jdbcType="BIGINT" />
+		<result column="predictiveautoassigned" property="predictiveAutoAssigned"
+			jdbcType="BOOLEAN" />
+		<result column="generatedreportcount" property="generatedReportCount" jdbcType="BIGINT" />	
+		<result column="schoolreportcount" property="schoolReportCount" jdbcType="BIGINT" />
+		<result column="districtreportcount" property="districtReportCount" jdbcType="BIGINT" />
+		<result column="windowcomplete" property="windowComplete" jdbcType="BOOLEAN" />
+		<result column="feedbackallowed" property="feedbackAllowed" jdbcType="BOOLEAN" />	
+	</resultMap>
+
+	<sql id="Comminication_Message_Where_Clause">
+		<if test="criteria.createdDate != null">
+			AND to_char(createddate, 'MM/DD/YYYY') ilike
+			#{criteria.createdDate}
+		</if>
+		<if test="criteria.messageTitle != null">
+			AND messageTitle ilike #{criteria.messageTitle}
+		</if>
+		<!-- <if test="criteria.messageStatus != null and criteria.messageStatus=='%expired%'"> 
+			AND expiredate &lt; now() </if> <if test="criteria.messageStatus != null 
+			and criteria.messageStatus=='%active%'"> AND displaydate &lt; now() and expiredate 
+			&gt; now() </if> <if test="criteria.messageStatus != null and criteria.messageStatus=='%pending%'"> 
+			AND displaydate &gt; now() </if> -->
+	</sql>
+	<select id="testCountDetails" parameterType="edu.ku.cete.domain.interim.InterimTest"
+		resultType="java.lang.Integer">
+		SELECT count(*) FROM test
+		where activeflag is true and is_interim_test
+		is true
+		<if test="criteria !=null">
+			<include refid="Comminication_Message_Where_Clause" />
+		</if>
+	</select>
+
+	<select id="getInterimTestsCount" resultType="Long">
+		SELECT count(*) FROM interimtest
+		where activeflag is true
+		and createduser= #{id, jdbcType=BIGINT} or modifieduser=#{id, jdbcType=BIGINT}
+	</select>
+	<select id="getAttemptedCount" parameterType="java.lang.Long"
+		resultType="Long">
+		SELECT (SELECT count(id) FROM studentstests WHERE
+		testid=#{testTestId})-
+		(SELECT count(studentid) FROM studentsresponses
+		WHERE testid=#{testTestId}) as count
+	</select>
+
+	<update id="setTestAssigned" parameterType="java.lang.Long">
+		update interimtest
+		set istestassigned=true where id =
+		#{interimTestId,jdbcType=BIGINT}
+	</update>
+	<update id="updateTestSession">
+		update testsession
+		set name=#{name,jdbcType=VARCHAR},
+		testid=#{testTestId,jdbcType=BIGINT},
+		testcollectionid=#{testCollectionId,jdbcType=BIGINT},
+		modifieddate=now()
+		where id =
+		#{testSessionId,jdbcType=BIGINT};
+		update studentstests
+		set testcollectionid=#{testCollectionId,jdbcType=BIGINT},
+		modifieddate=now()
+		where
+		testsessionid=#{testSessionId,jdbcType=BIGINT};
+		update interimtest set
+		istestassigned =true;
+	</update>
+	<update id="cleanUpTest">
+		update interimtest
+		set istestassigned = false
+		where id=#{id,jdbcType=BIGINT};
+	</update>
+
+	<update id="suspendTestWindow">
+		update testsession
+		set suspend=#{suspend},
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+		where
+		id=#{testSessionId,jdbcType=BIGINT};
+	</update>
+
+	<insert id="insertAutoAssignInterim" parameterType="edu.ku.cete.domain.interim.AutoAssignInterim">
+		insert into
+		autoassigninterim (gradecourseid,testsessionid,
+		rosterid, createddate, modifieddate,createduser,modifieduser,
+		activeflag,contentareaid
+		)
+		values
+		(#{gradeCourseId,jdbcType=BIGINT},
+		#{testSessionId,jdbcType=BIGINT},#{rosterId,jdbcType=BIGINT},
+		now(),now(),
+		#{createdUser,jdbcType=BIGINT},#{modifiedUser,jdbcType=BIGINT},
+		#{activeFlag,jdbcType=BIT},#{contentAreaId,jdbcType=BIGINT});
+	</insert>
+	
+	<select id="getInterimPredictiveStudentScores" resultMap="interimPredictiveStudentScoresResultMap">
+	<if test="isTeacher == true">
+			with rostered_students as (
+				select distinct e.studentid
+				from roster r
+				join enrollmentsrosters er on r.id = er.rosterid and er.activeflag
+				join enrollment e on er.enrollmentid = e.id and r.currentschoolyear = 
+				e.currentschoolyear and e.activeflag
+				where r.teacherid = #{userId,jdbcType=BIGINT}
+				and r.attendanceschoolid in
+					<foreach collection="orgIds" item="orgId" open="(" close=")" separator=",">
+						#{orgId,jdbcType=BIGINT}
+					</foreach>	
+				and r.currentschoolyear = #{schoolYear,jdbcType=BIGINT}		
+				)
+		</if>
+	select e.currentschoolyear as schoolyear,s.statestudentidentifier, s.legallastname, s.legalfirstname,
+	ca.name as subject, gc.name as grade,
+	case when sr.id is null then (select districtdisplayidentifier from organizationtreedetail where schoolid=e.attendanceschoolid)
+	else (select districtdisplayidentifier from organizationtreedetail where schoolid=sr.attendanceschoolid) end as districtidentifier,
+	case when sr.id is null then (select districtname from organizationtreedetail where schoolid=e.attendanceschoolid)
+	else (select districtname from organizationtreedetail where schoolid=sr.attendanceschoolid) end as districtname,
+	case when sr.id is null then (select schooldisplayidentifier from organizationtreedetail where schoolid=e.attendanceschoolid)
+	else (select schooldisplayidentifier from organizationtreedetail where schoolid=sr.attendanceschoolid) end as schoolidentifier,
+	case when sr.id is null then (select schoolname from organizationtreedetail where schoolid=e.attendanceschoolid)
+	else (select schoolname from organizationtreedetail where schoolid=sr.attendanceschoolid) end as schoolname,
+	isr.reportcycle as testingcyclename, round((isr.scalescore + isr.standarderror),2) as high, round((isr.scalescore - isr.standarderror),2) as low,
+	case when sr.status is true then sr.scalescore else null end  as summativescalescore,(select level from leveldescription where id=sr.levelid) as summativelevel
+	from interimstudentreport isr
+	inner join enrollment e on isr.studentid=e.studentid and e.id= isr.enrollmentid and e.currentschoolyear= #{schoolYear,jdbcType=BIGINT} and e.studentid in 	<foreach collection="studentIds" item="studentId" open="(" close=")" separator=",">
+		#{studentId,jdbcType=BIGINT} 
+	</foreach>
+	and e.attendanceschoolid in 
+	<foreach collection="orgIds" item="orgId" open="(" close=")" separator=",">
+		#{orgId,jdbcType=BIGINT}
+	</foreach>
+	inner  join gradecourse gc on gc.id=isr.gradeid 
+	<if test="gradeCourseIds != null">
+	and gc.name in (select name from gradecourse where id in 
+	<foreach collection="gradeCourseIds" item="gradeCourseId" open="(" close=")" separator=",">
+		#{gradeCourseId,jdbcType=BIGINT}
+	</foreach>)
+	</if>
+	inner join contentarea ca on ca.id=isr.contentareaid 
+	and ca.name in (select name from contentarea where id in
+	<foreach collection="contentAreaIds" item="contentAreaId" open="(" close=")" separator=",">
+		#{contentAreaId,jdbcType=BIGINT}
+	</foreach>)
+	inner join student s on e.studentid=s.id and s.id in
+	<foreach collection="studentIds" item="studentId" open="(" close=")" separator=",">
+		#{studentId,jdbcType=BIGINT}
+	</foreach>
+	left outer join studentreport sr on sr.studentid = s.id and sr.schoolyear=e.currentschoolyear and sr.assessmentProgramid= #{assessmentProgramId, jdbcType=BIGINT}
+	and sr.attendanceschoolid in 
+	<foreach collection="orgIds" item="orgId" open="(" close=")" separator=",">
+		#{orgId,jdbcType=BIGINT}
+	</foreach>
+	and sr.contentareaid in (select id from contentarea where name=ca.name)
+	and sr.gradeid in (select id from gradecourse where name=gc.name)
+	where
+	isr.schoolyear = #{schoolYear,jdbcType=BIGINT}
+	and isr.status is true 
+	and		((e.activeflag is true) or (e.activeflag is false and sr.id is not null)) 
+  <if test="isTeacher == true">
+    and s.id in (select studentid from rostered_students)  
+  </if>
+	order by s.legallastname asc,s.legalfirstname asc,ca.name asc
+</select>
+	
+	<select id="getStudentReportActivityDetails" resultMap="studentActivityResultMap">
+		<if test="isTeacher == true">
+			with rostered_students as (
+				select distinct e.studentid
+				from roster r
+				join enrollmentsrosters er on r.id = er.rosterid and er.activeflag
+				join enrollment e on er.enrollmentid = e.id and r.currentschoolyear = 
+				e.currentschoolyear and e.activeflag
+				where r.teacherid = #{userId,jdbcType=BIGINT}
+				and r.attendanceschoolid in
+					<foreach collection="orgIds" item="orgId" open="(" close=")" separator=",">
+						#{orgId,jdbcType=BIGINT}
+					</foreach>	
+				and r.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT}		
+				)
+		</if>
+		select distinct s.statestudentidentifier as studentId,
+		s.legalfirstname as firstName,
+		s.legallastname as lastName, test.testname as test,ct.categoryname as status,
+		st.createddate as testAssignedDate ,
+		st.enddatetime as testCompletionDate,
+		round(sum (sr.score),2) as totalPoints,
+		round((select ( sum (sr.score)/ sum(tv.maxscore))*100),2) as totalPercentage,
+		round( sum(tv.maxscore),2) as maxscore,
+		gcg.name as studentGrade,cat.name as testSubject
+		<if test="isPLTWUser == false"> 
+		,gc.name as testGrade
+		</if>
+		from
+		student s
+		join studentstests st on s.id=st.studentid and st.activeflag
+		is true
+		join category ct on ct.id=st.status
+		join testsession ts on
+		st.testsessionid = ts.id and ts.activeflag is true
+		left outer join
+		operationaltestwindow otw on ts.operationaltestwindowid = otw.id
+		join test test on test.id=st.testid and test.activeflag is true
+		join testspecstatementofpurpose tssop on test.testspecificationid =
+		tssop.testspecificationid and tssop.activeflag is true
+		join category c
+		on tssop.statementofpurposeid = c.id
+		join enrollment e on
+		e.studentid=s.id and e.activeflag is true
+		join gradecourse gcg on
+		gcg.id=e.currentgradelevel and gcg.activeflag is true
+		<if test="isPLTWUser == false"> 
+		join gradecourse
+		gc on gc.id=test.gradecourseid and gc.activeflag is true
+		</if>
+		join
+		contentarea cat on cat.id=test.contentareaid
+		join testsection tsec on st.testid = tsec.testid
+		join testsectionstaskvariants tstv on tstv.testsectionid = tsec.id
+		join taskvariant tv on tv.id = tstv.taskvariantid
+		left join studentsresponses sr on st.id = sr.studentstestsid and sr.testid
+		= st.testid
+		and sr.taskvariantid = tv.id and sr.activeflag is true
+		where s.id in
+		<foreach collection="studentIds" item="studentId" open="("
+			close=")" separator=",">
+			#{studentId,jdbcType=BIGINT}
+		</foreach>
+		and e.attendanceschoolid in
+		<foreach collection="orgIds" item="orgId" open="(" close=")"
+			separator=",">
+			#{orgId,jdbcType=BIGINT}
+		</foreach>
+		and e.currentschoolyear=#{currentSchoolYear,jdbcType=BIGINT}
+		and
+		ts.schoolyear=#{currentSchoolYear,jdbcType=BIGINT}
+		and
+		test.is_interim_test is true
+		and tv.scoringneeded is true
+		<if test="isTeacher == true">
+    		and s.id in (select studentid from rostered_students)  
+  		</if>
+		group by s.statestudentidentifier, s.legalfirstname,s.legallastname,
+		test.testname,st.status,testCompletionDate,
+		testAssignedDate, studentGrade,
+		testSubject,ct.categoryname,
+		<if test="isPLTWUser == false"> 
+		gc.name,
+		</if>
+		otw.expirydate,otw.effectivedate,c.categorycode
+		order by s.statestudentidentifier, s.legalfirstname,s.legallastname
+	</select>
+	<select id="getAutoAssignedTestSessions" resultType="java.lang.Long">
+		select distinct aai.testsessionid from autoassigninterim aai
+		join testsession ts on ts.id=aai.testsessionid and ts.activeflag is true
+		join interimtest it on it.testtestid=ts.testid and it.activeflag is
+		true
+		where
+		<if test="rosterId != null">
+			aai.rosterid= #{rosterId,jdbcType=BIGINT}
+		</if>
+		<if test="contentAreaId != null">
+			<if test="gradeCourseId != null">
+				<if test="rosterId !=null">
+					or
+				</if>
+				(
+				it.organizationid in
+				<foreach collection="orgIds" item="orgId" open="(" close=")"
+					separator=",">
+					#{orgId,jdbcType=BIGINT}
+				</foreach>
+				and (aai.contentareaid=#{contentAreaId,jdbcType=BIGINT} and
+				aai.gradecourseid=#{gradeCourseId,jdbcType=BIGINT})
+				)
+			</if>
+		</if>
+
+	</select>
+	<select id="getInterimOrgIds" resultType="java.lang.Long">
+		select distinct e.attendanceschoolid from studentstests st
+		inner join test t on t.id=st.testid
+		join testspecstatementofpurpose tssop on t.testspecificationid = tssop.testspecificationid and tssop.activeflag is true
+		join category c on tssop.statementofpurposeid = c.id
+		inner join enrollment e on e.studentid=st.studentid and e.currentschoolyear=#{currentSchoolYear,jdbcType=BIGINT}
+		where e.activeflag is true and st.activeflag is true and t.activeflag is true and
+		e.attendanceschoolid in
+		<foreach collection="orgIds" item="orgId" open="(" close=")"
+			separator=",">
+			#{orgId,jdbcType=BIGINT}
+		</foreach>
+		and (t.is_interim_test is true or c.categorycode = 'PRDCTN')
+
+	</select>
+
+	<select id="getDistrictAndBuildingLevelUserCountForUserByOrg"
+		resultType="java.lang.Long">
+		select count(distinct g.*)
+		from userorganizationsgroups uog
+		inner join usersorganizations uo on uo.id = uog.userorganizationid and
+		uo.activeflag is true and uog.activeflag is true
+		inner join userassessmentprogram uap on uap.userorganizationsgroupsid =
+		uog.id and uap.activeflag is true
+		inner join organization o on o.id=uo.organizationid and o.activeflag is
+		true
+		inner join groups g on uog.groupid = g.id and g.activeflag is true
+		where (uo.organizationid=(select districtid from organizationtreedetail
+		where schoolid=#{orgId,jdbcType=BIGINT}) or uo.organizationid=#{orgId,jdbcType=BIGINT})
+		and g.roleorgtypeid in (5,6)
+		and uo.aartuserid=#{userId,jdbcType=BIGINT}
+	</select>
+	
+    <select id="getInterimPredictiveQuestionCSVBytestsessionAndUser" resultType="edu.ku.cete.domain.InterimPredictiveQuestionExtractDTO">
+       <if test="isTeacher == true">
+			with rostered_students as (
+				select distinct e.studentid
+				from roster r
+				join enrollmentsrosters er on r.id = er.rosterid and er.activeflag
+				join enrollment e on er.enrollmentid = e.id and r.currentschoolyear = 
+				e.currentschoolyear and e.activeflag
+				where r.teacherid = #{userId,jdbcType=BIGINT}
+				and r.attendanceschoolid = #{organizationId,jdbcType=BIGINT}	
+				and r.currentschoolyear = #{currentSchoolYear,jdbcType=BIGINT}		
+				)
+		</if>
+        <if test="districtUser == true">
+			WITH all_district AS(
+			select ts.* from testsession ts
+			inner join testcollection tc ON ts.testcollectionid = tc.id 	
+			inner join organizationtreedetail odt on odt.schoolid = ts.attendanceschoolid and odt.districtid = #{organizationId,jdbcType=BIGINT}
+			inner join (select tss.operationaltestwindowid, tcc.gradecourseid, tcc.contentareaid 
+			             from testsession tss
+			             inner join testcollection tcc ON tss.testcollectionid = tcc.id 
+			             where tss.id = #{testSessionId,jdbcType=BIGINT}) sptes on tc.gradecourseid =  sptes.gradecourseid 
+				                                       and tc.contentareaid =  sptes.contentareaid 
+				                                       and ts.operationaltestwindowid = sptes.operationaltestwindowid	                                            
+			where ts.schoolyear = #{currentSchoolYear,jdbcType=BIGINT})
+		</if>
+		select distinct
+		s.legalfirstname, s.legallastname, s.statestudentidentifier, 
+		odt.districtdisplayidentifier, odt.districtname, odt.schooldisplayidentifier, odt.schoolname,
+		isr.reportcycle, ca.abbreviatedname as subject, gc.name as gradename, gc.abbreviatedname as grade,isr.id as interimStudentReportId,
+		array_to_string(array(
+			            select cat.categorydescription from 
+						studentreportquestioninfo strq 
+		                inner join category cat on cat.id = strq.creditearned and cat.activeflag is true
+			            where strq.interimstudentreportid = isr.id 
+			order by strq.taskvariantposition
+					), ',') as results
+		from testsession ts
+		inner join studentstests st on st.testsessionid = ts.id and st.activeflag is true
+		inner join student s on s.id = st.studentid
+		inner join interimstudentreport isr on isr.studentid = st.studentid and isr.testid = st.testid
+		inner join organizationtreedetail odt on odt.schoolid = isr.attendanceschoolid
+		inner join gradecourse gc on gc.id = isr.gradeid and gc.activeflag is true
+		inner join contentarea ca on ca.id = isr.contentareaid and ca.activeflag is true
+		<if test="districtUser == true">
+		  inner join all_district ad on ad.id = ts.id
+		</if>
+		<if test="districtUser == false">
+		  where st.testsessionid in (#{testSessionId,jdbcType=BIGINT})
+		  <if test="isTeacher == true">
+		    and st.studentid in (select studentid from rostered_students)  
+		  </if>
+		</if>
+		order by s.legallastname, s.legalfirstname
+	</select>
+	
+	<select id="getTotalTestsForOrgs" resultMap="InterimTestDTOMap" >
+		select
+		test.id,test.testname,test.numitems, test.externalid, test.createdate, test.modifieddate,test.uitypecode,
+		test.gradecourseid,
+		test.contentareaid, test.status, test.originationcode, test.qccomplete, it.id as
+		interimtestid,otw.expirydate,otw.effectivedate,ts.suspend,
+		it.description as testDescription, org.organizationname as schoolname
+		,(au.firstname||' '||au.surname) as assembledby, ts.id as
+		testsessionid,
+		it.createduser as createduser, aai.testsessionid as autoassignid,
+		(select count(st.id) as studentsassigned 
+			from studentstests st 
+			inner join interimtest it on it.testtestid=st.testid and it.activeflag is true 
+			and it.currentschoolyear = #{schoolYear}
+			where st.testsessionid = ts.id and st.activeflag is true),
+		(select count(distinct st.studentid) as studentsattempted 
+			from studentstests st 
+			inner join interimtest it on it.testtestid=st.testid and it.activeflag is true 
+			and it.currentschoolyear = #{schoolYear}
+			where st.testsessionid = ts.id and (st.startdatetime is not null)
+		and (st.activeflag is true)),
+		(select tct.testcollectionid as testcollectionid from testcollectionstests
+		tct where testid = test.id limit 1),
+		0 as generatedreportcount,
+		false as predictiveautoassigned,
+		0 as schoolreportcount, 
+  		0 as districtreportcount,
+  		false as windowcomplete
+  		, CASE WHEN f.feedbackallowed IS TRUE THEN TRUE ELSE FALSE END AS feedbackallowed
+		from test
+		join interimtest it on test.id = it.testtestid and it.activeflag is true
+		join aartuser au on it.createduser = au.id
+		join organization org on it.organizationid = org.id
+		left outer join testsession ts on it.testtestid = ts.testid and ts.activeflag is true and ts.schoolyear = #{schoolYear}
+		left outer join autoassigninterim aai on ts.id = aai.testsessionid and aai.activeflag is true
+		left outer join operationaltestwindow otw on ts.operationaltestwindowid = otw.id
+		LEFT OUTER JOIN (SELECT DISTINCT testid, TRUE AS feedbackallowed FROM test t 
+		JOIN testsection ts ON ts.testid = t.id 
+		JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id 
+		JOIN testlet tl ON tl.id = tstv.testletid
+		JOIN testletfeedback tfb ON tfb.testletexternalid = tl.externalid
+		WHERE 
+			tfb.id IS NOT NULL
+			AND tfb.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+			AND tfb.startdate &lt; now() AND tfb.enddate &gt; now())
+		f on f.testid = test.id
+		where test.activeflag is true
+		and test.is_interim_test is true
+		and it.testtestid = test.id
+		and it.createduser = au.id
+		and it.organizationid = ANY(ARRAY
+		<foreach collection="organizationIds" item="organizationId" open="[" close="]"
+			separator=",">
+			#{organizationId}
+		</foreach>
+		)
+		and it.currentschoolyear = #{schoolYear}
+		and it.createduser = ANY(ARRAY
+		<foreach collection="userIds" item="userId" open="[" close="]"
+			separator=",">
+			#{userId}
+		</foreach>
+		)
+		Union
+		select distinct t.id,
+		t.testname,
+		t.numitems, 
+		t.externalid, 
+		ts.createddate, 
+		t.modifieddate,
+		t.uitypecode, 
+		t.gradecourseid, 
+		t.contentareaid, 
+		t.status, 
+		t.originationcode, 
+		t.qccomplete,
+		0 as interimtestid,
+		otw.expirydate,
+		otw.effectivedate,
+		ts.suspend, 
+		ts.name as testDescription,
+		odt.schoolname as schoolname ,
+		null::text as assembledby,
+		ts.id as testsessionid, 
+		ts.createduser as createduser,
+		0 as autoassignid,
+		count(distinct st.studentid) as studentsassigned,
+		count(distinct case when st.startdatetime is not null then
+			st.studentid else null end) as studentsattempted,
+		ts.testcollectionid,
+		count(distinct case when isr.id is not null then
+		isr.id else null end) as generatedreportcount,
+		true as predictiveautoassigned, 		
+		(select count(id) from predictivereportcreditpercent where organizationid = ts.attendanceschoolid and testid = t.id and schoolyear = ts.schoolyear and assessmentprogramid = #{assessmentProgramId}) as schoolreportcount,
+		(select count(id) from predictivereportcreditpercent where organizationid = odt.districtid and testid = t.id and schoolyear = ts.schoolyear and assessmentprogramid = #{assessmentProgramId}) as districtreportcount,
+		otw.expirydate &lt; now() as windowcomplete
+		, CASE WHEN f.feedbackallowed IS TRUE THEN TRUE ELSE FALSE END AS feedbackallowed
+		from testsession ts
+		inner join studentstests st on st.testsessionid = ts.id and st.activeflag is true
+		inner join test t on st.testid = t.id and t.is_interim_test is false
+		inner join organizationtreedetail odt on odt.schoolid = ts.attendanceschoolid
+		inner join operationaltestwindow otw on otw.id = ts.operationaltestwindowid and otw.assessmentprogramid = #{assessmentProgramId}
+		inner join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid and tem.assessmentprogramid = #{assessmentProgramId} and methodcode = 'PREDICTIVE'
+		inner join aartuser au on au.id = ts.createduser 
+		left join interimstudentreport isr on isr.studentid = st.studentid and isr.testid = st.testid and isr.generated is true and isr.filepath is not null
+		LEFT OUTER JOIN (SELECT DISTINCT testid, TRUE AS feedbackallowed FROM test t 
+		JOIN testsection ts ON ts.testid = t.id 
+		JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id 
+		JOIN testlet tl ON tl.id = tstv.testletid
+		JOIN testletfeedback tfb ON tfb.testletexternalid = tl.externalid
+		WHERE 
+			tfb.id IS NOT NULL
+			AND tfb.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+			AND tfb.startdate &lt; now() AND tfb.enddate &gt; now())
+		f on f.testid = t.id
+		where ts.activeflag is true and ts.schoolyear = #{schoolYear} 
+		and ts.attendanceschoolid = ANY(ARRAY
+		<foreach collection="organizationIds" item="organizationId" open="[" close="]"
+			separator=",">
+			#{organizationId}
+		</foreach>
+		)
+		group by t.id, t.testname, t.numitems, t.externalid,
+			t.createdate, t.modifieddate, t.uitypecode,
+			t.gradecourseid,
+			t.contentareaid, t.status,
+			t.originationcode, t.qccomplete, interimtestid, otw.expirydate,
+			otw.effectivedate, ts.suspend,
+			testDescription, odt.schoolname,
+			assembledby, ts.id, ts.createduser, autoassignid ,odt.districtid, f.feedbackallowed
+		order by createdate desc, testname
+	</select>
+	
+	<select id="unassignUnusedStudentsTestsByInterimTestId" resultType="java.lang.Long" parameterType="java.lang.Long">
+		UPDATE studentstests
+		SET activeflag = false
+		WHERE 
+			testid = (
+				SELECT testtestid
+				FROM interimtest
+				WHERE
+					id = #{interimTestId}
+			)
+			AND status IN (
+				SELECT id
+				FROM category
+				WHERE
+					categorycode IN ('unused','inprogress')
+					AND categorytypeid = (
+						SELECT id
+						FROM categorytype
+						WHERE
+							typecode = 'STUDENT_TEST_STATUS'
+				)
+			)
+			AND activeflag IS TRUE
+		RETURNING studentid
+	</select>
+</mapper>

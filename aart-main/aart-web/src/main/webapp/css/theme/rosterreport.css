@@ -1,0 +1,129 @@
+.rosterreport .main{
+	border: 1px solid #000000;
+	background: #FFFFFF;
+}
+
+.rosterreport table {
+    color: #000000;
+    font-size: .7em;
+    border: 1px solid #000000;
+    width:680px;
+ }
+.rosterreport .strclaimHeading {
+    color: #FFFFFF;
+    background: #8BC8FC;
+    font-weight: bold;
+}
+.rosterreport th {
+	 font-weight: bold;
+	 color: #000000;
+     border: 1px solid #000000;
+}
+.rosterreport td, .rosterreport th {
+    padding-left: 10px;
+    table-layout:fixed;
+    width:113px;
+    overflow:hidden;
+    word-wrap:break-word;
+    text-align: left;
+}
+
+.rosterreport  td.yellow{
+    background: #FFF899;
+    font-weight: bold;
+}
+
+.rosterreport caption {
+    display: table-caption;
+    text-align: left;
+    padding: 5px;
+    color: #FFFFFF;
+    background: #8BC8FC;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.rosterreport .headrow1{
+    text-align:center;
+    padding-bottom:60px;
+    color:#94b54d;
+}
+.rosterreport .headrow2{
+    text-align:center;
+    padding-bottom:5px;
+    color:#94b54d;
+    font-size: .95em;
+    font-weight: bold;
+}
+.rosterreport .headrow3, .rosterreport .headrow4{
+    text-align:center;
+    padding-bottom:5px;
+    color:#94b54d;
+    font-size: .85em;
+}
+
+.rosterreport .padder50{
+    padding-left:50px;
+}
+.rosterreport .legend{
+	font-size: 0.8em;
+    text-align:right;
+} 
+.rosterreport .greenbox{
+    background: #C4DF9B;
+    border: 1px solid #000000;
+    padding:6px;
+    width:5px;
+    line-height: 30%;
+   
+}
+.rosterreport .levelyellow{
+     background: #FFF899;
+}
+
+.rosterreport .levelgreen{
+     background: #C4DF9B;
+}
+
+.rosterreport .yellowbox{
+    background: #FFF899;
+    border: 1px solid #000000;
+    padding:6px;
+    width:5px;
+    line-height: 30%;
+}
+._bcg .full_main .rosterreport img.reporticon{
+	height:15px;
+	width:15px;
+	border:0px solid;
+	vertical-align: middle;
+}
+
+.rosterreport .padder80{
+    padding-left:50px;
+}
+
+.rosterreport .assesseddiv{
+	padding-top:10px;
+}
+
+.rosterreport .noteinfo {
+	text-align:center;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+.rosterreport #dateDiv{
+	padding-top:10px;
+	float: left;
+}
+
+.rosterreport #printdiv{
+	float: right;
+}
+
+.rosterreport #printdiv a{
+	color: #ffffff;
+}
+
+

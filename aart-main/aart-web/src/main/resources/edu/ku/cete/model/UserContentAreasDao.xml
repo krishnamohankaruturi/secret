@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.UserContentAreasDao">
+
+	<resultMap id="UserContentArea" type="edu.ku.cete.domain.user.UserContentArea">
+	    <id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="userid" jdbcType="BIGINT" property="userId" />
+		<result column="contentareaid" jdbcType="BIGINT" property="contentAreaId" />
+		<result column="contentareaabbreviation" jdbcType="VARCHAR" property="contentAreaAbbreviation" />
+		<result column="activeflag" jdbcType="BIT" property="active" />
+		<result column="createduser" jdbcType="INTEGER" property="createdUser" />
+		<result column="createddate" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="modifieduser" jdbcType="INTEGER" property="modifiedUser" />
+		<result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+    </resultMap>
+	
+	<select id="getUserContentAreas" resultType="UserContentArea" parameterType="Long">		
+		SELECT uca.id, uca.userid, uca.contentareaid,  ca.abbreviatedname as contentareaabbreviation,
+		uca.activeflag, uca.createduser, uca.createddate, uca.modifieduser, uca.modifieddate
+		FROM usercontentareas uca join contentarea ca on ca.id = uca.contentareaid 
+		WHERE uca.userid = #{userId}
+	</select>
+	
+	<insert id="insertUserContentArea" parameterType="edu.ku.cete.domain.user.UserContentArea">
+		INSERT INTO usercontentareas
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null">
+					id,
+				</if>
+				<if test="userId != null">
+					userid,
+				</if>
+				<if test="contentAreaId != null">
+					contentareaid,
+				</if>
+				<if test="active != null">
+					activeflag,
+				</if>
+				<if test="createdUser != null">
+					createduser,
+				</if>
+				<if test="createdDate != null">
+					createddate,
+				</if>
+				<if test="modifiedUser != null">
+					modifieduser,
+				</if>
+				<if test="modifiedDate != null">
+					modifieddate,
+				</if>
+			</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="contentAreaId != null">
+				#{contentAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="active != null">
+				#{active,jdbcType=BIT},
+			</if>
+			<if test="createdUser != null">
+				#{createdUser,jdbcType=INTEGER},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifiedUser != null">
+				#{modifiedUser,jdbcType=INTEGER},
+			</if>
+			<if test="modifiedDate != null">
+				#{modifiedDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="activateUserContentAreas">
+		UPDATE usercontentareas
+		SET activeflag = true, modifieddate = NOW()
+		WHERE id IN
+		<foreach collection="userContentAreaIds" item="userContentAreaId" open="(" close=")" separator=",">
+			#{userContentAreaId,jdbcType=BIGINT}
+		</foreach>
+	</update>
+      
+	<update id="deactivateUserContentAreas">
+		UPDATE usercontentareas
+		SET activeflag = false, modifieddate = NOW()
+		WHERE id IN
+		<foreach collection="userContentAreaIds" item="userContentAreaId" open="(" close=")" separator=",">
+			#{userContentAreaId,jdbcType=BIGINT}
+		</foreach>
+	</update>
+	
+</mapper>

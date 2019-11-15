@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.PolicyDao">
+
+	<insert id="add" parameterType="Policy">
+		INSERT INTO policy(organizationid, name, data, createddate, createduser, activeflag, modifieddate, modifieduser)
+		  values(#{organizationId}, #{name}, #{data}, #{createdDate}, #{createdUser}, #{activeFlag},#{modifiedDate},#{modifiedUser})
+	</insert>
+	
+	<select id="lastid" resultType="java.lang.Long">
+		SELECT lastval() AS id
+	</select>
+
+	<delete id="delete">
+		DELETE FROM policy WHERE id = #{id}
+	</delete>
+
+	<select id="findByOrganization" resultType="Policy" parameterType="Long">
+		SELECT
+			id, organizationid, name, data
+		FROM policy 
+		WHERE
+			organizationid = #{organizationId}
+	</select>
+
+	<select id="get" resultType="Policy" parameterType="Long">
+		SELECT
+			id, organizationid, name, data
+		FROM policy 
+		WHERE
+			id = #{id}
+	</select>
+
+	<select id="getAll" resultType="Policy">
+		SELECT 
+			id, organizationid, name, data
+		FROM policy
+	</select>
+	
+	<update id="update">
+		UPDATE policy 
+			SET organizationid = #{organizationId}, name = #{name}, data = #{data},
+			modifieddate = #{modifiedDate},
+			modifieduser = #{modifiedUser},
+			activeflag = #{activeFlag} 
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,90 @@
+<div class="schoolDetail"  style="height:auto; min-height: 90%;">
+<% if (data != null && data.length > 0) {
+	var record = data[0];
+	var allSubjects = [];
+	
+    allSubjects[0] = record.subjectName;
+	for (var x = 1; x < data.length; x++) {
+		 record = data[x]; 
+		if(data[x].subjectName!=data[x-1].subjectName)
+		{
+			allSubjects.push(record.subjectName); 
+		}
+	}
+
+	for(var x = 0; x < allSubjects.length; x = x+4){
+	%>
+	<div style="margin-bottom:20px;">
+	<%					
+	  for(var i = 0; i < 4; i++){				 
+		 if(allSubjects[x+i] != undefined){		  
+	%>
+			    <div class="subject" style="width: 25%;float: left;">
+				    <span class="heading"><%= allSubjects[x+i] %></span>
+			    </div>	    
+	<%
+	     }
+	   }
+	%>
+		
+	<hr>
+	<%
+	    for(var i = 0; i < 4; i++){					 
+		 if(allSubjects[x+i] != undefined){
+		 	
+	%>
+	    <div class="subject" style="width: 25%;float: left;">
+			<div class="item">		   
+	<%	 	
+		 	for (var y = 0; y < data.length; y++) {
+		 	if(data[y].subjectName == allSubjects[x+i]){
+		     
+    %>  
+    
+          <a href="getSchoolDetailReportFile.htm?id=<%= data[y].id%>&reportyear=<%=record.schoolYear%>&assessmentid=<%= assessmentProgid %>&assessmentProgCode=<%=programCode%> ">         
+            <% if(data[y].assessmentProgramCode == 'CPASS' && (data[y].assessmentName!=null ||data[y].assessmentName == '')){%>			
+			     <%= data[y].assessmentName %> 
+			 <% }else{ %>
+			     <%= data[y].gradeName%>
+			 <%}%>    
+			
+		<%	if(data[y].organizationname == null || data[y].organizationname == ''){ %>
+				
+				<%= data[y].organizationname %>
+		
+		<%		
+			}
+			else{
+				%>
+				
+				(<%= data[y].organizationname %>)
+		<%
+			}
+			
+		%>
+			
+	    </a>
+	    <br/>  <br/> 
+	 <%	
+    	
+		       }
+		     }
+	%>
+	 	</div>
+			</div>
+	<%
+		 }
+		}
+	  %>
+	  </div>
+	  <%
+	 }  
+	%>	   
+		
+
+<%}else{ %>
+		<div style="margin:0px;">
+			Report Not Available		
+	    </div>
+	<%}%>
+</div>

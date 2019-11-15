@@ -1,0 +1,1 @@
+Webservice Transaction Notice (Kite) for ${webServiceType} record

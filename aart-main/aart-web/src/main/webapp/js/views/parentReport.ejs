@@ -1,0 +1,24 @@
+<div >
+	 <h4>Parent Reports</h4>
+	 Click the PDF file to download 
+</div>
+<br><br> 	
+<div>
+	<table>
+		<% for(var i=0; i<reportData.files.length; i++) {%>
+		<tr>
+			<td>
+	 			<a href="getParentReportPDF.htm?reportFileName=<%=reportData.files[i]%>"><img src='images/pdf.png' style='border:0px solid;' /> </a> 
+	 		</td>
+	 		<td>
+	 			<%=reportData.files[i]%>
+			</td>
+		</tr>
+	<% }%>
+	 </table>
+		
+	 
+	 
+	
+	 
+</div>

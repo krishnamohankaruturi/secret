@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.OperationalTestWindowDao">
+	 <resultMap id="assessmentProgramAndTCMap" type="edu.ku.cete.web.AssessmentProgramTCDTO">
+	 	<id column="id" property="id" jdbcType="BIGINT" />	
+	    <id column="testCollectionId" property="testCollectionId" jdbcType="BIGINT" />	  
+	    <result column="name" property="name" jdbcType="VARCHAR" />	    
+	    <result column="programname" property="programName" jdbcType="VARCHAR" />
+	 </resultMap>
+	 
+	 <!-- Added for US 16553 -->
+	  <resultMap id="operationalTestWindowDTOMap" type="edu.ku.cete.domain.test.OperationalTestWindowDTO">
+	    <id column="id" property="otwId" jdbcType="BIGINT" />	  
+	    <result column="windowName" property="windowName" jdbcType="VARCHAR" />	    
+	    <result column="categoryName" property="managedBy" jdbcType="VARCHAR" />
+	    <result column="randomizationtype" property="randomization" jdbcType="VARCHAR" />	    
+	    <result column="effectivedate" property="beginDate" jdbcType="TIMESTAMP" />
+	    <result column="expirydate" property="endDate" jdbcType="TIMESTAMP" />	    
+	    <result column="createdate" property="createdDate" jdbcType="TIMESTAMP" />
+	    <result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />	    
+	    <result column="createduser" property="createdBy" jdbcType="VARCHAR" />
+	    <result column="modifeduser" property="modifiedBy" jdbcType="VARCHAR" />
+	    <result column="suspendwindow" property="suspendwindow" jdbcType="BOOLEAN" />
+	    <result column="effectivedate" property="beginTestTime" jdbcType="TIMESTAMP" />
+	    <result column="expirydate" property="endTestTime" jdbcType="TIMESTAMP" />
+	    <result column="categorycode" property="testCategoryCode" jdbcType="VARCHAR" />		
+	    <result column="organizationname" property="stateNames" jdbcType="VARCHAR" />
+	    <result column="scoringwindowstartdate" property="scoringWindowStartDate" jdbcType="TIMESTAMP" />
+	    <result column="scoringwindowenddate" property="scoringWindowEndDate" jdbcType="TIMESTAMP" />
+	    <result column="scoringwindowstartdate" property="scoringWindowStartTime" jdbcType="TIMESTAMP" />
+	    <result column="scoringwindowenddate" property="scoringWindowEndTime" jdbcType="TIMESTAMP" />
+	    <result column="status" property="status" jdbcType="VARCHAR" />	    
+	    <result column="instructionplannerwindow" property="instructionPlannerWindow" jdbcType="BIT" />
+	    <result column="instructionplannerdisplayname" property="instructionPlannerDisplayName" jdbcType="VARCHAR" />
+	    <result column="instructionplannerdirections" property="instructionPlannerDirections" jdbcType="VARCHAR" />
+	 </resultMap>
+		  
+	<insert id="addOperTestWindowData" parameterType="OperationalTestWindow" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		INSERT INTO operationaltestwindow(windowName, 
+       effectiveDate, expiryDate, suspendWindow, createdUser,
+       modifiedUser,assessmentProgramId,testEnrollmentFlag,testEnrollmentMethodId,scoringWindowFlag,scoringWindowId,scoringWindowStartDate,scoringWindowEndDate,
+       instructionplannerwindow, instructionplannerdisplayname)
+		  values(#{windowName},#{effectiveDate},#{expiryDate},
+		  #{suspendWindow},#{createdUser},#{modifiedUser},#{assessmentProgramId},#{testEnrollmentFlag},#{testEnrollmentMethodId},#{scoringWindowFlag},#{scoringWindowMethodId}
+		  ,#{scoringWindowStartDate},#{scoringWindowEndDate},
+		  #{instructionPlannerWindow}, #{instructionPlannerDisplayName})
+	</insert>
+	
+	<insert id="addOperTestWindowTestCollectionData"  parameterType="OperationalTestWindow">
+		INSERT INTO operationaltestwindowstestcollections(operationaltestwindowid,
+			testcollectionid, createduser, modifieduser)
+			 values(#{id}, #{testCollectionId}, #{createdUser}, #{modifiedUser})
+	</insert>
+	<insert id="deleteBYWindowId"  parameterType="java.lang.Long">
+		
+		delete from operationaltestwindowstestcollections where operationaltestwindowid = #{windowId}
+	</insert>
+	
+	<select id="selectTestCollectionById" resultType="OperationalTestWindow" parameterType="Long">
+		SELECT otw.id, otw.windowName, otwtc.testCollectionId, 
+       		otw.effectiveDate, otw.expiryDate, otw.suspendwindow, otw.modifiedDate, otw.createdUser,
+       		otw.modifiedUser
+		FROM operationaltestwindow otw
+		INNER JOIN operationaltestwindowstestcollections otwtc
+		ON otwtc.operationaltestwindowid = otw.id
+		WHERE		  
+		  otwtc.testCollectionId = #{testCollectionId}
+		  AND otwtc.activeflag is true
+		ORDER BY modifiedDate DESC   
+	</select>
+	
+	<select id="selectTestViewWindowById" resultType="OperationalTestWindow" parameterType="Long">
+	SELECT otw.id, otw.windowName,
+       		otw.effectiveDate, otw.expiryDate, otw.suspendwindow, otw.modifiedDate, otw.createdUser,
+       		otw.modifiedUser, otw.managedby
+		FROM operationaltestwindow otw
+		WHERE		  
+		  otw.id = #{Id}
+	</select>
+			  
+	<select id="selectTestWindowById" resultType="OperationalTestWindow" parameterType="Long">
+		SELECT otw.id, otw.windowName,
+       		otw.effectiveDate, otw.expiryDate, otw.suspendwindow, otw.modifiedDate, otw.createdUser,
+       		otw.modifiedUser
+		FROM operationaltestwindow otw
+		WHERE		  
+		  otw.id = #{Id}
+	</select>
+		
+	<update id="updateOperTestWindowByPrimaryKey" parameterType="OperationalTestWindow" >    
+	    UPDATE operationaltestwindow
+	    SET 
+	      <if test="windowName != null" >
+	      	windowName = #{windowName},
+	      </if>
+	      <if test="windowName != null" >
+	      effectiveDate = #{effectiveDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="windowName != null" >
+	      	expiryDate = #{expiryDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="suspendWindow != null" >
+	      	suspendWindow = #{suspendWindow,jdbcType=BOOLEAN},
+	      </if>
+	      <if test="createdUser != null" >
+	      	createdUser = #{createdUser},
+		  </if>
+	      <if test="assessmentProgramId != null" >
+	      	assessmentProgramId = #{assessmentProgramId},
+		  </if>
+	      <if test="testEnrollmentFlag != null" >
+	      	testEnrollmentFlag = #{testEnrollmentFlag},
+		  </if>
+	      <if test="testEnrollmentMethodId != null" >
+	      	testEnrollmentMethodId = #{testEnrollmentMethodId},
+		  </if>
+	      <if test="scoringWindowFlag != null" >
+	      	scoringWindowFlag = #{scoringWindowFlag},
+		  </if>
+	      <if test="scoringWindowMethodId != null" >
+	      	scoringWindowId = #{scoringWindowMethodId},
+		  </if>
+	      <if test="scoringWindowStartDate != null" >
+	      	scoringWindowStartDate = #{scoringWindowStartDate},
+		  </if>
+	      <if test="scoringWindowEndDate != null" >
+	      	scoringWindowEndDate = #{scoringWindowEndDate},
+	      </if>
+	      <if test="instructionPlannerWindow != null">
+	        instructionplannerwindow = #{instructionPlannerWindow},
+	      </if>
+	      <if test="instructionPlannerDisplayName != null">
+	        instructionplannerdisplayname = #{instructionPlannerDisplayName},
+	      </if>
+	      	modifiedUser = #{modifiedUser},
+	      	modifiedDate = #{modifiedDate,jdbcType=TIMESTAMP}
+	  
+	    WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+  
+	
+	<select id="selectOperTestWindowDataById" resultType="OperationalTestWindow" parameterType="Long">
+		SELECT otw.id, otw.windowName, otwtc.testCollectionId, 
+       		otw.effectiveDate, otw.expiryDate, otw.modifiedDate, otw.createdUser,
+       		otw.modifiedUser
+		FROM operationaltestwindow otw
+		INNER JOIN operationaltestwindowstestcollections otwtc
+		ON otwtc.operationaltestwindowid = otw.id
+		WHERE		  
+		  otw.id = #{id}		  
+	</select>
+	
+	<select id="selectOperTestWindowForInterim" resultType="OperationalTestWindow">
+	SELECT otw.id, otw.windowName,
+	otw.effectiveDate, otw.expiryDate, otw.modifiedDate, otw.createdUser,
+	otw.modifiedUser
+	FROM operationaltestwindow otw
+	INNER JOIN operationaltestwindowstestcollections otwtc on otwtc.operationaltestwindowid= otw.id
+	WHERE
+	otwtc.testcollectionid=#{testCollectionId,jdbcType=BIGINT} and otw.expirydate &gt; now() and otw.effectivedate &lt; now()  and otw.activeflag is true and otwtc.activeflag is true 
+	limit 1
+	</select>
+	
+	<select id="selectAssessmentProgramAndTCList"  resultMap="assessmentProgramAndTCMap">  
+		
+			Select DISTINCT tc.id as id,tc.externalid as testCollectionId,tc.name as name,tc.randomizationtype,categorycode
+ 				FROM assessmentprogram ap JOIN testingprogram tp ON ap.id = tp.assessmentprogramid
+				JOIN assessment ass ON tp.id = ass.testingprogramid
+				JOIN assessmentstestcollections atc ON ass.id = atc.assessmentid
+				JOIN testcollection tc ON atc.testcollectionid = tc.id and tc.activeflag is true
+				left outer JOIN Category cat ON tc.systemselectoptionid = cat.id	    
+			<if test="assessmentProgramId != null" > 
+    			where ap.id= #{assessmentProgramId,jdbcType=BIGINT}
+    		</if>
+    		<if test="randomizationType != 'null' and randomizationType != ''" > 
+    			and tc.randomizationtype =  #{randomizationType,jdbcType=VARCHAR}  
+			</if>
+			<if test="windowId != null" > 
+    			and tc.id not in (SELECT DISTINCT tc.id as testCollectionId FROM testcollection tc 
+    			JOIN operationaltestwindowstestcollections otwtc ON tc.id = otwtc.testCollectionId where operationaltestwindowid = #{windowId,jdbcType=BIGINT})
+    		</if>
+	 		<if test="categoryCode == 'SYSTEM_DEFINED_ENROLLMENT_TO_TEST'" > 
+    			and ( cat.categoryCode = 'RADOMIZATION' )   
+			</if>
+			<if test="categoryCode != 'SYSTEM_DEFINED_ENROLLMENT_TO_TEST'" > 
+    			and ( cat.categoryCode is null )   
+			</if> 
+	 		 <include refid="Extended_TestCollection_Where_Clause" />
+				<if test="sortByColumn != null">
+		    ORDER BY  
+			      <choose>  
+		            <when test="sortByColumn == 'testCollectionId'">
+		                testCollectionId 
+		            </when>         
+		            <when test="sortByColumn == 'name'">
+		                name 
+		            </when> 
+		            <when test="sortByColumn == 'id'">
+		                id 
+		            </when> 
+		      	  </choose>
+		      <choose>
+		      <when test="sortType != null and (sortType=='desc' or sortType=='DESC')">
+		      	DESC
+		      </when>
+		      <otherwise>
+		      	ASC 
+		      </otherwise>
+		      </choose>
+		 </if>		    
+	 <!-- <if test="limit != null">
+		LIMIT #{limit}
+	</if>
+	<if test="offset != null">
+		OFFSET #{offset}
+	</if> -->
+	</select>
+	
+	<sql id="Extended_TestCollection_Where_Clause">
+	<if test="testWindowCriteriaMap.testCollectionId != null">
+ 		AND (tc.id || '') ilike #{testWindowCriteriaMap.testCollectionId}
+ 	</if>
+ 	<if test="testWindowCriteriaMap.name != null">
+ 		AND (tc.name || '') like #{testWindowCriteriaMap.name}
+ 	</if>	    	
+	
+	</sql>
+	
+	<select id="selectAssessmentProgramAndTCListByWindowId" resultMap="assessmentProgramAndTCMap" parameterType="Long">
+			SELECT DISTINCT tc.id as testCollectionId,tc.name as name FROM assessmentprogram ap JOIN testingprogram tp 
+			ON ap.id = tp.assessmentprogramid
+				JOIN assessment ass 
+			ON tp.id = ass.testingprogramid 
+				JOIN assessmentstestcollections atc
+			ON ass.id = atc.assessmentid 
+				JOIN testcollection tc 
+			ON atc.testcollectionid = tc.id
+				JOIN operationaltestwindowstestcollections otwtc
+			ON otwtc.testcollectionid = atc.testcollectionid and otwtc.operationaltestwindowid = #{Id}
+					ORDER BY 	tc.name,
+						tc.id
+	</select>
+	<sql id="SELECT_TEST_WINDOW_BY_ASSESSMENT_PROGRAM">
+	select * from (SELECT DISTINCT  otw.id as id, windowName,suspendwindow,cat.categoryName,
+	case when cat.categoryName = 'Manual Enrollment to Test' then null else  tc.randomizationtype end as randomizationtype ,effectivedate,expirydate,
+	otw.createddate as createdate,otw.modifieddate as modifieddate,aaus.username as createduser,
+	aas.username as modifeduser,effectivedate,expirydate,cat.categorycode,
+	string_AGG(distinct o.organizationname,',') as statenames,
+	tem.methodname as testEnrollmentMethodName,otw.testenrollmentflag,
+	case  when tktofday.categoryname is null then 'Off' else 'On' end as ticketing,
+	tktofday.categoryname as ticketingoftheday,
+	(case when 'DAILY_ACCESS_CODES' in(select c.categorycode from category c inner join operationaltestwindowsessionrule otws on otws.sessionruleid= c.id where otws.operationaltestwindowid = otw.id) then 'Daily Access Codes' 
+	 when 'TICKETED_AT_SECTION' in(select c.categorycode from category c inner join operationaltestwindowsessionrule otws on otws.sessionruleid= c.id where otws.operationaltestwindowid = otw.id) then 'Tickets'
+	else null END)as dailyAccessCode,temsw.methodname as scoringWindowMethodName, otw.scoringwindowflag,otw.scoringwindowstartdate,otw.scoringwindowenddate 	
+	 , CASE WHEN (NOW() BETWEEN effectivedate AND expirydate) THEN 'Active' ELSE 'Expired' END AS status,
+	 instructionplannerwindow, instructionplannerdisplayname
+	 FROM assessmentprogram ap
+                  JOIN testingprogram tp ON ap.id = tp.assessmentprogramid
+                  JOIN assessment ass ON tp.id = ass.testingprogramid
+                  JOIN assessmentstestcollections atc  ON ass.id = atc.assessmentid
+                  JOIN testcollection tc  ON atc.testcollectionid = tc.id
+                  JOIN operationaltestwindowstestcollections otwtc ON tc.id = otwtc.testcollectionid
+                  JOIN operationaltestwindow otw ON otwtc.operationaltestwindowid = otw.id 
+		 			JOIN operationaltestwindowsessionrule otwsr ON otw.id =otwsr.operationaltestwindowid 
+				JOIN Category cat ON otwsr.sessionruleid= cat.id 
+		  JOIN aartuser aaus ON otw.createduser =aaus.id
+		  JOIN aartuser aas ON otw.modifieduser =aas.id
+		  LEFT JOIN testenrollmentmethod tem ON tem.id = otw.testenrollmentmethodid
+		  LEFT JOIN testenrollmentmethod temsw ON temsw.id = otw.scoringwindowid
+		  LEFT JOIN operationaltestwindowstate otws on otws.operationaltestwindowid = otw.id and otws.activeflag = true
+	   	  LEFT OUTER JOIN organization o on otws.stateid = o.id  
+	   	  left outer join (  select icat.categoryname ,iotwsr.operationaltestwindowid
+	   	   from operationaltestwindowsessionrule  iotwsr
+  			join Category icat ON iotwsr.sessionruleid= icat.id where 
+  			icat.activeflag = TRUE and icat.categoryCode in('TICKETED_AT_SECTION')
+    ) tktofday on tktofday.operationaltestwindowid = otw.id
+		  WHERE ap.activeflag = TRUE
+	  AND tp.activeflag = TRUE
+	  AND ass.activeflag = TRUE
+	  AND atc.activeflag = TRUE
+	  AND otwtc.activeflag = TRUE
+	  AND otw.activeflag = TRUE
+	  AND cat.activeflag = TRUE
+	  and cat.categoryCode in('SYSTEM_DEFINED_ENROLLMENT_TO_TEST','MANUAL_DEFINED_ENROLLMENT_TO_TEST')
+	  <!--Fixes for DE10803-->
+	  <!--<if test="assessmentProgramId != null">-->
+	  and ap.id = #{assessmentProgramId,jdbcType=BIGINT}
+      <!--</if>-->
+     
+    <include refid="Extended_TW_Where_Clause" />	
+    GROUP BY otw.id, windowName,suspendwindow,cat.categoryName,case when cat.categoryName = 'Manual Enrollment to Test' then null else  tc.randomizationtype end ,
+     expirydate,otw.createddate,otw.modifieddate ,temsw.methodname,otw.scoringwindowflag,
+     cat.categorycode,tem.methodname, aaus.username , aas.username ,effectivedate,
+     tem.methodname,otw.testenrollmentflag, 
+     case  when tktofday.categoryname is null then 'off' else 'on' end ,tktofday.categoryname
+	</sql>
+		
+	<select id="getSelectTestWindowByAssessmentProgram"  resultMap="operationalTestWindowDTOMap">
+	<include refid="SELECT_TEST_WINDOW_BY_ASSESSMENT_PROGRAM" />	
+	<if test="sortByColumn != null">
+		    ORDER BY  
+			      <choose>  
+		            <when test="sortByColumn == 'otwId'">
+		                otw.id 
+		            </when>         
+		            <when test="sortByColumn == 'windowName'">
+		                windowName 
+		            </when> 
+		            <when test="sortByColumn == 'managedBy'">
+		                cat.categoryName 
+		            </when>
+		            <when test="sortByColumn == 'randomization'">
+		                randomizationtype 
+		            </when>
+		            <when test="sortByColumn == 'beginDate'">
+		                effectivedate 
+		            </when>
+		            <when test="sortByColumn == 'endDate'">
+		                expiryDate 
+		            </when>
+		            <when test="sortByColumn == 'createdDate'">
+		                createdate 
+		            </when>
+		             <when test="sortByColumn == 'modifiedDate'">
+		                modifieddate 
+		            </when>
+		      	  <when test="sortByColumn == 'createdBy'">
+		                createduser 
+		            </when>
+		             <when test="sortByColumn == 'modifiedBy'">
+		                modifeduser 
+		            </when>
+		             <when test="sortByColumn == 'state'">
+		                statenames
+		            </when>
+		            <when test="sortByColumn == 'TestEnrollmentMethod'">
+		                tem.methodname
+		            </when>
+		             <when test="sortByColumn == 'TestEnrollment'">
+		                otw.testenrollmentflag
+		            </when>
+		            <when test="sortByColumn == 'Ticketing'">
+		                ticketing
+		            </when>
+		            <when test="sortByColumn == 'Ticketingoftheday'">
+		                tktofday.categoryname
+		            </when>
+		            <when test="sortByColumn == 'dailyAccessCode'">
+		                dailyAccessCode
+		            </when>
+		            <when test="sortByColumn == 'ScoringWindowFlag'">
+		            	otw.scoringwindowflag
+		            </when>
+		             <when test="sortByColumn == 'ScoringWindowName'">
+		            	scoringWindowMethodName
+		            </when>
+		            <when test="sortByColumn == 'status'">
+		            	status
+		            </when>
+		            <when test="sortByColumn == 'instructionPlannerWindow'">
+		            	instructionplannerwindow
+		            </when>
+		            <when test="sortByColumn == 'instructionPlannerDisplayName'">
+		            	instructionplannerdisplayname
+		            </when>
+		      	  </choose>
+		      <choose>
+		      <when test="sortType != null and (sortType=='desc' or sortType=='DESC')">
+		      	DESC
+		      </when>
+		      <otherwise>
+		      	ASC 
+		      </otherwise>
+		      </choose>
+		 </if>)	optws  
+		<if test="testWindowCriteriaMap.randomization != null">
+ 		   where (randomizationtype || '') ilike #{testWindowCriteriaMap.randomization}
+ 	    </if> 		    
+	  limit #{limit}
+	  offset #{offset}
+	<!-- <if test="limit != null">
+		LIMIT #{limit}
+	</if>
+	<if test="offset != null">
+		OFFSET #{offset}
+	</if> -->
+  	</select>
+  	
+  	<sql id="Extended_TW_Where_Clause">
+  	<if test="testWindowCriteriaMap.otwId != null">
+ 		AND (otw.id || '') ilike #{testWindowCriteriaMap.otwId}
+ 	</if>
+	<if test="testWindowCriteriaMap.windowName != null">
+ 		AND (windowName || '') ilike #{testWindowCriteriaMap.windowName}
+ 	</if>
+ 	<if test="testWindowCriteriaMap.managedBy != null">
+ 		AND (cat.categoryName || '') ilike #{testWindowCriteriaMap.managedBy}
+ 	</if>	    	
+	<!-- <if test="testWindowCriteriaMap.randomization != null">
+ 		AND (randomizationtype || '') ilike #{testWindowCriteriaMap.randomization}
+ 	</if> --> 	
+ 	<if test="testWindowCriteriaMap.state != null">
+ 		AND (o.organizationname || '') ilike #{testWindowCriteriaMap.state}
+ 	</if>
+	</sql>
+	
+  	<select id="countSelectTestWindowByAssessmentProgram"  resultType="INTEGER">
+	SELECT count(*) from (
+	<include refid="SELECT_TEST_WINDOW_BY_ASSESSMENT_PROGRAM" />	
+	)  optws 
+			<if test="testWindowCriteriaMap.randomization != null">
+ 		       where (randomizationtype || '') ilike #{testWindowCriteriaMap.randomization}
+ 	        </if>
+ 	   ) optestwindow
+	  
+  	</select>
+ 
+	 <update id="extendTestSessionWindow" parameterType="OperationalTestWindow">    
+	    UPDATE testsession
+	    SET windowexpirydate = #{expiryDate,jdbcType=TIMESTAMP},
+	      modifiedDate = #{modifiedDate,jdbcType=TIMESTAMP},
+		  modifiedUser = #{modifiedUser}		 
+	    WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="selectByAssessmentProgramAndHighStakes" parameterType="map" resultType="OperationalTestWindow">
+	  SELECT distinct otw.id, otw.windowName, 
+       		otw.effectiveDate, otw.expiryDate, otw.modifiedDate, otw.createdUser,
+       		otw.modifiedUser
+	  FROM assessmentprogram ap
+	  INNER JOIN testingprogram tp
+	    ON ap.id = tp.assessmentprogramid
+	    AND ap.id = #{assessmentProgramId,jdbcType=BIGINT}
+	    AND tp.highstake = #{highStakes,jdbcType=BIT}
+	  INNER JOIN assessment a ON tp.id = a.testingprogramid
+	  INNER JOIN assessmentstestcollections atc ON a.id = atc.assessmentid 
+	  INNER JOIN testcollection tc ON atc.testcollectionid = tc.id
+	  INNER JOIN operationaltestwindowstestcollections otwtc ON tc.id = otwtc.testcollectionid
+	  INNER JOIN operationaltestwindow otw ON otwtc.operationaltestwindowid = otw.id
+	  WHERE ap.activeflag = TRUE
+	  AND tp.activeflag = TRUE
+	  AND a.activeflag = TRUE
+	  AND atc.activeflag = TRUE
+	  AND otwtc.activeflag = TRUE
+	  AND otw.activeflag = TRUE
+	  ORDER BY otw.windowName, otw.effectiveDate, otw.expiryDate
+	</select>
+	
+	<select id="existOperationalWindowTestCollection"  resultMap="assessmentProgramAndTCMap">  
+		SELECT DISTINCT tc.id as id,tc.externalid as testCollectionId,tc.name as name
+		FROM testcollection tc
+		JOIN operationaltestwindowstestcollections otwtc ON tc.id = otwtc.testCollectionId
+		where operationaltestwindowid = #{windowId}
+		and tc.activeflag is true
+		and otwtc.activeflag is true
+	</select>
+	
+	<select id="countAssessmentProgramAndTCList"  resultType="INTEGER">
+			    Select count(DISTINCT tc.id)
+ 				FROM assessmentprogram ap JOIN testingprogram tp ON ap.id = tp.assessmentprogramid
+				JOIN assessment ass ON tp.id = ass.testingprogramid
+				JOIN assessmentstestcollections atc ON ass.id = atc.assessmentid
+				JOIN testcollection tc ON atc.testcollectionid = tc.id
+				left outer JOIN Category cat ON tc.systemselectoptionid = cat.id	    
+			<if test="assessmentProgramId != null" > 
+    			where ap.id= #{assessmentProgramId,jdbcType=BIGINT}
+    		</if>
+    		<if test="randomizationType != 'null'" > 
+    			and tc.randomizationtype =  #{randomizationType,jdbcType=VARCHAR}   
+			</if>
+			<if test="windowId != null" > 
+    			and tc.id not in (SELECT DISTINCT tc.id as testCollectionId FROM testcollection tc 
+    			JOIN operationaltestwindowstestcollections otwtc ON tc.id = otwtc.testCollectionId where operationaltestwindowid = #{windowId,jdbcType=BIGINT})
+    		</if>
+	 		<if test="categoryCode == 'SYSTEM_DEFINED_ENROLLMENT_TO_TEST'" > 
+    			and ( cat.categoryCode = 'RADOMIZATION' )   
+			</if>
+			<if test="categoryCode != 'SYSTEM_DEFINED_ENROLLMENT_TO_TEST'" > 
+    			and ( cat.categoryCode is null )   
+			</if>
+		
+    <include refid="Extended_TestCollection_Where_Clause" />
+	</select>
+	<select id="selectOverlappingTestCollectionIds" parameterType="map" resultType="Long" >
+		select distinct tc.externalid from operationaltestwindow otw join operationaltestwindowstestcollections otwc 
+		on otwc.operationaltestwindowid = otw.id inner join testcollection tc ON tc.id = otwc.testCollectionId 
+		where ((effectivedate &gt;= #{beginTimeStamp} and effectivedate &lt;= #{endTimeStamp} )
+		or ( expirydate &gt;= #{beginTimeStamp} and expirydate &lt;= #{endTimeStamp}) 
+		or ( #{beginTimeStamp} &gt;= effectivedate and  #{beginTimeStamp} &lt;= expirydate ) 
+		or ( #{endTimeStamp} &gt;= effectivedate and #{endTimeStamp} &lt;= expirydate ) )
+		<!-- and	otwc.testcollectionid in () -->
+		<if test="windowId != null" > 
+    		and otw.id != #{windowId}
+    	</if>
+    	<if test="multiStateIds != null" > 
+    		and otw.id in ( select operationaltestwindowid from operationaltestwindowstate where stateid in
+	    	<foreach item="stateIds" index="index" collection="multiStateIds" open="(" separator="," close=")">
+	        	#{stateIds}
+	  		</foreach> 
+	  		)
+    	</if>
+    	and	otwc.testcollectionid in
+		<foreach item="item" index="index" collection="testCollectionIds" open="(" separator="," close=")">
+        	#{item}
+  		</foreach>
+	</select>
+	
+	<select id="isTestWidowNameExist" resultType = "INTEGER">
+		Select count(id) from operationalTestwindow where upper(windowName) = upper(#{windowName}) and activeflag = true
+		<if test="id != null" > 
+      		and id != #{id}
+     	</if>
+	</select>
+	
+	<insert id="addOperTestWindowStateData"  parameterType="OperationalTestWindow">
+		INSERT INTO operationaltestwindowstate(operationaltestwindowid,
+			stateid, createduser, modifieduser)
+			 values(#{id}, #{multipleStateId}, #{createdUser}, #{modifiedUser})
+	</insert>
+	
+	<insert id="addOperationalTestWindowMultiAssignDetail"  parameterType="OperationalTestWindowMultiAssignDetail">
+		INSERT INTO operationaltestwindowmultiassigndetail(
+            operationaltestwindowid, contentareaid, numberoftests)
+    			VALUES (#{operationaltestwindowid}, #{contentareaid}, #{numberoftests});
+	</insert>
+	
+	<update id="updateOperationalTestWindowMultiAssignDetail" parameterType="OperationalTestWindowMultiAssignDetail" >    
+	    UPDATE operationaltestwindowmultiassigndetail
+  			SET numberoftests= #{numberoftests}
+ 				WHERE operationaltestwindowid= #{operationaltestwindowid} and contentareaid= #{contentareaid};
+	</update>
+	
+	<insert id="deleteOperationalTestWindowMultiAssignDetail"  parameterType="java.lang.Long">
+		DELETE FROM operationaltestwindowmultiassigndetail 
+			WHERE operationaltestwindowid = #{windowId};		
+	</insert>
+	
+	<select id="selectOperationalTestWindowMultiAssignDetailList"  resultType="edu.ku.cete.domain.common.OperationalTestWindowMultiAssignDetail">
+		select contentareaid, numberoftests, (select name from contentarea where id = contentareaid) as name from operationaltestwindowmultiassigndetail where operationaltestwindowid = #{id}
+		<!--  -->
+	</select>
+	
+	<select id="selectOTWMultiAssignDetail"  resultType="edu.ku.cete.domain.common.OperationalTestWindowMultiAssignDetail">
+		select contentareaid, numberoftests from operationaltestwindowmultiassigndetail where operationaltestwindowid = #{operationalTestWindowId} and contentareaid= #{contentAreaId} limit 1;
+	</select>
+
+	<resultMap type="edu.ku.cete.domain.common.OperationalTestWindow" id="operationalTestWindowState">
+		<result property="stateName" column="stateName"></result>
+		<result property="multipleStateId" column="multipleStateId"></result>
+	</resultMap>
+	
+	<select id="getOperationalTestWindowsMultipleState" resultMap="operationalTestWindowState">
+		select o.organizationname as stateName,o.id as multipleStateId from organization o
+		inner join usersorganizations uo on uo.organizationid = o.id 
+		inner join aartuser au on au.id = uo.aartuserid 
+		inner join orgassessmentprogram ua on  ua.organizationid = uo.organizationid and ua.activeflag is true
+		where organizationtypeid =(select id from organizationtype where typecode='ST')
+		and ua.activeflag='t' and uo.activeflag = true
+
+		<if test="assessmentProgramId != null" > 
+    			and ua.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+        </if>
+        <if test="userId != null" > 
+    			and uo.aartuserid = #{userId,jdbcType=BIGINT}
+    	</if> 
+	</select>
+		
+	<select id="getMultipleStateByUserIdAndAssessmentProgramId" resultMap="operationalTestWindowState">
+		select o.organizationname as stateName,o.id as multipleStateId from organization o
+		inner join usersorganizations uo on uo.organizationid = o.id 
+		inner join aartuser au on au.id = uo.aartuserid 
+		inner join orgassessmentprogram ua on  ua.organizationid = uo.organizationid and ua.activeflag is true
+		where organizationtypeid =(select id from organizationtype where typecode='ST')
+		and ua.activeflag='t' and uo.activeflag = true
+
+		<if test="assessmentProgramId != null" > 
+    			and ua.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+        </if>
+        <if test="userId != null" > 
+    			and uo.aartuserid = #{userId,jdbcType=BIGINT}
+    	</if> 
+    	ORDER BY stateName
+	</select>	
+	
+	<insert id="deleteOperTestWindowStateData"  parameterType="java.lang.Long">
+		
+		delete from operationaltestwindowstate where operationaltestwindowid = #{operationalWindowId}
+	</insert>
+	
+	<select id="getOperationalTestWindowsSelectedState" resultMap="operationalTestWindowState">
+		select otws.stateId as multipleStateId ,o.organizationname as stateName from operationaltestwindow otw
+		inner join operationaltestwindowstate otws on otws.operationaltestwindowid = otw.id
+		inner join organization o on o.id = otws.stateid 
+    		where otw.id = #{operationalTestWindowId,jdbcType=BIGINT}
+	</select>
+  
+  <select id="selectWindowsForBatchRegistration" resultType="OperationalTestWindow" parameterType="Long">
+  	select distinct otw.id, otw.windowName, otw.effectiveDate, otw.expiryDate
+		from operationaltestwindow otw
+		WHERE now() &lt;= otw.expirydate
+		<!-- and otw.suspendwindow=false -->
+		and otw.testenrollmentmethodid=#{testEnrollmentMethodId,jdbcType=BIGINT}
+		and otw.assessmentprogramid=#{assessmentProgramId,jdbcType=BIGINT}
+		order by otw.windowName
+  </select>
+  
+  <select id="selectEffectiveWindowsForBatchRegistration" resultType="OperationalTestWindow" parameterType="Long">
+  	select distinct otw.id, otw.windowName, otw.effectiveDate, otw.expiryDate
+		from operationaltestwindow otw
+		WHERE now() &lt;= otw.expirydate and now() &gt;= otw.effectivedate
+		<!-- and otw.suspendwindow=false -->
+		and otw.testenrollmentmethodid=#{testEnrollmentMethodId,jdbcType=BIGINT}
+		and otw.assessmentprogramid=#{assessmentProgramId,jdbcType=BIGINT}
+		order by otw.windowName
+  </select>
+  
+   <resultMap type="edu.ku.cete.domain.common.OperationalTestWindow" id="effectiveStateWindowsMap">
+		<result property="stateName" column="organizationname"></result>
+		<result property="multipleStateId" column="multipleStateId"></result>
+	</resultMap>
+  
+  <select id="selectEffectiveStateWindows" resultMap="effectiveStateWindowsMap" parameterType="Long">
+  	select distinct otw.id, otw.windowName, otw.effectiveDate, otw.expiryDate, otws.stateId as multipleStateId
+		from operationaltestwindow otw
+		inner join operationaltestwindowstate otws on otws.operationaltestwindowid = otw.id
+		WHERE now() &lt;= otw.expirydate and now() &gt;= otw.effectivedate
+		<!-- and otw.suspendwindow=false -->
+		and otw.testenrollmentmethodid=#{testEnrollmentMethodId,jdbcType=BIGINT}
+		and otw.assessmentprogramid=#{assessmentProgramId,jdbcType=BIGINT}
+		order by otw.windowName
+  </select>
+  
+	<resultMap type="edu.ku.cete.domain.common.OperationalTestWindow" id="operationalTestWindowTestEnrollmentMethod">
+		<result property="testEnrollmentMethodId" column="id"></result>
+		<result property="testEnrollmentMethodName" column="methodname"></result>
+	</resultMap>
+	
+	<select id="getOperationalTestWindowsTestEnrollmentMethod" resultMap="operationalTestWindowTestEnrollmentMethod">
+		select tem.id,tem.methodname from testenrollmentmethod tem 
+		INNER JOIN assessmentprogram ap ON ap.id = tem.assessmentprogramid 
+		where ap.activeflag='t' and tem.methodtype='TEM' 
+		and tem.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+	</select>
+	
+	<resultMap type="edu.ku.cete.domain.common.OperationalTestWindow" id="operationalTestWindowScoringWindowMethod">
+		<result property="scoringWindowMethodId" column="id"></result>
+		<result property="scoringWindowMethodName" column="methodname"></result>
+	</resultMap>
+	<select id="getOperationalTestWindowScoringWindowMethod" resultMap="operationalTestWindowScoringWindowMethod">
+		select tem.id,tem.methodname from testenrollmentmethod tem 
+		INNER JOIN assessmentprogram ap ON ap.id = tem.assessmentprogramid 
+		where ap.activeflag='t' and tem.methodtype='SAM' 
+		and tem.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+	</select>
+	
+	<resultMap id="TestStagesByWindowMap" type="edu.ku.cete.domain.DailyAccessCode">
+	    <result column="contentareaid" property="contentAreaId" jdbcType="BIGINT" />	    
+	    <result column="gradecourseid" property="gradeCourseId" jdbcType="BIGINT" />
+	    <result column="stagenumber" property="partNumber" jdbcType="INTEGER" />	
+	    <result column="stageid" property="stageId" jdbcType="BIGINT" />	    
+	    <result column="operationaltestwindowid" property="operationalTestwindowId" jdbcType="BIGINT" />
+	    <result column="effectivedate" property="beginDate" jdbcType="TIMESTAMP" />
+	    <result column="expirydate" property="endDate" jdbcType="TIMESTAMP" />
+	    <result column="gradebandid" property="gradeBandId" jdbcType="BIGINT" />
+	 </resultMap>
+	 
+	<select id="findDacTestStagesByWindow" resultMap="TestStagesByWindowMap">
+		select * from (select tc.contentareaid, tc.gradecourseid, stg.sortorder as stagenumber, tc.stageid, otwtc.operationaltestwindowid, otw.effectiveDate, otw.expiryDate
+			from operationaltestwindow otw
+				inner join operationaltestwindowstestcollections otwtc on otwtc.operationaltestwindowid=otw.id
+				inner join operationaltestwindowsessionrule otwsr on otwsr.operationaltestwindowid=otw.id
+				inner join testcollection tc on otwtc.testcollectionid=tc.id
+				inner join testcollectionstests tct on tct.testcollectionid=tc.id
+				inner join test t on t.id=tct.testid
+				inner join stage stg on stg.id=tc.stageid
+			where otw.id=#{operationalTestWindowId,jdbcType=BIGINT} 
+				and otwsr.activeflag is true and otwsr.sessionruleid = (select id from category where categorycode='DAILY_ACCESS_CODES') 
+				and t.activeflag is true and t.qccomplete is true
+				and t.status = (select id from category where categorycode='DEPLOYED')
+			union
+			select tc.contentareaid, gbgc.gradecourseid, stg.sortorder as stagenumber, tc.stageid, otwtc.operationaltestwindowid, otw.effectiveDate, otw.expiryDate
+			from operationaltestwindow otw
+				inner join operationaltestwindowstestcollections otwtc on otwtc.operationaltestwindowid=otw.id
+				inner join operationaltestwindowsessionrule otwsr on otwsr.operationaltestwindowid=otw.id
+				inner join testcollection tc on otwtc.testcollectionid=tc.id
+				inner join gradebandgradecourse gbgc on gbgc.gradebandid = tc.gradebandid
+				inner join testcollectionstests tct on tct.testcollectionid=tc.id
+				inner join test t on t.id=tct.testid
+				inner join stage stg on stg.id=tc.stageid
+			where otw.id=#{operationalTestWindowId,jdbcType=BIGINT} 
+				and otwsr.activeflag is true and otwsr.sessionruleid = (select id from category where categorycode='DAILY_ACCESS_CODES') 
+				and t.activeflag is true and t.qccomplete is true
+				and t.status = (select id from category where categorycode='DEPLOYED')) as a
+				where gradecourseid is not null
+			order by contentareaid, gradecourseid, stagenumber
+	</select>
+	
+	<select id="findDacTestStagesByGradeBand" resultMap="TestStagesByWindowMap">
+		select distinct
+		tc.contentareaid,
+		gb.id as gradebandid,
+		stg.sortorder as stagenumber,
+		tc.stageid,
+		otwtc.operationaltestwindowid,
+		otw.effectiveDate,
+		otw.expiryDate
+		from operationaltestwindow otw
+		inner join operationaltestwindowstestcollections otwtc on
+		otwtc.operationaltestwindowid=otw.id
+		inner join operationaltestwindowsessionrule otwsr on
+		otwsr.operationaltestwindowid=otw.id
+		inner join testcollection tc on
+		otwtc.testcollectionid=tc.id
+		inner join gradeband gb on gb.id =
+		tc.gradebandid
+		inner join testcollectionstests tct on
+		tct.testcollectionid=tc.id
+		inner join test t on t.id=tct.testid
+		inner
+		join stage stg on stg.id=tc.stageid
+		where
+		otw.id= #{operationalTestWindowId,jdbcType=BIGINT}
+		and otwsr.activeflag is true
+		and otwsr.sessionruleid = (select id from category where
+		categorycode='DAILY_ACCESS_CODES')
+		and t.activeflag is true
+		and t.qccomplete is true
+		and t.status = (select id from category where
+		categorycode='DEPLOYED')
+	</select>
+
+	<select id="selectOverlappingOperationalTestWindowAutoEnrollmentIds" resultType="edu.ku.cete.domain.common.OperationalTestWindow">
+		select distinct tem.methodname as testEnrollmentMethodName from operationaltestwindow otw 
+		join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid 
+		where ((effectivedate &gt;= #{beginTimeStamp} and effectivedate &lt;= #{endTimeStamp} )
+		or ( expirydate &gt;= #{beginTimeStamp} and expirydate &lt;= #{endTimeStamp}) 
+		or ( #{beginTimeStamp} &gt;= effectivedate and  #{beginTimeStamp} &lt;= expirydate ) 
+		or ( #{endTimeStamp} &gt;= effectivedate and #{endTimeStamp} &lt;= expirydate ) )
+		
+		<if test="windowId != null" > 
+    		and otw.id != #{windowId}
+    	</if>
+    	<if test="multiStateIds != null" > 
+    		and otw.id in ( select operationaltestwindowid from operationaltestwindowstate where stateid in
+	    	<foreach item="stateIds" index="index" collection="multiStateIds" open="(" separator="," close=")">
+	        	#{stateIds}
+	  		</foreach> 
+	  		)
+    	</if>
+		<if test="testEnrollmentId != null" > 
+    		and otw.testenrollmentmethodid = #{testEnrollmentId}
+    	</if>    	
+	</select>
+	
+	<select id="fetchOperationalTestWindowsByAssessmentProgram" resultType="OperationalTestWindow">
+  	SELECT distinct otw.*
+	FROM assessmentprogram ap
+        JOIN testingprogram tp ON ap.id = tp.assessmentprogramid
+        JOIN assessment ass ON tp.id = ass.testingprogramid
+        JOIN operationaltestwindow otw ON otw.assessmentprogramid = ap.id
+        JOIN testenrollmentmethod tem ON tem.id=otw.testenrollmentmethodid and tem.methodcode='MLTSTG'
+	WHERE otw.activeflag = true
+		<!-- AND otw.suspendwindow= false -->
+		AND ap.activeflag = true
+	  	AND tp.activeflag = true
+	  	AND ass.activeflag = true
+		AND ap.programname = #{assessmentProgramName}
+		AND tem.assessmentprogramid=ap.id
+		and otw.testenrollmentflag is true
+		order by otw.expirydate desc
+  </select>
+  <update id="suspendOperTestWindowByPrimaryKey" parameterType="OperationalTestWindow" >
+     UPDATE operationaltestwindow
+	    SET 
+	      	suspendWindow = #{suspendWindow,jdbcType=BOOLEAN},
+	      	modifiedUser = #{modifiedUser},
+	      	modifiedDate = #{modifiedDate,jdbcType=TIMESTAMP}
+	  
+	    WHERE id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getOpenInstructionAssessmentPlannerWindow" parameterType="map" resultMap="operationalTestWindowDTOMap">
+    SELECT DISTINCT
+      otw.id, otw.windowname, otw.effectivedate, otw.expirydate, otw.createduser, otw.createddate, otw.modifieduser, otw.modifieddate, otw.activeflag,
+      otw.suspendwindow, otw.assessmentprogramid, otw.instructionplannerwindow, otw.instructionplannerdisplayname
+      <if test="contentAreaId != null">
+      	, otwsd.directions as instructionplannerdirections
+      </if>
+    FROM operationaltestwindow otw
+    JOIN operationaltestwindowstate otws ON otw.id = otws.operationaltestwindowid AND otws.activeflag IS TRUE
+    JOIN organization o ON otws.stateid = o.id AND o.activeflag IS TRUE
+    JOIN operationaltestwindowstestcollections otwtc ON otw.id = otwtc.operationaltestwindowid AND otwtc.activeflag IS TRUE
+    JOIN testcollection tc ON otwtc.testcollectionid = tc.id
+    <if test="contentAreaId != null">
+    	JOIN contentarea ca ON tc.contentareaid = ca.id AND ca.id = #{contentAreaId,jdbcType=BIGINT}
+	    LEFT JOIN operationaltestwindowsubjectdirections otwsd
+	      ON otw.id = otwsd.operationaltestwindowid
+	      AND otwsd.contentareaid = ca.id
+	      AND o.pooltype = otwsd.pooltype
+	      AND otwsd.activeflag IS TRUE
+     </if>
+    WHERE otw.activeflag IS TRUE
+    <choose>
+      <when test="otwId != null">
+        AND otw.id = #{otwId,jdbcType=BIGINT}
+      </when>
+      <otherwise>
+        <!-- only get windows that are open -->
+        AND (now() BETWEEN otw.effectivedate AND otw.expirydate)
+      </otherwise>
+    </choose>
+    AND otw.instructionplannerwindow IS TRUE
+    AND otw.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+    AND otws.stateid = #{stateId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getStateIdsForOTWId" parameterType="Long" resultType="Long">
+    SELECT otws.stateid
+    FROM operationaltestwindowstate otws
+    WHERE otws.activeflag IS TRUE
+    AND otws.operationaltestwindowid = #{operationalTestWindowId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getLatestActiveOperationalTestWindowForStudentTracker" resultType="edu.ku.cete.domain.common.OperationalTestWindow">
+		select otw.*  
+	   	from organization o
+		inner join orgassessmentprogram oa on o.id = oa.organizationid
+		inner join assessmentprogram ap on oa.assessmentprogramid = ap.id
+		join operationaltestwindowstate otws on otws.stateid = o.id 
+		join operationaltestwindow otw on otw.id = otws.operationaltestwindowid
+		join testenrollmentmethod tem on tem.id = otw.testenrollmentmethodid
+		where contractingorganization is true and o.activeflag is true and ap.activeflag is true 
+		and ap.abbreviatedname like #{assessmentProgramCode,jdbcType=VARCHAR} and o.pooltype is not null
+		and o.id= #{stateId,jdbcType=BIGINT}
+		and otw.activeflag is true 
+		and otw.testenrollmentflag is true
+		and tem.methodcode = 'STDNTTRKR' order by otw.effectivedate desc limit 1;   	
+	</select>
+  
+  <select id="getPreviousInstructionPlannerWindowsByStateAssessmentProgramAndSchoolYear" parameterType="map" resultMap="operationalTestWindowDTOMap">
+    SELECT DISTINCT otw.id, otw.windowname, otw.effectivedate, otw.expirydate, otw.createduser, otw.createddate, otw.modifieduser, otw.modifieddate, otw.activeflag,
+      otw.suspendwindow, otw.assessmentprogramid
+    FROM operationaltestwindow otw
+    JOIN operationaltestwindowstate otws ON otw.id = otws.operationaltestwindowid AND otws.activeflag IS TRUE
+    JOIN testingcycle tc ON otw.id = tc.operationaltestwindowid AND tc.activeflag IS TRUE
+    WHERE otw.activeflag IS TRUE
+    AND otw.instructionplannerwindow IS TRUE
+    AND otw.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+    AND otws.stateid = #{stateId,jdbcType=BIGINT}
+    AND tc.schoolyear = #{schoolYear,jdbcType=BIGINT}
+    AND now() > otw.expirydate
+  </select>
+</mapper>

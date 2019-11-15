@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="edu.ku.cete.model.ScoringTestMetaDataMapper" >
+
+<insert id="insertScoringTestMetaData" parameterType="long">
+ 	INSERT INTO scoringtestmetadata(
+            testid, taskvariantid, testletid, positionintest, rubrictype, 
+            rubricminscore, rubricmaxscore, clusterscoring, createddate)            
+            (WITH main as (
+	    select row_number() over() as positionintest ,* from (select ts.testid, tv.id as taskvariantid,
+	      tstv.testsectionid,
+	      tstv.testletid,
+	      tstv.taskvariantposition,
+	      tv.rubricminscore,
+	      tv.rubricmaxscore,
+	      tv.rubrictype,
+	      tv.clusterscoring,
+	      tt.code,
+	      ts.sectionorder
+	  from testsection ts
+	  inner join testsectionstaskvariants tstv on tstv.testsectionid = ts.id
+	  inner join taskvariant tv on tv.id = tstv.taskvariantid
+	  inner join tasktype tt on tt.id = tv.tasktypeid
+	  where ts.testid =  #{testId}
+	  order by sectionorder,taskvariantposition
+	  ) testwithitem
+	 )
+	 select m.testid, m.taskvariantid, m.testletid, m.positionintest, m.rubrictype, 
+	 m.rubricminscore, m.rubricmaxscore, m.clusterscoring, now() as createddate  
+	 from main m where code in ('ER','UDI','UI'))
+</insert>
+
+<select id="countNoOfItemInScoringTestMetaData" resultType="Integer">
+	 select count(distinct taskvariantid) from scoringtestmetadata where testid = #{testId}
+</select>
+
+</mapper>

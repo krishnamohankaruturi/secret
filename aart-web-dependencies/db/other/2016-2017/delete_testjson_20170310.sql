@@ -1,0 +1,1 @@
+delete from testjson where testid in (78897,78759,78922,78842,78900);

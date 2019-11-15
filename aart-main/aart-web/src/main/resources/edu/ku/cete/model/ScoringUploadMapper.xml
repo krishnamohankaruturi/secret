@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.ScoringUploadMapper" >
+  	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.ScoringUploadFile" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="testid" property="testId" jdbcType="BIGINT" />
+	    <result column="filename" property="fileName" jdbcType="VARCHAR" />
+	    <result column="filepath" property="filePath" jdbcType="VARCHAR" />
+	    <result column="assessmentprogramid" property="assessmentProgramId" jdbcType="BIGINT" />
+	    <result column="headercolumn" property="headerColumn" jdbcType="VARCHAR" />
+	    <result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+	    <result column="createduser" property="createdUser" jdbcType="BIGINT" />
+	    <result column="activeflag" property="activeFlag" jdbcType="BIT" />
+  	</resultMap>
+  
+  
+	<insert id="insert" parameterType="edu.ku.cete.domain.ScoringUploadFile" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    
+    	INSERT INTO scoringuploadfile(
+			testid, filename, filepath, assessmentprogramid, headercolumn, 
+        	createddate, createduser, activeflag)
+    	VALUES (#{testId,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, #{assessmentProgramId,jdbcType=BIGINT}, #{headerColumn,jdbcType=CHAR}::json, 
+      	    #{createdDate,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=BIGINT}, #{activeFlag,jdbcType=BIT});
+	</insert>
+	
+	<sql id="Base_Column_List" >
+    	id, testid, filename, filepath, assessmentprogramid, headercolumn, 
+       createddate, createduser, activeflag
+  	 
+  	</sql>
+	
+	<select id="getScoringAssignmentUploadFile" resultMap="BaseResultMap" parameterType="String">
+    	SELECT 
+    	<include refid="Base_Column_List" />
+    	from scoringuploadfile
+    	where filename = #{fileName,jdbcType=VARCHAR} and activeflag is true limit 1
+  </select>
+	
+	<select id="getUplodFileDetails" resultMap="BaseResultMap" parameterType="long">
+    	SELECT 
+    	<include refid="Base_Column_List" />
+    	from scoringuploadfile
+    	where id = #{uploadFileId,jdbcType=VARCHAR}
+  </select>	
+</mapper>

@@ -1,0 +1,181 @@
+<% if(testlet.stimulusNeeded) {
+ 	if(testlet.layoutCode == 'passage_vertical_stacked') { %>
+		<div class="span1 test-passage span_pvertical_stacked">
+	<% } else if(testlet.layoutCode == 'passage_right') { %>
+		<div class="span2-right test-passage" style="float:right">
+	<% } else { %>
+		<div class="span2 test-passage">
+	<% } %>
+		<img id="guideHandle" src="/images/next-arrow.png">
+		<% var acks = new Array();
+			   var stimulus = _.map(_.sortBy(contextStimulus, function(stim) {
+										return stim.sortOrder;
+									}), function(stim) {
+									if(stim.srCack) {
+										acks.push(stim.srCack);
+									}
+									var compositeAcks =  _.flatten(_.filter(stim.compositeStimuli, function(stim) {
+			  												return stim.srCack != null;
+			  											}));
+			  						acks.push(compositeAcks)					
+			  						acks = _.flatten(acks);
+									return stim.text;
+								});
+		%>
+		<div class="passage"><% for(var i=0; i<stimulus.length; i++) { %><%=stimulus[i]%><% } %>
+			<% if(acks.length > 0) { %>
+				<div class="testlet-acks">
+					<ul>
+					<% for(var i=0; i<acks.length; i++) { %>
+						<li><%=acks[i]%></li>
+					<% } %>
+					</ul>
+				</div>
+			<% } %>
+		</div>
+		<div class="guidetopper" id="guideTop"></div>
+	</div><!-- /50% -->
+
+	<% if(testlet.layoutCode == 'passage_vertical_stacked') { %>
+		<div class="span1 last test-1 test-questions span_pvertical_stacked">
+	<% } else if(testlet.layoutCode == 'passage_right') { %>
+		<div class="span2-right last test-1 test-questions">
+	<% } else { %>
+		<div class="span2 last test-1 test-questions">
+	<% } %>
+<% } else { %>
+	<div class="span1 last test-1 test-questions">
+<% } %>
+	<div class="linksLine">
+		<%if(!viewAll){ %>
+    		<a id="view_one" class="activePassage" href="#"><%=message.testPage.viewOne%></a>
+			|
+    		<a id="view_all" href="#"><%=message.testPage.viewAll%></a>
+    	<% } else { %>
+    		<a id="view_one" href="#"><%=message.testPage.viewOne%></a>
+    		|
+    		<a id="view_all" class="activePassage" href="#"><%=message.testPage.viewAll%></a>
+    	<% } %>
+	</div>
+	<div class="all-qWrap">
+	<% var foilcounter = 0;
+	   for (tsk in taskgroup[group]) {
+	   var qNumber = taskgroup[group][tsk],
+              open = false;
+      
+       if (!viewAll) {
+          qNumber = qNum;
+       }
+            	
+       if (qNumber == qNum) {
+          open = true;
+       }
+       
+       var tmpAns;
+	   if(tasks[qNumber].taskType == 'MC-MS') {
+			try {
+				tmpAns = new Array();
+				var ans = response.values[qNumber];
+				if(ans!= null && ans!=undefined && ans!='[]') {
+					tmpAns = ans.replace(/\[|\]|\s/g,'').split(',');
+					tmpAns.forEach(function(item, i) {
+						tmpAns[i] = parseInt(tmpAns[i]);
+					});
+				}
+			} catch(e) {}
+							
+		}
+    %>
+		
+		<div class="q" data-qNum="<%=qNumber%>">
+			<div class="q-hdr">
+				<ul>
+					<li>
+						<% if((jQuery.inArray(parseInt(qNumber), markedReview) > 0)) { %>
+							<a href="#" class="mark-question mark-question-active">Mark for Review</a>
+						<% } else { %>
+							<a href="#" class="mark-question">Mark for Review</a>
+						<% } %>
+						<span>Flag for Review</span>
+					</li>
+					<li>
+						<% if(open == true) { %>
+							<a href="#" class="show-q-questions-active show-q-questions">Show</a>
+						<% } else { %>
+							<a href="#" class="show-q-questions">Show</a>
+						<% } %>
+					</li>
+				</ul>
+			</div><!-- /q-hdr -->
+		
+			<div class="q-question"><%=tasks[qNumber].question%></div><!-- /q1 -->
+		
+			<div class="foils q-answers">
+				<% if(open == true && tasks[qNumber].taskType == 'ER') { %>
+					<p>	
+						<textarea class="ckeditor response" cols="80" id="answer_<%= qNumber+'_0' %>" rows="10" tabindex="1" style="display: inline;" >
+							<% if (response && response.values && response.values[qNumber]!=null) { %>
+								<%= responses.values[qNumber] %>
+							<% } %>
+						</textarea>
+					</p>
+				<%} else if(open == true) { 
+						if(tasks[qNumber].taskType == 'MC-MS') {
+							task.iniTmpAnswer(tmpAns);
+						} %>
+						<ul>
+				<% } else if ( tasks[qNumber].taskType == 'ER' ) { %>
+					<p style="display:none;">	
+						<textarea class="ckeditor response" cols="80" id="answer_<%= qNumber+'_0' %>" rows="10" tabindex="1" style="display: none;" >
+							<% if (response && response.values && response.values[qNumber]!=null) { %>
+								<%= responses.values[qNumber] %>
+							<% } %>
+						</textarea>
+					</p>
+				<% } else { %>
+					<ul style="display:none;">
+				<% } %>
+				
+				<% 	if ( tasks[qNumber].taskType != 'ER' ) {
+						for (foil in tasks[qNumber].foils) {
+							var foilText = tasks[qNumber].foils[foil].text;
+							var html;
+							if(tasks[qNumber].taskType != 'MC-MS') {
+								html = new EJS({url: path+'/js/views/mc.ejs'}).render({qNum: qNumber, i:foil, response: response, showtick: showtick});
+							} else {
+								html = new EJS({url: path+'/js/views/ms.ejs'}).render({answers: tmpAns, qNum: qNumber, i:foil, task: tasks[qNumber], showtick: showtick});
+							} %>
+							<% var foilAudios = null;
+								if(spokenPref) {
+									foilAudios = _.map(_.sortBy(_.filter(tasks[qNumber]['foils'][foil].contentGroups, function(contentGroup) {
+																	return contentGroup.readAloudAccommodation != null && contentGroup.readAloudAccommodation.readAloudType.replace(" ","").toLowerCase() == spokenPref;
+																}), function(contentGroup) {
+															return contentGroup.readAloudAccommodation.defaultOrder;
+														}), function(contentGroup) {
+													return contentGroup.readAloudAccommodation.accessibilityFile.fileLocation;
+												});
+									foilAudios = JSON.stringify(foilAudios);
+								}
+							%>
+							<li>
+								<div class="tick ptick">
+									<%= html %>
+								</div>
+								<div class="foil pfoil tabable" tabindex="<%= foilcounter %>" data-audio='<%= foilAudios %>'><%= foilText %></div>
+							</li>
+							<% foilcounter++;
+					   	} %> 
+					  
+				    </ul>
+				<% } %>
+	 		</div>
+		
+		</div>
+	<% if (! viewAll) { 
+           	break;
+        }
+	} %> 
+	</div>
+	</div>
+	<!--<div class="buffer"></div>-->
+	

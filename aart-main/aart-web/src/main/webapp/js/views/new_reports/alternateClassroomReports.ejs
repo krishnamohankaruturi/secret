@@ -1,0 +1,43 @@
+<style>
+.classroom-Summary-reports-div{
+	height: 380px;
+	overflow-y: auto;
+	line-height: 16px;
+}
+
+</style>
+<div class="classroom-Summary-reports-div">
+ 	<%		
+	 	if(data!=null && data!=undefined && data.length > 0){
+	 %>
+	<div class="heading_left">
+		<span class="heading">Classroom Report File</span>
+	</div>
+	<br/><br/>
+	 <% 
+	 	for (var x = 0; x < data.length; x++) {
+	 	 	var pdfRecord = data[x];
+			var pdfRecordFileName = pdfRecord.detailedReportPath;		 
+			pdfRecordFileName = pdfRecordFileName.substring(pdfRecordFileName.lastIndexOf('/')+1);
+			
+	%>
+		<div id="#allClassSummaryDiv" class="allSchoolSummaryDiv"> 			
+			<% if(pdfRecord.detailedReportPath != null){
+				if(pdfRecord.csvDetailedReportPath != null){%>
+					<div class="itemDlmSummaryLinkText" ><%= pdfRecordFileName.substring(0, pdfRecordFileName.lastIndexOf('.')) %></div>				
+					<a href="getSchoolSummaryPdfReport.htm?id=<%=pdfRecord.id%>&reportyear=<%=pdfRecord.schoolYear%>&downloadType=pdf" class="itemDlmSummaryLink" title="pdf"><img src="images/pdf.png" style="height: 25px;width: 25px;"/></a>	
+					<a href="getSchoolSummaryPdfReport.htm?id=<%=pdfRecord.id%>&reportyear=<%=pdfRecord.schoolYear%>&downloadType=csv" title="CSV"><img src="images/icon-csv.png" style="height: 25px;width: 25px;"/></a>		
+				<%} else {%>
+					<a href="getSchoolSummaryPdfReport.htm?id=<%=pdfRecord.id%>&reportyear=<%=pdfRecord.schoolYear%>&downloadType=pdf" class="schSummaryBundledLink" title="<%= pdfRecordFileName %>"> <%= pdfRecordFileName %>
+					</a>
+				<%}%>	
+			<%}%>
+		</div>
+	<%}%>	
+	
+	<%}else{ %>
+		<div style="margin:0px;">
+			Report Not Available		
+	    </div>
+	<%}%>
+</div>

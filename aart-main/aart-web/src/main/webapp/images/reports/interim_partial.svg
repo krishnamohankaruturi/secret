@@ -1,0 +1,42 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10.8" height="10.741" viewBox="0 0 10.8 10.741">
+  <defs>
+    <style>
+      .cls-1, .cls-4 {
+        fill: none;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-3 {
+        fill: #42ac4a;
+      }
+
+      .cls-4 {
+        stroke: #42ac4a;
+        stroke-miterlimit: 10;
+        stroke-width: 0.884px;
+      }
+    </style>
+    <clipPath id="clip-path" transform="translate(-2.267 -1.454)">
+      <rect class="cls-1" x="2.267" y="1.453" width="10.8" height="10.742"/>
+    </clipPath>
+  </defs>
+  <title>partial</title>
+  <g id="Layer_5" data-name="Layer 5">
+    <g id="Layer_6" data-name="Layer 6">
+      <g>
+        <g class="cls-2">
+          <path class="cls-3" d="M12.624,6.796a4.957,4.957,0,0,1-9.914,0" transform="translate(-2.267 -1.454)"/>
+        </g>
+        <g class="cls-2">
+          <path class="cls-4" d="M12.624,6.796a4.957,4.957,0,0,1-9.914,0" transform="translate(-2.267 -1.454)"/>
+        </g>
+        <g class="cls-2">
+          <path class="cls-4" d="M2.709,6.854a4.958,4.958,0,1,1,9.916,0" transform="translate(-2.267 -1.454)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

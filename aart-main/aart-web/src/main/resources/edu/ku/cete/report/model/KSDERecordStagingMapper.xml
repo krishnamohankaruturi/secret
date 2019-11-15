@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.report.model.KSDERecordStagingMapper">
+  <resultMap id="KidsStagingResultMap" type="edu.ku.cete.ksde.kids.result.KSDERecord">
+    	<id column="id" jdbcType="BIGINT" property="id" />
+    	<result column="ksdexmlaudit_id" jdbcType="BIGINT" property="xmlAuditId" />
+    	<result column="sequence_order" jdbcType="BIGINT" property="seqNo" />
+    	<result column="notes"  jdbcType="VARCHAR" property="reason"/>
+		<result column="animal_systems_assess"  jdbcType="VARCHAR" property="animalSystemsAssessment"/>
+		<result column="attendance_bldg_no"  jdbcType="VARCHAR" property="attendanceSchoolProgramIdentifier"/>
+		<result column="ayp_qpa_bldg_no"  jdbcType="VARCHAR" property="aypSchoolIdentifier"/>
+		<result column="comprehensive_ag_assess"  jdbcType="VARCHAR" property="comprehensiveAgAssessment"/>
+		<result column="comprehensive_business_assess"  jdbcType="VARCHAR" property="comprehensiveBusinessAssessment"/>
+		<result column="comprehensive_race"  jdbcType="VARCHAR" property="comprehensiveRace"/>
+		<result column="create_date"  jdbcType="VARCHAR" property="createDate"/>
+		<result column="current_grade_level"  jdbcType="VARCHAR" property="currentGradeLevel"/>
+		<result column="current_school_year"  jdbcType="VARCHAR" property="currentSchoolYear"/>
+		<result column="design_preconstruction_assess"  jdbcType="VARCHAR" property="designPreConstructionAssessment"/>
+		<result column="district_entry_date"  jdbcType="VARCHAR" property="districtEntryDate"/>
+		<result column="elpa21_assess"  jdbcType="VARCHAR" property="elpa21Assessment"/>
+		<result column="esol_participation_code"  jdbcType="VARCHAR" property="esolParticipationCode"/>
+		<result column="finance_assess"  jdbcType="VARCHAR" property="financeAssessment"/>
+		<result column="gender"  jdbcType="VARCHAR" property="gender"/>
+		<result column="general_cte_assess"  jdbcType="VARCHAR" property="generalCTEAssessment"/>
+		<result column="generation_code"  jdbcType="VARCHAR" property="generationCode"/>
+		<result column="grouping_animal_systems"  jdbcType="VARCHAR" property="groupingAnimalSystems"/>
+		<result column="grouping_comprehensive_ag"  jdbcType="VARCHAR" property="groupingComprehensiveAg"/>
+		<result column="grouping_comprehensive_business"  jdbcType="VARCHAR" property="groupingComprehensiveBusiness"/>
+		<result column="grouping_design_preconstruction"  jdbcType="VARCHAR" property="groupingDesignPreConstruction"/>
+		<result column="grouping_finance"  jdbcType="VARCHAR" property="groupingFinance"/>
+		<result column="grouping_cte_1"  jdbcType="VARCHAR" property="groupingInd1CTE"/>
+		<result column="grouping_reading_1"  jdbcType="VARCHAR" property="groupingInd1ELA"/>
+		<result column="grouping_elpa21_1"  jdbcType="VARCHAR" property="groupingInd1Elpa21"/>
+		<result column="grouping_history_1"  jdbcType="VARCHAR" property="groupingInd1HistGov"/>
+		<result column="grouping_math_1"  jdbcType="VARCHAR" property="groupingInd1Math"/>
+		<result column="grouping_science_1"  jdbcType="VARCHAR" property="groupingInd1Sci"/>
+		<result column="grouping_cte_2"  jdbcType="VARCHAR" property="groupingInd2CTE"/>
+		<result column="grouping_reading_2"  jdbcType="VARCHAR" property="groupingInd2ELA"/>
+		<result column="grouping_elpa21_2"  jdbcType="VARCHAR" property="groupingInd2Elpa21"/>
+		<result column="grouping_history_2"  jdbcType="VARCHAR" property="groupingInd2HistGov"/>
+		<result column="grouping_math_2"  jdbcType="VARCHAR" property="groupingInd2Math"/>
+		<result column="grouping_science_2"  jdbcType="VARCHAR" property="groupingInd2Sci"/>
+		<result column="grouping_manufacturing_prod"  jdbcType="VARCHAR" property="groupingManufacturingProd"/>
+		<result column="grouping_plant_systems"  jdbcType="VARCHAR" property="groupingPlantSystems"/>
+		<result column="hispanic_ethnicity"  jdbcType="VARCHAR" property="hispanicEthnicity"/>
+		<result column="legal_first_name"  jdbcType="VARCHAR" property="legalFirstName"/>
+		<result column="legal_last_name"  jdbcType="VARCHAR" property="legalLastName"/>
+		<result column="legal_middle_name"  jdbcType="VARCHAR" property="legalMiddleName"/>
+		<result column="manufacturing_prod_assess"  jdbcType="VARCHAR" property="manufacturingProdAssessment"/>
+		<result column="plant_systems_assess"  jdbcType="VARCHAR" property="plantSystemsAssessment"/>
+		<result column="primary_exceptionality_code"  jdbcType="VARCHAR" property="primaryDisabilityCode"/>
+		<result column="record_common_id"  jdbcType="VARCHAR" property="recordCommonId"/>
+		<result column="record_type"  jdbcType="VARCHAR" property="recordType"/>
+		<result column="school_entry_date"  jdbcType="VARCHAR" property="schoolEntryDate"/>
+		<result column="secondary_exceptionality_code"  jdbcType="VARCHAR" property="giftedCode"/>
+		<result column="state_ela_assess"  jdbcType="VARCHAR" property="stateELAAssessment"/>
+		<result column="state_entry_date"  jdbcType="VARCHAR" property="stateEntryDate"/>
+		<result column="state_hist_gov_assess"  jdbcType="VARCHAR" property="stateHistGovAssessment"/>
+		<result column="state_math_assess"  jdbcType="VARCHAR" property="stateMathAssess"/>
+		<result column="state_science_assess"  jdbcType="VARCHAR" property="stateSciAssessment"/>
+		<result column="state_student_identifier"  jdbcType="VARCHAR" property="stateStudentIdentifier"/>
+		<result column="av_communications_assess"  jdbcType="VARCHAR" property="avCommunicationsAssessment"/>
+		<result column="grouping_av_communications"  jdbcType="VARCHAR" property="groupingAvCommunications"/>
+		<result column="elpa_proctor_id"  jdbcType="VARCHAR" property="elpaProctorId"/>
+		<result column="elpa_proctor_first_name"  jdbcType="VARCHAR" property="elpaProctorFirstName"/>
+		<result column="elpa_proctor_last_name"  jdbcType="VARCHAR" property="elpaProctorLastName"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="emailsent" jdbcType="BIT" property="emailSent"/>
+		<result column="emailsentto" jdbcType="VARCHAR" property="emailSentTo"/>
+		<result column="triggeremail" jdbcType="BIT" property="triggerEmail"/>
+		<result column="exit_withdrawal_type" jdbcType="VARCHAR" property="exitWithdrawalType"/>
+		<result column="exit_withdrawal_date" jdbcType="VARCHAR" property="exitWithdrawalDate"/>
+		<result column="birth_date" jdbcType="VARCHAR" property="dateOfBirth"/>
+		<result column="emailtemplateids" jdbcType="VARCHAR" property="emailTemplateIds"/>
+		<result column="emailsentdate" jdbcType="TIMESTAMP" property="emailSentDate"/>
+		<result column="state_history_proctor_id"  jdbcType="VARCHAR" property="historyGovProctorId"/>
+		<result column="state_history_proctor_first_name"  jdbcType="VARCHAR" property="historyGovProctorFirstName"/>
+		<result column="state_history_proctor_last_name"  jdbcType="VARCHAR" property="historyGovProctorLastName"/>
+		
+  </resultMap>
+ 
+  <sql id="Kid_Staging_Column_List">
+    ksdexmlaudit_id, sequence_order, attendance_bldg_no,animal_systems_assess,ayp_qpa_bldg_no,comprehensive_ag_assess,comprehensive_business_assess,
+    comprehensive_race,create_date,current_grade_level,current_school_year,design_preconstruction_assess,district_entry_date,elpa21_assess,esol_participation_code,
+    finance_assess,gender,general_cte_assess,generation_code,grouping_animal_systems,grouping_comprehensive_ag,grouping_comprehensive_business,grouping_design_preconstruction,
+    grouping_finance,grouping_cte_1,grouping_reading_1,grouping_elpa21_1,grouping_history_1,grouping_math_1,grouping_science_1,grouping_cte_2,grouping_reading_2,
+    grouping_elpa21_2,grouping_history_2,grouping_math_2,grouping_science_2,grouping_manufacturing_prod,grouping_plant_systems,hispanic_ethnicity,legal_first_name,
+    legal_last_name,legal_middle_name,manufacturing_prod_assess,plant_systems_assess,primary_exceptionality_code,record_common_id,record_type,school_entry_date,secondary_exceptionality_code,
+    state_ela_assess,state_entry_date,state_hist_gov_assess,state_math_assess,state_science_assess,state_student_identifier, av_communications_assess,grouping_av_communications,
+	elpa_proctor_id,elpa_proctor_first_name,elpa_proctor_last_name, exit_withdrawal_type,exit_withdrawal_date,
+	notes,emailsent, emailsentTo, status, triggeremail, birth_date, emailtemplateids, state_history_proctor_id, state_history_proctor_first_name, state_history_proctor_last_name
+    
+  </sql>
+  
+  <select id="getKidStagingRecord" resultMap="KidsStagingResultMap">
+    select distinct id,
+    	<include refid="Kid_Staging_Column_List" />
+    from kids_record_staging
+	    <if test="ksdeXmlAuditId != null and seqNo != null">
+			where ksdexmlaudit_id = #{ksdeXmlAuditId} and sequence_order = #{seqNo}
+	    </if>	
+     order by sequence_order
+  </select>
+
+  <insert id="insertKidStaging" parameterType="edu.ku.cete.ksde.kids.result.KSDERecord" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+
+    insert into kids_record_staging (<include refid="Kid_Staging_Column_List" />)
+    values (#{xmlAuditId,jdbcType=BIGINT},#{seqNo,jdbcType=BIGINT}, #{attendanceSchoolProgramIdentifier,jdbcType=VARCHAR},#{animalSystemsAssessment,jdbcType=VARCHAR},
+    #{aypSchoolIdentifier,jdbcType=VARCHAR},#{comprehensiveAgAssessment,jdbcType=VARCHAR},#{comprehensiveBusinessAssessment,jdbcType=VARCHAR},
+    #{comprehensiveRace,jdbcType=VARCHAR},#{createDate,jdbcType=VARCHAR},#{currentGradeLevel,jdbcType=VARCHAR},#{currentSchoolYear,jdbcType=VARCHAR},#{designPreConstructionAssessment,jdbcType=VARCHAR},
+    #{districtEntryDate,jdbcType=VARCHAR},#{elpa21Assessment,jdbcType=VARCHAR},#{esolParticipationCode,jdbcType=VARCHAR},#{financeAssessment,jdbcType=VARCHAR},
+    #{gender,jdbcType=VARCHAR},#{generalCTEAssessment,jdbcType=VARCHAR},#{generationCode,jdbcType=VARCHAR},#{groupingAnimalSystems,jdbcType=VARCHAR},#{groupingComprehensiveAg,jdbcType=VARCHAR},
+    #{groupingComprehensiveBusiness,jdbcType=VARCHAR},#{groupingDesignPreConstruction,jdbcType=VARCHAR},#{groupingFinance,jdbcType=VARCHAR},#{groupingInd1CTE,jdbcType=VARCHAR},#{groupingInd1ELA,jdbcType=VARCHAR},
+    #{groupingInd1Elpa21,jdbcType=VARCHAR},#{groupingInd1HistGov,jdbcType=VARCHAR},#{groupingInd1Math,jdbcType=VARCHAR},#{groupingInd1Sci,jdbcType=VARCHAR},#{groupingInd2CTE,jdbcType=VARCHAR},
+    #{groupingInd2ELA,jdbcType=VARCHAR},#{groupingInd2Elpa21,jdbcType=VARCHAR},#{groupingInd2HistGov,jdbcType=VARCHAR},#{groupingInd2Math,jdbcType=VARCHAR},#{groupingInd2Sci,jdbcType=VARCHAR},
+    #{groupingManufacturingProd,jdbcType=VARCHAR},#{groupingPlantSystems,jdbcType=VARCHAR},#{hispanicEthnicity,jdbcType=VARCHAR},#{legalFirstName,jdbcType=VARCHAR},#{legalLastName,jdbcType=VARCHAR},
+    #{legalMiddleName,jdbcType=VARCHAR},#{manufacturingProdAssessment,jdbcType=VARCHAR},#{plantSystemsAssessment,jdbcType=VARCHAR},#{primaryDisabilityCode,jdbcType=VARCHAR},#{recordCommonId,jdbcType=VARCHAR},
+    #{recordType,jdbcType=VARCHAR},#{schoolEntryDate,jdbcType=VARCHAR},#{giftedCode,jdbcType=VARCHAR},#{stateELAAssessment,jdbcType=VARCHAR},#{stateEntryDate,jdbcType=VARCHAR},
+    #{stateHistGovAssessment,jdbcType=VARCHAR},#{stateMathAssess,jdbcType=VARCHAR},#{stateSciAssessment,jdbcType=VARCHAR},#{stateStudentIdentifier,jdbcType=VARCHAR}, #{avCommunicationsAssessment,jdbcType=VARCHAR},
+    #{groupingAvCommunications,jdbcType=VARCHAR},#{elpaProctorId,jdbcType=VARCHAR},#{elpaProctorFirstName,jdbcType=VARCHAR},#{elpaProctorLastName,jdbcType=VARCHAR},#{exitWithdrawalType,jdbcType=VARCHAR},#{exitWithdrawalDate,jdbcType=VARCHAR},
+    #{reason,jdbcType=VARCHAR}, #{emailSent}, #{emailSentTo}, #{status}, #{triggerEmail},#{dateOfBirth}, #{emailTemplateIds},
+    #{historyGovProctorId,jdbcType=VARCHAR},#{historyGovProctorFirstName,jdbcType=VARCHAR},#{historyGovProctorLastName,jdbcType=VARCHAR})
+ 
+ </insert>
+
+  <!-- TASC staging -->
+  <resultMap id="TascStagingResultMap" type="edu.ku.cete.ksde.kids.result.KSDERecord">
+    	<id column="id" jdbcType="BIGINT" property="id" />
+    	<result column="ksdexmlaudit_id" jdbcType="BIGINT" property="xmlAuditId" />
+    	<result column="sequence_order" jdbcType="BIGINT" property="seqNo" />
+    	<result column="notes"  jdbcType="VARCHAR" property="reason"/>
+		<result column="attendance_bldg_no" jdbcType="VARCHAR" property="attendanceSchoolProgramIdentifier"/>
+		<result column="ayp_qpa_bldg_no" jdbcType="VARCHAR" property="aypSchoolIdentifier"/>
+		<result column="birth_date" jdbcType="VARCHAR" property="dateOfBirth"/>
+		<result column="course_status" jdbcType="VARCHAR" property="courseStatus"/>
+		<result column="create_date" jdbcType="VARCHAR" property="createDate"/>
+		<result column="current_grade_level" jdbcType="VARCHAR" property="currentGradeLevel"/>
+		<result column="current_school_year" jdbcType="VARCHAR" property="currentSchoolYear"/>
+		<result column="district_entry_date" jdbcType="VARCHAR" property="districtEntryDate"/>
+		<result column="student_gender" jdbcType="VARCHAR" property="gender"/>
+		<result column="student_generation_code" jdbcType="VARCHAR" property="generationCode"/>
+		<result column="hispanic_ethnicity" jdbcType="VARCHAR" property="hispanicEthnicity"/>
+		<result column="student_legal_last_name" jdbcType="VARCHAR" property="legalFirstName"/>
+		<result column="student_legal_first_name" jdbcType="VARCHAR" property="legalLastName"/>
+		<result column="student_legal_middle_name" jdbcType="VARCHAR" property="legalMiddleName"/>
+		<result column="local_course_id" jdbcType="VARCHAR" property="tascLocalCourseId"/>
+		<result column="record_common_id" jdbcType="VARCHAR" property="recordCommonId"/>
+		<result column="record_type" jdbcType="VARCHAR" property="recordType"/>
+		<result column="school_entry_date" jdbcType="VARCHAR" property="schoolEntryDate"/>
+		<result column="state_entry_date" jdbcType="VARCHAR" property="stateEntryDate"/>
+		<result column="state_student_identifier" jdbcType="VARCHAR" property="stateStudentIdentifier"/>
+		<result column="state_subj_area_code" jdbcType="VARCHAR" property="tascStateSubjectAreaCode"/>
+		<result column="teacher_identifier" jdbcType="VARCHAR" property="tascEducatorIdentifier"/>
+		<result column="teacher_last_name" jdbcType="VARCHAR" property="teacherLastName"/>
+		<result column="teacher_first_name" jdbcType="VARCHAR" property="teacherFirstName"/>
+		<result column="teacher_middle_name" jdbcType="VARCHAR" property="teacherMiddleName"/>
+		<result column="teacher_district_email" jdbcType="VARCHAR" property="educatorEmailId"/>
+		<result column="educator_bldg_no" jdbcType="VARCHAR" property="educatorSchoolId"/>
+		<result column="status" jdbcType="VARCHAR" property="status"/>
+		<result column="emailsent" jdbcType="BIT" property="emailSent"/>
+		<result column="emailsentto" jdbcType="VARCHAR" property="emailSentTo"/>
+		<result column="triggeremail" jdbcType="BIT" property="triggerEmail"/>
+		<result column="emailtemplateids" jdbcType="VARCHAR" property="emailTemplateIds"/>
+		
+  </resultMap>
+ 
+  <resultMap type="edu.ku.cete.ksde.kids.result.KSDERecord" id="kidsRecordDetails">
+  	<result column="processeddate" property="processedDate"/>
+  	<association property="kidsRecord" javaType="edu.ku.cete.ksde.kids.result.KSDERecord" resultMap="KidsStagingResultMap" />
+  </resultMap>
+  
+  <resultMap type="edu.ku.cete.ksde.kids.result.KSDERecord" id="tascRecordDetails">
+  	<result column="processeddate" property="processedDate"/>
+  	<association property="kidsRecord" javaType="edu.ku.cete.ksde.kids.result.KSDERecord" resultMap="TascStagingResultMap" />
+  </resultMap>
+ 
+  <sql id="Tasc_Staging_Column_List">
+    ksdexmlaudit_id, sequence_order, attendance_bldg_no,ayp_qpa_bldg_no,birth_date,course_status,create_date,current_grade_level,current_school_year,district_entry_date,
+    student_gender,student_generation_code,hispanic_ethnicity,student_legal_last_name,student_legal_first_name,student_legal_middle_name,local_course_id,record_common_id,
+    record_type,school_entry_date,state_entry_date,state_student_identifier,state_subj_area_code,teacher_identifier,teacher_first_name,teacher_last_name,teacher_middle_name,
+    teacher_district_email,educator_bldg_no, notes, emailsent, emailsentTo, status, triggeremail, emailtemplateids
+  </sql>
+  
+  <select id="getTascStagingRecord" resultMap="TascStagingResultMap">
+    select distinct id,
+    	<include refid="Tasc_Staging_Column_List" />
+    from tasc_record_staging
+	    <if test="ksdeXmlAuditId != null and seqNo != null">
+			where ksdexmlaudit_id = #{ksdeXmlAuditId} and sequence_order = #{seqNo}
+	    </if>	
+     order by sequence_order
+  </select>
+
+  <insert id="insertTascStaging" parameterType="edu.ku.cete.ksde.kids.result.KSDERecord" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+
+    insert into tasc_record_staging (<include refid="Tasc_Staging_Column_List" />)
+    values (#{xmlAuditId,jdbcType=BIGINT},#{seqNo,jdbcType=BIGINT}, #{attendanceSchoolProgramIdentifier},#{aypSchoolIdentifier},#{dateOfBirth},#{courseStatus},
+    #{createDate},#{currentGradeLevel},#{currentSchoolYear},#{districtEntryDate},#{gender},#{generationCode},#{hispanicEthnicity},
+    #{legalLastName},#{legalFirstName},#{legalMiddleName},#{tascLocalCourseId},#{recordCommonId},#{recordType},#{schoolEntryDate},#{stateEntryDate},
+    #{stateStudentIdentifier},#{tascStateSubjectAreaCode},#{tascEducatorIdentifier},#{teacherFirstName},#{teacherLastName},#{teacherMiddleName},#{educatorEmailId},
+    #{educatorSchoolId},
+    #{reason,jdbcType=VARCHAR}, #{emailSent}, #{emailSentTo}, #{status}, #{triggerEmail}, #{emailTemplateIds} )
+ 
+ </insert>
+  
+  
+ <select id="getKidsStagingRecords" resultMap="KidsStagingResultMap">
+    select kaudit.processeddate, kids.*
+	from ksdexmlaudit kaudit
+	join kids_record_staging kids on kids.ksdexmlaudit_id = kaudit.id
+	where kaudit.processedcode = 'COMPLETED'
+	<if test="kidsEmailDate != null">
+		and (kaudit.processeddate AT TIME ZONE 'US/Central')::date = #{kidsEmailDate,jdbcType=TIMESTAMP} <!--compare processeddate against kidsEmailSchedulerDate per Kansas date -->
+	</if>
+	and (kids.triggeremail is true and kids.emailsent is false)
+	order by kaudit.processeddate,kids.ksdexmlaudit_id, kids.sequence_order asc
+ </select>
+ 
+  <select id="getTASCStagingRecords" resultMap="TascStagingResultMap">
+    select kaudit.processeddate, tasc.*
+	from ksdexmlaudit kaudit
+	join tasc_record_staging tasc on tasc.ksdexmlaudit_id = kaudit.id
+	where kaudit.processedcode = 'COMPLETED'
+	<if test="kidsEmailDate != null">
+		and (kaudit.processeddate AT TIME ZONE 'US/Central')::date = #{kidsEmailDate,jdbcType=TIMESTAMP} <!--compare processeddate against kidsEmailSchedulerDate per Kansas date -->
+	</if>
+	and (tasc.triggeremail is true and tasc.emailSent is false)
+	order by kaudit.processeddate, tasc.ksdexmlaudit_id, tasc.sequence_order asc
+ </select> 
+ 
+  <update id="updateKIDSEmailStatus" parameterType="edu.ku.cete.ksde.kids.result.KSDERecord">
+    update kids_record_staging
+    <set>
+      <if test="emailSent != null">
+        emailsent = #{emailSent,jdbcType=BIT},
+      </if>
+      <if test="emailSentDate != null">
+        emailsentdate = #{emailSentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emailSentTo != null">
+      	emailsentto = #{emailSentTo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateTASCEmailStatus" parameterType="edu.ku.cete.ksde.kids.result.KSDERecord">
+    update tasc_record_staging
+    <set>
+      <if test="emailSent != null">
+        emailsent = #{emailSent,jdbcType=BIT},
+      </if>
+      <if test="emailSentDate != null">
+        emailsentdate = #{emailSentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emailSentTo != null">
+      	emailsentto = #{emailSentTo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>
+

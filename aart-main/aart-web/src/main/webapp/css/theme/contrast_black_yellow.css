@@ -1,0 +1,846 @@
+/* White background, black text */
+body.black_yellow {
+	background: url(/images/pagebg2.jpg);
+	color: yellow;
+}
+
+.black_yellow h1, .black_yellow h2, .black_yellow h3,.black_yellow h4,.black_yellow h5,.black_yellow h6 {
+	color: #333;
+}
+
+.black_yellow h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.black_yellow #container {
+	background: #fff;
+	border: 1px solid #999;
+	box-shadow: 4px 4px 12px #888888;
+	background: -webkit-gradient(linear, left bottom, left top, from(#cecece),
+		to(#FFFFFF) );
+	background-image: -moz-linear-gradient(bottom, #cecece 0%, #FFFFFF 30%);
+}
+
+.black_yellow #container_login {
+	background: #fff;
+	border: 1px solid #999;
+	box-shadow: 4px 4px 12px #888888;
+	background: -webkit-gradient(linear, left bottom, left top, from(#cecece),
+		to(#FFFFFF) );
+	background-image: -moz-linear-gradient(bottom, #cecece 0%, #FFFFFF 30%);
+}
+
+.black_yellow .loginContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.black_yellow .loginContent input {
+	border: 1px solid #333;
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#d6d6d6),
+		to(#fff) );
+	background: -moz-linear-gradient(top, #d6d6d6, #fff);
+	box-shadow: 2px 2px 5px #333333;
+}
+
+.black_yellow .button {
+	border: 1px solid #666;
+	background: #6f89b8;
+	background: -webkit-gradient(linear, left top, left bottom, from(#b0c0da),
+		to(#6f89b8) );
+	background: -moz-linear-gradient(top, #b0c0da, #6f89b8);
+	color: #fff;
+	text-shadow: #000 1px 1px 1px;
+	box-shadow: 2px 2px 5px #333333;
+}
+
+.black_yellow .button:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#6f89b8),
+		to(#b0c0da) );
+	background: -moz-linear-gradient(top, #6f89b8, #b0c0da);
+}
+
+.black_yellow hr {
+	color: #0d4272;
+	background: #0d4272;
+}
+
+.black_yellow a {
+	color: #333;
+}
+
+.black_yellow .active {
+	background: #9ac1ec;
+	color: #333;
+}
+
+.black_yellow .error {
+	color: #ff0000;
+}
+
+/* ************************* 
+Top Nav
+************************* */
+.black_yellow .topPassageNav a {
+	border-left: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+}
+
+.black_yellow .topPassageNav a:hover {
+	background: #9ac1ec;
+	color: #333;
+}
+
+/* ************************* 
+Pagination 
+************************* */
+.black_yellow .pagesWrap {
+	border: 1px solid #b5b5b5;
+	background: url(/images/paginateBG.jpg) repeat-x
+}
+
+.black_yellow .pagesWrap a {
+	border-left: 1px solid #fff;
+	border-right: 1px solid #b5b5b5;
+}
+
+.black_yellow .pagesWrap a:hover {
+	background: #9ac1ec;
+}
+
+.black_yellow .paginateAnswered {
+	background: #e0ffd6
+}
+
+.black_yellow .paginateReview {
+	background: #fee1a3
+}
+
+.black_yellow .pageBack {
+	background: url(/images/paginate_Arrows.png) left top no-repeat;
+}
+
+.black_yellow .pageBack:hover {
+	background: url(/images/paginate_Arrows.png) left bottom no-repeat;
+}
+
+.black_yellow .pageNext {
+	background: url(/images/paginate_Arrows.png) right top no-repeat;
+}
+
+.black_yellow .pageNext:hover {
+	background: url(/images/paginate_Arrows.png) right bottom no-repeat;
+}
+
+/* ************************* 
+Tool Bars
+************************* */
+.black_yellow #toolbar_tools a{
+	-moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	box-shadow: inset 0px 1px 0px 0px #ffffff;
+	background-color: #ededed;
+	border: 1px solid #dcdcdc;
+	color: #777777;
+	text-shadow: 1px 1px 0px #ffffff;
+	background-image: url('/images/icons/tools/tde-icons.svg');
+	background-size: 20em 1em;
+	background-origin: content-box;
+	background-color:#EDEDED;
+	display: block;
+	width:1em;
+	height:1em;			
+}
+
+.black_yellow #toolbar_tools a:hover {
+	background-color: #dfdfdf;
+}
+
+.black_yellow #toolbar_tools .selected {
+	background-color: #9ac1ec;
+}
+
+.black_yellow .closebutton {
+	border: 1px solid #CCC;
+	background: #E0E0E0;
+	background: -webkit-gradient(linear, left bottom, left top, from(#cecece),
+		to(#FFFFFF) );
+	background-image: -moz-linear-gradient(bottom, #cecece 0%, #FFFFFF 90%);
+}
+
+.black_yellow .closebutton:hover {
+	background: #e6e6e6;
+}
+
+.black_yellow .toolButton {
+	border: 1px solid #b4b4b4;
+}
+
+.black_yellow .toolButton:hover {
+	background: #fff
+}
+
+/* ************************* 
+Viewports
+************************* */
+.black_yellow .notice {
+	border: 1px solid #000;
+	background: #ffffcc;
+}
+
+.black_yellow .viewPort {
+	background: #9ac1ec;
+	box-shadow: inset 4px 4px 12px #666;
+}
+
+.black_yellow .viewportPortable {
+	background: #9ac1ec;
+	border: 1px solid #fff;
+	box-shadow: inset 4px 4px 12px #666;
+}
+
+.black_yellow .viewportPortable h2 {
+	color: #0d4272;
+}
+
+.black_yellow .viewportPortable2 {
+	background: #9ac1ec;
+	border: 1px solid #fff;
+	box-shadow: inset 4px 4px 12px #666;
+}
+
+.black_yellow .directionsContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+/* ************************* 
+Testing Port
+************************* */
+.black_yellow .testingPort {
+	border: 1px solid #fff;
+}
+
+.black_yellow .testingPort h2 {
+	color: #0d5db6;
+}
+
+.black_yellow #passageText {
+	border: 1px solid #ccc;
+	background: black;
+}
+
+.black_yellow #passageText h3,.black_yellow #passageText h5 {
+	color: #457ab0;
+}
+
+/* ************************* 
+Section Tabs
+************************* */
+.black_yellow #sectionTabs a {
+	background: #e9e9e9;
+	border: 1px solid #ccc;
+}
+
+.black_yellow #sectionTabs a:hover {
+	background: #9ac1ec;
+	color: #333;
+}
+
+/* ************************* 
+Question Col Head
+************************* */
+
+.black_yellow #questionArrowBack {
+	background: url(/images/questionsArrows.png) no-repeat left top;
+}
+
+.black_yellow #questionArrowNext {
+	background: url(/images/questionsArrows.png) no-repeat right top;
+}
+
+.black_yellow #questionArrowBack:hover {
+	background: url(/images/questionsArrows.png) no-repeat left bottom;
+}
+
+.black_yellow #questionArrowNext:hover {
+	background: url(/images/questionsArrows.png) no-repeat right bottom;
+}
+
+/* Question Layout classes */
+
+/* 
+ * Test complete confirmation. 
+ */
+.black_yellow #confirmEnd, .black_yellow #confirmDeleteNote, .black_yellow #maskWarn, .black_yellow #navigationAlert {
+	background: #000000;
+	border: 2px solid #333;
+}
+
+.black_yellow #backgroundMask {
+	border: 1px solid #333;
+}
+
+/* ************************* 
+Question Col Questions
+************************* */
+.black_yellow .questionBox {
+	background: black;
+	border: 1px solid #ccc
+}
+
+.black_yellow .questionBoxHead {
+	border-bottom: 1px solid #999;
+	background: url(/images/paginateBG.jpg) repeat-x;
+	color: #457ab0;
+}
+
+.black_yellow .review {
+	background: #fee1a3;
+	border: 1px solid #999;
+	color: #857658;
+}
+
+.black_yellow .expandArea {
+	background: #CCC;
+	border: 1px solid #dbdbdb;
+	background: -webkit-gradient(linear, left top, left bottom, from(#c4c4c4),
+		to(#fff) );
+	background: -moz-linear-gradient(top, #c4c4c4, #fff);
+}
+
+.black_yellow .expandArea:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#c4c4c4) );
+	background: -moz-linear-gradient(top, #fff, #c4c4c4);
+}
+
+.black_yellow .questionBox h4 {
+	color: #457ab0;
+}
+
+.black_yellow .questionAnswers label,.black_yellow .questionAnswers span.foil {
+	color: yellow;
+}
+
+.black_yellow .accordionContent {
+	background: black;
+	border: 1px solid #ccc;
+}
+
+.black_yellow .footer a {
+	color: #0f4379;
+	text-shadow: #fff 1px 1px 1px;
+}
+
+.black_yellow .backButton {
+	background: #d8d8d8; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#d8d8d8),
+		to(#eeeeee) );
+	background-image: -moz-linear-gradient(bottom, #d8d8d8 0%, #eeeeee 30%);
+	border: 1px solid #efefef;
+	box-shadow: 2px 2px 4px #999;
+}
+
+.black_yellow .backButton:hover {
+	background: #eeeeee; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#eeeeee),
+		to(#d8d8d8) );
+	background-image: -moz-linear-gradient(bottom, #eeeeee 0%, #d8d8d8 30%);
+}
+
+.black_yellow .nextButton {
+	background: #d8d8d8; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#d8d8d8),
+		to(#eeeeee) );
+	background-image: -moz-linear-gradient(bottom, #d8d8d8 0%, #eeeeee 30%);
+	border: 1px solid #efefef;
+	color: #0D5DB6;
+}
+
+.black_yellow .nextButton:hover {
+	background: #eeeeee; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#eeeeee),
+		to(#d8d8d8) );
+	background-image: -moz-linear-gradient(bottom, #eeeeee 0%, #d8d8d8 30%);
+}
+
+.black_yellow .clear {
+	background: #e3c7dd; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#e3c7dd),
+		to(#dbbbd3) );
+	background-image: -moz-linear-gradient(bottom, #e3c7dd 0%, #dbbbd3 30%);
+	border: 1px solid #ac8ea8;
+}
+
+.black_yellow .clear:hover {
+	background: #dbbbd3;
+	background: -webkit-gradient(linear, left bottom, left top, from(#dbbbd3),
+		to(#e3c7dd) );
+	background-image: -moz-linear-gradient(bottom, #dbbbd3 0%, #e3c7dd 30%);
+}
+
+.black_yellow .reviewBig {
+	background: #fedd8e; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#fedd8e),
+		to(#f9d889) );
+	background-image: -moz-linear-gradient(bottom, #fedd8e 0%, #f9d889 30%);
+	border: 1px solid #ac8ea8;
+}
+
+.black_yellow .reviewBig:hover {
+	background: #f9d889; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#f9d889),
+		to(#fedd8e) );
+	background-image: -moz-linear-gradient(bottom, #f9d889 0%, #fedd8e 30%);
+}
+
+.black_yellow .end {
+	background: #facfcf; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#facfcf),
+		to(#fddede) );
+	background-image: -moz-linear-gradient(bottom, #facfcf 0%, #fddede 30%);
+	box-shadow: 2px 2px 4px #999;
+	border: 1px solid #ac8ea8;
+}
+
+.black_yellow .end:hover {
+	background: #fddede;
+	background: -webkit-gradient(linear, left bottom, left top, from(#fddede),
+		to(#facfcf) );
+	background-image: -moz-linear-gradient(bottom, #fddede 0%, #facfcf 30%);
+}
+
+.black_yellow .button2 {
+	background: url(/images/buttonBG.png) left top no-repeat #6f89b8;
+	background: -webkit-gradient(linear, left top, left bottom, from(#b0c0da),
+		to(#6f89b8) );
+	background: -moz-linear-gradient(top, #b0c0da, #6f89b8);
+	border: 1px solid #57738c;
+	color: #fff;
+	text-shadow: #000 1px 1px 1px;
+	box-shadow: 2px 2px 6px #666;
+}
+
+.black_yellow .button2:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#6f89b8),
+		to(#b0c0da) );
+	background: -moz-linear-gradient(top, #6f89b8, #b0c0da);
+}
+
+.black_yellow .homeContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.black_yellow .takeContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.black_yellow .buttonLink {
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#d7d7d7) );
+	background: -moz-linear-gradient(top, #fff, #d7d7d7);
+	box-shadow: 2px 2px 3px #d7d6d6;
+	border: 1px solid #999;
+	box-shadow: 2px 2px 3px #D7D6D6;
+}
+
+.black_yellow .buttonLink:hover {
+	box-shadow: none;
+}
+
+.black_yellow .selectTestContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.black_yellow .selectTestContent label {
+	color: #0D4272
+}
+
+.black_yellow .selectTestContent select {
+	border-color: #ccc;
+}
+
+.black_yellow .selectTest {
+	border: 1px solid #ccc;
+	background: #fff;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.black_yellow .selectTest li+li {
+	border-top: 1px solid #CCC
+}
+
+.black_yellow .alternate {
+	background-color: #e7e7e7;
+}
+
+.black_yellow .selectTest ul {
+	background-color: #fff;
+}
+
+.black_yellow .selectTest li:hover,.black_yellow .selectTest .chosen {
+	background: #a2d394
+}
+
+.black_yellow .directionsTests {
+	border: 1px solid #ccc;
+	background: #fff;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.black_yellow .question {
+	border: 1px solid #ccc;
+	background: black;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.black_yellow .radio {
+	background: url(/images/radioButtons.jpg) no-repeat;
+}
+
+.black_yellow .checkbox {
+	background: url(/images/checkbox.png) no-repeat;
+}
+
+.black_yellow #reviewer div.reviewerTests {
+	border: 1px solid #ccc;
+	background: #fff;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.black_yellow #reviewer #reviewbox h4 {
+	border-bottom: 1px solid gray;
+}
+
+.black_yellow #reviewer div.reviewquestion {
+	border: 1px solid black;
+}
+
+.black_yellow #magnificationBox {
+	background: black;
+	border: 4px solid white;
+}
+
+.white_black #magnifyingGlassControl {
+	background: black;
+	border: 4px solid white;
+}
+
+/* Reference */
+.black_yellow #reference {
+	background: black;
+	border: 4px solid white;
+}
+
+/********************* /Calculator ********************/
+.black_yellow #calculator {
+	background: url(/images/calc-bg.png) no-repeat;
+	z-index: 999999;
+}
+
+.black_yellow #graphCalculator {
+	background: white;
+	border: 1px solid black;
+} 
+
+/********************* /Highlighter ********************/
+.black_yellow .tts_hightlight {
+	background-color:yellow;
+}
+
+.black_yellow .tts_underline {
+	border-bottom:1px solid red;
+}
+
+.black_yellow .highlight {
+	background-color: yellow;
+}
+
+.black_yellow .strikethrough {
+	text-decoration: line-through;
+}
+
+/********************* /GuideLine ********************/
+.black_yellow .guidetopper {
+	background: gold;
+}
+
+/********************* /Ruler ******************************/
+.black_yellow #rulerDiv {
+	background: url('/images/tools/ruler-cmtop.png') no-repeat;
+}
+
+/******************* Search Tool **************************/
+.black_yellow #searchBox {
+	background: #cccccc;
+}
+
+.black_yellow .search_highlight {
+	background-color: #FFA824;
+}
+
+/************periodic table ************/
+.black_yellow #periodicTable {
+	background: white;
+	border: 1px solid black;
+}
+
+.black_yellow #pTElem {
+	background: white;
+	border: 1px solid black;
+}
+
+.black_yellow table.navbar td a,.black_yellow table.navbar td a.he {
+	color: #000000;
+}
+
+.black_yellow table.navbar td {
+	border: 1px solid white;
+}
+
+.black_yellow .info {
+	background-color: #F5F5F5;
+	color: #333333;
+}
+
+.black_yellow .navbar td a:hover,.black_yellow .navbar td a:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #FFFFFF;
+}
+
+.black_yellow .navbar td a.unnamed:link,.black_yellow .navbar td a.unnamed:visited {
+	background-color: #FFFFFF;
+	border: 1px solid #0F5782;
+	color: #A52A2A;
+}
+
+.black_yellow .navbar td a.rare-synthetic:link,.black_yellow .navbar td a.rare-synthetic:visited {
+	background-color: #DDDDDD;
+	border: 1px solid #0F5782;
+	color: #A52A2A;
+}
+
+.black_yellow .navbar td a.rare-synthetic:hover,.black_yellow .navbar td a.rare-synthetic:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #FFFFFF;
+}
+
+.black_yellow .navbar td a.rare:link,.black_yellow .navbar td a.rare:visited {
+	background-color: #DDDDDD;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.rare:hover,.black_yellow .navbar td a.rare:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.tmetals:link {
+	background-color: #EBB8B8; /*#F5F5DC;*/
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.tmetals:hover,.black_yellow .navbar td a.tmetals:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.tmetals-synthetic:link,.black_yellow .navbar td a.tmetals-synthetic:visited
+	{
+	background-color: #EBB8B8;
+	border: 1px solid #0F5782;
+	color: #A52A2A;
+}
+
+.black_yellow table.navbar td a.ngases:link {
+	background-color: #C3D4FF; /*#E6E6FA;*/
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.black_yellow .navbar td a.halogens-gases:link,.black_yellow .navbar td a.halogens-gases:visited {
+	background-color: #ADE8C7;
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.black_yellow .navbar td a.halogens-gases:hover,.black_yellow .navbar td a.halogens-gases:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.black_yellow table.navbar td a.onm-gases:link,.black_yellow table.navbar td a.onm-gases:visited {
+	background-color: #FFEEDD;
+	border: 1px solid #0F5782;
+	color: #225588;
+}
+
+.black_yellow table.navbar td a.onm-gases:hover,.black_yellow table.navbar td a.onm-gases:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.black_yellow .navbar td a.metalloid:link,.black_yellow .navbar td a.metalloid:visited {
+	background-color: #7ED38F; 
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.metalloid:hover,.black_yellow .navbar td a.metalloid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.ometals:link,.black_yellow .navbar td a.ometals:visited {
+	background-color: #CDEB8B;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.ometals:hover,.black_yellow .navbar td a.ometals:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.alkali:link,.black_yellow .navbar td a.alkali:visited {
+	background-color: #DDCCDD;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.alkali:hover,.black_yellow .navbar td a.alkali:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.alkalie:link,.black_yellow .navbar td a.alkalie:visited {
+	background-color: #FFF3BB;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.alkalie:hover,.black_yellow .navbar td a.alkalie:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.alkali-liquid:link,.black_yellow .navbar td a.alkali-liquid:visited {
+	background-color: #DDCCDD;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.black_yellow .navbar td a.alkali-liquid:hover,.black_yellow .navbar td a.alkali-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.black_yellow .navbar td a.halogens:link,.black_yellow .navbar td a.halogens:visited {
+	background-color: #ADE8C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.halogens:hover,.black_yellow .navbar td a.halogens:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow table.navbar td a.onm:link,.black_yellow table.navbar td a.onm:visited {
+	background-color: #FF9966;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow table.navbar td a.onm:hover,.black_yellow table.navbar td a.onm:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.black_yellow .navbar td a.halogens-liquid:link,.black_yellow .navbar td a.halogens-liquid:visited {
+	background-color: #ADE8C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.black_yellow .navbar td a.halogens-liquid:hover,.black_yellow .navbar td a.halogens-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.black_yellow .navbar td a.ometals-liquid:link,.black_yellow .navbar td a.ometals-liquid:visited {
+	background-color: #CDEB8B;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.black_yellow .navbar td a.ometals-liquid:hover,.black_yellow .navbar td a.ometals-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.black_yellow .navbar td a.tmetals-liquid:link,.black_yellow .navbar td a.tmetals-liquid:visited {
+	background-color: #EBB8B8;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.black_yellow .navbar td a.tmetals-liquid:hover,.black_yellow .navbar td a.tmetals-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+/*dlm added*/
+.black_yellow #calculator {
+	background: url(/images/calc-bg.png) no-repeat;
+}
+
+.black_yellow #calculator .num-button {
+	background: url(/images/button-bg.png) no-repeat;
+}
+
+.black_yellow #calculator .clear-button {
+	background: url(/images/button-bg.png) no-repeat;
+}
+
+.black_yellow #calculator .function-button {
+	background: url(/images/function-button-bg.png) no-repeat;
+}
+
+.black_yellow #calculator .equals-button {
+	background: url(/images/equals-bg.png) no-repeat;
+}
+
+.black_yellow #calculator #plusminus {
+	background: url(/images/function-button-bg.png) no-repeat;
+}
+
+.black_yellow #calculator #calc-back {
+	background: url(/images/function-button-bg.png) no-repeat;
+}

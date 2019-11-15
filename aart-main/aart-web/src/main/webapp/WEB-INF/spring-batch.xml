@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+     http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<bean id="jobRepository"
+		class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean" />
+	<bean
+		class="org.springframework.batch.core.explore.support.MapJobExplorerFactoryBean"
+		id="jobExplorer">
+		<property name="repositoryFactory" ref="&amp;jobRepository"></property>
+	</bean>
+
+	<bean id="webJobLauncher"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+		<property name="taskExecutor">
+			<bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor">
+				<property name="concurrencyLimit" value="10" />
+			</bean>
+		</property>
+	</bean>
+
+	<aop:config>
+		<aop:advisor advice-ref="simultaneousJobAspect"
+			pointcut="execution(* org.springframework.batch.core.launch.JobLauncher.run(..))"></aop:advisor>
+	</aop:config>
+
+	<bean class="edu.ku.cete.batch.support.SimultaneousJobAspect" id="simultaneousJobAspect">
+		<property name="jobExplorer" ref="jobExplorer"></property>
+		<property name="jobNames">
+			<list>
+				<value>ampJob</value>
+				<value>ampDacJob</value>
+				<value>cpassJob</value>
+				<value>cpassDacJob</value>
+				<value>kapJob</value>
+				<value>kapDacJob</value>
+				<value>kapAdaptiveJob</value>
+				<value>kapAdaptiveInterimJob</value>
+				<value>kapAdaptiveDacJob</value>
+				<value>dlmAllJobs</value>
+				<value>dlmOnlyUntrackedAllJobs</value>
+				<value>dlmAutoJob</value>
+				<value>studentTrackerJob</value>
+				<value>stOnlyUntrackedJob</value>
+				<value>batchKSDEDataProcessJob</value>
+				<value>batchGetDataFromKSDEJob</value>
+				<value>sendKIDSEmailsJobRunScheduler</value>
+				<value>dlmResearchSurveyJob</value>
+				<value>kapPredictiveJob</value>
+				<value>batchInterimPredictiveReportJob</value>
+				<value>iSmartAutoJob</value>
+				<value>pltwDacJob</value>
+				<value>pltwScoringJob</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="batchTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10" />
+		<property name="maxPoolSize" value="10" />
+		<property name="allowCoreThreadTimeOut" value="true" />
+	</bean>
+	
+	<bean id="cpassPartitioner" class="edu.ku.cete.batch.cpass.CPASSBatchRegistrationPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="testTypeId" value="#{jobParameters['testTypeId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+		<property name="assessmentId" value="#{jobParameters['assessmentId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="studentId" value="#{jobParameters['studentId']}" />
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="enrollmentMethodId" value="#{jobParameters['enrollmentMethodId']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+
+	<bean id="batchPartitioner" class="edu.ku.cete.batch.BatchRegistrationPartitioner"
+		scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="testTypeId" value="#{jobParameters['testTypeId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+		<property name="assessmentId" value="#{jobParameters['assessmentId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="studentId" value="#{jobParameters['studentId']}" />
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="enrollmentMethodId" value="#{jobParameters['enrollmentMethodId']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+
+	<bean id="skipPolicy" class="edu.ku.cete.batch.support.SkipExceptionPolicy">
+		<constructor-arg value="edu.ku.cete.batch.support.SkipBatchException" />
+	</bean>
+
+	<bean name="batchRegPageReader" scope="step"
+		class="edu.ku.cete.batch.BatchRegistrationReader" autowire-candidate="false">
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="testType" value="#{stepExecutionContext['testType']}" />
+		<property name="assessment" value="#{stepExecutionContext['assessment']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="pageSize" value="1000" />
+	</bean>
+
+	<bean id="batchRegReader"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchRegPageReader" />
+	</bean>
+
+	<bean name="batchRegWriter" scope="step"
+		class="edu.ku.cete.batch.BatchRegistrationWriter" autowire-candidate="false">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="testType" value="#{stepExecutionContext['testType']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="assessment" value="#{stepExecutionContext['assessment']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		
+		<!-- this is for CPASS  -->
+		<property name="contractingOrganizations" value="#{stepExecutionContext['contractingOrganizations']}" />
+	</bean>
+	
+	<bean name="cpassReader" scope="step" class="edu.ku.cete.batch.cpass.CPASSBatchRegistrationReader">
+		<property name="testType" value="#{stepExecutionContext['testType']}" />
+		<property name="assessment" value="#{stepExecutionContext['assessment']}" />
+		<property name="contractingOrganizations" value="#{stepExecutionContext['contractingOrganizations']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="pageSize" value="1000" />
+	</bean>
+	
+	<bean name="cpassProcessor" scope="step"
+		class="edu.ku.cete.batch.processor.CPASSBatchRegistrationProcessor">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="testType" value="#{stepExecutionContext['testType']}" />
+		<property name="testTypeToTestCollectionsMap" value="#{stepExecutionContext['testTypeToTestCollectionsMap']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	</bean>
+	<bean name="ampProcessor" scope="step"
+		class="edu.ku.cete.batch.processor.AMPBatchRegistrationProcessor">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="testType" value="#{stepExecutionContext['testType']}" />
+		<property name="testCollections" value="#{stepExecutionContext['testCollections']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	</bean>
+	<bean name="kapProcessor" scope="step"
+		class="edu.ku.cete.batch.processor.KAPBatchRegistrationProcessor">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="testType" value="#{stepExecutionContext['testType']}" />
+		<property name="testCollections" value="#{stepExecutionContext['testCollections']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	</bean>
+	
+	<bean name="batchRegStepListener" scope="step"
+		class="edu.ku.cete.batch.support.BatchRegistrationStepListener">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<batch:job id="cpassDacJob">
+		<batch:step id="cpassDacJob.step1" next="cpassDacJob.step2">
+			<batch:job ref="cpassJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="cpassDacJob.step2">
+			<batch:job ref="dacJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:job id="cpassJob">
+		<batch:step id="partitionedCpassLoadStep">
+			<batch:partition step="cpassBatchRegStep"
+				partitioner="cpassPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="cpassBatchRegStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="cpassReader" writer="batchRegWriter"
+				processor="cpassProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+
+			<batch:listeners>
+				<batch:listener ref="batchRegStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+
+	<batch:job id="ampDacJob">
+		<batch:step id="ampDacJob.step1" next="ampDacJob.step2">
+			<batch:job ref="ampJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="ampDacJob.step2">
+			<batch:job ref="dacJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:job id="ampJob">
+		<batch:step id="partitionedAmpLoadStep">
+			<batch:partition step="ampBatchRegStep" partitioner="batchPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="ampBatchRegStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchRegReader" writer="batchRegWriter"
+				processor="ampProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchRegStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+
+	<batch:job id="kapDacJob">
+		<batch:step id="kapDacJob.step1" next="kapDacJob.step2">
+			<batch:job ref="kapJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="kapDacJob.step2">
+			<batch:job ref="dacJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:job id="kapJob">
+		<batch:step id="partitionedKapLoadStep">
+			<batch:partition step="kapBatchRegStep" partitioner="batchPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="kapBatchRegStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchRegReader" writer="batchRegWriter"
+				processor="kapProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchRegStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<!-- student tracker -->
+	<bean id="studentTrackerPartitioner" class="edu.ku.cete.batch.dlm.st.StudentTrackerPartitioner"
+		scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="operationalWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />	
+	</bean>
+
+	<bean name="studentTrackerStepListener" class="edu.ku.cete.batch.dlm.st.StudentTrackerStepListener"
+		scope="step">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+
+	<bean name="studentTrackerPageReader" class="edu.ku.cete.batch.dlm.st.StudentTrackerReader"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="operationalWindowId" value="#{stepExecutionContext['operationalWindowId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="pageSize" value="3000" />
+	</bean>
+
+	<bean id="studentTrackerReader"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="studentTrackerPageReader" />
+	</bean>
+	
+	<bean name="stPageReaderOnlyUntracked" class="edu.ku.cete.batch.dlm.st.StudentTrackerOnlyUntrackedReader"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="operationalWindowId" value="#{stepExecutionContext['operationalWindowId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="pageSize" value="3000" />
+	</bean>
+
+	<bean id="stReaderOnlyUntracked"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="stPageReaderOnlyUntracked" />
+	</bean>	
+
+	<bean name="studentTrackerWriter" class="edu.ku.cete.batch.dlm.st.StudentTrackerWriter"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+	</bean>
+
+	<bean name="studentTrackerProcessor" class="edu.ku.cete.batch.dlm.st.StudentTrackerProcessor"
+		scope="step">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="allBands" value="#{stepExecutionContext['allBands']}" />
+		<property name="assessmentProgram" value="#{stepExecutionContext['assessmentProgram']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="operationalWindowId" value="#{stepExecutionContext['operationalWindowId']}" />
+		<property name="user" value="#{jobExecutionContext['user']}" />
+	</bean>
+
+	<batch:job id="studentTrackerJob">
+		<batch:step id="partitionedSTStep">
+			<batch:partition step="studentTrackerBatchStep"
+				partitioner="studentTrackerPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="studentTrackerJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="studentTrackerBatchStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="studentTrackerReader" writer="studentTrackerWriter"
+				processor="studentTrackerProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="120" />
+			<batch:listeners>
+				<batch:listener ref="studentTrackerStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:job id="stOnlyUntrackedJob">
+		<batch:step id="partitionedSTStepOnlyUntracked">
+			<batch:partition step="stBatchStepOnlyUntracked"
+				partitioner="studentTrackerPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="studentTrackerJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:step id="stBatchStepOnlyUntracked">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="stReaderOnlyUntracked" writer="studentTrackerWriter"
+				processor="studentTrackerProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="120" />
+			<batch:listeners>
+				<batch:listener ref="studentTrackerStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+
+	<!-- DLM Auto -->
+	<bean id="dlmAutoPartitioner" class="edu.ku.cete.batch.dlm.auto.DLMAutoEnrollmentPartitioner" 	scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="operationalWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />		
+	</bean>
+
+	<bean name="dlmAutoStepListener" class="edu.ku.cete.batch.dlm.auto.DLMAutoStepListener"
+		scope="step">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+
+	<bean name="dlmAutoPageReader" class="edu.ku.cete.batch.dlm.auto.DLMAutoEnrollmentReader"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="interimFlag" value="#{jobParameters['interimFlag']}" />
+		<property name="pageSize" value="1000" />
+		<property name="operationalWindowId" value="#{stepExecutionContext['operationalWindowId']}" />
+		
+	</bean>
+
+	<bean id="dlmAutoReader"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="dlmAutoPageReader" />
+	</bean>
+
+	<bean name="dlmAutoWriter" class="edu.ku.cete.batch.dlm.auto.DLMBatchRegistrationWriter"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+	</bean>
+
+	<bean name="dlmAutoProcessor"
+		class="edu.ku.cete.batch.dlm.auto.DLMBatchRegistrationProcessor"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="allBands" value="#{stepExecutionContext['allBands']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="operationalWindowId" value="#{stepExecutionContext['operationalWindowId']}" />
+		
+	</bean>
+	
+	<batch:job id="dlmAutoJob">
+		<batch:step id="partitionedDLMAutoStep">
+			<batch:partition step="dlmAutoBatchStep" partitioner="dlmAutoPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="dlmAutoBatchStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="dlmAutoReader" writer="dlmAutoWriter"
+				processor="dlmAutoProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="dlmAutoStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<!-- DLM Auto Multi Assignment -->
+	<bean id="dlmMultiAssignAutoPartitioner" class="edu.ku.cete.batch.dlm.auto.multiassign.DLMMultiAssignAutoEnrollmentPartitioner"
+		scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="enrollmentMethodId" value="#{jobParameters['enrollmentMethodId']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+
+	<bean name="dlmMultiAssignAutoStepListener" class="edu.ku.cete.batch.dlm.auto.multiassign.DLMMultiAssignAutoStepListener"
+		scope="step">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+
+	<bean name="dlmMultiAssignAutoPageReader" class="edu.ku.cete.batch.dlm.auto.multiassign.DLMMultiAssignAutoEnrollmentReader"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="operationalTestWindowId" value="#{stepExecutionContext['multiAssignTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{stepExecutionContext['multiAssignEnrollmentMethod']}" />
+		<property name="multiAssignLimit" value="#{stepExecutionContext['multiAssignLimit']}" />
+		<property name="interimFlag" value="#{jobParameters['interimFlag']}" />
+		<property name="pageSize" value="1000" />
+	</bean>
+
+	<bean id="dlmMultiAssignAutoReader"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="dlmMultiAssignAutoPageReader" />
+	</bean>
+
+	<bean name="dlmMultiAssignAutoWriter" class="edu.ku.cete.batch.dlm.auto.multiassign.DLMMultiAssignBatchRegistrationWriter"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+	</bean>
+
+	<bean name="dlmMultiAssignAutoProcessor" class="edu.ku.cete.batch.dlm.auto.multiassign.DLMMultiAssignBatchRegistrationProcessor"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="allBands" value="#{stepExecutionContext['allBands']}" />
+		<property name="multiAssignTestWindowId" value="#{stepExecutionContext['multiAssignTestWindowId']}" />
+		<property name="multiAssignLimit" value="#{stepExecutionContext['multiAssignLimit']}" />
+		<property name="enrollmentMethod" value="#{stepExecutionContext['multiAssignEnrollmentMethod']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<batch:job id="dlmMultiAssignAutoJob">
+		<batch:step id="partitionedDLMMultiAssignAutoStep">
+			<batch:partition step="dlmMultiAssignAutoBatchStep" partitioner="dlmMultiAssignAutoPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="dlmMultiAssignAutoBatchStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="dlmMultiAssignAutoReader" writer="dlmMultiAssignAutoWriter"
+				processor="dlmMultiAssignAutoProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="dlmMultiAssignAutoStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+
+	<!-- DLM Fixed Assignment-->
+	<bean id="dlmFixedAssignAutoPartitioner" class="edu.ku.cete.batch.dlm.fixed.DLMFixedAutoEnrollmentPartitioner"
+		scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="enrollmentMethodId" value="#{jobParameters['enrollmentMethodId']}" />
+		<property name="gradeAbbrName" value="#{jobParameters['dlmFixedGradeAbbrName']}"/>
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<bean name="dlmFixedAssignAutoStepListener" class="edu.ku.cete.batch.dlm.fixed.DLMFixedAssignAutoStepListener"
+		scope="step">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<bean name="dlmFixedAssignAutoPageReader" class="edu.ku.cete.batch.dlm.fixed.DLMFixedAssignAutoEnrollmentReader"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="course" value="#{stepExecutionContext['course']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="operationalTestWindowId" value="#{stepExecutionContext['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="gradeAbbrName" value="#{stepExecutionContext['gradeAbbrName']}"/>
+		<property name="pageSize" value="1000" />
+	</bean>
+
+	<bean id="dlmFixedAssignAutoReader"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="dlmFixedAssignAutoPageReader" />
+	</bean>
+	
+	<bean name="dlmFixedAssignAutoWriter" class="edu.ku.cete.batch.dlm.fixed.DLMFixedAssignBatchRegistrationWriter"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="gradeAbbrName" value="#{stepExecutionContext['gradeAbbrName']}"/>
+	</bean>
+	
+	<bean name="dlmFixedAssignAutoProcessor" class="edu.ku.cete.batch.dlm.fixed.DLMFixedAssignBatchRegistrationProcessor"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />				
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="operationalTestWindowId" value="#{stepExecutionContext['operationalTestWindowId']}" />
+		<property name="gradeAbbrName" value="#{stepExecutionContext['gradeAbbrName']}"/>
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+	</bean>
+	
+	<batch:job id="dlmFixedAssignAutoJob">
+		<batch:step id="partitionedDLMFixedAssignAutoStep">
+			<batch:partition step="dlmFixedAutoBatchStep" partitioner="dlmFixedAssignAutoPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:step id="dlmFixedAutoBatchStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="dlmFixedAssignAutoPageReader" writer="dlmFixedAssignAutoWriter"
+				processor="dlmFixedAssignAutoProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="dlmFixedAssignAutoStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+
+	<!-- for dlm student tracker and auto enrollment batch mode -->
+	<bean id="scheduledJobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+	<batch:job id="dlmAllJobs">
+		<batch:step id="dlmAllJobs.step1" next="dlmAllJobs.step2">
+			<batch:job ref="studentTrackerJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="dlmAllJobs.step2" next="dlmAllJobs.step3">
+			<batch:job ref="dlmAutoJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="dlmAllJobs.step3">
+			<batch:job ref="dlmMultiAssignAutoJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		 <batch:listeners>
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners> 
+	</batch:job>
+
+	<bean id="dlmRunScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher">
+		<property name="job" ref="dlmAllJobs" />
+		<property name="assesmentProgramCode" value="DLM" />
+		<property name="isScheduleOn" value="${dlm.st.auto.job.switch}" />
+   		<property name="enrollmentMethod" value="STDNTTRKR" />
+   		<property name="interimFlag" value="false" />
+	</bean>
+	
+	<batch:job id="dlmOnlyUntrackedAllJobs">
+		<batch:step id="dlmOnlyUntrackedAllJobs.step1" next="dlmOnlyUntrackedAllJobs.step2">
+			<batch:job ref="stOnlyUntrackedJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="dlmOnlyUntrackedAllJobs.step2" next="dlmOnlyUntrackedAllJobs.step3">		
+			<batch:job ref="dlmAutoJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="dlmOnlyUntrackedAllJobs.step3">
+			<batch:job ref="dlmMultiAssignAutoJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+	</batch:job>	
+	
+	<bean id="dlmOnlyUntrackedRunScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher">
+		<property name="job" ref="dlmOnlyUntrackedAllJobs" />
+		<property name="assesmentProgramCode" value="DLM" />
+		<property name="isScheduleOn" value="${dlm.st.auto.onlyuntracked.job.switch}" />
+   		<property name="enrollmentMethod" value="STDNTTRKR" />
+   		<property name="interimFlag" value="true" />
+	</bean>	
+		
+	<bean id="dlmFixedRunScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher">
+		<property name="job" ref="dlmFixedAssignAutoJob" />
+		<property name="assesmentProgramCode" value="DLM" />
+		<property name="isScheduleOn" value="OFF" />
+   		<property name="enrollmentMethod" value="FXD" />
+	</bean>	
+
+	<!-- Scheduler for Summative Testing program -->	
+	<bean id="kapSummativeRunScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher" >
+			<property name="job" ref="kapDacJob" />
+   			<property name="assesmentProgramCode" value="KAP" />
+   			<property name="isScheduleOn" value="${kap.summative.auto.job.switch}" />
+   			<property name="testingProgramAbbr" value="S" />
+   			<property name="enrollmentMethod" value="MLTSTG" />
+    </bean>
+
+    <bean id="cpassSummativeRunScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher" >
+			<property name="job" ref="cpassDacJob" />
+   			<property name="assesmentProgramCode" value="CPASS" />
+			<property name="isScheduleOn" value="${cpass.summative.auto.job.switch}" />
+			<property name="testingProgramAbbr" value="S" />
+   			<property name="enrollmentMethod" value="MLTSTG" />
+    </bean>
+    
+    <bean id="ampSummativeRunScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher" >
+			<property name="job" ref="ampDacJob" />
+   			<property name="assesmentProgramCode" value="AMP" />
+   			<property name="isScheduleOn" value="${amp.summative.auto.job.switch}" />
+			<property name="testingProgramAbbr" value="S" />
+   			<property name="enrollmentMethod" value="MLTSTG" />
+    </bean>
+    
+	<bean id="batchRepositoryCleanupJob" class="edu.ku.cete.batch.support.BatchRepositoryCleanupJob">
+		<property name="repositoryFactory" ref="&amp;jobRepository"></property>
+	</bean>
+	
+	<bean id="passwordExpirationAlertScheduler" class="edu.ku.cete.user.PasswordExpirationAlertScheduler">
+		<property name="isScheduleOn" value="${password.expire.alert.job.switch}" />
+	</bean>
+	
+	<bean id="moduleReportDeleteScheduler" class="edu.ku.cete.report.scheduler.ModuleReportScheduler">
+		<property name="isScheduleOn" value="${module.report.delete.job.switch}" />
+	</bean>
+	
+	<!-- Projected Scoring For F605 -->	
+	<bean id="projectedTestingDistrictSummaryReportScheduler" class="edu.ku.cete.batch.ProjectedTestingDistrictSummaryReportScheduler">
+	</bean>
+	
+	<bean id="batchOnFlagCheckJob" class="edu.ku.cete.batch.support.BatchOnFlagCheckJob"/>
+	
+	<bean id="auditLogScheduler" class="edu.ku.cete.batch.audit.AuditLogScheduler"/>
+
+	
+	<!-- Auto Scoring Assignment for KELPA2 -->	
+	<bean id="autoScoringAssignmentScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher">
+		<property name="job" ref="batchAutoScoringAssignment" />
+		<property name="assesmentProgramCode" value="KELPA2" />
+    </bean>	
+        
+    <bean id="batchRegJobListenerForScoring" class="edu.ku.cete.batch.scoringassignment.BatchReportProcessJobListenerForScoring"/>
+    
+	<bean name="batchAutoScoringAssignmentJobListener" class="edu.ku.cete.batch.scoringassignment.BatchAutoScoringAssignmentJobListener"
+		scope="step">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<batch:job id="batchAutoScoringAssignment">
+		<batch:step id="partitionedbatchAutoScoringAssignment">
+			<batch:partition step="batchAutoScoringAssignmentProcessStep" partitioner="batchAutoScoringAssignmentPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListenerForScoring" />
+		</batch:listeners>
+	</batch:job>
+	
+	<bean id="batchAutoScoringAssignmentPartitioner" class="edu.ku.cete.batch.scoringassignment.BatchAutoScoringAssignmentPartitioner" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+	</bean>
+	
+	<bean id="batchAutoScoringAssignmentReaderPage"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchAutoScoringAssignmentProcessReader" />
+	</bean>	
+	
+	<bean name="batchAutoScoringAssignmentProcessReader" class="edu.ku.cete.batch.scoringassignment.BatchAutoScoringAssignmentProcessReader"
+		scope="step" autowire-candidate="false">
+		<property name="subjectAreaId" value="#{stepExecutionContext['subjectId']}" />
+		<property name="schoolYear" value="#{jobExecutionContext['schoolYear']}" />
+		<property name="pageSize" value="1000" />
+		<property name="assessmentProgramId" value="#{stepExecutionContext['assessmentProgramId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>	
+	
+	<bean name="batchAutoScoringAssignmentProcessWriter" class="edu.ku.cete.batch.scoringassignment.BatchAutoScoringAssignmentProcessWriter"
+		scope="step" autowire-candidate="false">
+	</bean>
+	
+	<bean name="batchAutoScoringAssignmentProcessor" class="edu.ku.cete.batch.scoringassignment.BatchAutoScoringAssignmentProcessor"
+		scope="step" autowire-candidate="false">
+		<property name="user" value="#{jobExecutionContext['user']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramId" value="#{stepExecutionContext['assessmentProgramId']}" />	
+	</bean>
+	
+	<batch:step id="batchAutoScoringAssignmentProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchAutoScoringAssignmentReaderPage" writer="batchAutoScoringAssignmentProcessWriter"
+				processor="batchAutoScoringAssignmentProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchAutoScoringAssignmentJobListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>	
+	
+	<bean name="dlmResearchSurveyAutoStepListener" class="edu.ku.cete.batch.dlm.survey.DLMResearchSurveyAutoListener"
+		scope="step">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<bean id="dlmResearchSurveySchedular" class="edu.ku.cete.batch.ScheduledJobLauncher">
+		<property name="job" ref="dlmResearchSurveyJob" />
+		<property name="assesmentProgramCode" value="DLM" />		
+   		<property name="enrollmentMethod" value="RESEARCHSURVEY" />
+   		<property name="isScheduleOn" value="OFF" />
+	</bean>
+	
+	<bean id="ismartResearchSurveySchedular" class="edu.ku.cete.batch.ScheduledJobLauncher">
+		<property name="job" ref="dlmResearchSurveyJob" />
+		<property name="assesmentProgramCode" value="I-SMART" />		
+   		<property name="enrollmentMethod" value="RESEARCHSURVEY" />
+   		<property name="isScheduleOn" value="OFF" />
+	</bean>
+	
+	<batch:job id="dlmResearchSurveyJob">
+		<batch:step id="partitionedDLMRearchSurveyStep">
+			<batch:partition step="dlmResearchSurveyBatchStep" partitioner="dlmResearchSurveyPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+			<batch:listener ref="batchRegParentJobListener" />		
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:step id="dlmResearchSurveyBatchStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="dlmResearchSurveyReader" writer="dlmResearchSurveyWriter"
+				processor="dlmResearchSurveyProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="dlmResearchSurveyAutoStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="dlmResearchSurveyPartitioner" class="edu.ku.cete.batch.dlm.survey.DLMResearchSurveyPartitioner"
+		scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="operationalWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	</bean>
+	
+	<bean name="dlmResearchSurveyPageReader" class="edu.ku.cete.batch.dlm.survey.DLMResearchSurveyReader"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="operationalWindowId" value="#{stepExecutionContext['operationalWindowId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="stepExecution" value="#{stepExecution}" />		
+		<property name="pageSize" value="3000" />
+	</bean>
+	
+	<bean id="dlmResearchSurveyReader"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="dlmResearchSurveyPageReader" />
+	</bean>
+	
+	<bean name="dlmResearchSurveyProcessor" class="edu.ku.cete.batch.dlm.survey.DLMResearchSurveyProcessor"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />		
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="operationalWindowId" value="#{stepExecutionContext['operationalWindowId']}" />				
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />	
+	</bean>
+	
+	<bean name="dlmResearchSurveyWriter" class="edu.ku.cete.batch.dlm.survey.DLMResearchSurveyWriter"
+		scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />		
+	</bean>
+	
+	<!-- F725 ISMART -->
+	
+	<batch:job id="iSmartAutoJob">
+		<batch:step id="partitionedISmartAutoStep">
+			<batch:partition step="iSmartAutoBatchStep" partitioner="iSmartAutoPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:step id="iSmartAutoBatchStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="iSmartAutoReader" writer="iSmartAutoWriter"
+				processor="iSmartAutoProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="iSmartAutoStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="iSmartAutoPartitioner" class="edu.ku.cete.batch.auto.ismart.ISmartAutoEnrollmentPartitioner" 	scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="enrollmentMethodId" value="#{jobParameters['enrollmentMethodId']}" />
+		<property name="gradeAbbrName" value="#{jobParameters['dlmFixedGradeAbbrName']}"/>
+	</bean>
+	
+	<bean name="iSmartAutoStepListener" class="edu.ku.cete.batch.auto.ismart.ISmartAutoStepListener" scope="step">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+
+	<bean name="iSmartAutoPageReader" class="edu.ku.cete.batch.auto.ismart.ISmartAutoEnrollmentReader" scope="step" autowire-candidate="false">		
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="gradeAbbrName" value="#{stepExecutionContext['gradeAbbrName']}"/>
+		<property name="operationalTestWindowId" value="#{stepExecutionContext['operationalTestWindowId']}" />
+		<property name="pageSize" value="1000" />		
+	</bean>
+	
+	<bean id="iSmartAutoReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="iSmartAutoPageReader" />
+	</bean>
+	
+	<bean name="iSmartAutoProcessor" class="edu.ku.cete.batch.auto.ismart.ISmartBatchRegistrationProcessor"	scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="allBands" value="#{stepExecutionContext['allBands']}" />		
+		<property name="operationalTestWindowId" value="#{stepExecutionContext['operationalTestWindowId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="gradeAbbrName" value="#{stepExecutionContext['gradeAbbrName']}"/>
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<bean name="iSmartAutoWriter" class="edu.ku.cete.batch.auto.ismart.ISmartBatchRegistrationWriter" scope="step" autowire-candidate="false">
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />		
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="operationalTestWindowId" value="#{stepExecutionContext['operationalTestWindowId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="testSessionUnusedStatusId" value="#{stepExecutionContext['testSessionUnusedStatusId']}" />
+		<property name="studentSessionRule" value="#{stepExecutionContext['studentSessionRule']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<bean id="iSmartAutoRunScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher">
+	    <property name="job" ref="iSmartAutoJob" />
+	    <property name="assesmentProgramCode" value="I-SMART" />
+	    <property name="isScheduleOn" value="OFF" />
+  		<property name="enrollmentMethod" value="FXD" />
+	</bean>
+	
+	<!-- End F725 ISMART -->
+	
+	<task:scheduled-tasks scheduler="batchTaskScheduler">
+		<!-- fixed delay is 420000 ms = 7 minutes -->
+		<!-- initial delay is 180000 ms = 3 minutes -->
+		<task:scheduled ref="batchRepositoryCleanupJob" method="run" fixed-delay="420000" initial-delay="180000" />
+		<!-- fixed delay is 120000 ms = 2 minutes -->
+		<!-- initial delay is 180000 ms = 3 minutes -->
+		<task:scheduled ref="batchOnFlagCheckJob" method="run" fixed-delay="120000" initial-delay="180000" />
+	</task:scheduled-tasks>
+	
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+	 <property name="locations">
+			<list>
+				<value>classpath:env.properties</value>
+				<value>classpath:upload.properties</value>
+				<value>file:${AART_HOME}/env.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+	
+	<bean name="sftpUtil" class="edu.ku.cete.util.SFTPUtil" init-method="init" scope="singleton" destroy-method="close">
+		<property name="sftpHostKey" value="${report.import.host.key}" />
+		<property name="sftpServer" value="${report.sftp.server}" />
+		<property name="sftpUsername" value="${report.sftp.username}" />
+		<property name="sftpPassword" value="${report.sftp.password}" />	
+	</bean>
+	
+	<task:scheduler id="batchTaskScheduler" pool-size="15"/>
+    <import resource="upload-batch.xml"/>
+    <import resource="questar-batch.xml"/>
+    <import resource="kapadaptive-batch.xml"/>
+    <import resource="kelpa-batch.xml"/>
+    <import resource="pltw-batch.xml"/>
+    <import resource="dac-batch.xml"/>
+    <import resource="kap-predictive-batch.xml"/>
+	
+</beans>

@@ -1,0 +1,197 @@
+<%var filterIndex = 0;%>
+<div id="reportFilter" class="reportFilter">
+	<div class="filterLine" id="filterLine">
+		<div class="reportCriteriaText corner">Report &nbsp;Criteria</div>		
+		<form id="reportFilterForm">
+			<% if (filtersNeeded.summaryLevel) { %>
+				<div id="summaryLevelSection" class="section" style="width: 17.8%;">
+					<div id="summaryLevelFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">Summary<br/>Level</span>
+						<select id="summaryLevelSelect" name="summaryLevel" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="summaryLevel">
+							<option value="0">Select</option>
+							<% if (userOrgLevel <= 20) { %><option value="state">State</option> <% } %>
+							<% if (userOrgLevel <= 50) { %><option value="district">District</option> <% } %>
+							<% if (userOrgLevel <= 70) { %><option value="school">School</option> <% } %>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			<% if (filtersNeeded.reportYear) { %>
+				<div id="reportYearSection" class="section" style="width: 17.8%;">
+					<div id="reportYearFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">Report<br/>Year</span>
+						<select id="reportYearSelect" name="reportYear" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="reportYear">
+							<option value="0">Select</option>							
+						</select>
+					</div>
+				</div>
+			<% } %>
+			<% if (filtersNeeded.state) { %>
+				<div id="stateSection" class="section" style="width: 17.8%;">
+					<div id="stateFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">State</span>
+						<select id="stateSelect" name="stateId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="state">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			
+			
+			
+			<% if (filtersNeeded.district) { %>
+				<div id="districtSection" class="section" style="width: 17.8%;">
+					<div id="districtFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">District</span>
+						<select id="districtSelect" name="districtId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="district">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			
+			<% if (filtersNeeded.school) { %>
+				<div id="schoolSection" class="section" style="width: 17.8%;">
+					<div id="schoolFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">School</span>
+						<select id="schoolSelect" name="schoolId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="school">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			
+			<% if (filtersNeeded.subject) { %>
+				<div id="subjectSection" class="section" style="width: 17.8%;">
+					<div id="subjectFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">Subject</span>
+						<select id="subjectSelect" name="subjectId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="subject">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			
+			<% if (filtersNeeded.grade) { %>
+				<div id="gradeSection" class="section" style="width: 17.8%;">
+					<div id="gradeFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">Grade</span>
+						<select id="gradeSelect" name="gradeId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="grade">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			
+			<% if (filtersNeeded.roster) { %>
+				<div  id="rosterSection" class="section" style="width: 17.8%;">
+					<div id="rosterFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">Roster</span>
+						<select id="rosterSelect" name="rosterId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="roster">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			
+			<% if (filtersNeeded.teacherRoster) { %>
+				<div  id="teacherRosterSection" class="section" style="width: 17.8%;">
+					<div id="teacherRosterFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">Roster</span>
+						<select id="teacherRosterSelect" name="rosterId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="teacherRoster">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>
+			<% if (filtersNeeded.teacher) { %>
+				<div  id="teacherSection" class="section" style="width: 17.8%;">
+					<div id="teacherFilter" class="criteria">
+						<span class="icon icon<%= filterIndex + 1 %>"></span>&nbsp;<span class="text">Teacher</span>
+						<select id="teacherSelect" name="dlmTeacherId" class="multiselect" data-filter-index="<%= filterIndex++ %>" data-data-type="teacher">
+							<option value="0">Select</option>
+						</select>
+					</div>
+				</div>
+			<% } %>				
+		</form>
+	</div>
+	
+	<div class="textLine" id="textLine">
+		<div class="reportCriteriaTextPlaceholder"><input id="resetButton" type="button" value="Reset"/></div>
+		<span id="dlmGRFReportErrorMsg" class="hidden" style="float: left;margin:12px 12px 12px -35px;color: red;display: none;">There is no report available.</span>
+		<% if (filtersNeeded.summaryLevel) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="summaryLevelText" class="text"></span>
+			</div>
+		<% } %>
+		<% if (filtersNeeded.reportYear) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="reportYearText" class="text"></span>
+			</div>
+		<% } %>
+		<% if (filtersNeeded.state) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="stateText" class="text"></span>
+			</div>
+		<% } %>
+		
+		
+		
+		<% if (filtersNeeded.district) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="districtText" class="text"></span>
+			</div>
+		<% } %>
+		
+		<% if (filtersNeeded.school) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="schoolText" class="text"></span>
+			</div>
+		<% } %>
+		
+		<% if (filtersNeeded.subject) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="subjectText" class="text"></span>
+			</div>
+		<% } %>
+		
+		<% if (filtersNeeded.grade) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="gradeText" class="text"></span>
+			</div>
+		<% } %>
+		
+		<% if (filtersNeeded.roster) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="rosterText" class="text"></span>
+			</div>
+		<% } %>
+		
+		<% if (filtersNeeded.teacherRoster) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="teacherRosterText" class="text"></span>
+			</div>
+		<% } %>	
+		<% if (filtersNeeded.teacher) { %>
+			<div class="section" style="width: 17.8%;">
+				<span id="teacherText" class="text"></span>
+			</div>
+		<% } %>		
+	</div>
+</div>
+
+<div id="loadingImage" style="float:left; width:100%; text-align:center; display:none;"><img src="images/ajax-loader.gif"/></div>
+<div id="reportContent"></div>
+
+<% if (filtersNeeded.subject || filtersNeeded.grade || filtersNeeded.roster || filtersNeeded.teacherRoster) { %>
+<div class="bottom">
+	<div class="pagination">
+	    <a href="#" class="first" data-action="first">&laquo;</a>
+	    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+	    <input type="text" readonly="readonly" />
+	    <a href="#" class="next" data-action="next">&rsaquo;</a>
+	    <a href="#" class="last" data-action="last">&raquo;</a>
+	</div>
+</div>
+<% } %>

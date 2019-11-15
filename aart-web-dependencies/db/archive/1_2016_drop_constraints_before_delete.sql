@@ -1,0 +1,113 @@
+ --drop constraints
+ --SELECT 'ALTER TABLE "'||nspname||'"."'||relname||'" DROP CONSTRAINT "'||conname||'";'
+ --FROM pg_constraint 
+ --INNER JOIN pg_class ON conrelid=pg_class.oid 
+ --INNER JOIN pg_namespace ON pg_namespace.oid=pg_class.relnamespace 
+ --where relname in ('studentsresponses','studentstestsectionstasksfoils','studentstestsectionstasks',
+ --'studentsresponseparameters','exitwithoutsavetest','studentstestsections','studentadaptivetestthetastatus',
+ --'studentadaptivetestfinaltheta','studentsadaptivetestsections','studentspecialcircumstance',
+ --'studentstests','testsession','enrollmenttesttypesubjectarea','enrollmentsrosters', 'enrollment', 'roster')
+ --ORDER BY CASE WHEN contype='f' THEN 0 ELSE 1 END,contype,nspname,relname,conname;
+ 
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "attendance_school_fk";
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "aypschoolid_fk";
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "current_grade_level_fk";
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "fk_enrollment_crdusr";
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "fk_enrollment_updusr";
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "restriction_fk";
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "source_student_fk";
+ ALTER TABLE "public"."enrollment" DROP CONSTRAINT "student_fk";
+ ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "enrollment_fk";
+ ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "enrollmentsrosters_course_status_fk";
+ ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "fk_enrollmentsrosters_crdusr";
+ ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "fk_enrollmentsrosters_updusr";
+ ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "roster_fk";
+ ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "source_student_fk";
+ ALTER TABLE "public"."enrollmenttesttypesubjectarea" DROP CONSTRAINT "fk_enrollmenttesttypesubjectarea_enrollmentid_fk";
+ ALTER TABLE "public"."enrollmenttesttypesubjectarea" DROP CONSTRAINT "fk_enrollmenttesttypesubjectarea_subjectareaid_fk";
+ ALTER TABLE "public"."enrollmenttesttypesubjectarea" DROP CONSTRAINT "fk_enrollmenttesttypesubjectarea_testtypeid_fk";
+ ALTER TABLE "public"."exitwithoutsavetest" DROP CONSTRAINT "fk_studentstestsectionid_testsectioid";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "course_enrollment_status_fk";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "course_gradecourse_fk";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "fk_roster_crdusr";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "fk_roster_updusr";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "restriction_fk";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "roster_attendance_school_fk";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "source_student_fk";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "state_subject_area_fk";
+ ALTER TABLE "public"."roster" DROP CONSTRAINT "teacher_fk";
+ ALTER TABLE "public"."studentadaptivetestfinaltheta" DROP CONSTRAINT "fk_studentadaptivetestfinaltheta_studentstestid";
+ ALTER TABLE "public"."studentadaptivetestfinaltheta" DROP CONSTRAINT "fk_studentadaptivetestfinaltheta_testsectioncontainerid";
+ ALTER TABLE "public"."studentadaptivetestthetastatus" DROP CONSTRAINT "fk_studentadaptivetestthetastatus_studentstestid";
+ ALTER TABLE "public"."studentadaptivetestthetastatus" DROP CONSTRAINT "fk_studentadaptivetestthetastatus_testpartid";
+ ALTER TABLE "public"."studentadaptivetestthetastatus" DROP CONSTRAINT "fk_studentadaptivetestthetastatus_testsectioncontainerid";
+ ALTER TABLE "public"."studentsadaptivetestsections" DROP CONSTRAINT "fk_studentsadaptivetestsections_partid";
+ ALTER TABLE "public"."studentsadaptivetestsections" DROP CONSTRAINT "fk_studentsadaptivetestsections_studentstestid";
+ ALTER TABLE "public"."studentsadaptivetestsections" DROP CONSTRAINT "fk_studentsadaptivetestsections_taskvariantid";
+ ALTER TABLE "public"."studentsadaptivetestsections" DROP CONSTRAINT "fk_studentsadaptivetestsections_testsectioncontainerid";
+ ALTER TABLE "public"."studentsadaptivetestsections" DROP CONSTRAINT "fk_studentsadaptivetestsections_testsectioncontainerthetanodeid";
+ ALTER TABLE "public"."studentsadaptivetestsections" DROP CONSTRAINT "fk_studentsadaptivetestsections_testsectionid"; 
+ ALTER TABLE "public"."studentadaptivetest" DROP CONSTRAINT "fk_studentadaptivetest_assignedstudentstestsid";
+ ALTER TABLE "public"."studentadaptivetest" DROP CONSTRAINT "fk_studentadaptivetest_studentstestsid";
+ ALTER TABLE "public"."scoringassignmentstudent" DROP CONSTRAINT "studentstestsid_fk";
+ ALTER TABLE "public"."studenttrackerband" DROP CONSTRAINT "fk_studenttrackerband_testsession";
+ ALTER TABLE "public"."scoringassignment" DROP CONSTRAINT "testsessionid_fk"; 
+ ALTER TABLE "public"."studentspecialcircumstance" DROP CONSTRAINT "fk_studentspecialcircumstance_specialcircumstanceid";
+ ALTER TABLE "public"."studentspecialcircumstance" DROP CONSTRAINT "fk_studentspecialcircumstance_studenttestid";
+ ALTER TABLE "public"."studentspecialcircumstance" DROP CONSTRAINT "studentspecialcircumstance_approvedby_fkey";
+ ALTER TABLE "public"."studentspecialcircumstance" DROP CONSTRAINT "studentspecialcircumstance_status_fkey";
+ ALTER TABLE "public"."studentsresponseparameters" DROP CONSTRAINT "fk_studentsresponseparameters_studentstestsectionsid";
+ ALTER TABLE "public"."studentsresponseparameters" DROP CONSTRAINT "fk_studentsresponseparameters_studentstestsid";
+ ALTER TABLE "public"."studentsresponseparameters" DROP CONSTRAINT "fk_studentsresponseparameters_taskvariantid";
+ ALTER TABLE "public"."studentsresponseparameters" DROP CONSTRAINT "fk_studentsresponseparameters_testid";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "fk_enrollmentid";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "fk_st_created_user";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "fk_st_updated_user";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "fk_students_tests_status";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "studentstests_status_fk";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "studentstests_studentid_fkey";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "studentstests_testcollectionid_fkey";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "studentstests_testid_fkey";
+ ALTER TABLE "public"."studentstests" DROP CONSTRAINT "studentstests_testsessionid_fkey";
+ ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "fk_previousstatus";
+ ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "fk_studentstestsections_crdusr";
+ ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "fk_studentstestsections_status";
+ ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "fk_studentstestsections_studentstestid";
+ ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "fk_studentstestsections_testpartid";
+ ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "fk_studentstestsections_testsectionid";
+ ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "fk_studentstestsections_updusr";
+ ALTER TABLE "public"."studentstestsectionstasks" DROP CONSTRAINT "studentstestsectionstasks_studentstestsectionsid_fkey";
+ ALTER TABLE "public"."studentstestsectionstasks" DROP CONSTRAINT "studentstestsectionstasks_taskid_fkey";
+ ALTER TABLE "public"."studentstestsectionstasksfoils" DROP CONSTRAINT "studentstestsectionstasksfoils_foilid_fkey";
+ ALTER TABLE "public"."studentstestsectionstasksfoils" DROP CONSTRAINT "studentstestsectionstasksfoils_studentstestsectionstasks_fkey";
+ ALTER TABLE "public"."studentstestsectionstasksfoils" DROP CONSTRAINT "studentstestsectionstasksfoils_taskid_fkey";
+ ALTER TABLE "public"."studentstestshistory" DROP CONSTRAINT "fk_studentstestshistory_acteduser";
+ ALTER TABLE "public"."studentstestshistory" DROP CONSTRAINT "fk_studentstestshistory_studentstestsid";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "fk_ts_created_user";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "fk_ts_updated_user";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "test_session_test_coll_fk";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_attendanceschoolid_fk";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_gradecourseid_fk";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_operationaltestwindowid_fk";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_rosterid_fkey";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_stageid_fk";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_status_fkey";
+ ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_testtypeid_fk";
+ --ALTER TABLE "public"."enrollment" DROP CONSTRAINT "enrollment_pkey";
+ --ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "enrollment_roster_pk";
+ --ALTER TABLE "public"."enrollmenttesttypesubjectarea" DROP CONSTRAINT "pk_enrollmenttesttypesubjectarea_id";
+ --ALTER TABLE "public"."roster" DROP CONSTRAINT "roster_pk";
+ ALTER TABLE "public"."studentadaptivetestfinaltheta" DROP CONSTRAINT "uk_studentadaptivetestfinaltheta";
+ ALTER TABLE "public"."studentadaptivetestthetastatus" DROP CONSTRAINT "uk_studentadaptivetestthetastatus";
+ ALTER TABLE "public"."studentsadaptivetestsections" DROP CONSTRAINT "uk_studentsadaptivetestsections";
+ --ALTER TABLE "public"."studentsresponseparameters" DROP CONSTRAINT "studentsresponseparameters_pkey";
+ --ALTER TABLE "public"."studentsresponses" DROP CONSTRAINT "studentsresponses_pkey";
+ --ALTER TABLE "public"."studentstests" DROP CONSTRAINT "studentstests_pkey";
+ --ALTER TABLE "public"."studentstestsections" DROP CONSTRAINT "studentstestsections_pkey";
+ --ALTER TABLE "public"."studentstestsectionstasks" DROP CONSTRAINT "studentstestsectionstasks_pkey";
+ --ALTER TABLE "public"."studentstestsectionstasksfoils" DROP CONSTRAINT "studentstestsectionstasksfoils_pkey";
+ --ALTER TABLE "public"."testsession" DROP CONSTRAINT "testsession_pkey";
+ --ALTER TABLE "public"."enrollment" DROP CONSTRAINT "enrollment_uk";
+ ALTER TABLE "public"."enrollmentsrosters" DROP CONSTRAINT "enrollment_roster_uk";
+ ALTER TABLE "public"."studentsresponseparameters" DROP CONSTRAINT "studentsresponses_ukey"; 
+ ALTER TABLE "public"."ititestsessionsensitivitytags" DROP CONSTRAINT "fk_itisensitivity_historyid"; 

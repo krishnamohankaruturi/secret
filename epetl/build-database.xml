@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+
+<project name="build-database">
+	
+	<property name="project.dir" value="${basedir}" />
+	<property name="env.dir" value="../environments/"/>
+	<property name="sql.dir" value="${project.dir}/db" />
+	<property name="sql.ddl.dir" value="ddl" />
+	<property name="sql.dml.dir" value="dml" />
+	<property name="sql.project" value="AART" />
+
+	<path id="master-classpath">
+		<fileset dir="${project.dir}/build_lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="initialize-properties" description="initialize aart-build.properties">
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+		<echo message="Initializing properties from ${env.dir}${env}/aart-build.properties" />
+			
+		<property file="${env.dir}${env}/aart-build.properties" />
+	</target>
+
+	<target name="sql-deploy-ddl" description="Deploy DDL changes to the database."  depends="initialize-properties">
+		<antcall target="sql-deploy" inheritAll="false">
+			<param name="env" value="${env}" />
+			<param name="env.dir" value="${env.dir}" />
+		</antcall>
+
+		<sql driver="${etl.db.driver}" url="${etl.db.url}" userid="${etl.db.username}" password="${etl.db.password}" src="${sql.dir}/${sql.ddl.dir}/permissions.sql" encoding="UTF-8">
+			<classpath refid="master-classpath" />
+		</sql>
+	</target>
+
+	<target name="sql-deploy" description="Do Not Use: Deploy changes to the database.">
+
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+
+		<property file="${env.dir}${env}/aart-build.properties" />
+
+		<sql driver="${etl.db.driver}" url="${etl.db.url}" userid="${etl.db.username}" encoding="UTF-8" password="${etl.db.password}" print="true" output="temp.properties" expandProperties="true" onerror="continue" showheaders="false" showtrailers="false">
+			<classpath refid="master-classpath" />
+			/*NO LOAD BALANCE*/ SELECT 'sql.version=' || max(version) + 1 FROM ddl_version
+			WHERE project = '${sql.project}';
+		</sql>
+
+		<property file="temp.properties" />
+		<delete file="temp.properties" />
+
+		<echo message="Next version for ${sql.project}: ${sql.version}" />
+
+		<available file="${sql.dir}/${sql.ddl.dir}/${sql.version}.sql" property="sql.file.present" />
+
+		<antcall target="sql-load-file" />
+
+	</target>
+
+	<target name="sql-load-file" if="sql.file.present" depends="sql-create-schema" description="Do not use: Loads individual file to the database.">
+
+		<concat destfile="temp.${sql.version}.sql" encoding="UTF-8">
+			<filelist dir="${sql.dir}" files="${sql.ddl.dir}/${sql.version}.sql, ${sql.dml.dir}/${sql.version}.sql" />
+		</concat>
+
+		<sql driver="${etl.db.driver}" url="${etl.db.url}" userid="${etl.db.username}" password="${etl.db.password}" keepformat="true" delimitertype="row" encoding="UTF-8">
+			<classpath refid="master-classpath" />
+			<transaction src="temp.${sql.version}.sql" />
+		</sql>
+
+		<delete file="temp.${sql.version}.sql" failonerror="false" />
+
+		<echo message="Update ddl version" />
+		<sql driver="${etl.db.driver}" url="${etl.db.url}" userid="${etl.db.username}" password="${etl.db.password}" encoding="UTF-8">
+			<classpath refid="master-classpath" />
+		            INSERT INTO ddl_version (version, project) VALUES (${sql.version}, '${sql.project}');
+		        </sql>
+
+		<antcall target="sql-deploy" inheritAll="false">
+			<param name="env" value="${env}" />
+			<param name="env.dir" value="${env.dir}" />
+		</antcall>
+		
+	</target>
+
+	<target name="sql-create-schema" unless="sql.version" description="Do not use: Preloads the schema.">
+		<echo message="Preload schema." />
+
+		<echo message="Create table and insert initial version" />
+
+		<sql driver="${etl.db.driver}" url="${etl.db.url}" userid="${etl.db.username}" password="${etl.db.password}">
+			<classpath refid="master-classpath" />
+			CREATE TABLE ddl_version (version int4, project varchar, updated timestamp with time zone default now());
+			INSERT INTO ddl_version (version, project) VALUES (0, '${sql.project}');
+		</sql>
+
+		<antcall target="sql-deploy" inheritAll="false">
+			<param name="env" value="${env}" />
+			<param name="env.dir" value="${env.dir}" />
+		</antcall>
+	</target>
+
+</project>

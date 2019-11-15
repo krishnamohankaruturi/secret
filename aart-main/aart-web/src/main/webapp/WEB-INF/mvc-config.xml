@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:soap="http://cxf.apache.org/bindings/soap"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+     http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+	 http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	 http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+	 http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd">
+
+	<task:annotation-driven executor="batchTaskExecutor" scheduler="batchTaskScheduler"/>
+	<!-- enable transaction demarcation with annotations -->
+	<tx:annotation-driven />
+	
+	<aop:aspectj-autoproxy />
+
+	<bean id="aartAspect" class="edu.ku.cete.aspect.AARTAspect" />
+	
+	<!-- enable auto-wire -->
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+	</mvc:annotation-driven>
+	
+	<bean id="applicationContextUtil" class="edu.ku.cete.util.ApplicationContextUtil"></bean>
+
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="defaultContentType">
+        	 <util:constant static-field="org.springframework.http.MediaType.APPLICATION_JSON_VALUE" />
+        </property>  
+        <property name="ignoreAcceptHeader" value="false"></property>
+        <property name="favorPathExtension" value="false"></property>
+    </bean>
+    
+	<!-- This bean defines where the Apache Tiles configuration is located. -->
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles-defs.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Captcha -->
+	<bean id="reCaptchaService" class="net.tanesha.recaptcha.ReCaptchaImpl">
+		<property name="privateKey" value="6Leg0-cSAAAAANVEzUhDPKj6K8Rc13rsB4LMvV1H"></property>
+	</bean>
+
+	<!-- Setup the DynamicTilesView, this will allow us to insert the content of a page dynamically into our tile definitions. -->
+	<bean id="dynamicTilesViewResolver"
+		class="org.springbyexample.web.servlet.view.tiles2.TilesUrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springbyexample.web.servlet.view.tiles2.DynamicTilesView" />
+		<property name="prefix" value="/jsp/" />
+		<property name="suffix" value=".jsp" />
+		<property name="tilesDefinitionName" value="mainTemplate" />
+		<property name="tilesBodyAttributeName" value="content" />
+		<property name="tilesDefinitionDelimiter" value="." />
+		<property name="order" value="0" />
+	</bean>
+
+	<bean id="internalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/standalone/" />
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="1" />
+	</bean>
+    
+	<!--<context:property-placeholder location="classpath*:*.properties"/> -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+		<property name="locations">
+			<list>
+				<value>classpath:env.properties</value>
+				<value>classpath:upload.properties</value>
+				<value>file:${AART_HOME}/env.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+
+	<!-- google analytics -->
+	<bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+		<property name="attributes">
+			<map>
+				<entry key="enable.google.analytics" value="${enable.google.analytics}">
+				</entry>
+				<entry key="google.analytics.account" value="${google.analytics.account}">
+				</entry>
+				<entry key="nfs.url" value="${nfs.url}">
+				</entry>		
+				<entry key="queued.extracts.starttime" value="${queued.extracts.starttime}"></entry>
+				<entry key="queued.enabled" value="${queued.enabled}">
+				</entry>
+				<entry key="queued.extracts.endtime" value="${queued.extracts.endtime}">
+				</entry>		
+				<entry key="test.admin.monitoring.extract.instructional.start" value="${test.admin.monitoring.extract.instructional.start}"></entry>
+				<entry key="test.admin.monitoring.extract.instructional.end" value="${test.admin.monitoring.extract.instructional.end}"></entry>		
+				<entry key="test.admin.monitoring.extract.eoy.start" value="${test.admin.monitoring.extract.eoy.start}"></entry>		
+				<entry key="test.admin.monitoring.extract.eoy.end" value="${test.admin.monitoring.extract.eoy.end}"></entry>		
+			</map>
+		</property>
+	</bean>
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+            	<bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+				<bean
+					class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- Enter only properties that need to get transformaed. -->
+	<bean id="uploadSpecification" class="edu.ku.cete.util.UploadSpecification">
+		<property name="enrollmentColumnAttributeMapStr" value="${enrollmentColumnAttributeMapStr}" />
+		<property name="tecColumnAttributeMapStr" value="${tecColumnAttributeMapStr}" />
+		<property name="scrsColumnAttributeMapStr" value="${scrsColumnAttributeMapStr}" />
+		<property name="personalNeedsProfileColumnAttributeMapStr" value="${personalNeedsProfileColumnAttributeMapStr}" />
+		<property name="testColumnAttributeMapStr" value="${testColumnAttributeMapStr}" />
+		<property name="userColumnMapStr" value="${userupload.userColumnMapStr}" />
+		<property name="pDTrainingResultsMapStr" value="${pdTrainingUpload.userColumnMapStr}"/>
+		<property name="testCutScoresColumnAttributeMapStr" value="${testCutScoresColumnAttributeMapStr}" />
+		<property name="rawToScaleScoresColumnAttributeMapStr" value="${rawToScaleScoresColumnAttributeMapStr}" />
+		<property name="csvRecordTypeCode" value="${csvRecordTypeCode}" />
+		<property name="webServiceRecordTypeCode" value="${webServiceRecordTypeCode}" />
+		<property name="enrollmentRecordType" value="${enrollmentRecordType}" />
+		<property name="xmlEnrollmentRecordType" value="${xmlEnrollmentRecordType}" />
+		<property name="xmlUnEnrollmentRecordType" value="${xmlUnEnrollmentRecordType}" />
+		<property name="xmlLeaRecordType" value="${xmlLeaRecordType}" />
+		<property name="xmlSchoolRecordType" value="${xmlSchoolRecordType}" />
+		<property name="xmlDeleteLeaRecordType" value="${xmlDeleteLeaRecordType}" />
+		<property name="xmlDeleteSchoolRecordType" value="${xmlDeleteSchoolRecordType}" />
+		<property name="xmlRosterRecordType" value="${xmlRosterRecordType}" />
+		<property name="testRecordType" value="${testRecordType}" />
+		<property name="scrsRecordType" value="${scrsRecordType}" />
+		<property name="kidRecordType" value="${kidRecordType}" />
+		<property name="userRecordType" value="${userupload.userRecordType}" />
+		<property name="pdTrainingUploadType" value="${pdTrainingUpload.userRecordType}"/>
+		<property name="includeExcludeRecordType" value="${includeExcludeRecordType}"/>
+		<property name="includeExcludeRecordMapStr" value="${includeExcludeRecordColumnAttributeMapStr}" />
+		<!-- <property name="stateSubjectAreaCode" value="${stateSubjectAreaCode}" 
+			/> -->
+		<!-- <property name="testSubjectCode" value="${testSubjectCode}" /> -->
+		<!-- <property name="testTypeCode" value="${testTypeCode}" /> -->
+		<property name="courseEnrollmentStatusCode" value="${courseEnrollmentStatusCode}" />
+		<!-- <property name="stateCourseCode" value="${stateCourseCode}" /> -->
+		<property name="kansasAssessmentTags" value="${kansasAssessmentTags}" />
+		<property name="kansasWebServiceConfigTypeCode" value="${kansasWebServiceConfigTypeCode}" />
+		<!-- <property name="gradeTypeCode" value="${gradeTypeCode}" /> -->
+		<property name="orgRecordType" value="${orgupload.recordType}" />
+		<property name="errorMessageFileHeaderStr" value="${errorMessageFileHeaderStr}" />
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${jdbc.pool.intialSize}" />
+		<property name="maxTotal" value="${jdbc.pool.maxActive}" />
+		<property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+		<property name="maxConnLifetimeMillis" value="43200000" />
+	</bean>
+		
+	<!-- transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+ 	
+	<!-- define the SqlSessionFactory -->
+	<bean name="sqlSessionFactory" id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="edu.ku.cete.domain" />
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="edu.ku.cete.model" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>	
+	
+	<bean id="reportDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.report.driverClassName}" />
+		<property name="url" value="${jdbc.report.url}" />
+		<property name="username" value="${jdbc.report.username}" />
+		<property name="password" value="${jdbc.report.password}" />
+		<property name="initialSize" value="${jdbc.pool.intialSize}" />
+		<property name="maxTotal" value="${jdbc.pool.maxActive}" />
+		<property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+		<property name="maxConnLifetimeMillis" value="43200000" />
+	</bean>
+	
+	<bean id="reportTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">		
+		<property name="dataSource" ref="reportDataSource" />
+	</bean>
+	
+	<bean name="reportSqlSessionFactory" id="reportSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="reportDataSource" />
+		<property name="typeAliasesPackage" value="edu.ku.cete.report.domain" />
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="edu.ku.cete.report.model" />
+		<property name="sqlSessionFactoryBeanName" value="reportSqlSessionFactory"/>
+	</bean>
+
+	<bean id="warehouseDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.datawarehouse.driverClassName}" />
+		<property name="url" value="${jdbc.datawarehouse.url}" />
+		<property name="username" value="${jdbc.datawarehouse.username}" />
+		<property name="password" value="${jdbc.datawarehouse.password}" />
+		<property name="initialSize" value="${jdbc.datawarehouse.pool.intialSize}" />
+		<property name="maxTotal" value="${jdbc.datawarehouse.pool.maxActive}" />
+		<property name="maxIdle" value="${jdbc.datawarehouse.pool.maxIdle}" />
+		<property name="maxConnLifetimeMillis" value="43200000" />
+	</bean>
+	
+	<bean id="dataWarehouseTxMgr" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">
+		<property name="dataSource" ref="warehouseDataSource" />
+	</bean>
+	
+ 	
+	<!-- define the SqlSessionFactory -->
+	<bean name="datawarehouseSqlSessionFactory" id="datawarehouseSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="warehouseDataSource" />
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="edu.ku.cete.warehouse.model" />
+		<property name="sqlSessionFactoryBeanName" value="datawarehouseSqlSessionFactory"/>
+	</bean>
+	
+	<!-- Start of ReadReplica section -->
+	<bean id="readreplicaDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+	    <property name="driverClassName" value="${jdbc.readreplica.driverClassName}" />
+		<property name="url" value="${jdbc.readreplica.url}" />
+		<property name="username" value="${jdbc.readreplica.username}" />
+		<property name="password" value="${jdbc.readreplica.password}" />
+		<property name="initialSize" value="${jdbc.readreplica.pool.intialSize}" />
+		<property name="maxTotal" value="${jdbc.readreplica.pool.maxActive}" />
+		<property name="maxIdle" value="${jdbc.readreplica.pool.maxIdle}" />
+		<property name="maxConnLifetimeMillis" value="43200000" />
+	</bean>
+	
+	<bean id="readreplicaTxMgr" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">
+		<property name="dataSource" ref="readreplicaDataSource" />
+	</bean>
+	
+ 	
+	<!-- define the SqlSessionFactory -->
+	<bean name="readreplicaSqlSessionFactory" id="readreplicaSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="readreplicaDataSource" />
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="edu.ku.cete.dataextracts.model" />
+		<property name="sqlSessionFactoryBeanName" value="readreplicaSqlSessionFactory"/>
+	</bean>
+	<!-- End of ReadReplica section -->
+	
+	<!-- Java Mail Configuration -->
+	<!-- TODO pull the host from a property file -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}" />
+		<property name="port" value="${mail.port}" />
+		<property name="username" value="${mail.username}" />
+		<property name="password" value="${mail.password}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">${mail.transport.protocol}</prop>
+				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+				<prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+				<prop key="mail.debug">${mail.debug}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="fmConfig" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+		<property name="templateLoaderPath" value="/templates/" />
+	</bean>
+
+<!-- 	<bean id="messageSource" -->
+<!-- 		class="org.springframework.context.support.ResourceBundleMessageSource"> -->
+<!-- 		<property name="basename" value="messages" /> -->
+<!-- 	</bean> -->
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+                <value>tde/messages</value>
+            </list>
+        </property>
+    </bean>
+	<!-- Configure the multipart resolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- one of the properties available; the maximum file size in bytes 17*10^6 -->
+		<!-- changed from 16mb to 30mb  -->
+		<property name="maxUploadSize" value="31457280" />
+	</bean>
+
+	<bean id="kidsSettings" class="edu.ku.cete.ksde.kids.KidsSettingsFactory"
+		factory-method="initialize">
+		<constructor-arg value="${wsConnectionPassword}" type="java.lang.String" />
+		<constructor-arg value="${wsConnectionUsername}" type="java.lang.String" />
+	</bean>
+	
+	<cache:annotation-driven cache-manager="epCacheManager" />
+	
+   	<bean id="epCacheManager" class="org.springframework.cache.jcache.JCacheCacheManager">
+		  <property name="cacheManager" ref="jCacheManager" />
+	</bean>
+	
+	<bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
+	  	<!-- <property name="cacheManagerUri" value="file:///Users/rohit/ep-ehcache.xml" /> -->
+	  	<property name="cacheManagerUri" value="https://files.kiteaai.org/applications/educator/ep-ehcache.xml" />
+	</bean>
+		
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver" />
+	<bean id="defaultExceptionHandler" class="edu.ku.cete.web.support.ExceptionHandler" >
+		<!-- from ExceptionHandler -->
+		<property name="ajaxErrorView" value="ajaxError" />
+
+		<!-- from SimpleMappingExceptionResolver -->
+		<property name="defaultErrorView" value="error"/>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	    <property name="targetObject">
+	        <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	            <property name="targetClass" value="java.lang.System" />
+	            <property name="targetMethod" value="getProperties" />
+	        </bean>
+	    </property>
+	    <property name="targetMethod" value="putAll" />
+	    <property name="arguments">
+	        <util:properties>
+	            <prop key="org.apache.cxf.stax.allowInsecureParser">true</prop>
+	        </util:properties>
+	    </property>
+	</bean>
+</beans>

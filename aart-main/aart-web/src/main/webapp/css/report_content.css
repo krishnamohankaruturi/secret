@@ -1,0 +1,433 @@
+#reportPane {
+	background-color: #EEEEEE;
+	position: relative;
+}
+
+.reportFilter {
+	height: 50px;
+	text-align: center;
+	font-size: 0.85em;
+}
+
+.reportFilter .reportCriteriaText {
+	float: left;
+	word-wrap: break-word;
+	background-color: #CCCCCC;
+	font-weight: bold;
+	width: 10%;
+	height: 50px;
+	line-height: 25px; /* if we want x lines, this needs to be 1/x the height (in this case, x = 2) */
+}
+
+/* this is the same as the .reportCriteriaText, without the background-color */
+.reportFilter .reportCriteriaTextPlaceholder {
+	float: left;
+	word-wrap: break-word;
+	font-weight: bold;
+	width: 10%;
+	height: 50px;
+	line-height: 25px;
+	vertical-align: center;
+}
+
+.reportFilter .section {
+	display: inline-block;
+	float: left;
+	width: 22%;
+	/* height: 50px; */
+	line-height: 50px;
+	word-wrap: break-word;
+}
+
+.reportFilter .section .criteria {
+	opacity: 0.50;
+}
+
+.reportFilter .section .criteria.enabled, .reportFilter .section .criteria.complete {
+	cursor: pointer;
+	font-weight: bold;
+	opacity: 1;
+}
+
+.reportFilter .section .text {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+}
+
+.reportFilter .filterLine div {
+	border-bottom: 1px solid #888888;
+	border-right: 1px solid #888888;
+}
+
+.reportFilter .textLine > div {
+	padding-right: 1px;
+	/* border-bottom: 1px solid #BBBBBB; */
+}
+
+.reportFilter .textLine div:last-of-type {
+	padding-right: 0px;
+	/* border-right: 1px solid #BBBBBB; */
+}
+
+.reportFilter .icon {
+	vertical-align: middle;
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+}
+
+.reportFilter #resetButton {
+	padding: 0px 0px;
+	vertical-align: text-top;
+}
+
+.reportFilter .criteria .icon1 {
+	background: url(../images/reports/number1_disabled.png) no-repeat center center;
+}
+
+.reportFilter .criteria .icon2 {
+	background: url(../images/reports/number2_disabled.png) no-repeat center center;
+}
+
+.reportFilter .criteria .icon3 {
+	background: url(../images/reports/number3_disabled.png) no-repeat center center;
+}
+
+.reportFilter .criteria .icon4 {
+	background: url(../images/reports/number4_disabled.png) no-repeat center center;
+}
+.reportFilter .criteria .icon5 {
+	background: url(../images/reports/number5_disabled.png) no-repeat center center;
+}
+.reportFilter .criteria.enabled .icon1 {
+	background: url(../images/reports/number1_enabled.png) no-repeat center center;
+}
+
+.reportFilter .criteria.enabled .icon2 {
+	background: url(../images/reports/number2_enabled.png) no-repeat center center;
+}
+
+.reportFilter .criteria.enabled .icon3 {
+	background: url(../images/reports/number3_enabled.png) no-repeat center center;
+}
+
+.reportFilter .criteria.enabled .icon4 {
+	background: url(../images/reports/number4_enabled.png) no-repeat center center;
+}
+.reportFilter .criteria.enabled .icon5 {
+	background: url(../images/reports/number5_enabled.png) no-repeat center center;
+}
+.reportFilter .criteria.complete .icon {
+	background: url(../images/reports/checked.png) no-repeat center center;
+}
+
+
+/* Corner styles, like on the Report Criteria label */
+.reportFilter .corner {
+	position: relative;
+}
+.reportFilter .corner:after, .reportFilter .corner:before {
+	content: "";
+	position: absolute;
+	left: 100%;
+	width: 20px;
+	height: 50%;
+}
+.reportFilter .corner:before {
+	top: 0px;
+	background: -moz-linear-gradient(top,  #CCCCCC 0%, #CCCCCC 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CCCCCC), color-stop(100%,#CCCCCC)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #CCCCCC 0%,#CCCCCC 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #CCCCCC 0%,#CCCCCC 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #CCCCCC 0%,#CCCCCC 100%); /* IE10+ */
+	background: linear-gradient(to top right, #CCCCCC 50%, transparent 51%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CCCCCC', endColorstr='#CCCCCC',GradientType=0 ); /* IE6-9 */
+}
+.reportFilter .corner:after {
+	bottom: 0px;
+	background: -moz-linear-gradient(top, #CCCCCC 0%, #CCCCCC 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CCCCCC), color-stop(100%,#CCCCCC)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #CCCCCC 0%,#CCCCCC 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #CCCCCC 0%, #CCCCCC 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #CCCCCC 0%, #CCCCCC 100%); /* IE10+ */
+	background: linear-gradient(to bottom right, #CCCCCC 50%, transparent 51%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CCCCCC', endColorstr='#CCCCCC',GradientType=0 ); /* IE6-9 */
+}
+
+
+#reportPane .bottom {
+	clear: both;
+	text-align: center;
+}
+
+#reportContent {
+	float: left;
+	margin: 1% 1% 0;
+	width: 98%;
+	height: 74%;
+	word-wrap: break-word;
+	overflow: auto;
+}
+
+#reportContent a {
+	color: #434343;
+}
+
+#reportContent a:hover {
+	color: #DD9944;
+}
+
+#reportContent div.item {
+	margin: 5px;
+}
+
+#reportFilter
+{
+	width: 100%;
+	word-wrap: break-word;
+}
+
+#filterLine
+{
+	width: 100%;
+	word-wrap: break-word;
+	overflow: auto;
+}
+
+#textLine
+{
+	width: 100%;
+	float: left;
+	word-wrap: break-word;
+	/*border-bottom: 1px solid #bbbbbb;*/
+}
+
+
+.schoolDetail {
+	/*border: solid #b8b8b8 2px;*/
+    display: block;
+    float: left;
+    height: 90%;
+    padding: 1%;
+    width: 97%;
+    clear: both;
+}
+
+.schoolDetail .subject {
+	display: inline-block;
+	width: 22%;
+    word-wrap: break-word;
+    padding-right:1%;
+    line-height: normal;
+	vertical-align: top;
+	text-align: center;
+}
+
+.schoolDetail .subject .heading {
+	display: inline-block;
+	line-height: normal;
+	vertical-align: middle;
+}
+
+.schoolDetail .subject .item {
+	margin: 5px;
+}
+
+.allStudents {
+	/*border: solid #b8b8b8 2px;*/
+    display: block;
+    float: left;
+    height: 90%;
+    padding: 1%;
+    width: 97%;
+    clear: both;
+    overflow-x: auto;
+}
+
+.allStudents .heading_left{
+	width: 45%;
+    word-wrap: break-word;
+    padding-right:1%;
+    padding-left:1%;
+    line-height: normal;
+	vertical-align: top;
+	text-align: left;
+	display: inline-block;
+	float: left;
+	font-weight: bold;
+	color:#3178CC;
+	font:19px Arial,Helvetica,sans-serif;
+}
+
+.allStudents .heading_left_summary{
+	width: 60%;
+    word-wrap: break-word;
+    padding-right:1%;
+    padding-left:0%;
+    line-height: normal;
+	vertical-align: top;
+	text-align: left;
+	display: inline-block;
+	float: left;
+	font-weight: bold;
+	color:#3178CC;
+	font:19px Arial,Helvetica,sans-serif;
+}
+
+#reportContent .allStudents .heading_right a{
+	color:#3178CC;
+}
+
+.allStudents .heading_right{
+	display: inline-block;
+	width: 40%;
+    word-wrap: break-word;
+    padding-right:1%;
+    line-height: normal;
+	vertical-align: top;
+	text-align: right;
+	float: right;
+	font:16px Arial,Helvetica,sans-serif;
+	color:#3178CC;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.allStudents .titleHeading{
+	width: 100%;
+    word-wrap: break-word;
+    padding-right:10px;
+    padding-left:10px;
+    padding-bottom: 10px;
+    line-height: normal;
+	vertical-align: top;
+	text-align: left;
+	display: inline-block;
+	font-weight: bold;
+	font:16px Arial,Helvetica,sans-serif;
+}
+
+.allStudentsDiv{
+	padding-bottom: 3px;
+}
+.allStudents .subject .heading {
+	display: inline-block;
+	line-height: normal;
+	vertical-align: middle;
+}
+
+.allStudentsDiv .allStudentsLinks{
+	padding-left:10px;
+	font:16px sans-serif;
+	font-weight: bold;
+	color:#3178CC;
+	text-decoration: underline;
+	padding-right:10px;
+}
+
+#allStudentsSummaryDiv .stdSummaryBundledLink{
+	padding-left:10px;
+	font:16px sans-serif;
+	font-weight: bold;
+	color:#3178CC;
+	text-decoration: underline;
+	padding-right:10px;
+}
+
+#allSchoolSummaryDiv .schoolSummaryBundledLink{
+	padding-left:10px;
+	font:16px sans-serif;
+	font-weight: bold;
+	color:#3178CC;
+	text-decoration: underline;
+	padding-right:10px;
+}
+
+.size{
+	padding-left: 10px;
+}
+
+.districtDetail {
+	/*border: solid #b8b8b8 2px;*/
+    display: block;
+    float: left;
+    height: 90%;
+    padding: 1%;
+    width: 97%;
+    clear: both;
+}
+
+.districtDetail .subject {
+	display: inline-block;
+	width: 23%;
+    word-wrap: break-word;
+    padding-right:1%;
+    line-height: normal;
+	vertical-align: top;
+}
+
+.districtDetail .subject .heading {
+	display: inline-block;
+	line-height: normal;
+	vertical-align: middle;
+}
+
+.districtDetail .subject .item {
+	margin: 5px;
+}
+
+.dlmStudentReportStudent{
+	width:100%;
+}
+
+.viewAltStudentReportDiv{
+	float: left; width: 25%;
+}
+
+.altStudentDropDownDiv{
+	float:left; width: 60%;
+}
+.altStudentDropDown{
+	width: 80%;
+}
+
+.altReportDisplayDiv{
+	width:100%; margin-top:5%;
+}
+
+.elpaTitleHeading{
+	width: 100%;
+    word-wrap: break-word;
+    margin-bottom: 5px;
+    line-height: normal;
+	vertical-align: top;
+	text-align: left;
+	display: inline-block;
+	font-weight: bold;
+	font:20px verdana;
+	color:#93B55D;
+}
+.dlmSummaryTitleHeading{
+    color: #5281D4;
+    font-size: 21px;
+    font-weight: bold;
+    font-family: none;  
+}
+.dlmSummaryHeading{
+    margin: 15px;
+}
+.itemDlmSummaryHeading{
+	 margin-left: 0px;
+	 margin-top: 35px;
+}
+.itemDlmSummaryLink{
+ 	color:#275081 !important;	
+}
+.itemDlmSummaryLinkText{
+	float: left;
+	color:#275081 !important;	
+    padding-right: 8px;
+    padding-top: 8px;
+}
+

@@ -1,0 +1,299 @@
+.circle {
+  height: 100px;
+  width: 100px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  border:solid black 1px;
+}
+
+div.teacherStudentRow {
+	width: 98%;
+	max-height: 400px;
+}
+
+div.teacherCell {
+	color: #0E76BC;
+	min-height: 72px;
+	max-height: 80px;
+	padding-top: 30px;
+}
+
+div.gradeCell {
+	min-height: 72px;
+	max-height: 80px;
+	float: right;
+}
+
+div.studentHeader {
+	background-color: #5b5c5e;
+}
+
+div.studentFirstHeader{
+	width: 55%;
+	min-height: 72px;
+	max-height: 80px;
+}
+div.studentSecondHeader{
+	width: 15%;
+	min-height: 72px;
+	max-height: 80px;
+}
+
+div.studentThirdHeader{
+	width: 15%;
+	min-height: 72px;
+	max-height: 80px;
+}
+div.studentForuthHeader{
+	width: 15%;
+	min-height: 72px;
+	max-height: 80px;
+}
+
+img.header-icon {
+	width: 30px;
+	cursor: pointer;
+}
+
+.viewStudentLink {
+	cursor: pointer;
+}
+
+.headerText {
+	color: white;
+}
+
+.centerIcon {
+  display: block;
+  padding-top: 5px;
+  width: 50%;
+}
+
+.iap-icon{
+	margin-bottom: 4px;
+}
+
+.iap_caption{
+	text-align: center;
+}    
+
+.blackBackground{
+	background-color: #5b5c5e;
+}
+
+.horizontalLinewithNoMargin{
+	margin-bottom: 0px;
+	margin-top: 0px;
+	width: 39%;
+	margin-left: 0;
+}
+
+.iconText {
+	font-size: 10px;
+	color: white;
+}
+
+
+th.studentFirstHeader{
+	width: 55%;
+	min-height: 72px;
+	max-height: 80px;
+}
+th.studentSecondHeader{
+	width: 15%;
+	min-height: 72px;
+	max-height: 80px;
+}
+
+th.studentThirdHeader{
+	width: 15%;
+	min-height: 72px;
+	max-height: 80px;
+}
+th.studentForuthHeader{
+	width: 15%;
+	min-height: 72px;
+	max-height: 80px;
+}
+
+thead.studentHeader {
+	background-color: #5b5c5e;
+}
+
+
+.box-shadow--2dp {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12)
+}
+.box-shadow--3dp {
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)
+}
+.box-shadow--4dp {
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
+}
+.box-shadow--6dp {
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2)
+}
+.box-shadow--8dp {
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12), 0 5px 5px -3px rgba(0, 0, 0, .2)
+}
+.box-shadow--16dp {
+    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+}
+
+
+.greyBackground{
+	background-color: #d3d3d3;
+}
+ 
+ .lightBlueBackground{
+	background-color: #add8e6;
+}
+  
+ .iap-numberinColumn{
+ 
+ 	text-align: center;
+}
+
+#iap-studentsearch div.row{
+	    flex-wrap: nowrap;
+	    margin-left: 0px;
+}
+
+ .iap-columnText{
+ 
+ 	text-align: center;
+}
+
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.error{
+	text-align: right;
+	color: red;
+	font-size: .8em;
+}
+
+
+
+.iap_pagination input {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 120px;
+    height: 100%;
+    outline: none;
+    border: none;
+    vertical-align: middle;
+    text-align: center;
+    color: #434343;
+    background-color: #ffffff;
+}
+
+.iap_pagination a.disabled, 
+.iap_pagination a.disabled:hover, 
+.iap_pagination a.disabled:focus, 
+.iap_pagination a.disabled:active {
+    background-color: #f3f3f3;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
+    background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
+    background-image: linear-gradient(#f3f3f3, lightgrey);
+    cursor: default;
+}
+
+.iap_pagination a {
+    display: block;
+    float: left;
+    width: 20px;
+    height: 20px;
+    outline: none;
+    border-right: 1px solid #CDCDCD;
+    border-left: 1px solid #CDCDCD;
+    color: #555555;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Times, 'Times New Roman', Georgia, Palatino;
+    background-color: #f3f3f3;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
+    background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
+    background-image: linear-gradient(#f3f3f3, lightgrey);
+}
+
+.iap_pagination a:first-child {
+    border: none;
+    border-radius: 2px 0 0 2px;
+}
+
+.iap_pagination a {
+    display: block;
+    float: left;
+    width: 20px;
+    height: 25px;
+    outline: none;
+    border-right: 1px solid #CDCDCD;
+    border-left: 1px solid #CDCDCD;
+    color: #555555;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Times, 'Times New Roman', Georgia, Palatino;
+    background-color: #f3f3f3;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
+    background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
+    background-image: linear-gradient(#f3f3f3, lightgrey);
+}
+
+.iap_pagination a:last-child {
+    border: none;
+    border-radius: 0 2px 2px 0;
+}
+
+.iap_pagination {
+    display: inline-block;
+    border: 1px solid #CDCDCD;
+    border-radius: 3px;
+}
+
+.bottom {
+    clear: both;
+    text-align: center;
+}
+
+.cell_text_middle{
+	margin: auto;
+}
+
+/* IE specific styling added for DE19636 fix */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+   .cell_text_middle {
+        margin-top:4.25vh;
+ 	}
+ 	.bold_text {  
+		text-align: center; 
+ 	}
+}
+
+.bold_text{
+	color: #0E76BC;
+	font-size: 1.2em;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.input_field_height31{
+	height: 31px !important;
+} 
+
+.stateStudentIdentifier{
+	width : 150px !important;
+}

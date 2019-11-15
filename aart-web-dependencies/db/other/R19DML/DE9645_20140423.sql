@@ -1,0 +1,1 @@
+update roster set activeflag=true,modifieddate=CURRENT_TIMESTAMP where id=526275;

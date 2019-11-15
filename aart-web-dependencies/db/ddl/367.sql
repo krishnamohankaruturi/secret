@@ -1,0 +1,1 @@
+ALTER TABLE itemstatistic DROP CONSTRAINT IF EXISTS itemstatistic_pkey;

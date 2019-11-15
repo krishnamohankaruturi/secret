@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+     http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+	
+	<bean id="pltwBatchAutoPartitionerStage1" class="edu.ku.cete.batch.pltw.auto.PLTWBatchAutoPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />		
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />		
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="stageCode" value="Stg1" />
+	</bean>
+	
+	<bean id="pltwBatchAutoPartitionerStage2" class="edu.ku.cete.batch.pltw.auto.PLTWBatchAutoPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />		
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />		
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="stageCode" value="Stg2" />
+	</bean>
+	
+	<bean name="pltwBatchAutoPageReader" scope="step" class="edu.ku.cete.batch.pltw.auto.PLTWBatchAutoReader" autowire-candidate="false">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />		
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="gradeBand" value="#{stepExecutionContext['gradeBand']}" />			
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />	
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />	
+		<property name="pageSize" value="5000" />
+		<property name="stage" value="#{stepExecutionContext['stage']}" />
+	</bean>
+
+	<bean id="pltwBatchAutoReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="pltwBatchAutoPageReader" />
+	</bean>
+
+	<bean name="pltwBatchAutoProcessor" scope="step" class="edu.ku.cete.batch.pltw.auto.PLTWBatchAutoProcessor">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />	
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />	
+		<property name="gradeBand" value="#{stepExecutionContext['gradeBand']}" />
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />			
+		<property name="testCollections" value="#{stepExecutionContext['testCollections']}" />	
+		<property name="pltwBatchErrorMessageMap" value="#{stepExecutionContext['pltwBatchErrorMessageMap']}" />			
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="stage" value="#{stepExecutionContext['stage']}" />		
+	</bean>
+	
+	<bean name="pltwBatchAutoWriter" scope="step" class="edu.ku.cete.batch.pltw.auto.PLTWBatchAutoWriter" autowire-candidate="false">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />	
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="gradeBand" value="#{stepExecutionContext['gradeBand']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="unusedTestSessionId" value="#{stepExecutionContext['unusedTestSessionId']}" />
+		<property name="studentSessionRule" value="#{stepExecutionContext['studentSessionRule']}" />					
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="stage" value="#{stepExecutionContext['stage']}" />
+	</bean>
+	
+	<bean name="pltwBatchAutoStepListener" scope="step" class="edu.ku.cete.batch.pltw.auto.PLTWBatchAutoStepListener">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<batch:step id="pltwBatchRegStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="pltwBatchAutoReader" writer="pltwBatchAutoWriter" 
+					processor="pltwBatchAutoProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="pltwBatchAutoStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:job id="pltwAutoEnrollmentJobStage1">
+		<batch:step id="partitionedPltwAutoStepStage1">
+			<batch:partition step="pltwBatchRegStep" partitioner="pltwBatchAutoPartitionerStage1">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="pltwBatchRegJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:job id="pltwAutoEnrollmentJobStage2">
+		<batch:step id="partitionedPltwAutoStepStage2">
+			<batch:partition step="pltwBatchRegStep" partitioner="pltwBatchAutoPartitionerStage2">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="pltwBatchRegJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!--
+	The first 2 steps are just the same thing with a different stage code.
+	Reason being that content was not set up how we were expecting.
+	Stage 1 can be randomized, but stage 2 should be directly based off of the stage 1 test.
+	This setup isn't ideal, but it should be serviceable given the nice timeframe of "2 weeks before the release".
+	-->
+	<batch:job id="pltwDacJob">
+		<batch:step id="pltwDacJob.step1" next="pltwDacJob.step2">
+			<batch:job ref="pltwAutoEnrollmentJobStage1" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="pltwDacJob.step2" next="pltwDacJob.step3">
+			<batch:job ref="pltwAutoEnrollmentJobStage2" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="pltwDacJob.step3">
+			<batch:job ref="dacJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<bean id="pltwAutoJobScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher" >
+		<property name="job" ref="pltwDacJob" />
+		<property name="assesmentProgramCode" value="PLTW" />
+		<property name="isScheduleOn" value="OFF" />
+		<!-- <property name="testingProgramAbbr" value="S" /> -->
+		<property name="enrollmentMethod" value="MLTSTG" />
+    </bean>
+    
+	<!--
+	scoring job configuration follows
+	-->
+	<bean id="pltwScoringJobListener" class="edu.ku.cete.batch.pltw.auto.PLTWScoringJobListener"/>
+	
+	<bean id="pltwScoringReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="pltwScoringPageReader" />
+	</bean>
+	<bean id="pltwScoringPageReader" class="edu.ku.cete.batch.pltw.auto.PLTWScoringReader" scope="step" autowire-candidate="false">
+		<property name="jobLastSubmissionDate" value="#{jobExecutionContext['jobLastSubmissionDate']}" />
+		<property name="batchRegistration" value="#{jobParameters['batchRegistrationRecord']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+		<property name="interimFlag" value="#{jobParameters['interimFlag']}" />
+		<property name="pageSize" value="#{jobExecutionContext['scoringAPIPageSize']}" />
+		<property name="reprocess" value="false" />
+	</bean>
+	
+	<bean id="pltwScoringReaderReprocess" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="pltwScoringPageReaderReprocess" />
+	</bean>
+	<bean id="pltwScoringPageReaderReprocess" class="edu.ku.cete.batch.pltw.auto.PLTWScoringReader" scope="step" autowire-candidate="false">
+		<property name="jobLastSubmissionDate" value="#{jobExecutionContext['jobLastSubmissionDate']}" />
+		<property name="batchRegistration" value="#{jobParameters['batchRegistrationRecord']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+		<property name="interimFlag" value="#{jobParameters['interimFlag']}" />
+		<property name="pageSize" value="#{jobExecutionContext['scoringAPIPageSize']}" />
+		<property name="reprocess" value="true" />
+	</bean>
+	
+	<bean id="pltwScoringWriter" class="edu.ku.cete.batch.pltw.auto.PLTWScoringWriter" scope="step" autowire-candidate="false">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="scoringAPIURL" value="#{jobExecutionContext['scoringAPIURL']}" />
+		<property name="scoringAPIKey" value="#{jobExecutionContext['scoringAPIKey']}" />
+		<property name="validateEnrollmentsHeader" value="#{jobExecutionContext['validateEnrollments']}" />
+	</bean>
+	
+	<batch:job id="pltwScoringJob">
+		<batch:step id="scoringMainStep" next="scoringReprocessStep">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk reader="pltwScoringReader" writer="pltwScoringWriter" commit-interval="#{jobExecutionContext['scoringAPIPageSize']}"/>
+			</batch:tasklet>
+		</batch:step>
+		<batch:step id="scoringReprocessStep">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk reader="pltwScoringReaderReprocess" writer="pltwScoringWriter" commit-interval="#{jobExecutionContext['scoringAPIPageSize']}"/>
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="pltwScoringJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!-- the nightly job will do more stuff, so we need a way to tell them apart. -->
+	<bean id="pltwScoringNightlyScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher" >
+		<property name="job" ref="pltwScoringJob" />
+		<property name="assesmentProgramCode" value="PLTW" />
+		<property name="interimFlag" value="false" />
+		<property name="isScheduleOn" value="ON" />
+	</bean>
+	<bean id="pltwScoringDaytimeScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher">
+		<property name="job" ref="pltwScoringJob" />
+		<property name="assesmentProgramCode" value="PLTW" />
+		<property name="interimFlag" value="true" />
+		<property name="isScheduleOn" value="ON" />
+	</bean>
+	<!--
+	end of scoring job configuration
+	-->
+</beans>

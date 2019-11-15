@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.report.model.StudentPNPAuditHistoryDao">
+    
+  <resultMap id="PnpHistoryResultMap" type="edu.ku.cete.report.domain.StudentPNPAuditHistory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="eventname" property="eventName" jdbcType="VARCHAR" />
+    <result column="studentid" property="studentId" jdbcType="BIGINT" />
+    <result column="statestudentidentifier" property="stateStudentIdentifier" jdbcType="VARCHAR" />
+    <result column="studentfirstname" property="studentFirstName" jdbcType="VARCHAR" />
+    <result column="studentlastname" property="studentLastName" jdbcType="VARCHAR" />
+    <result column="beforevalue" property="beforeValue" jdbcType="VARCHAR" />
+    <result column="currentvalue" property="currentValue" jdbcType="VARCHAR" />
+    <result column="activeflag" property="activeFlag" jdbcType="BIT" />
+    <result column="loggedinuserfirstname" property="loggedInUserFirstName" jdbcType="VARCHAR" />
+    <result column="loggedinuserlastname" property="loggedInUserLastName" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+   </resultMap>
+   
+   <insert id="insertStudentPNPAttributesHistory" parameterType="edu.ku.cete.report.domain.StudentPNPAuditHistory">
+	INSERT INTO studentpnpsaudithistory(eventname,studentid,statestudentidentifier,
+	studentfirstname,studentlastname,beforevalue,currentvalue,activeflag,
+	loggedinuserfirstname,loggedinuserlastname,state,createddate,modifieddate,modifiedusername,modifieduserfirstname,modifieduserlastname,modifiedusereducatoridentifier,modifiedUser)
+	values(#{eventName,jdbcType=VARCHAR},
+	#{studentId,jdbcType=BIGINT},#{stateStudentIdentifier,jdbcType=VARCHAR},
+	#{studentFirstName,jdbcType=VARCHAR},#{studentLastName,jdbcType=VARCHAR},
+	#{beforeValue,jdbcType=VARCHAR},#{currentValue,jdbcType=VARCHAR},
+	#{activeFlag,jdbcType=BIT},
+	#{loggedInUserFirstName,jdbcType=VARCHAR},
+	#{loggedInUserLastName,jdbcType=VARCHAR},
+	#{state,jdbcType=VARCHAR},
+	#{createdDate,jdbcType=TIMESTAMP},
+	#{modifiedDate,jdbcType=TIMESTAMP},
+	#{modifiedUserName,jdbcType=VARCHAR},
+	#{modifiedUserFirstName,jdbcType=VARCHAR},
+	#{modifiedUserLastName,jdbcType=VARCHAR},
+	#{modifiedUserEducatorIdentifier,jdbcType=VARCHAR},
+	#{modifiedUser,jdbcType=VARCHAR})
+  </insert>
+  
+   <select id="getAuditHistory" resultType="edu.ku.cete.report.domain.StudentPNPAuditHistory">
+	SELECT *, state, to_char(createddate AT time zone 'US/Central', 'MM-DD-YYYY hh12:mi:ss AM') createddateStr
+ from studentpnpsaudithistory studpnpauditHistory
+	where studpnpauditHistory.createddate &gt;=#{startDateTimes,jdbcType=TIMESTAMP} 
+	AND studpnpauditHistory.createddate &lt;=#{endDateTimes,jdbcType=TIMESTAMP}
+	<if test="stateStudentId !=null and stateStudentId !=''">
+	AND id in (select id   from studentaudittrailhistory studaudtrailhistory
+	where studentid in (select distinct studentid from studentaudittrailhistory
+	 where statestudentid=trim(#{stateStudentId,jdbcType=VARCHAR}))
+	union 
+	select id from   studentpnpsaudithistory 	where 	statestudentidentifier=trim(#{stateStudentId,jdbcType=VARCHAR})) 
+	</if> 
+	order by id
+	<if test="offset !=null ">
+	offset #{offset,jdbcType=INTEGER}
+	</if>
+	<if test="limit !=null">
+	limit #{limit,jdbcType=INTEGER}
+	</if>
+	
+	
+  </select>
+</mapper>

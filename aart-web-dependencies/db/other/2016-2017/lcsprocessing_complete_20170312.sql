@@ -1,0 +1,1 @@
+update studentstests set status=86,modifieddate=now(),modifieduser=162964 where id in (14493608,14606426,15255155,15135605);

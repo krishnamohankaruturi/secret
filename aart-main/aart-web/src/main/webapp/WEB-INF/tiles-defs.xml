@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+       
+<!-- This file contains the configuration for Apache Tiles. -->
+       
+<tiles-definitions>
+    <definition name=".mainTemplate" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/templates/blank.jsp"></put-attribute>
+    </definition>
+    <definition name="templates/profileView" template="/jsp/templates/profile.jsp">
+        <put-attribute name="content" value="/jsp/templates/profileView.jsp"></put-attribute> 
+    </definition>
+     <definition name="previewTest" template="/jsp/templates/preview.jsp">
+        <put-attribute name="content" value="/jsp/test/previewTest.jsp"></put-attribute> 
+    </definition>
+     <definition name="previewITPTest" template="/jsp/templates/itpPreviewTemplate.jsp">
+        <put-attribute name="content" value="/jsp/itpPreview.jsp"></put-attribute> 
+    </definition>
+    
+    <definition name="previewNodes" template="/jsp/test/previewNodes.jsp"></definition>
+    <definition name="accessProfile" template="/jsp/student/accessProfile.jsp"></definition>
+    <definition name="editStudent" template="/jsp/configuration/editStudent.jsp"></definition>
+    <definition name="editStudentGrfInformation" template="/jsp/configuration/editStudentGRF.jsp"></definition>
+    <definition name="manageOrganization" template="/jsp/configuration/manageOrganization.jsp"></definition>
+    <definition name="editOrganization" template="/jsp/configuration/editOrganizations.jsp"></definition>
+    <definition name="viewOrganization" template="/jsp/configuration/viewOrganization.jsp"></definition>     
+    <definition name="createActivationEmailTemplate" template="/jsp/configuration/createActivationEmailTemplate.jsp"></definition>        
+    <definition name="batchProcesses" template="/jsp/configuration/batchProcesses.jsp"></definition>
+    <definition name="rosters" template="/jsp/configuration/rosters.jsp"></definition>
+     <definition name="roles" template="/jsp/configuration/roles.jsp"></definition>
+    <definition name="students" template="/jsp/configuration/students.jsp"></definition>
+    <definition name="organizationMgmt" template="/jsp/configuration/organizationMgmt.jsp"></definition>
+    <definition name="testRecordsMgmt" template="/jsp/configuration/testRecordsMgmt.jsp"></definition>
+
+    <definition name="monitoring" template="/jsp/test/viewTestSessionMonitor.jsp"></definition>
+    <definition name="uploadReportData" template="/jsp/configuration/uploadReportData.jsp"></definition>
+    <definition name="configureITI" template="/jsp/configuration/configureITI.jsp"></definition>
+    <definition name="usersMgmt" template="/jsp/configuration/usersMgmt.jsp"></definition>
+    <definition name="findQCTests" template="/jsp/test/findQCTests.jsp"></definition>
+    <definition name="firstContactSettings" template="/jsp/configuration/firstContactSettings.jsp"></definition>
+    <definition name="reportsSetup" template="/jsp/configuration/reportsSetup.jsp"></definition>
+    <definition name="createMessage" template="/jsp/configuration/createMessage.jsp"></definition>
+    <definition name="generalSettings" template="/jsp/configuration/generalSettings.jsp"></definition>
+<!--      <definition name="viewEditOperationalTestWindow" template="/jsp/test/viewEditOperationalTestWindow.jsp"></definition>  -->
+    <definition name="viewStudentDetails" template="/jsp/student/viewStudentDetails.jsp"></definition>
+    <definition name="activeStudentDetails" template="/jsp/student/activateStudent.jsp"></definition>
+    <definition name="firstContactReponseView" template="/jsp/student/firstContactResponseView.jsp"></definition>
+    <definition name="pnpOptions" template="/jsp/configuration/pnpOptionSettings.jsp"></definition>
+    
+    
+    <!-- Test Management Tab START-->
+    <definition name="testManagementTab" template="/jsp/test/testManagementTab.jsp"></definition>
+    <definition name="instructionalSupportTab" template="/jsp/test/instructionalSupportTab.jsp"></definition>
+    <definition name="viewAutoRegistrationTestSessions" template="/jsp/test/viewAutoRegistrationTestSessions.jsp"></definition>
+    <definition name="viewProjectedTesting" template="/jsp/test/viewProjectedTesting.jsp"></definition>
+    <!-- Test Management Tab END-->
+    
+    <definition name="viewModuleDetails" template="/jsp/professionaldevelopment/viewModuleDetails.jsp"></definition>
+    <definition name="rubricScoringView" template="/jsp/test/rubricScoringView.jsp"></definition>
+    <definition name="viewStudentInstructionalPlans" template="/jsp/test/viewStudentInstructionalPlans.jsp"></definition>
+    <definition name="sessionTimedOut" template="/jsp/sessionTimedOut.jsp"/>
+
+    <definition name="testCoordination" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/configuration/testCoordination.jsp"></put-attribute>     
+    </definition>
+
+    <definition name="projectedTesting" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/test/viewProjectedTesting.jsp"></put-attribute>     
+    </definition>
+
+    <definition name="operationalTestWindow" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/test/viewOperationalTestWindow.jsp"></put-attribute>     
+    </definition>
+    
+    <definition name="instructionalSupportWindow" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/test/instructionalSupportTab.jsp"></put-attribute>     
+    </definition>
+    
+    <definition name="error" template="/jsp/tem/test/editOperationalTestWindowplates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/error.jsp"></put-attribute> 
+    </definition>
+    <definition name="permissionDenied" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/permissionDenied.jsp"></put-attribute> 
+    </definition>    
+    <definition name="new_reports" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/new_reports.jsp"></put-attribute> 
+    </definition>
+    <definition name="reportDataManagement" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/reportDataManagement.jsp"></put-attribute> 
+    </definition>
+    
+    <definition name=".mainNoNavTemplate" template="/jsp/templates/mainNoNavigation.jsp">
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/templates/blank.jsp"></put-attribute>
+    </definition>
+    <definition name="errorNoNavigation" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/errorNoLogin.jsp"></put-attribute> 
+    </definition>
+    <definition name="permissionDeniedNoNavigation" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/permissionDenied.jsp"></put-attribute> 
+    </definition>    
+    <definition name="authErrorNoNavigation" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/authError.jsp"></put-attribute> 
+    </definition>    
+    <definition name="forgotPassword" extends=".mainNoNavTemplate">
+    	<put-attribute name="content" value="/jsp/forgotPassword.jsp"/>
+    </definition>
+    <definition name="logIn" extends=".mainNoNavTemplate" >
+    	<put-attribute name="content" value="/jsp/logIn.jsp"/>
+    </definition>
+    <definition name="createAccount" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/professionaldevelopment/createAccount.jsp"></put-attribute>
+    </definition>
+    <definition name="newPassword" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/professionaldevelopment/activeAccount.jsp"></put-attribute>
+    </definition>
+     <definition name="activateUser" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/user/activateUser.jsp"></put-attribute> 
+    </definition>
+     <definition name="activateSuccess" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/user/activateSuccess.jsp"></put-attribute> 
+    </definition>
+    <definition name="resetPassword" extends=".mainNoNavTemplate">
+        <put-attribute name="content" value="/jsp/resetPassword.jsp"></put-attribute>
+    </definition>
+    <definition name="nojs"  template="/jsp/nojs.jsp">
+    </definition>
+    <definition name="pdStudentHome"  template="/jsp/tde/studentHome.jsp">
+    </definition>
+	<definition name="endTest"  template="/jsp/tde/endTest.jsp"/>
+	<definition name="ajaxError"  template="/jsp/ajaxError.jsp"/>
+	
+	<definition name="toolstab" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/tools/toolstab.jsp"></put-attribute> 
+	 </definition>
+	 
+	<definition name="interim" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/interim.jsp"></put-attribute> 
+	 </definition>
+	 
+	 <definition name="helptab" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/tools/helpTab.jsp"></put-attribute> 
+	 </definition>
+	 
+	 <definition name="instructionAndAssessmentPlannerPopover" template="/jsp/instruction-and-assessment-planner/ajax/iap-popover-content.jsp"></definition>
+	 
+	 <definition name="instructionAndAssessmentPlannerPopoverThemes" template="/jsp/instruction-and-assessment-planner/ajax/iap-popover-content-themes.jsp"></definition>
+	 
+	 <definition name="instructionAndAssessmentStudentSearch" template="/jsp/instruction-and-assessment-planner/ajax/iap-home-students.jsp"></definition>
+	
+</tiles-definitions>

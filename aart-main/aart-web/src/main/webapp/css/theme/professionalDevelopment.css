@@ -1,0 +1,53 @@
+div .prodev .tabTable { 
+	display: table;
+	width: auto;
+}
+
+div .prodev .row { 
+	display: table-row;
+
+}
+
+div .prodev .cell { 
+	display: table-cell;
+ 	vertical-align:top;
+}
+
+div .prodev .tab-cell { 
+	display: table-cell;
+ 	vertical-align:top;
+ 	width: 160px;
+}
+div .prodev .content-cell { 
+	display: table-cell;
+ 	vertical-align:top;
+ 	width: 100%;
+}
+
+div .prodev h2 {
+    color: #4090E1;
+    font-size: 1.5em;
+    font-weight: 300;
+}
+
+div .prodev .linkBox {
+	color: #FFFFFF;
+   	background-color: #0E76AC;
+	padding: 5px;
+}
+
+div .prodev .blueLabel {
+	font-size: .95em;
+    color: #4090e1;
+    text-transform: uppercase; 
+}
+
+div .prodev .value{
+    color: #646567;
+    font-weight: 300; 
+}
+
+div .prodev .tab{
+	  cursor: pointer;
+}
+

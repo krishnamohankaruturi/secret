@@ -1,0 +1,2359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+     http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+ 	<bean id="batchUploadReader" class="edu.ku.cete.batch.upload.SkippableItemReader" scope="step">
+ 		<!-- changed from resource to fileName to allow the pulling of the file from S3 -->
+		<property name="fileName" value="#{jobParameters['inputFile']}" />
+		<property name="linesToSkip" value="1" />
+		<property name="skippedLinesCallback" ref="uploadSkippedLinesCallback" ></property>
+		<property name="lineMapper">
+			<bean class="edu.ku.cete.batch.upload.BatchUploadLineMapper">
+ 				<property name="lineTokenizer">
+				  	<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value="," />
+						<property name="strict" value="false" />
+					</bean>
+				</property>
+   				<property name="fieldSetMapper">
+			  		<bean class="org.springframework.batch.item.file.mapping.PassThroughFieldSetMapper" />
+				</property>
+				<property name="stepExecution" value="#{stepExecution}" />
+             </bean>
+        </property>
+	</bean>
+
+	 <bean id="batchUploadXSLReader" class="edu.ku.cete.batch.upload.excel.poi.ExcelUploadReader" scope="step">
+		<!-- changed from resource to fileName to allow the pulling of the file from S3 -->
+		<property name="fileName" value="#{jobParameters['inputFile']}" />
+		<property name="linesToSkip" value="1" />
+		<property name="skippedLinesCallback" ref="uploadSkippedLinesCallback" ></property>
+		<property name="lineMapper">
+			<bean class="edu.ku.cete.batch.upload.BatchUploadLineMapper">
+ 				<property name="lineTokenizer">
+				  	<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value="," />  
+					</bean>
+				</property>
+   				<property name="fieldSetMapper">
+			  		<bean class="org.springframework.batch.item.file.mapping.PassThroughFieldSetMapper" />
+				</property>
+				<property name="stepExecution" value="#{stepExecution}" />
+             </bean>
+        </property>
+	</bean>
+	
+ 	<bean id="uploadSkippedLinesCallback" class="edu.ku.cete.batch.upload.BatchUploadHeaderHandler" scope="step">
+		  <property name="stepExecution" value="#{stepExecution}" />
+		  <property name="batchUploadId" value="#{jobExecutionContext['batchUploadId']}" />
+	</bean>
+	
+	<bean id="batchUploadJobListener" class="edu.ku.cete.batch.upload.BatchUploadJobListener"/>
+	
+	<bean id="batchUploadWriter" class="edu.ku.cete.batch.upload.writer.BatchUploadWriter" scope="step">
+  			<property name="uploadTypeCode" value="#{jobParameters['uploadTypeCode']}" />
+ 	</bean>
+	
+	<bean name="batchUploadStepListener" class="edu.ku.cete.batch.upload.BatchUploadStepListener" scope="step">
+		<property name="batchUploadId" value="#{jobExecutionContext['batchUploadId']}" />
+	</bean>
+ 
+	<bean id="batchUploadProcessor" class="edu.ku.cete.batch.upload.processor.BatchUploadProcessor" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="uploadFileValidator">
+			<bean class="edu.ku.cete.batch.upload.validator.BatchUploadValidator">
+				<property name="stepExecution" value="#{stepExecution}" />
+				<property name="uploadTypeCode" value="#{jobParameters['uploadTypeCode']}" />
+             </bean>
+		</property>
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="subjectId" value="#{jobParameters['subjectId']}" />
+		<property name="subjectCode" value="#{jobParameters['subjectCode']}" />
+		<property name="uploadTypeCode" value="#{jobParameters['uploadTypeCode']}" />
+		<property name="batchUploadId" value="#{jobExecutionContext['batchUploadId']}" />
+		<property name="UPLOAD_TYPE" value="#{jobParameters['UPLOAD_TYPE']}" />
+		<property name="stateId" value="#{jobParameters['stateId']}" />
+		<property name="districtId" value="#{jobParameters['districtId']}" />
+		<property name="schoolId" value="#{jobParameters['schoolId']}" />
+		<property name="selectedOrgId" value="#{jobParameters['selectedOrgId']}"/>
+		<property name="batchUploadRecord" value="#{jobExecutionContext['batchUploadRecord']}"/>
+		<property name="testId" value="#{jobExecutionContext['testId']}"/>
+		<property name="documentId" value="#{jobExecutionContext['documentId']}"/>
+		<property name="uploadedUserId" value="#{jobParameters['uploadedUserId']}"/>
+		<property name="reportYear" value="#{jobParameters['reportYear']}"/>
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}"/>
+		<property name="testingProgramName" value="#{jobParameters['testingProgramName']}"/>
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}"/>
+		<property name="createdUser" value="#{jobParameters['createdUser']}"/>
+	</bean>
+
+	<batch:job id="batchUploadJob">
+		<batch:step id="batchUploadStep">
+			<batch:tasklet>
+				<batch:chunk reader="batchUploadReader" processor="batchUploadProcessor" writer="batchUploadWriter" skip-limit="999999" commit-interval="1">
+					<batch:skippable-exception-classes>
+                		<batch:include class="edu.ku.cete.batch.support.SkipBatchException"/>
+            		</batch:skippable-exception-classes>
+				</batch:chunk>
+				<batch:listeners> <batch:listener ref="batchUploadStepListener" /> </batch:listeners>
+				<batch:no-rollback-exception-classes>
+					<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				</batch:no-rollback-exception-classes>
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchUploadJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:job id="batchUploadExcelJob">
+		<batch:step id="batchUploadExcelStep">
+			<batch:tasklet>
+				<batch:chunk reader="batchUploadXSLReader" processor="batchUploadProcessor" writer="batchUploadWriter" skip-limit="999999" commit-interval="1">
+					<batch:skippable-exception-classes>
+                		<batch:include class="edu.ku.cete.batch.support.SkipBatchException"/>
+            		</batch:skippable-exception-classes>
+				</batch:chunk>
+				<batch:listeners> <batch:listener ref="batchUploadStepListener" /> </batch:listeners>
+				<batch:no-rollback-exception-classes>
+					<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				</batch:no-rollback-exception-classes>
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchUploadJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<bean id="batchUploadRunScheduler" class="edu.ku.cete.batch.upload.BatchUploadProcessStarter" >
+			<property name="batchUploadJob" ref="batchUploadJob" />
+			<property name="batchUploadExcelJob" ref="batchUploadExcelJob" />
+			<property name="isScheduleOn" value="${batch.upload.job.switch}" />
+    </bean>
+	
+	<!-- Batch Report Calculations -->
+	
+	 <bean name="batchReportProcessScoreCalcPageReader" class="edu.ku.cete.batch.reportprocess.ReportProcessScoreCalcPageReader" scope="step" autowire-candidate="false">
+		<property name="gradeCourseId" value="#{stepExecutionContext['gradeCourseId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+ 		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+ 		<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+ 		<property name="studentIdListForReprocess" value="#{stepExecutionContext['studentIdListForReprocess']}" />
+ 		<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+ 		<property name="testsInprogressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+ 		<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+		<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+		<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+		<property name="assessmentId" value="#{stepExecutionContext['assessment']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="studentId" value="#{jobParameters['studentId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="createdUserId" value="#{jobParameters['createdUserId']}" />
+		<property name="gradeCourseAbbreviatedName" value="#{stepExecutionContext['gradeCourseAbbreviatedName']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="pageSize" value="10000" />
+	</bean>
+	
+	<bean id="batchReportProcessScoreCalcReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchReportProcessScoreCalcPageReader" />
+	</bean>
+	
+ 	<bean id="batchReportProcessScoreCalcWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchReportProcessScoreCalcWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="testingProgramId" value="#{stepExecutionContext['testingProgramId']}" />
+	 		<property name="contentAreaAbbreviatedName" value="#{stepExecutionContext['contentAreaAbbreviatedName']}" />
+	 		<property name="enableTroubleShooting" value="#{stepExecutionContext['enableTroubleShooting']}" />
+ 	</bean>
+	
+	<bean id="batchReportProcessScoreCalcProcessor" class="org.springframework.batch.item.support.CompositeItemProcessor">
+	    <property name="delegates">
+	        <list>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.BatchStudentReportGetTests" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            	<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+	            	<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+           	 		<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+ 					<property name="testsInprogressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+					<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+					<property name="specialCircumstanceStatusSavedId" value="#{stepExecutionContext['specialCircumstanceStatusSavedId']}" />
+	       			<property name="specialCircumstanceStatusApprovedId" value="#{stepExecutionContext['specialCircumstanceStatusApprovedId']}" />
+	       			<property name="scoringStatusCompletedId" value="#{stepExecutionContext['scoringStatusCompletedId']}" />
+	       			<property name="skipStudentCalcForUncompletedStages" value="#{jobParameters['skipStudentCalcForUncompletedStages']}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculateRawCutScore" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	       			<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+	       			<property name="testsInProgressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+	       			<property name="testSectionStatusUnusedId" value="#{stepExecutionContext['testSectionStatusUnusedId']}" />
+	       			<property name="testSectionStatusCompletedId" value="#{stepExecutionContext['testSectionStatusCompletedId']}" />
+	       			<property name="testSectionStatusInProgressId" value="#{stepExecutionContext['testSectionStatusInProgressId']}" />
+	       			<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+	       			<property name="specialCircumstanceStatusSavedId" value="#{stepExecutionContext['specialCircumstanceStatusSavedId']}" />
+	       			<property name="specialCircumstanceStatusApprovedId" value="#{stepExecutionContext['specialCircumstanceStatusApprovedId']}" />
+	       			<property name="contentAreaAbbreviatedName" value="#{stepExecutionContext['contentAreaAbbreviatedName']}" />
+	       			<property name="gradeCourseAbbreviatedName" value="#{stepExecutionContext['gradeCourseAbbreviatedName']}" />
+	       			<property name="excludedItemsList" value="#{stepExecutionContext['excludedItems']}" />
+	       			<property name="enableTroubleShooting" value="#{stepExecutionContext['enableTroubleShooting']}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculateSubscoresRawScore" scope="step">
+	            	 <property name="stepExecution" value="#{stepExecution}" />
+	            	 <property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+	            	 <property name="testSectionStatusInProgressId" value="#{stepExecutionContext['testSectionStatusInProgressId']}" />
+	            	 <property name="testSectionStatusCompletedId" value="#{stepExecutionContext['testSectionStatusCompletedId']}" />
+	            	 <property name="subscoreRawScaleExternalTestIds" value="#{stepExecutionContext['subscoreRawScaleExternalTestIds']}" />
+	            	 <property name="testsInProgressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			 <property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			 <property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			 <property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+	       			 <property name="testLevelSubscoreBucketMap" value="#{stepExecutionContext['testLevelSubscoreBucketMap']}" />	       			 
+	       			 <property name="excludedItemsList" value="#{stepExecutionContext['excludedItems']}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculateSubscoresScaleScore" scope="step">
+	            	 <property name="stepExecution" value="#{stepExecution}" />
+	            	 <property name="subscoreRawScaleExternalTestIds" value="#{stepExecutionContext['subscoreRawScaleExternalTestIds']}" />
+	            	 <property name="testLevelSubscoreBucketMap" value="#{stepExecutionContext['testLevelSubscoreBucketMap']}" />
+	            	 <property name="gradeCourseAbbreviatedName" value="#{stepExecutionContext['gradeCourseAbbreviatedName']}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculateScaleScore" scope="step">
+	            	<property name="testingProgramId" value="#{stepExecutionContext['testingProgramId']}" />
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculateLevelOnScaleScore" scope="step">
+	            	<property name="testingProgramId" value="#{stepExecutionContext['testingProgramId']}" />
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            </bean>
+	            <!-- <bean class="edu.ku.cete.batch.reportprocess.processor.CalculateCombinedLevelOnMDPTAndScaleScores" scope="step">
+	            		<property name="testingProgramId" value="#{stepExecutionContext['testingProgramId']}" />
+	            		<property name="stepExecution" value="#{stepExecution}" />
+	            </bean> -->
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.TransferAggregateProcessor" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            	<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+	            	<property name="testsInProgressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+	       			<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+	       			<property name="contentAreaAbbreviatedName" value="#{stepExecutionContext['contentAreaAbbreviatedName']}" />
+	            </bean>
+	        </list>
+	    </property>
+	</bean>
+	
+	<bean name="batchReportProcessStepListener" class="edu.ku.cete.batch.reportprocess.BatchReportProcessStepListener" scope="step">
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	</bean>
+	
+	<bean id="batchReportProcessJobListener" class="edu.ku.cete.batch.reportprocess.BatchReportProcessJobListener"/>
+	
+	<bean id="batchReportScoreCalcJobListener" class="edu.ku.cete.batch.reportprocess.BatchReportScoreCalcJobListener"/>
+	
+	
+	<bean id="batchReportProcessScoreCalcPartitioner" class="edu.ku.cete.batch.reportprocess.BatchReportProcessPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+	</bean>
+	
+	<batch:job id="batchReportProcessScoreCalcJob">
+		<batch:step id="partitionedBatchReportProcessScoreCalcStep">
+			<batch:partition step="batchReportProcessScoreCalcStep" partitioner="batchReportProcessScoreCalcPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchReportScoreCalcJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="batchReportProcessScoreCalcStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchReportProcessScoreCalcReader" writer="batchReportProcessScoreCalcWriter"
+				processor="batchReportProcessScoreCalcProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	
+	<!-- KELPA2 REPORT CALCULATIONS  -->
+	<batch:job id="kelpaBatchReportProcessScoreCalcJob">
+		<batch:step id="kelpaPartitionedBatchReportProcessScoreCalcStep">
+			<batch:partition step="kelpaBatchReportProcessScoreCalcStep" partitioner="kelpaBatchReportProcessScoreCalcPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="kelpaBatchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:step id="kelpaBatchReportProcessScoreCalcStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchReportProcessScoreCalcReader" writer="kelpaBatchReportProcessScoreCalcWriter"
+				processor="kelpaBatchReportProcessScoreCalcProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="kelpaBatchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="kelpaBatchReportProcessScoreCalcPartitioner" class="edu.ku.cete.batch.reportprocess.KelpaBatchReportProcessPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+	</bean>
+	
+	<bean id="kelpaBatchReportProcessJobListener" class="edu.ku.cete.batch.reportprocess.KelpaBatchReportScoreCalcJobListener"/>
+	
+	<bean name="kelpaBatchReportProcessStepListener" class="edu.ku.cete.batch.reportprocess.KelpaBatchReportProcessStepListener" scope="step">
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	</bean>
+	
+	<bean id="kelpaBatchReportProcessScoreCalcWriter" class="edu.ku.cete.batch.reportprocess.writer.KelpaBatchReportProcessScoreCalcWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="testingProgramId" value="#{stepExecutionContext['testingProgramId']}" />
+	 		<property name="enableTroubleShooting" value="#{stepExecutionContext['enableTroubleShooting']}" />
+ 	</bean>
+	
+	<bean id="kelpaBatchReportProcessScoreCalcProcessor" class="org.springframework.batch.item.support.CompositeItemProcessor">
+	    <property name="delegates">
+	        <list>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.KelpaBatchStudentReportGetTests" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            	<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+	            	<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+           	 		<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+ 					<property name="testsInprogressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+					<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+					<property name="specialCircumstanceStatusSavedId" value="#{stepExecutionContext['specialCircumstanceStatusSavedId']}" />
+	       			<property name="specialCircumstanceStatusApprovedId" value="#{stepExecutionContext['specialCircumstanceStatusApprovedId']}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.KelpaCalculateRawCutScore" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	       			<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+	       			<property name="testsInProgressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+	       			<property name="testSectionStatusUnusedId" value="#{stepExecutionContext['testSectionStatusUnusedId']}" />
+	       			<property name="testSectionStatusCompletedId" value="#{stepExecutionContext['testSectionStatusCompletedId']}" />
+	       			<property name="testSectionStatusInProgressId" value="#{stepExecutionContext['testSectionStatusInProgressId']}" />
+	       			<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+	       			<property name="specialCircumstanceStatusSavedId" value="#{stepExecutionContext['specialCircumstanceStatusSavedId']}" />
+	       			<property name="specialCircumstanceStatusApprovedId" value="#{stepExecutionContext['specialCircumstanceStatusApprovedId']}" />
+	       			<property name="contentAreaAbbreviatedName" value="#{stepExecutionContext['contentAreaAbbreviatedName']}" />
+	       			<property name="excludedItemsList" value="#{stepExecutionContext['excludedItems']}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.KelpaCalculateScaleScore" scope="step">
+	            	<property name="testingProgramId" value="#{stepExecutionContext['testingProgramId']}" />
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.KelpaCalculateLevelOnScaleScore" scope="step">
+	            	<property name="testingProgramId" value="#{stepExecutionContext['testingProgramId']}" />
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            </bean>
+	        </list>
+	    </property>
+	</bean>
+	<!--  End of KELPA2 Calculations -->
+	
+	
+	<!-- Median Report -->	
+	
+	<bean name="batchReportProcessMedianPageReader" class="edu.ku.cete.batch.reportprocess.ReportProcessMedianReader" scope="step" autowire-candidate="false">
+		<property name="gradeCourseId" value="#{stepExecutionContext['gradeCourseId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="pageSize" value="1000" />
+	</bean>
+	
+	<bean id="batchReportProcessMedianReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchReportProcessMedianPageReader" />
+	</bean>
+	
+	<bean id="batchReportProcessMedianWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchReportProcessMedianWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+ 	</bean>
+	
+	<bean id="batchReportProcessMedianProcessor" class="edu.ku.cete.batch.reportprocess.processor.ReportProcessMedianScoreProcessor" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	</bean>
+	
+	<bean id="batchReportProcessMedianPartitioner" class="edu.ku.cete.batch.reportprocess.BatchReportProcessMedianPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<batch:step id="batchReportProcessMedianStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchReportProcessMedianReader" writer="batchReportProcessMedianWriter"
+				processor="batchReportProcessMedianProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:job id="batchReportProcessMedianJob">
+		<batch:step id="partitionedBatchReportProcessMedianStep">
+			<batch:partition step="batchReportProcessMedianStep" partitioner="batchReportProcessMedianPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		 <batch:listeners>
+			<batch:listener ref="batchReportScoreCalcJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!-- Median and Standard error by subscore definition -->
+	<bean id="batchReportProcessMedianBySubScoreDefProcessor" class="edu.ku.cete.batch.reportprocess.processor.ReportProcessMedianBySubScoreProcessor" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	</bean>
+	
+	<batch:step id="batchReportProcessMedianBySubScoreStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchReportProcessMedianReader" writer="batchReportProcessMedianWriter"
+				processor="batchReportProcessMedianBySubScoreDefProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:job id="batchReportProcessMedianJobBySubScore">
+		<batch:step id="partitionedBatchReportProcessMedianStepBySubScore">
+			<batch:partition step="batchReportProcessMedianBySubScoreStep" partitioner="batchReportProcessMedianPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		 <batch:listeners>
+			<batch:listener ref="batchReportScoreCalcJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!--   Report Process --> 
+	 <bean name="batchStudentReportProcessPageReader" class="edu.ku.cete.batch.reportprocess.StudentReportProcessPageReader" scope="step" autowire-candidate="false">
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+ 		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="studentId" value="#{jobParameters['studentId']}" />
+		<property name="pageSize" value="1000" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />		
+	</bean>
+	
+	<bean id="batchStudentReportProcessReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchStudentReportProcessPageReader" />
+	</bean>
+	
+ 	<bean id="batchStudentReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchStudentReportProcessWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+	 		<property name="createdUserId" value="#{jobParameters['createdUserId']}" />
+ 	</bean>
+	
+	<bean id="batchStudentReportProcessPartitioner" class="edu.ku.cete.batch.reportprocess.BatchStudentReportGenerationPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<bean id="batchStudentReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchStudentReportProcess" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+	</bean>
+	
+	<batch:step id="batchStudentReportProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchStudentReportProcessReader" writer="batchStudentReportProcessWriter"
+				processor="batchStudentReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:job id="batchReportProcessStudentReportJob">
+		<batch:step id="partitionedBatchStudentReportProcessStep">
+			<batch:partition step="batchStudentReportProcessStep" partitioner="batchStudentReportProcessPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!-- Dynamic student Bundle report batch start-->
+ 	<bean id="dynamicbundledreportscheduler" class="edu.ku.cete.batch.BatchDynamicBundledReportProcessStarter">
+		<property name="batchDynamicBundleofStudentReportJob" ref="batchDynamicBundleofStudentReportJob" />
+		<property name="isScheduleOn" value="${report.extract.job.switch}" />
+    </bean>	
+	
+	<bean id="dynamicbundledreportJobListener" class="edu.ku.cete.batch.reportprocess.BatchDynamicBundledReportJobListener"/>
+	
+	<!-- <batch:job id="batchDynamicBundleofStudentReportJob">
+		<batch:step id="partitionedbatchDynamicBundleofStudentReportsProcessStep">
+			<batch:partition step="batchDynamicBundleofStudentReportsProcessStep" partitioner="batchDynamicBundleofStudentReportsPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+	    <batch:listeners>
+			<batch:listener ref="dynamicbundledreportJobListener" />
+		</batch:listeners>
+	</batch:job> -->
+	
+	<batch:job id="batchDynamicBundleofStudentReportJob">
+		<batch:step id="batchDynamicBundleofStudentReportsProcessStep">
+		    <batch:tasklet transaction-manager="transactionManager">
+			     <batch:chunk reader="batchDynamicBundleOfStudentReportsProcessReader" writer="batchDynamicBundleofStudentReportsProcessWriter"
+					 processor="batchDynamicBundleofStudentReportsProcessor" commit-interval="8" skip-policy="skipPolicy" />
+				 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				 </batch:no-rollback-exception-classes>
+				 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+			</batch:tasklet>
+		</batch:step>
+	    <batch:listeners>
+			<batch:listener ref="dynamicbundledreportJobListener" />
+		</batch:listeners>
+	</batch:job>
+		
+		
+	<bean id="batchDynamicBundleofStudentReportsPartitioner" class="edu.ku.cete.batch.reportprocess.BatchDynamicBundleofStudentReportsPartitioner" scope="step">
+		<property name="requestProcessId" value="#{jobParameters['requestId']}" />
+		<property name="bundleRequest" value="#{jobExecutionContext['bundleRequest']}" />
+		<property name="assessmentProgramCode" value="#{jobExecutionContext['assessmentProgramCode']}" />
+		<property name="schoolIds" value="#{jobExecutionContext['schoolIds']}" />
+		<property name="gradeIds" value="#{jobExecutionContext['gradeIds']}" />
+		<property name="subjectIds" value="#{jobExecutionContext['subjectIds']}" />		
+	</bean>
+	
+	<bean name="batchDynamicBundleOfStudentReportsProcessReader" class="edu.ku.cete.batch.reportprocess.BatchDynamicBundleOfStudentReportsProcessReader" scope="step" autowire-candidate="false">
+		<property name="requestProcessId" value="#{jobParameters['requestId']}" />
+		<property name="bundleRequest" value="#{jobExecutionContext['bundleRequest']}" />
+		<property name="assessmentProgramCode" value="#{jobExecutionContext['assessmentProgramCode']}" />	
+		<property name="schoolIds" value="#{jobExecutionContext['schoolIds']}" />
+		<property name="gradeIds" value="#{jobExecutionContext['gradeIds']}" />
+		<property name="subjectIds" value="#{jobExecutionContext['subjectIds']}" />						
+	</bean>	
+	
+	<bean id="batchDynamicBundleofStudentReportsProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchDynamicBundleofStudentReportsProcessor" scope="step">
+	    <property name="requestProcessId" value="#{jobParameters['requestId']}" />
+		<property name="bundleRequest" value="#{jobExecutionContext['bundleRequest']}" />
+		<property name="assessmentProgramCode" value="#{jobExecutionContext['assessmentProgramCode']}" />
+		<property name="schoolIds" value="#{jobExecutionContext['schoolIds']}" />
+		<property name="gradeIds" value="#{jobExecutionContext['gradeIds']}" />
+		<property name="subjectIds" value="#{jobExecutionContext['subjectIds']}" />		
+	</bean>
+	
+	<bean id="batchDynamicBundleofStudentReportsProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchDynamicBundleofStudentReportsProcessWriter" scope="step">
+		<property name="bundleRequest" value="#{jobExecutionContext['bundleRequest']}" />
+		<property name="assessmentProgramCode" value="#{jobExecutionContext['assessmentProgramCode']}" />
+ 	</bean> 
+	<!-- Dynamic student Bundle report batch end -->
+	
+	
+	<!-- package student reports into school files (creating pdf's and zip/sqllite files) -->
+	
+	<bean name="batchSchoolPdfFilesofStudentReportsPageReader" class="edu.ku.cete.batch.reportprocess.BatchSchoolPdfReportsProcessReader" scope="step" autowire-candidate="false">				
+ 		<property name="gradeCourseAbbrName" value="#{stepExecutionContext['gradeCourseAbbrName']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="stateId" value="#{stepExecutionContext['stateId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />		
+	</bean>
+	
+	<bean name="batchDistrictPdfOfStudentReportsProcessReader" class="edu.ku.cete.batch.reportprocess.BatchDistrictPdfReportsProcessReader" scope="step" autowire-candidate="false">				
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="stateId" value="#{stepExecutionContext['stateId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />		
+	</bean>
+	
+	<bean id="batchSchoolPdfOfStudentReportsProcessReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchSchoolPdfFilesofStudentReportsPageReader" />
+	</bean>
+	
+	<bean id="batchSchoolFilesofStudentReportsProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchSchoolPdfReportsProcessWriter" scope="step">
+	 		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="stepExecution" value="#{stepExecution}" />
+ 	</bean>
+ 	
+ 	<bean id="batchDistrictFilesofStudentReportsProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchDistrictPdfReportsProcessWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	 		<property name="stepExecution" value="#{stepExecution}" />
+ 	</bean>
+	
+	<bean id="batchSchoolPdfFilesofStudentReportsProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchSchoolPdfReportsProcessor" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="gradeCourseAbbrName" value="#{stepExecutionContext['gradeCourseAbbrName']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />		
+	</bean>
+	
+	<bean id="batchDistrictPdfFilesofStudentReportsProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchDistrictPdfReportsProcessor" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />		
+	</bean>
+	
+	<bean id="batchSchoolPdfFilesofStudentReportsPartitioner" class="edu.ku.cete.batch.reportprocess.BatchSchoolPdfReportsProcessPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+ 		<property name="organizationId" value="#{jobParameters['organizationId']}" />		
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+		<bean id="batchDistrictPdfFilesofStudentReportsPartitioner" class="edu.ku.cete.batch.reportprocess.BatchDistrictPdfReportsProcessPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+ 		<property name="organizationId" value="#{jobParameters['organizationId']}" />		
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<batch:step id="batchSchoolPdfFilesofStudentReportsProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchSchoolPdfOfStudentReportsProcessReader" writer="batchSchoolFilesofStudentReportsProcessWriter"
+				processor="batchSchoolPdfFilesofStudentReportsProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:step id="batchDistrictPdfFilesofStudentReportsProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchDistrictPdfOfStudentReportsProcessReader" writer="batchDistrictFilesofStudentReportsProcessWriter"
+				processor="batchDistrictPdfFilesofStudentReportsProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	
+	<batch:job id="batchSchoolPdfFilesofStudentReportJob">
+		<batch:step id="partitionedbatchSchoolPdfFilesofStudentReportsProcessStep">
+			<batch:partition step="batchSchoolPdfFilesofStudentReportsProcessStep" partitioner="batchSchoolPdfFilesofStudentReportsPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<bean name="batchSchoolCompressedFileReader" class="edu.ku.cete.batch.reportprocess.BatchSchoolReportCompressedFileProcessReader" scope="step" autowire-candidate="false">
+ 		<property name="contractingOrganizationId" value="#{stepExecutionContext['contractingOrganizationId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<bean id="batchSchoolCompressedFileProcessReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchSchoolCompressedFileReader" />
+	</bean>
+	
+	<bean id="batchSchoolCompressedFileProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchSchoolCompressedFileReportProcess" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="createPSFile" value="#{jobParameters['createPSFile']}" />
+	</bean>
+	
+	<bean id="batchSchoolCompressedFileProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchSchoolCompressedFileReportProcessWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+ 	</bean>
+	
+	<bean id="batchSchoolCompressedFilePartitioner" class="edu.ku.cete.batch.reportprocess.BatchSchoolCompressedFileProcessPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+			<property name="organizationId" value="#{jobParameters['organizationId']}" />			
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<batch:step id="batchSchoolCompressedFileProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchSchoolCompressedFileProcessReader" writer="batchSchoolCompressedFileProcessWriter"
+				processor="batchSchoolCompressedFileProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	<batch:job id="batchSchoolCompressedFileProcessStepJob">
+		<batch:step id="partitionedbatchSchoolCompressedFileProcessStep">
+			<batch:partition step="batchSchoolCompressedFileProcessStep" partitioner="batchSchoolCompressedFilePartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!-- School/District/State PDF report Generation -->
+	
+	<bean name="batchOrganizationReportProcessPageReader" class="edu.ku.cete.batch.reportprocess.OrganizationReportProcessPageReader" scope="step" autowire-candidate="false">
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+ 		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="pageSize" value="1000" />
+	</bean>
+	
+	<bean id="batchOrganizationReportProcessReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchOrganizationReportProcessPageReader" />
+	</bean>
+	
+ 	<bean id="batchOrganizationReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchOrganizationReportProcessWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+ 	</bean>
+	
+	<bean id="batchOrganizationReportProcessPartitioner" class="edu.ku.cete.batch.reportprocess.BatchOrganizationReportGenerationPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<bean id="batchOrganizationReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchOrganizationReportProcess" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+	</bean>
+	
+	<batch:step id="batchOrganizationReportProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchOrganizationReportProcessReader" writer="batchOrganizationReportProcessWriter"
+				processor="batchOrganizationReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="batchOrganizationSummaryReportProcessPartitioner" class="edu.ku.cete.batch.reportprocess.BatchOrganizationSummaryReportPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<bean id="batchOrganizationSummaryReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchOrganizationSummaryProcess" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+	</bean>
+	
+	<batch:step id="batchOrganizationSummaryReportProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchOrganizationReportProcessReader" writer="batchOrganizationReportProcessWriter"
+				processor="batchOrganizationSummaryReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:job id="batchReportProcessOrganizationReportJob">
+		 <batch:step id="partitionedBatchOrganizationReportProcessStep.step2">
+			<batch:partition step="batchOrganizationSummaryReportProcessStep" partitioner="batchOrganizationSummaryReportProcessPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!-- package student reports into school files (creating pdf's and zip/sqllite files) -->
+	<batch:job id="batchSchoolPDFOfStudentReportstAndZipJob">
+		<batch:step id="batchSchoolPDFOfStudentReportstAndZipJob.step1" next="batchSchoolPDFOfStudentReportstAndZipJob.step2">
+			<batch:job ref="batchSchoolPdfFilesofStudentReportJob"/>
+		</batch:step>
+		<batch:step id="batchSchoolPDFOfStudentReportstAndZipJob.step2">
+			<batch:job ref="batchSchoolCompressedFileProcessStepJob" />
+		</batch:step>		
+	</batch:job>
+	
+	<!-- Job to run Score ,median Calc -->
+	<batch:job id="batchReportProcessAllScoreCalcJob">
+		<batch:step id="batchReportProcessAllScoreCalcJob.step1" next="batchReportProcessAllScoreCalcJob.step2">
+			<batch:job ref="batchReportProcessScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcJob.step2" next="batchReportProcessAllScoreCalcJob.step3">
+			<batch:job ref="batchReportProcessMedianJob" />
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcJob.step3">
+			<batch:job ref="batchReportProcessMedianJobBySubScore" />
+		</batch:step>
+			<batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<!-- Job to run Only median Calc -->
+	<batch:job id="batchReportProcessMedianScoreCalcJob">
+		<batch:step id="batchReportProcessMedianScoreCalcJob.step1" next="batchReportProcessMedianScoreCalcJob.step2">
+			<batch:job ref="batchReportProcessMedianJob" />
+		</batch:step>
+		<batch:step id="batchReportProcessMedianScoreCalcJob.step2">
+			<batch:job ref="batchReportProcessMedianJobBySubScore" />
+		</batch:step>
+			<batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	
+	<!-- Job to run Score, median  and student report -->
+	<batch:job id="batchReportProcessAllScoreCalcStudentReportJob">
+		<batch:step id="batchReportProcessAllScoreCalcStudentReportJob.step1" next="batchReportProcessAllScoreCalcStudentReportJob.step2">
+			<batch:job ref="batchReportProcessAllScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcStudentReportJob.step2">
+			<batch:job ref="batchReportProcessStudentReportJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- Job to run Score, median  and district/school report-->
+	<batch:job id="batchReportProcessAllScoreCalcSchoolDistrictJob">
+		<batch:step id="batchReportProcessAllScoreCalcSchoolDistrictJob.step1" next="batchReportProcessAllScoreCalcSchoolDistrictJob.step2">
+			<batch:job ref="batchReportProcessAllScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcSchoolDistrictJob.step2">
+			<batch:job ref="batchReportProcessOrganizationReportJob" />
+		</batch:step>
+	</batch:job> 
+	
+	<!-- Job to run Score, median  and student report and district/school report-->
+	<batch:job id="batchReportProcessStudentReportSchoolDistrictJob">
+		<batch:step id="batchReportProcessStudentReportSchoolDistrictJob.step1" next="batchReportProcessStudentReportSchoolDistrictJob.step2">
+			<batch:job ref="batchReportProcessStudentReportJob" />
+		</batch:step>
+		<batch:step id="batchReportProcessStudentReportSchoolDistrictJob.step2">
+			<batch:job ref="batchReportProcessOrganizationReportJob" />
+		</batch:step>
+	</batch:job> 
+	
+	<!-- PDF/ZIP JOBS -->
+	<!-- Job to run Score, median  and pdf/Zip job -->
+	<batch:job id="batchReportProcessAllScoreCalcPDFZIPJob">
+		<batch:step id="batchReportProcessAllScoreCalcPDFZIPJob.step1" next="batchReportProcessAllScoreCalcPDFZIPJob.step2">
+			<batch:job ref="batchReportProcessAllScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcPDFZIPJob.step2">
+			<batch:job ref="batchSchoolPDFOfStudentReportstAndZipJob" />
+		</batch:step>
+	</batch:job>
+		
+	<!-- Job to run Student Report Generation and pdf/Zip job -->
+	<batch:job id="batchReportProcessStudentReportPDFZIPJob">
+		<batch:step id="batchReportProcessStudentReportPDFZIPJob.step1" next="batchReportProcessStudentReportPDFZIPJob.step2">
+			<batch:job ref="batchReportProcessStudentReportJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessStudentReportPDFZIPJob.step2">
+			<batch:job ref="batchSchoolPDFOfStudentReportstAndZipJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- Job to run district/school report and pdf/Zip job -->
+	<batch:job id="batchReportProcessSchoolDistrictPDFZIPJob">
+		<batch:step id="batchReportProcessSchoolDistrictPDFZIPJob.step1" next="batchReportProcessSchoolDistrictPDFZIPJob.step2">
+			<batch:job ref="batchReportProcessOrganizationReportJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessSchoolDistrictPDFZIPJob.step2">
+			<batch:job ref="batchSchoolPDFOfStudentReportstAndZipJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- Job to run Score, median and Student Report Generation and pdf/Zip job -->
+	<batch:job id="batchReportProcessAllScoreCalcStudentReportPDFZIPJob">
+		<batch:step id="batchReportProcessAllScoreCalcStudentReportPDFZIPJob.step1" next="batchReportProcessAllScoreCalcStudentReportPDFZIPJob.step2">
+			<batch:job ref="batchReportProcessAllScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcStudentReportPDFZIPJob.step2" next="batchReportProcessAllScoreCalcStudentReportPDFZIPJob.step3">
+			<batch:job ref="batchReportProcessStudentReportJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcStudentReportPDFZIPJob.step3">
+			<batch:job ref="batchSchoolPDFOfStudentReportstAndZipJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- Job to run Student Report Generation and district/school report and pdf/Zip job -->
+	<batch:job id="batchReportProcessStudentReportSchoolDistrictPDFZIPJob">
+		<batch:step id="batchReportProcessStudentReportSchoolDistrictPDFZIPJob.step1" next="batchReportProcessStudentReportSchoolDistrictPDFZIPJob.step2">
+			<batch:job ref="batchReportProcessStudentReportJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessStudentReportSchoolDistrictPDFZIPJob.step2" next="batchReportProcessStudentReportSchoolDistrictPDFZIPJob.step3">
+			<batch:job ref="batchReportProcessOrganizationReportJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessStudentReportSchoolDistrictPDFZIPJob.step3">
+			<batch:job ref="batchSchoolPDFOfStudentReportstAndZipJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- Job to run  Score, median and district/school report and pdf/Zip job -->
+	<batch:job id="batchReportProcessAllScoreCalcSchoolDistrictPDFZIPJob">
+		<batch:step id="batchReportProcessAllScoreCalcSchoolDistrictPDFZIPJob.step1" next="batchReportProcessAllScoreCalcSchoolDistrictPDFZIPJob.step2">
+			<batch:job ref="batchReportProcessAllScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcSchoolDistrictPDFZIPJob.step2" next="batchReportProcessAllScoreCalcSchoolDistrictPDFZIPJob.step3">
+			<batch:job ref="batchReportProcessOrganizationReportJob"/>
+		</batch:step>
+		<batch:step id="batchReportProcessAllScoreCalcSchoolDistrictPDFZIPJob.step3">
+			<batch:job ref="batchSchoolPDFOfStudentReportstAndZipJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- Job to run Score, median  and student report and district/school report and PDF of School/ZIP-->
+	<batch:job id="batchReportAllJob">
+		<batch:step id="batchReportAllJob.step1" next="batchReportAllJob.step2">
+			<batch:job ref="batchReportProcessAllScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchReportAllJob.step2" next="batchReportAllJob.step3">
+			<batch:job ref="batchReportProcessStudentReportJob" />
+		</batch:step>
+		<batch:step id="batchReportAllJob.step3" next="batchReportAllJob.step4">
+			<batch:job ref="batchReportProcessOrganizationReportJob" />
+		</batch:step>
+		<batch:step id="batchReportAllJob.step4">
+			<batch:job ref="batchSchoolPDFOfStudentReportstAndZipJob"/>
+		</batch:step>
+	</batch:job>
+
+	<!-- Start DLM Student Summary Bundled Reports -->
+		<bean id="batchStudentSummaryBundledReportPartitioner" class="edu.ku.cete.batch.reportprocess.StudentSummaryBundledReportPartitioner" scope="step">
+			<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+			<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+			<property name="organizationId" value="#{jobParameters['organizationId']}" />			
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />	 		
+ 			<property name="bundledReportType" value="#{jobParameters['bundledReportType']}" />	
+			<property name="stepExecution" value="#{stepExecution}" />
+		</bean>
+		
+		<bean id="batchStudentSummaryBundledReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.StudentSummaryBundledReportProcessor" scope="step">
+			<property name="stepExecution" value="#{stepExecution}" />
+			<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+			<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+			<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+			<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+			<property name="bundledReportType" value="#{stepExecutionContext['bundledReportType']}" />
+			<property name="gradeCourseAbbrName" value="#{stepExecutionContext['gradeCourseAbbrName']}" />
+		</bean>
+		<bean id="batchStudentSummaryBundledReportWriter" class="edu.ku.cete.batch.reportprocess.writer.StudentSummaryBundledReportWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="bundledReportType" value="#{stepExecutionContext['bundledReportType']}" />
+	 		<property name="stepExecution" value="#{stepExecution}" />
+	 	</bean>
+		
+		<bean name="batchStudentSummaryBundledReader" class="edu.ku.cete.batch.reportprocess.StudentSummaryBundledReportReader" scope="step" autowire-candidate="false">
+	 		<property name="stateId" value="#{stepExecutionContext['organizationId']}" />
+	 		<property name="gradeCourseAbbrName" value="#{stepExecutionContext['gradeCourseAbbrName']}" />
+			<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+			<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+			<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+			<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+			<property name="stepExecution" value="#{stepExecution}" />
+			<property name="bundledReportType" value="#{stepExecutionContext['bundledReportType']}" />
+		</bean>
+		
+		<bean id="batchStudentSummaryBundledReportReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+			<property name="delegate" ref="batchStudentSummaryBundledReader" />
+		</bean>
+		
+		<batch:step id="batchStudentSummaryBundledProcessStep">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk reader="batchStudentSummaryBundledReportReader" writer="batchStudentSummaryBundledReportWriter"
+					processor="batchStudentSummaryBundledReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+				<batch:no-rollback-exception-classes>
+					<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				</batch:no-rollback-exception-classes>
+				<batch:transaction-attributes isolation="DEFAULT"
+					propagation="REQUIRES_NEW" timeout="60" />
+				<batch:listeners>
+					<batch:listener ref="batchReportProcessStepListener" />
+				</batch:listeners>
+			</batch:tasklet>
+		</batch:step>
+		
+		<batch:job id="batchStudentSummaryBundledProcessJob">
+			<batch:step id="partitionedbatchStudentSummaryBundledStep">
+				<batch:partition step="batchStudentSummaryBundledProcessStep" partitioner="batchStudentSummaryBundledReportPartitioner">
+					<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+				</batch:partition>
+			</batch:step>
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessJobListener" />
+			</batch:listeners>
+		</batch:job>
+		
+	<!-- End DLM Student Summary Bundled Reports -->
+
+	<!-- Start DLM School Summary Bundled Reports -->
+		<bean id="batchSchoolSummaryBundledReportPartitioner" class="edu.ku.cete.batch.reportprocess.SchoolSummaryBundledReportPartitioner" scope="step">
+			<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+			<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+			<property name="organizationId" value="#{jobParameters['organizationId']}" />			
+			<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />	 		
+			<property name="bundledReportType" value="#{jobParameters['bundledReportType']}" />	
+			<property name="stepExecution" value="#{stepExecution}" />
+		</bean>
+		
+		<bean id="batchSchoolSummaryBundledReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.SchoolSummaryBundledReportProcessor" scope="step">
+			<property name="stepExecution" value="#{stepExecution}" />
+			<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+			<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+			<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+			<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+			<property name="bundledReportType" value="#{stepExecutionContext['bundledReportType']}" />
+		</bean>
+		<bean id="batchSchoolSummaryBundledReportWriter" class="edu.ku.cete.batch.reportprocess.writer.SchoolSummaryBundledReportWriter" scope="step">
+			<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+			<property name="bundledReportType" value="#{stepExecutionContext['bundledReportType']}" />
+			<property name="stepExecution" value="#{stepExecution}" />
+		</bean>
+		
+		<bean name="batchSchoolSummaryBundledReader" class="edu.ku.cete.batch.reportprocess.SchoolSummaryBundledReportReader" scope="step" autowire-candidate="false">
+			<property name="stateId" value="#{stepExecutionContext['organizationId']}" />
+			<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+			<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+			<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+			<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+			<property name="stepExecution" value="#{stepExecution}" />
+			<property name="bundledReportType" value="#{stepExecutionContext['bundledReportType']}" />
+		</bean>
+		
+		<bean id="batchSchoolSummaryBundledReportReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+			<property name="delegate" ref="batchSchoolSummaryBundledReader" />
+		</bean>
+		
+		<batch:step id="batchSchoolSummaryBundledProcessStep">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk reader="batchSchoolSummaryBundledReportReader" writer="batchSchoolSummaryBundledReportWriter"
+					processor="batchSchoolSummaryBundledReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+				<batch:no-rollback-exception-classes>
+					<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				</batch:no-rollback-exception-classes>
+				<batch:transaction-attributes isolation="DEFAULT"
+					propagation="REQUIRES_NEW" timeout="60" />
+				<batch:listeners>
+					<batch:listener ref="batchReportProcessStepListener" />
+				</batch:listeners>
+			</batch:tasklet>
+		</batch:step>
+		
+		<batch:job id="batchSchoolSummaryBundledProcessJob">
+			<batch:step id="partitionedbatchSchoolSummaryBundledStep">
+				<batch:partition step="batchSchoolSummaryBundledProcessStep" partitioner="batchSchoolSummaryBundledReportPartitioner">
+					<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+				</batch:partition>
+			</batch:step>
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessJobListener" />
+			</batch:listeners>
+		</batch:job>
+	
+	<!-- End DLM School Summary Bundled Reports -->
+
+	<!-- Start: Dynamic Student Summary Bundled Reports -->
+		<bean id="dynamicStudentSummaryBundledReportScheduler" class="edu.ku.cete.batch.DynamicStudentSummaryBundledReportProcessStarter">
+			<property name="batchDynamicBundleOfStudentSummaryReportsJob" ref="batchDynamicBundleOfStudentSummaryReportsJob" />
+			<property name="isScheduleOn" value="OFF" />
+		</bean>
+		
+		<bean id="dynamicStudentSummaryBundledReportJobListener" class="edu.ku.cete.batch.reportprocess.DynamicStudentSummaryBundledReportJobListener"/>
+		
+		<batch:job id="batchDynamicBundleOfStudentSummaryReportsJob">
+			<batch:step id="batchDynamicBundleofStudentSummaryReportsProcessStep">
+				<batch:tasklet transaction-manager="transactionManager">
+					 <batch:chunk reader="batchDynamicBundleOfStudentSummaryReportsProcessReader" writer="batchDynamicBundleofStudentSummaryReportsProcessWriter"
+						 processor="batchDynamicBundleofStudentSummaryReportsProcessor" commit-interval="8" skip-policy="skipPolicy" />
+					 <batch:no-rollback-exception-classes>
+						   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+					 </batch:no-rollback-exception-classes>
+					 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+				</batch:tasklet>
+			</batch:step>
+			<batch:listeners>
+				<batch:listener ref="dynamicStudentSummaryBundledReportJobListener" />
+			</batch:listeners>
+		</batch:job>		
+
+		<bean name="batchDynamicBundleOfStudentSummaryReportsProcessReader" class="edu.ku.cete.batch.reportprocess.DynamicBundleOfStudentSummaryReportsProcessReader" scope="step" autowire-candidate="false">
+			<property name="requestProcessId" value="#{jobParameters['requestId']}" />
+			<property name="bundleRequest" value="#{jobExecutionContext['bundleRequest']}" />
+			<property name="assessmentProgramCode" value="#{jobExecutionContext['assessmentProgramCode']}" />	
+			<property name="schoolIds" value="#{jobExecutionContext['schoolIds']}" />
+			<property name="gradeIds" value="#{jobExecutionContext['gradeIds']}" />					
+		</bean>
+		
+		<bean id="batchDynamicBundleofStudentSummaryReportsProcessor" class="edu.ku.cete.batch.reportprocess.processor.DynamicBundleofStudentSummaryReportsProcessor" scope="step">
+			<property name="requestProcessId" value="#{jobParameters['requestId']}" />
+			<property name="bundleRequest" value="#{jobExecutionContext['bundleRequest']}" />
+			<property name="assessmentProgramCode" value="#{jobExecutionContext['assessmentProgramCode']}" />
+			<property name="schoolIds" value="#{jobExecutionContext['schoolIds']}" />
+			<property name="gradeIds" value="#{jobExecutionContext['gradeIds']}" />	
+		</bean>
+		
+		<bean id="batchDynamicBundleofStudentSummaryReportsProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.DynamicBundleofStudentSummaryReportsProcessWriter" scope="step">
+			<property name="bundleRequest" value="#{jobExecutionContext['bundleRequest']}" />
+		</bean> 
+
+	<!-- End: Dynamic Student Summary Bundled Reports -->
+	
+	<!-- XML file processing Job -->
+	
+	<bean id="xmlBatchUploadReader" class="edu.ku.cete.batch.upload.reader.XmlUploadReader" scope="step">
+		<!-- changed from resource to fileName to allow the pulling of the file from S3 -->
+		<property name="fileName" value="#{jobParameters['inputFile']}" />
+		<property name="sifUploadId" value="#{jobParameters['sifUploadId']}" />
+		<property name="itemsToSkip" value="1" />
+		<property name="skippedItemsCallback" ref="xmlUploadSkippedItemsCallback" ></property>
+		<property name="itemMapper">
+			<bean class="edu.ku.cete.batch.upload.XmlItemMapper">
+ 				<property name="lineTokenizer">
+				  	<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="delimiter" value="," />  
+					</bean>
+				  </property>				
+   				<property name="fieldSetMapper">
+			  		<bean class="org.springframework.batch.item.file.mapping.PassThroughFieldSetMapper" />
+				</property>
+             </bean>
+        </property>
+        <property name="uploadTypeCode" value="#{jobParameters['uploadTypeCode']}" />
+	</bean>
+
+
+	<bean id="xmlUploadSkippedItemsCallback" class="edu.ku.cete.batch.upload.XmlBatchUploadHandler" scope="step">
+		  <property name="stepExecution" value="#{stepExecution}" />
+		  <property name="batchUploadId" value="#{jobExecutionContext['batchUploadId']}" />
+	</bean>
+	
+	<bean id="xmlBatchUploadProcessor" class="edu.ku.cete.batch.upload.processor.XmlBatchUploadProcessor" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="uploadFileValidator">
+			<bean class="edu.ku.cete.batch.upload.validator.BatchUploadValidator">
+				<property name="stepExecution" value="#{stepExecution}" />
+             </bean>
+		</property>
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="subjectId" value="#{jobParameters['subjectId']}" />
+		<property name="subjectCode" value="#{jobParameters['subjectCode']}" />
+		<property name="uploadTypeCode" value="#{jobParameters['uploadTypeCode']}" />
+		<property name="batchUploadId" value="#{jobExecutionContext['batchUploadId']}" />
+		<property name="UPLOAD_TYPE" value="#{jobParameters['UPLOAD_TYPE']}" />
+		<property name="stateId" value="#{jobParameters['stateId']}" />
+		<property name="districtId" value="#{jobParameters['districtId']}" />
+		<property name="schoolId" value="#{jobParameters['schoolId']}" />
+		<property name="selectedOrgId" value="#{jobParameters['selectedOrgId']}"/>
+		<property name="batchUploadRecord" value="#{jobExecutionContext['batchUploadRecord']}"/>
+	</bean>
+	<bean id="xmlBatchUploadWriter" class="edu.ku.cete.batch.upload.writer.XmlBatchUploadWriter" scope="step">
+		<property name="uploadTypeCode" value="#{jobParameters['uploadTypeCode']}" />
+ 	</bean>
+ 	
+ 	<bean name="xmlBatchRegStepListener" scope="step"
+		class="edu.ku.cete.batch.support.XmlBatchRegistrationStepListener">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+ 	
+	<batch:job id="xmlBatchUploadJob">
+		<batch:step id="xmlBatchUploadStep">
+			<batch:tasklet>
+				<batch:chunk reader="xmlBatchUploadReader" processor="xmlBatchUploadProcessor" writer="xmlBatchUploadWriter" skip-limit="999999" commit-interval="1">
+					<batch:skippable-exception-classes>
+                		<batch:include class="edu.ku.cete.batch.support.SkipBatchException"/>
+            		</batch:skippable-exception-classes>
+				</batch:chunk>
+				<batch:listeners> <batch:listener ref="xmlBatchRegStepListener" /> </batch:listeners>
+				<batch:no-rollback-exception-classes>
+					<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				</batch:no-rollback-exception-classes>
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchUploadJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<bean id="xmlBatchUploadRunScheduler" class="edu.ku.cete.batch.upload.XmlBatchUploadProcessStarter" >
+		<property name="batchUploadJob" ref="xmlBatchUploadJob" />
+		<property name="isScheduleOn" value="${xml.batch.upload.job.switch}" />
+    </bean>
+	<!-- XML file processing Job -->
+	
+	<bean id="reportBatchUploadRunScheduler" class="edu.ku.cete.batch.upload.ReportBatchUploadProcessStarter" >
+		<property name="batchUploadJob" ref="batchUploadJob" />
+		<property name="isScheduleOn" value="${report.batch.upload.job.switch}" />
+    </bean>
+    
+    <!-- Report extract batch processing -->
+    <bean id="reportExtractScheduler" class="edu.ku.cete.batch.ReportExtractProcessStarter">
+		<property name="isScheduleOn" value="${report.extract.job.switch}" />
+    </bean>
+    
+    <bean id="allExtractScheduler" class="edu.ku.cete.batch.ReportExtractProcessStarter">
+		<property name="isScheduleOn" value="${report.extract.job.switch}" />
+    </bean>
+    
+    <bean id="asyncExtractScheduler" class="edu.ku.cete.batch.ReportExtractProcessStarter">
+		<property name="isScheduleOn" value="${report.extract.job.switch}" />
+    </bean>
+    
+    <bean id="schoolExtractScheduler" class="edu.ku.cete.batch.ReportExtractProcessStarter">
+		<property name="isScheduleOn" value="${report.extract.job.switch}" />
+    </bean>
+    
+    <bean id="districtExtractScheduler" class="edu.ku.cete.batch.ReportExtractProcessStarter">
+		<property name="isScheduleOn" value="${report.extract.job.switch}" />
+    </bean>
+    
+    <bean id="stateExtractScheduler" class="edu.ku.cete.batch.ReportExtractProcessStarter">
+		<property name="isScheduleOn" value="${report.extract.job.switch}" />
+    </bean>
+    <!-- Report extract batch processing -->
+    
+    <!-- KSDE WebService Call Job to get KIDS data from KSDE -->
+    
+    <bean id="batchGetDataFromKSDETasklet" class="edu.ku.cete.batch.ksde.BatchGetDataFromKSDE" />
+    <bean id="BatchKSDEGetDataJobListener" class="edu.ku.cete.batch.ksde.BatchKSDEGetDataJobListener"/>
+    
+    <batch:job id="batchGetDataFromKSDEJob">
+		<batch:step id="batchGetDataFromKSDEJob.step1">
+	 		<batch:tasklet ref="batchGetDataFromKSDETasklet">
+	 		</batch:tasklet> 
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="BatchKSDEGetDataJobListener" />
+		</batch:listeners>
+	</batch:job>
+             
+    <bean id="batchKSDEGetDataJobRunScheduler" class="edu.ku.cete.batch.ksde.BatchKSDEGetDataStarter" >
+ 		<property name="batchGetDataFromKSDEJob" ref="batchGetDataFromKSDEJob" />
+     </bean>
+     
+     <!-- KSDE Batch Job to Process KIDS, TASC data from KSDE -->
+     
+     <bean id="batchKSDEDataProcessJobListener" class="edu.ku.cete.batch.ksde.BatchKSDEDataProcessJobListener"/>
+    
+    <bean id="batchKSDEDataProcessReader" class="edu.ku.cete.batch.ksde.reader.BatchKSDEDataProcessReader"  scope="step">
+       <constructor-arg value="#{jobExecutionContext['kidRecords']}"></constructor-arg>
+    </bean>
+    
+    <bean id="batchKSDEDataProcessor" class="edu.ku.cete.batch.ksde.processor.BatchKSDEDataProcessor" scope="step">
+		  <property name="stepExecution" value="#{stepExecution}" />
+		  <property name="restrictionId" value="#{jobExecutionContext['restrictionId']}" />
+		  <property name="contractingOrganizationTree" value="#{jobExecutionContext['contractingOrganizationTree']}" />
+		  <property name="fieldSpecificationMap" value="#{jobExecutionContext['fieldSpecificationMap']}" />
+		  <property name="userDetails" value="#{jobExecutionContext['userDetails']}" />
+    </bean>
+ 
+    <bean id="batchKSDEDataProcessWriter" class="edu.ku.cete.batch.ksde.writer.BatchKSDEDataProcessWriter" scope="step" />
+    
+    <bean name="batchKSDEDataProcessStepListener" class="edu.ku.cete.batch.ksde.BatchKSDEDataProcessStepListener" scope="step">
+	</bean>
+    
+	<batch:job id="batchKSDEDataProcessJob">
+		<batch:step id="batchKSDEDataProcessStep">
+			<batch:tasklet transaction-manager="transactionManager">
+				<batch:chunk reader="batchKSDEDataProcessReader" writer="batchKSDEDataProcessWriter" processor="batchKSDEDataProcessor" commit-interval="1" skip-policy="skipPolicy" />
+				<batch:no-rollback-exception-classes>
+					<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				</batch:no-rollback-exception-classes>
+				<batch:transaction-attributes isolation="DEFAULT"  propagation="REQUIRES_NEW" timeout="60" />
+				<batch:listeners>
+					<batch:listener ref="batchKSDEDataProcessStepListener" />
+				</batch:listeners>
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchKSDEDataProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<bean id="batchKSDEDataProcessJobRunScheduler" class="edu.ku.cete.batch.ksde.BatchKSDEDataProcessStarter" >
+		<property name="batchKSDEDataProcessJob" ref="batchKSDEDataProcessJob" />
+    </bean>
+     
+     <!-- package student reports into district files (creating pdf's files) -->
+	<batch:job id="batchDistrictPDFOfStudentReportstAndZipJob">
+		<batch:step id="partitionedbatchDistrictPdfFilesofStudentReportsProcessStep">
+			<batch:partition step="batchDistrictPdfFilesofStudentReportsProcessStep" partitioner="batchDistrictPdfFilesofStudentReportsPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<!-- US19159: KIDS email processing. Nightly job to send emails. -->
+	<bean id="sendKIDSEmailsJobRunScheduler" class="edu.ku.cete.batch.kids.email.SendKIDSEmailsStarter" >
+ 		<property name="sendKIDSEmailsJob" ref="sendKIDSEmailsJob" />
+    </bean>
+	
+	<bean id="sendKIDSEmailsJobTasklet" class="edu.ku.cete.batch.kids.email.SendKIDSEmails" />
+	<bean id="sendKIDSEmailsJobListener" class="edu.ku.cete.batch.kids.email.SendKIDSEmailsListener"/> 
+   	
+   	<batch:job id="sendKIDSEmailsJob">
+   		<batch:step id="sendKIDSEmailsJob.step1">
+ 			<batch:tasklet ref="sendKIDSEmailsJobTasklet">
+ 			</batch:tasklet>
+ 		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="sendKIDSEmailsJobListener" />
+		</batch:listeners>
+ 	</batch:job>
+ 	<!-- US19159: KIDS email processing -->
+	
+	
+	<!--Feature F459 Job to run DLM calculation and State and district Summary PDf/CSV Reports -->
+	
+	<batch:job id="batchDLMSummaryReportAllJob">
+		<batch:step id="batchDLMSummaryReportAllJob.step1" next="batchDLMSummaryReportAllJob.step2">
+			<batch:job ref="batchDLMSummaryGrfCalculationJob"/>
+		</batch:step>
+		<batch:step id="batchDLMSummaryReportAllJob.step2" next="batchDLMSummaryReportAllJob.step3" >
+			<batch:job ref="batchReportProcessDLMOrganizationReportJob" />
+		</batch:step>  
+		<batch:step id="batchDLMSummaryReportAllJob.step3" next="batchDLMSummaryReportAllJob.step4">
+			<batch:job ref="batchAlternateAggregateOrganizationReportJob" />
+		</batch:step>
+		<batch:step id="batchDLMSummaryReportAllJob.step4" >
+			<batch:job ref="batchAlternateAggregateClassRoomReportJob" />
+		</batch:step>  	  			
+	</batch:job>
+	
+	<bean id="batchAlternateAggregateReportProcessJobListener" class="edu.ku.cete.batch.reportprocess.BatchAlternateAggregateReportProcessJobListener"/>
+				
+	<!-- DLM Summary Grf Calculation -->
+	
+	<batch:job id="batchDLMSummaryGrfCalculationJob">
+		<batch:step id="partitionedbatchDLMSummaryGrfCalculationProcessStep">
+			<batch:partition step="batchDLMSummaryGrfCalculationProcessStep" partitioner="batchDLMSummaryGrfCalculationProcessPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchAlternateAggregateReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	
+	<batch:step id="batchDLMSummaryGrfCalculationProcessStep">
+		    <batch:tasklet transaction-manager="transactionManager">
+			     <batch:chunk reader="batchDLMSummaryGrfCalculationProcessReader" writer="batchDLMSummaryGrfCalculationProcessWriter"
+					 processor="batchDLMSummaryGrfCalculationProcessor" commit-interval="8" skip-policy="skipPolicy" />
+				 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				 </batch:no-rollback-exception-classes>
+				 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+			</batch:tasklet>
+	</batch:step>
+
+	<bean id="batchDLMSummaryGrfCalculationProcessPartitioner" class="edu.ku.cete.batch.reportprocess.BatchDLMSummaryGrfCalculationProcessPartitioner" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+	</bean>
+	
+	<bean name="batchDLMSummaryGrfCalculationProcessReader" class="edu.ku.cete.batch.reportprocess.BatchDlmSummaryGrfCalculationProcessPageReader" scope="step" autowire-candidate="false">
+		<property name="gradeId" value="#{stepExecutionContext['gradeId']}" />
+		<property name="subjectId" value="#{stepExecutionContext['subjectId']}" />
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+	</bean>	
+	  	
+ 	<bean id="batchDLMSummaryGrfCalculationProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchDlmSummaryGrfCalculationProcess" scope="step">
+ 		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+ 		<property name="batchUploadProcessId" value="#{jobParameters['reportProcessId']}" />
+ 		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+ 		<property name="stateId" value="#{jobParameters['stateId']}" />	
+ 		<property name="gradeId" value="#{stepExecutionContext['gradeId']}" />
+		<property name="subjectId" value="#{stepExecutionContext['subjectId']}" />		
+		<property name="userId" value="#{jobParameters['userId']}" />		
+	</bean>
+	
+	<bean id="batchDLMSummaryGrfCalculationProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchDlmSummaryGrfCalculationProcessWriter" scope="step" />
+	
+  <!-- DLM Summary Grf Calculation   -->	
+	
+	
+  <!---  DLM Summary Report PDF/CSV Geneartion Processing      -->
+		
+	<batch:job id="batchReportProcessDLMOrganizationReportJob">
+	  <batch:step id="batchDLMOrganizationSummaryReportProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchDLMOrganizationReportProcessReader" writer="batchDLMOrganizationReportProcessWriter"
+				processor="batchDLMOrganizationSummaryReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+		</batch:tasklet>
+	  </batch:step>
+	  		<batch:listeners>
+				<batch:listener ref="batchAlternateAggregateReportProcessJobListener" />
+			</batch:listeners>	
+	 </batch:job>				
+			
+	<bean id="batchDLMOrganizationReportProcessReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchDLMOrganizationReportProcessPageReader" />
+	</bean>
+	
+	<bean name="batchDLMOrganizationReportProcessPageReader" class="edu.ku.cete.batch.reportprocess.BatchDlmOrganizationReportProcessPageReader" scope="step" autowire-candidate="false">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+ 		<property name="reportYear" value="#{jobParameters['reportYear']}" />			
+	</bean>
+		 	
+ 	<bean id="batchDLMOrganizationSummaryReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchDLMOrganizationSummaryProcess" scope="step">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+ 		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+ 		<property name="reportDate" value="#{jobParameters['reportDate']}" />
+	</bean>
+	
+	<bean id="batchDLMOrganizationReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchDLMOrganizationReportProcessWriter" scope="step">
+	 	<property name="batchReportProcessId" value="#{jobParameters['reportProcessId']}" />
+	 	<property name="userId" value="#{jobParameters['userId']}" />	
+ 	</bean>
+
+	<!--- END: DLM Summary Report Processing      -->
+	
+	<!-- START : KAP Interim Predictive Reports : Step1: Calculations; Step2: PDF report generation-->	
+	<!-- Start Interim Predictive Student Reports Calculations-->
+	<bean id="predictiveRptCalcsScheduler" class="edu.ku.cete.batch.InterimPredictiveReportProcessStarter">
+		<property name="batchInterimPredictiveReportJob" ref="batchInterimPredictiveReportJob" />
+		<property name="isScheduleOn" value="OFF" />
+		<property name="assessmentProgramCode" value="KAP" />
+		<property name="testingProgramAbbrName" value="F" />
+	</bean>
+
+	<batch:job id="batchInterimPredictiveReportJob">
+		<batch:step id="batchInterimPredictiveReportJob.step1" next="batchInterimPredictiveReportJob.step2">
+			<batch:job ref="batchPredictiveReportScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchInterimPredictiveReportJob.step2">
+			<batch:job ref="batchPredictiveStudentReportJob" />
+		</batch:step>
+	</batch:job>
+	
+	<batch:job id="batchPredictiveReportScoreCalcJob">
+		<batch:step id="partitionedBatchPredictiveReportScoreCalcStep">
+			<batch:partition step="batchPredictiveReportScoreCalcStep" partitioner="batchPredictiveReportScoreCalcPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="predictiveReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+
+	<batch:step id="batchPredictiveReportScoreCalcStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchPredictiveReportScoreCalcReader" writer="batchPredictiveReportScoreCalcWriter"
+				processor="batchPredictiveReportScoreCalcProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="predictiveReportProcessJobListener" class="edu.ku.cete.batch.reportprocess.PredictiveReportProcessJobListener"/>
+	
+	<bean id="batchPredictiveReportScoreCalcPartitioner" class="edu.ku.cete.batch.reportprocess.BatchPredictiveReportScoreCalcPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+	</bean>
+	
+	<bean id="batchPredictiveReportScoreCalcReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchPredictiveReportScoreCalcPageReader" />
+	</bean>
+	
+	<bean name="batchPredictiveReportScoreCalcPageReader" class="edu.ku.cete.batch.reportprocess.PredictiveStudentReportScoreCalcPageReader" scope="step" autowire-candidate="false">
+		<property name="gradeCourseId" value="#{stepExecutionContext['gradeCourseId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+ 		<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+ 		<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+ 		<property name="studentIdListForReprocess" value="#{stepExecutionContext['studentIdListForReprocess']}" />
+ 		<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+ 		<property name="testsInprogressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+ 		<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+		<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+		<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+		<property name="assessmentId" value="#{stepExecutionContext['assessment']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="studentId" value="#{jobParameters['studentId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="isTestingWindowComplete" value="#{stepExecutionContext['isTestingWindowComplete']}" />
+		<property name="operationalTestWindowId" value="#{stepExecutionContext['operationalTestWindowId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="createdUserId" value="#{jobParameters['createdUserId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="jobStartDate" value="#{stepExecutionContext['jobStartDate']}" />
+		<property name="pageSize" value="10000" />
+	</bean>
+	
+	<bean id="batchPredictiveReportScoreCalcWriter" class="edu.ku.cete.batch.reportprocess.writer.PredictiveStudentReportScoreCalcWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+ 	</bean>
+ 	
+	<bean id="batchPredictiveReportScoreCalcProcessor" class="org.springframework.batch.item.support.CompositeItemProcessor">
+	    <property name="delegates">
+	        <list>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.BatchPredictiveStudentReportGetTests" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	            	<property name="contractingOrganization" value="#{stepExecutionContext['contractingOrganization']}" />
+	            	<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+           	 		<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+ 					<property name="testsInprogressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+					<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+					<property name="isTestingWindowComplete" value="#{stepExecutionContext['isTestingWindowComplete']}" />
+	       			<property name="operationalTestWindowId" value="#{stepExecutionContext['operationalTestWindowId']}" />
+	            </bean>
+	            
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculatePredictiveRawScore" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	       			<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />
+	       			<property name="testsInProgressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+	       			<property name="testStatusUnusedId" value="#{stepExecutionContext['testStatusUnusedId']}" />
+	       			<property name="testStatusPendingId" value="#{stepExecutionContext['testStatusPendingId']}" />
+	       			<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+	       			<property name="rawScaleExternalTestIds" value="#{stepExecutionContext['rawScaleExternalTestIds']}" />
+	       			<property name="contentAreaAbbreviatedName" value="#{stepExecutionContext['contentAreaAbbreviatedName']}" />
+	       			<property name="studentNotTestedReasonId" value="#{stepExecutionContext['studentNotTestedReasonId']}" />
+	       			<property name="testNotCompletedReasonId" value="#{stepExecutionContext['testNotCompletedReasonId']}" />
+	       			<property name="isTestingWindowComplete" value="#{stepExecutionContext['isTestingWindowComplete']}" />
+	       			<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+	            </bean>
+	            
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculatePredictiveScaleScore" scope="step">
+	            	 <property name="stepExecution" value="#{stepExecution}" />
+	            	 <property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+	       			 <property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+	            </bean>
+	            
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.CalculatePredictiveReportQuestionCredit" scope="step">
+	            	<property name="stepExecution" value="#{stepExecution}" />
+	       			<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+	       			<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+	       			<property name="noCreditCategoryId" value="#{stepExecutionContext['noCreditCategoryId']}" />
+	       			<property name="partialCreditCategoryId" value="#{stepExecutionContext['partialCreditCategoryId']}" />
+	       			<property name="fullCreditCategoryId" value="#{stepExecutionContext['fullCreditCategoryId']}" />
+	       			<property name="unAnsweredCategoryId" value="#{stepExecutionContext['unAnsweredCategoryId']}" />
+	            </bean>
+	        </list>
+	     </property>
+	 </bean>   
+	
+	<!-- End Interim Predictive Student Reports Calc-->
+	
+	<!-- Start Interim Predictive Student Reports PDF-->
+	<batch:job id="batchPredictiveStudentReportJob">
+		<batch:step id="partitionedBatchPredictiveStudentReportJob">
+			<batch:partition step="batchPredictiveStudentReportProcessStep" partitioner="batchPredictiveStudentReportPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+	    <batch:listeners>
+			<batch:listener ref="predictiveReportProcessJobListener" />
+		</batch:listeners>	
+   </batch:job>
+   
+    <batch:step id="batchPredictiveStudentReportProcessStep">
+	    <batch:tasklet transaction-manager="transactionManager">
+		     <batch:chunk reader="batchPredictiveStudentReportProcessReader" writer="batchPredictiveStudentReportProcessWriter"
+					 processor="batchPredictiveStudentReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			 </batch:no-rollback-exception-classes>
+			 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="batchPredictiveStudentReportPartitioner" class="edu.ku.cete.batch.reportprocess.BatchPredictiveStudentReportPartitioner" scope="step">
+		<property name="reportProcessId" value="#{jobParameters['reportProcessId']}" />
+		<property name="assessmentProgramCode" value="#{jobExecutionContext['assessmentProgramCode']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />	
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />	
+	</bean>
+	
+	<bean name="batchPredictiveStudentReportProcessReader" class="edu.ku.cete.batch.reportprocess.BatchPredictiveStudentReportProcessReader" scope="step" autowire-candidate="false">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="gradeId" value="#{stepExecutionContext['gradeId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />	
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />	
+		<property name="pageSize" value="100000" />			
+	</bean>	
+	
+	<bean id="batchPredictiveStudentReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchPredictiveStudentReportProcessor" scope="step">
+	    <property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />	
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="gradeId" value="#{stepExecutionContext['gradeId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="currentYearTestingCycles" value="#{stepExecutionContext['currentYearTestingCycles']}" />
+		<property name="levelDescriptions" value="#{stepExecutionContext['levelDescriptions']}" />
+		<property name="testCutScores" value="#{stepExecutionContext['testCutScores']}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />		
+	</bean>
+	
+	<bean id="batchPredictiveStudentReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchPredictiveStudentReportProcessWriter" scope="step">
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{stepExecutionContext['schoolYear']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="gradeId" value="#{stepExecutionContext['gradeId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+		<property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />	
+ 	</bean>  	
+ 	   
+	<!-- End Interim Predictive Student Reports PDF-->
+	
+	<!-- Start Predictive School and District Summary Reports -->
+	
+	<batch:job id="batchInterimPredictiveOrganizationSummaryJob">
+		<batch:step id="batchInterimPredictiveSummaryReportJob.step1"><!-- next="batchInterimPredictiveSummaryReportJob.step2"> --> 
+			<batch:job ref="batchPredictiveOrganizationSummaryCalcJob"/>
+		</batch:step>
+		<!-- <batch:step id="batchInterimPredictiveSummaryReportJob.step2">
+			<batch:job ref="batchPredictiveOrganizationSummaryReportJob" />
+		</batch:step> -->
+	</batch:job>
+	
+	<!-- Start Summary Calculations -->	
+	
+	<batch:job id="batchPredictiveOrganizationSummaryCalcJob">
+		<batch:step id="partitionedBatchPredictiveOrgSummaryCaclStep">
+			<batch:partition step="batchPredictiveOrganizationSummaryCalcStep" partitioner="batchPredictiveOrganizationSummaryCalcPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		 <batch:listeners>
+			<batch:listener ref="predictiveReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:step id="batchPredictiveOrganizationSummaryCalcStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchPredictiveOrganizationSummaryCalcReader" writer="batchPredictiveOrganizationSummaryCalcWriter"
+				processor="batchPredictiveOrganizationSummaryCalcProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="batchReportProcessStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="batchPredictiveOrganizationSummaryCalcPartitioner" class="edu.ku.cete.batch.reportprocess.PredictiveOrganizationSummaryCalcPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+ 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	
+	<bean name="batchPredictiveOrgSummaryCalcReader" class="edu.ku.cete.batch.reportprocess.PredictiveOrganizationSummaryCalcReader" scope="step" autowire-candidate="false">
+		<property name="gradeCourseId" value="#{stepExecutionContext['gradeCourseId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />     	
+		<property name="testsInprogressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+  		<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="pageSize" value="1000" />
+	</bean>
+	
+	<bean id="batchPredictiveOrganizationSummaryCalcReader" class="org.springframework.batch.item.support.SingleItemPeekableItemReader" scope="step" autowire-candidate="false">
+		<property name="delegate" ref="batchPredictiveOrgSummaryCalcReader" />
+	</bean>
+	
+	<bean id="batchPredictiveOrganizationSummaryCalcWriter" class="edu.ku.cete.batch.reportprocess.writer.PredictiveOrganizationSummaryCalcWriter" scope="step">
+	 		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 		<property name="createdUserId" value="#{jobParameters['createdUserId']}" />
+ 	</bean>
+	
+	<bean id="batchPredictiveOrganizationSummaryCalcProcessor" class="edu.ku.cete.batch.reportprocess.processor.PredictiveOrganizationSummaryCalcProcessor" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testsCompletedStatusId" value="#{stepExecutionContext['testsCompletedStatusId']}" />     	
+		<property name="testsInprogressStatusId" value="#{stepExecutionContext['testsInprogressStatusId']}" />
+  		<property name="testStatusInprogressTimedoutId" value="#{stepExecutionContext['testStatusInprogressTimedoutId']}" />		
+		<property name="fullCreditCategoryId" value="#{stepExecutionContext['fullCreditCategoryId']}" /> 
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+	<!-- End Summary Calculations -->
+	<!-- End Predictive School and District Summary Reports -->
+	
+	<!-- If all three options were selected(Process data and calculations, Generate Student Report and Generate School/district reports) -->
+	<batch:job id="batchInterimPredictiveReportISRAndSummaryReportJob">
+		<batch:step id="batchInterimPredictiveISRJob.step1" next="batchInterimPredictiveSummaryReportJob.step2">
+			<batch:job ref="batchInterimPredictiveReportJob"/>
+		</batch:step>
+		<batch:step id="batchInterimPredictiveSummaryReportJob.step2" >
+			<batch:job ref="batchInterimPredictiveOrganizationSummaryJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- If Process data and calcualtions and Generate school district summary options were selected -->
+	<batch:job id="batchIPISRCalcOnlyAndSummaryReportJob">
+		<batch:step id="batchIPRCalOnlyJob.step1" next="batchIPRSummaryJob.step2">
+			<batch:job ref="batchPredictiveReportScoreCalcJob"/>
+		</batch:step>
+		<batch:step id="batchIPRSummaryJob.step2" >
+			<batch:job ref="batchInterimPredictiveOrganizationSummaryJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- If Generate student report and Generate school district summary options were selected -->
+	<batch:job id="batchIPISROnlyAndSummaryReportJob">
+		<batch:step id="batchIPISRJob.step1" next="batchIPISRSummaryJob.step2">
+			<batch:job ref="batchPredictiveStudentReportJob"/>
+		</batch:step>
+		<batch:step id="batchIPISRSummaryJob.step2" >
+			<batch:job ref="batchInterimPredictiveOrganizationSummaryJob" />
+		</batch:step>
+	</batch:job>
+	
+	<!-- END : KAP Interim Predictive Reports  -->
+	
+	<!-- Start CPASS Student Reports PDF-->
+	
+	<batch:job id="batchExternalStudentReportJob">
+		<batch:step id="partitionedBatchExternalStudentReportJob">
+			<batch:partition step="batchExternalStudentReportProcessStep" partitioner="batchExternalStudentReportPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+	    <batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>	
+   </batch:job>
+   
+   <batch:step id="batchExternalStudentReportProcessStep">
+	    <batch:tasklet transaction-manager="transactionManager">
+		     <batch:chunk reader="batchExternalStudentReportProcessReader" writer="batchExternalStudentReportProcessWriter"
+					 processor="batchExternalStudentReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			 </batch:no-rollback-exception-classes>
+			 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+			 <batch:listeners>
+			       <batch:listener ref="batchReportProcessStepListener" />
+		    </batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="batchExternalStudentReportPartitioner" class="edu.ku.cete.batch.reportprocess.BatchExternalStudentReportPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="stateId" value="#{jobParameters['organizationId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+	</bean>
+	
+	<bean name="batchExternalStudentReportProcessReader" class="edu.ku.cete.batch.reportprocess.BatchExternalStudentReportProcessReader" scope="step" autowire-candidate="false">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="stateId" value="#{jobParameters['organizationId']}" />	
+		<property name="assessmentCode" value="#{stepExecutionContext['assessmentCode']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />	
+		<property name="pageSize" value="10000" />			
+	</bean>	
+	
+	<bean id="batchExternalStudentReportProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchExternalStudentReportProcessor" scope="step">
+	   <property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+	   <property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	   <property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+	   <property name="stateId" value="#{jobParameters['organizationId']}" />
+	   <property name="assessmentCode" value="#{stepExecutionContext['assessmentCode']}" />
+	   <property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+	   <property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+	   <property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+	   <property name="reportProcessId" value="#{jobParameters['reportProcessId']}" />
+	   <property name="stepExecution" value="#{stepExecution}" />
+	   <property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />
+	   <property name="testCutScores" value="#{stepExecutionContext['testCutScores']}" />				
+	</bean>
+	
+	<bean id="batchExternalStudentReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchExternalStudentReportProcessWriter" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="gradeId" value="#{stepExecutionContext['gradeId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />				
+ 	</bean>   	
+ 	   
+	<!-- End CPASS Student Reports PDF-->
+	
+	<!-- Start CPASS School Detail Reports PDF-->
+	
+	<batch:job id="batchExternalSchoolDetailReportJob">
+		<batch:step id="partitionedBatchExternalSchoolDetailJob">
+			<batch:partition step="batchExternalSchoolDetailProcessStep" partitioner="batchExternalSchoolDetailPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+	    <batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>	
+   </batch:job>
+   
+   <batch:step id="batchExternalSchoolDetailProcessStep">
+	    <batch:tasklet transaction-manager="transactionManager">
+		     <batch:chunk reader="batchExternalSchoolDetailProcessReader" writer="batchExternalSchoolDetailProcessWriter"
+					 processor="batchExternalSchoolDetailProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			 </batch:no-rollback-exception-classes>
+			 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+			       <batch:listener ref="batchReportProcessStepListener" />
+		    </batch:listeners>	
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="batchExternalSchoolDetailPartitioner" class="edu.ku.cete.batch.reportprocess.BatchExternalSchoolDetailPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="stateId" value="#{jobParameters['organizationId']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+	</bean>
+	
+	<bean name="batchExternalSchoolDetailProcessReader" class="edu.ku.cete.batch.reportprocess.BatchExternalSchoolDetailProcessReader" scope="step" autowire-candidate="false">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="stateId" value="#{jobParameters['organizationId']}" />	
+		<property name="assessmentCode" value="#{stepExecutionContext['assessmentCode']}" />
+		<property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+		<property name="pageSize" value="10000" />			
+	</bean>	
+	
+	<bean id="batchExternalSchoolDetailProcessor" class="edu.ku.cete.batch.reportprocess.processor.BatchExternalSchoolDetailProcessor" scope="step">
+	   <property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+	   <property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+	   <property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+	   <property name="stateId" value="#{jobParameters['organizationId']}" />
+	   <property name="reportProcessId" value="#{jobParameters['reportProcessId']}" />
+	   <property name="assessmentCode" value="#{stepExecutionContext['assessmentCode']}" />
+	   <property name="stepExecution" value="#{stepExecution}" />
+	   <property name="reportCycle" value="#{jobParameters['reportCycle']}" />
+	   <property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+	   <property name="topics" value="#{stepExecutionContext['topics']}" />
+	   <property name="assessmentName" value="#{stepExecutionContext['assessmentName']}" />
+	</bean>
+	
+	<bean id="batchExternalSchoolDetailProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchExternalSchoolDetailProcessWriter" scope="step">			
+ 	</bean> 	   
+	<!-- END CPASS School Detail Reports PDF-->
+		
+		
+	<!-- Feature F679 Job to run DLM Classroom And School Aggregate Report Calculation and PDf/CSV Reports Geneartion -->
+		
+	<!-- Alternate ClassRoom Aggregate Grf Calculation and PDF/CSV Reports Started -->
+			
+	<batch:job id="batchAlternateAggregateClassRoomReportJob">
+		<batch:step id="partitionedbatchAlternateClassRoomReportProcessStep">
+			<batch:partition step="batchAlternateClassRoomReportProcessStep" partitioner="batchAlternateClassRoomReportProcessPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchAlternateAggregateReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	
+	<batch:step id="batchAlternateClassRoomReportProcessStep">
+		    <batch:tasklet transaction-manager="transactionManager">
+			     <batch:chunk reader="batchAlternateClassRoomReportProcessReader" writer="batchAlternateClassRoomReportProcessWriter"
+					 processor="batchAlternateClassRoomReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+				 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				 </batch:no-rollback-exception-classes>
+				 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+			</batch:tasklet>
+	</batch:step>
+
+	<bean id="batchAlternateClassRoomReportProcessPartitioner" class="edu.ku.cete.batch.reportprocess.BatchAlternateClassRoomReportProcessPartitioner" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+	</bean>
+	
+	<bean name="batchAlternateClassRoomReportProcessReader" class="edu.ku.cete.batch.reportprocess.BatchAlternateClassRoomReportProcessPageReader" scope="step" autowire-candidate="false">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+	</bean>	
+	
+	<bean id="batchAlternateClassRoomReportProcessor" class="org.springframework.batch.item.support.CompositeItemProcessor">
+	    <property name="delegates">
+	        <list>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.BatchAlternateClassRoomGrfCalculationProcess" scope="step">
+	            	<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />						
+					<property name="reportYear" value="#{jobParameters['reportYear']}" />
+					<property name="stateId" value="#{jobParameters['stateId']}" />								
+			    </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.BatchAlternateClassRoomReportSummaryProcess" scope="step">
+	            	<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" /> 					
+ 					<property name="reportYear" value="#{jobParameters['reportYear']}" />
+			 		<property name="stateId" value="#{jobParameters['stateId']}" />	 
+			 		<property name="reportDate" value="#{jobParameters['reportDate']}" />	 
+	            </bean>	       
+	        </list>
+	    </property>
+	</bean>
+	
+	<bean id="batchAlternateClassRoomReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchAlternateClassRoomReportProcessWriter" scope="step" >
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 	<property name="userId" value="#{jobParameters['userId']}" />
+	</bean> 
+	
+	<!-- Alternate ClassRoom Aggregate Grf Calculation and PDF/CSV Reports Ended 	 -->
+	
+		
+	<!-- Alternate Organization Aggregate Grf Calculation and PDF/CSV Reports Started -->
+			
+	<batch:job id="batchAlternateAggregateOrganizationReportJob">
+		<batch:step id="partitionedbatchAlternateOrganizationReportProcessStep">
+			<batch:partition step="batchAlternateOrganizationReportProcessStep" partitioner="batchAlternateOrganizationReportProcessPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchAlternateAggregateReportProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	
+	<batch:step id="batchAlternateOrganizationReportProcessStep">
+		    <batch:tasklet transaction-manager="transactionManager">
+			     <batch:chunk reader="batchAlternateOrganizationReportProcessReader" writer="batchAlternateOrganizationReportProcessWriter"
+					 processor="batchAlternateOrganizationReportProcessor" commit-interval="8" skip-policy="skipPolicy" />
+				 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				 </batch:no-rollback-exception-classes>
+				 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+			</batch:tasklet>
+	</batch:step>
+
+	<bean id="batchAlternateOrganizationReportProcessPartitioner" class="edu.ku.cete.batch.reportprocess.BatchAlternateOrganizationReportProcessPartitioner" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />	
+	</bean>
+	
+	<bean name="batchAlternateOrganizationReportProcessReader" class="edu.ku.cete.batch.reportprocess.BatchAlternateOrganizationReportProcessPageReader" scope="step" autowire-candidate="false">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+	</bean>	
+	
+	<bean id="batchAlternateOrganizationReportProcessor" class="org.springframework.batch.item.support.CompositeItemProcessor">
+	    <property name="delegates">
+	        <list>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.BatchAlternateOrganizationGrfCalculationProcess" scope="step">
+	            	<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />						
+					<property name="reportYear" value="#{jobParameters['reportYear']}" />
+					<property name="stateId" value="#{jobParameters['stateId']}" />								
+			    </bean>
+	            <bean class="edu.ku.cete.batch.reportprocess.processor.BatchAlternateOrganizationReportSummaryProcess" scope="step">
+	            	<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" /> 					
+ 					<property name="reportYear" value="#{jobParameters['reportYear']}" />
+			 		<property name="stateId" value="#{jobParameters['stateId']}" />	 
+			 	    <property name="reportDate" value="#{jobParameters['reportDate']}" />
+	            </bean>	       
+	        </list>
+	    </property>
+	</bean>
+	
+	<bean id="batchAlternateOrganizationReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchAlternateOrganizationReportProcessWriter" scope="step" >
+		<property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+	 	<property name="userId" value="#{jobParameters['userId']}" />
+	</bean> 
+	
+	<!-- Alternate Organization Aggregate Grf Calculation and PDF/CSV Reports Ended 	 -->
+	
+	<!-- KELPA Student Report Generation Batch started 	 -->
+	 
+	  <batch:job id="KELPAStudentReportProcessJob">
+		<batch:step id="partitionedKELPAStudentReportProcessJob">
+			<batch:partition step="KELPAStudentReportProcessStep" partitioner="KELPAStudentReportPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+	    <batch:listeners>
+			<batch:listener ref="batchReportProcessJobListener" />
+		</batch:listeners>	
+   </batch:job>
+   
+   <batch:step id="KELPAStudentReportProcessStep">
+	    <batch:tasklet transaction-manager="transactionManager">
+		     <batch:chunk reader="KELPAStudentReportProcessReader" writer="KELPAStudentReportProcessWriter"
+					 processor="KELPAStudentReportProcesser" commit-interval="8" skip-policy="skipPolicy" />
+			 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			 </batch:no-rollback-exception-classes>
+			 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="60" />
+			 <batch:listeners>
+			       <batch:listener ref="batchReportProcessStepListener" />
+		    </batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<bean id="KELPAStudentReportPartitioner" class="edu.ku.cete.batch.reportprocess.BatchKELPAStudentReportPartitioner" scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="stateId" value="#{jobParameters['organizationId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+	</bean>
+	
+	<bean name="KELPAStudentReportProcessReader" class="edu.ku.cete.batch.reportprocess.BatchKELPAStudentReportProcessReader" scope="step" autowire-candidate="false">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="schoolYear" value="#{jobParameters['schoolYear']}" />
+		<property name="stateId" value="#{jobParameters['organizationId']}" />
+		<property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{stepExecutionContext['gradeCourseId']}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />	
+		<property name="pageSize" value="10000" />			
+	</bean>	
+	
+	<bean id="KELPAStudentReportProcesser" class="edu.ku.cete.batch.reportprocess.processor.BatchKELPAStudentReportProcessor" scope="step">
+	   <property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+	   <property name="schoolYear" value="#{jobParameters['schoolYear']}" />	   
+	   <property name="stateId" value="#{jobParameters['organizationId']}" />
+	   <property name="levelDescriptions" value="#{stepExecutionContext['levelDescriptions']}" />
+	   <property name="domainPerfLevel" value="#{stepExecutionContext['domainPerfLevel']}" />
+	   <property name="staticPDFcontentMap" value="#{stepExecutionContext['staticPDFcontentMap']}" />
+	   <property name="progressionTextMap" value="#{stepExecutionContext['progressionTextMap']}" />
+	   <property name="scoringStatusMap" value="#{stepExecutionContext['scoringStatusMap']}" />
+	   <property name="testStatusMap" value="#{stepExecutionContext['testStatusMap']}" />	   
+	   <property name="contentAreaId" value="#{stepExecutionContext['contentAreaId']}" />
+	   <property name="gradeCourseId" value="#{stepExecutionContext['gradeCourseId']}" />	   
+	   <property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+	   <property name="reportProcessId" value="#{jobParameters['reportProcessId']}" />
+	   <property name="stepExecution" value="#{stepExecution}" />
+	   <property name="generateSpecificISROption" value="#{jobParameters['generateSpecificISROption']}" />
+	</bean>
+	
+	<bean id="KELPAStudentReportProcessWriter" class="edu.ku.cete.batch.reportprocess.writer.BatchKELPAStudentReportProcessWriter" scope="step">
+	    <property name="batchReportProcessId" value="#{jobExecutionContext['batchReportProcessId']}" />
+		<property name="processByStudentId" value="#{jobParameters['processByStudentId']}" />
+		<property name="createdUserId" value="#{jobParameters['createdUserId']}" />			
+ 	</bean>	
+	<!-- KELPA Student Report Generation Batch Ended-->
+	
+	<!-- GRF Batch Process Started-->
+	<!-- <batch:job id="batchGRFProcessJob">
+	  <batch:step id="batchGRFProcessStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="batchGRFProcessReader" writer="batchGRFProcessWriter"
+				processor="batchGRFProcessProcessor" commit-interval="8" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+		</batch:tasklet>
+	  </batch:step>
+	  		<batch:listeners>
+				<batch:listener ref="batchGRFProcessJobListener" />
+			</batch:listeners>	
+	 </batch:job>				
+	
+	<bean name="batchGRFProcessReader" class="edu.ku.cete.batch.upload.reader.BatchGRFProcessReader" scope="step" autowire-candidate="false">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+ 		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+ 		<property name="batchUploadId" value="#{jobParameters['batchUploadId']}" />
+ 		<property name="pageSize" value="1000" />			
+	</bean>
+	
+ 	<bean id="batchGRFProcessProcessor" class="edu.ku.cete.batch.upload.processor.BatchGRFProcessProcessor" scope="step">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="subjectMap" value="#{jobExecutionContext['subjectMap']}" />
+		<property name="gradeMap" value="#{jobExecutionContext['gradeMap']}" />
+		<property name="organizationMap" value="#{jobExecutionContext['organizationMap']}" />
+		<property name="stateCode" value="#{jobExecutionContext['stateCode']}" />
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="grfUploadType" value="#{jobExecutionContext['grfUploadType']}" />
+		<property name="batchUploadId" value="#{jobExecutionContext['batchUploadId']}" />
+		<property name="batchUploadUserId" value="#{jobExecutionContext['batchUploadUserId']}" />
+	</bean>
+	
+	<bean id="batchGRFProcessWriter" class="edu.ku.cete.batch.upload.writer.BatchGRFProcessWriter" scope="step">
+	 	<property name="batchReportProcessId" value="#{jobParameters['reportProcessId']}" />
+	 	<property name="userId" value="#{jobParameters['userId']}" />	
+ 	</bean>
+	
+	<bean name="batchGRFProcessJobListener" class="edu.ku.cete.batch.upload.BatchGRFProcessJobListener">
+	</bean> -->
+	<!-- GRF Batch Process Ended-->
+	 	
+	<!-- GRF New Upload Process-->
+	
+	<batch:job id="batchGRFProcessJob">
+		<batch:step id="partitionedbatchGRFUploadProcessStep">
+			<batch:partition step="batchGRFUploadProcessStep" partitioner="batchGRFUploadProcessPartitioner">
+				<batch:handler grid-size="20" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchGRFProcessJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<batch:step id="batchGRFUploadProcessStep">
+		    <batch:tasklet transaction-manager="transactionManager">
+			     <batch:chunk reader="batchGRFProcessReader" writer="batchGRFProcessWriter"
+					 processor="batchGRFProcessProcessor" commit-interval="8" skip-policy="skipPolicy" />
+				 <batch:no-rollback-exception-classes>
+					   <batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+				 </batch:no-rollback-exception-classes>
+				 <batch:transaction-attributes isolation="DEFAULT" propagation="REQUIRES_NEW" timeout="180" />
+			</batch:tasklet>
+	</batch:step>
+
+	<bean id="batchGRFUploadProcessPartitioner" class="edu.ku.cete.batch.reportprocess.BatchGRFUploadProcessPartitioner" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="batchUploadId" value="#{jobParameters['batchUploadId']}" />
+	</bean>
+	
+	<bean name="batchGRFProcessReader" class="edu.ku.cete.batch.upload.reader.BatchGRFProcessReader" scope="step" autowire-candidate="false">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />		
+ 		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+ 		<property name="batchUploadId" value="#{jobParameters['batchUploadId']}" />
+		<property name="districtCode" value="#{stepExecutionContext['districtCode']}" />
+		<property name="grfUploadType" value="#{jobExecutionContext['grfUploadType']}" />
+ 		<property name="pageSize" value="20000" />			
+	</bean>
+	
+ 	<bean id="batchGRFProcessProcessor" class="edu.ku.cete.batch.upload.processor.BatchGRFProcessProcessor" scope="step">
+		<property name="stateId" value="#{jobParameters['stateId']}" />	
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="subjectMap" value="#{jobExecutionContext['subjectMap']}" />
+		<property name="gradeMap" value="#{jobExecutionContext['gradeMap']}" />
+		<property name="organizationMap" value="#{jobExecutionContext['organizationMap']}" />
+		<property name="stateCode" value="#{jobExecutionContext['stateCode']}" />
+		<property name="reportYear" value="#{jobParameters['reportYear']}" />
+		<property name="grfUploadType" value="#{jobExecutionContext['grfUploadType']}" />
+		<property name="batchUploadId" value="#{jobExecutionContext['batchUploadId']}" />
+		<property name="batchUploadUserId" value="#{jobExecutionContext['batchUploadUserId']}" />
+	</bean>
+	
+	<bean id="batchGRFProcessWriter" class="edu.ku.cete.batch.upload.writer.BatchGRFProcessWriter" scope="step">
+	 	<property name="batchReportProcessId" value="#{jobParameters['reportProcessId']}" />
+	 	<property name="userId" value="#{jobParameters['userId']}" />	
+ 	</bean>
+	
+	<bean name="batchGRFProcessJobListener" class="edu.ku.cete.batch.upload.BatchGRFProcessJobListener">
+	</bean>
+	
+  <!-- GRF New Upload Process-->
+  
+		
+</beans>

@@ -1,0 +1,1 @@
+Alter table dataarchivestatus add constraint pk_schoolyear primary key(schoolyear);

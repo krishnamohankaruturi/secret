@@ -1,0 +1,155 @@
+<div id="reviewEnd">
+	<h1 class="intro-header" style="width="80%"></h1>
+	<div id="review-description">
+		<h2 class="left">
+			<%= messages.testPage.reviewFor %> <%= currentTest.name %>
+		</h2>
+		
+		<br class="clear" />
+		
+		<div class="span2">
+			<%  var currentTestSection = currentTest.testSections[currentTest['sectionId_'+currentStudentTestSection.testSectionId]];
+				if(currentTestSection.reviewtext == null) { %>
+					<p>
+						<%= messages.testPage.reviewEnd %>
+					</p>
+					<ol>
+						<li><%= messages.testPage.reviewStep1 %></li>
+						<li><%= messages.testPage.reviewStep2 %></li>
+					</ol>
+			<% } else { %>
+					<p><%= currentTestSection.reviewtext %></p>
+			<% }
+			if(currentTest.uiname == 'altTest') {
+			  							
+			  	var mediaAcknowledgements = new Array();
+			  	var pushedTestletIds = new Array();
+			  	var testletAcknowledgements = {};
+			  	for(var i=0; i<currentTestSection.testlets.length; i++) {
+			  		var testletAck = new Array();
+			  		var testletGroups = currentTestSection.testlets[i].groups;
+			  		
+			  		$.each(testletGroups, function() {
+			  			$.each(this, function() {
+			  				if(this.srCack != null) {
+			  					testletAck.push(this.srCack);
+			  				}
+			  				var compositeAcks =  _.flatten(_.filter(this.compositeStimuli, function(stim) {
+			  												return stim.srCack != null;
+			  											}));
+			  				testletAck.push(compositeAcks)
+			  				testletAck = _.flatten(testletAck);
+			  			});
+			  			
+			  			$.each(this.taskIds, function() {
+			  				var task = tasks[currentTestSection.tasks['id_'+this]];
+			  				var taskAcknowledgements = _.filter(_.pluck(task.stimuli, 'srCack'), function(ack) {
+			  												return ack != null;
+			  											});
+			  				var foilAcknowledgements = _.filter(_.pluck(_.flatten(_.pluck(task.foils,'stimuli')),'srCack'), function(ack) {
+			  													return ack != null;
+			  											});
+			  				testletAck.push(taskAcknowledgements);
+			  				testletAck.push(foilAcknowledgements);
+			  			});
+			  			testletAck = _.flatten(testletAck);
+			  		});
+			  		testletAcknowledgements[currentTestSection.testlets[i].id] = testletAck;
+			  	}
+			  	for(var i=0; i<tasks.length; i++) {
+			  		var task = tasks[i];
+			  		
+			  		if(!task.testlet) {
+			  			var taskAcknowledgements = _.filter(_.pluck(task.stimuli, 'srCack'), function(ack) {
+			  											return ack != null;
+			  										});
+			  			var foilAcknowledgements = _.filter(_.pluck(_.flatten(_.pluck(task.foils,'stimuli')),'srCack'), function(ack) {
+			  												return ack != null;
+			  										});
+			  			mediaAcknowledgements.push(taskAcknowledgements);
+			  			mediaAcknowledgements.push(foilAcknowledgements);
+			  		} else {
+			  			if(!_.contains(pushedTestletIds, task.testletId)) {
+			  				pushedTestletIds.push(task.testletId);
+			  				mediaAcknowledgements.push(testletAcknowledgements[task.testletId]);
+			  			}
+			  		}
+			  	}
+			  	mediaAcknowledgements = _.flatten(mediaAcknowledgements);
+			  	
+				if(_.size(mediaAcknowledgements) > 0) {
+			%>
+					<div class="review-acks">
+						<b>Acknowledgements</b>  
+						<ol>
+			  				<% for(var i in mediaAcknowledgements) { %>
+			  					<li><%= mediaAcknowledgements[i] %></li>
+			  				<% } %>
+			  			</ol>
+					</div>
+				<% } 
+			} %>
+		</div>
+		
+		<div id="reviewQuestions" class="span2 last"></div>
+		<!-- /span 2 
+
+		<br class="clear" />-->
+		
+		<ul class="review-legend">
+			<li><a href="#"><span class="answered"></span><%= messages.testPage.reviewAnswered %></a></li>
+			<!--<li><a href="#"><span class="marked-answer"></span><%= messages.testPage.reviewReviewed %></a></li>-->
+			<li><a href="#"><span class="not-answered"></span><%= messages.testPage.reviewNotAnswered %></a></li>
+			<% if(testObj.uiname == 'genTest') { %>
+				<li><a href="#"><span class="answered-marked"></span><%= messages.testPage.answeredReview %></a></li>
+				<li><a href="#"><span class="not-answered-marked"></span><%= messages.testPage.notAnsweredReview %></a></li>
+			<% } %>
+		</ul>
+		<br class="clear" />
+
+		
+		<!-- /span 2 -->
+
+		<div class="review-btm">
+			
+			<div>
+				<p>
+					<% var linearNavigation = _.find(currentTestSection.rules, function(rule){
+											return rule.code.toLowerCase() == 'linear' && rule.navigation == true;
+										});
+ 				    if( !currentTest.fixedLength && !linearNavigation ) { %>
+					<a id="app-go-back" class="btn" href="#"><img src="/images/arrowBack-sm-icon.png" alt="Back" /><%= messages.testPage.backToTest %> </a>
+					<% } %>
+					<!-- /confirm btn -->
+					<a id="endAssessment" class="btn" href="#"><%= messages.testPage.endTest %> <img src="/images/arrow-sm-icon.png" alt="Go" /></a>
+					<!-- /confirm btn -->
+				</p>
+			</div>
+		</div>
+	</div>
+	<div id="confirmEnd" class="popupOverlay">
+		<div class="overlay-content overlayShowing">
+			<div class="activation-form">
+				<h3>
+					<%= messages.testPage.confirmTestEnd %>
+				</h3>
+				<br />
+				<div class="activation">
+					<button type="button" id="confirmEndButton" class="btn-rev btn">
+						<%= messages.testPage.yes %>
+					</button>
+					<button type="button" id="confirmCancelButton" class="btn-rev btn">
+						<%= messages.testPage.no %>
+					</button>
+				</div>
+				<form id="saveTest" method="POST" action="<%= contextPath %>/test.htm">
+					<input type="hidden" name="studentTestId" value="<%= currentStudentTest.id %>" />
+					<input type="hidden" name="studentTestSectionId" value="<%= currentStudentTestSection.id %>" />
+					<input type="hidden" name="studentResponses" />
+					<input type="hidden" name="studentResponseHistories" />
+				</form>
+			</div>
+			<!--<div class="overlay-bg"></div>-->
+		</div>
+	</div>
+</div>

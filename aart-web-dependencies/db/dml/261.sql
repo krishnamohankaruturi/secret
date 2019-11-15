@@ -1,0 +1,5 @@
+
+--US14848
+insert into category(id, categoryname, categorycode, categorydescription, categorytypeid, originationcode, createddate, createduser, activeflag, modifieddate, modifieduser) values(nextval('category_id_seq'), 'Japanese', '46', 'Japanese', (select id from categorytype where typename = 'First Language'), 'AART_ORIG_CODE', current_timestamp, (Select id from aartuser where username='cetesysadmin'), true, current_timestamp, (Select id from aartuser where username='cetesysadmin'));
+insert into category(id, categoryname, categorycode, categorydescription, categorytypeid, originationcode, createddate, createduser, activeflag, modifieddate, modifieduser) values(nextval('category_id_seq'), 'Amharic', '47', 'Amharic', (select id from categorytype where typename = 'First Language'), 'AART_ORIG_CODE', current_timestamp, (Select id from aartuser where username='cetesysadmin'), true, current_timestamp, (Select id from aartuser where username='cetesysadmin'));
+update category set categorycode='0' where categorytypeid=(select id from categorytype where typename = 'First Language') and categorycode='';

@@ -1,0 +1,35 @@
+.ui-jqgrid .ui-jqgrid-bdiv {
+  position: relative; 
+  margin: 0em; 
+  padding:0; 
+  /*overflow: auto;*/ 
+  overflow-x:hidden; 
+  overflow-y:auto; 
+  text-align:left;
+}
+
+#scoring_buttons {
+	float: right;
+}
+
+#scoring_headers {
+	font-size: 120%;
+	clear: both;
+}
+
+#scoring_headers #scoring_orgLabel {
+	float:left;
+}
+
+#scoring_headers #scoring_asOf {
+	float: right;
+}
+
+.scoringSummary {
+	clear: both;
+}
+
+#scoring_headers #scoring_asOf {
+     font-size: 1rem;
+     margin-right: 10px;
+}

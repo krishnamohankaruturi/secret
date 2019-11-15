@@ -1,0 +1,33 @@
+
+/* Column chooser Multiselect
+----------------------------------*/
+
+.ui-grid-multiselect { border: solid 1px; font-size: 1em; color: #5b5c5e; }
+.ui-grid-multiselect ul { -moz-user-select: none; font-size: 1em; color: #5b5c5e; }
+.ui-grid-multiselect li { margin: 0; padding: 0; cursor: default; height: 25px; font-size: 1em; color: #5b5c5e; list-style: none;}
+.ui-grid-multiselect li a { color: #999; text-decoration: none; padding: 0; display: block; float: left; cursor: pointer; font-size: 1em; color: #5b5c5e;}
+.ui-grid-multiselect li.ui-draggable-dragging { padding-left: 10px; }
+
+.ui-grid-multiselect div.selected {float:left; overflow: auto; }
+.ui-grid-multiselect ul.selected { margin-left: -40px; width:100%;}
+
+.ui-grid-multiselect ul.ui-sortable	{}
+
+.ui-grid-multiselect div.available { border: 0; float:left; border-left: 1px solid #d8d8d8; overflow: auto;}
+.ui-grid-multiselect ul.available { margin-left: -40px; }
+.ui-grid-multiselect ul.available li {  }
+ 
+.ui-grid-multiselect .ui-state-default { border: none; margin-bottom: 1px; position: relative; padding-left: 20px; }
+.ui-grid-multiselect .ui-state-hover { border: none; }
+.ui-grid-multiselect .ui-widget-header {border: none;  margin-bottom: 1px; font-weight:300; font-size: 1em; color: #0e76bc;}
+ 
+.ui-grid-multiselect .add-all { float:right; font-size: .9em; color: #0e76bc;display: block;}
+.ui-grid-multiselect .remove-all, .ui-grid-multiselect .add-all { float: right; padding: 7px;font-size: .9em; color: #0e76bc;}
+.ui-grid-multiselect .search { float: left; padding: 4px; }
+.ui-grid-multiselect .count { float: left; padding: 7px; font-size: .9em; color: #0e76bc;}
+
+.ui-grid-multiselect li span.ui-icon-arrowthick-2-n-s { position: absolute; left: 2px; }
+.ui-grid-multiselect li a.action { position: absolute; right: 0px; top:0px; }
+	.ui-grid-multiselect li a.action span { background-color: white; } 
+
+.ui-grid-multiselect input.search { padding: 5px; opacity: 0.5; margin: 4px; width: 100px; border-radius: 4px; font-size: 14px; }

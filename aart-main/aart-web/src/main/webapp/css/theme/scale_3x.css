@@ -1,0 +1,1024 @@
+
+/* Default sizes and scalings for site */
+body.scale_3x {
+	font-size: 18pt;
+	line-height: 1.8em;
+}
+
+.scale_3x h1,.scale_3x h2,.scale_3x h3, .scale_3x h4,.scale_3x h5,.scale_3x h6 {
+	margin-bottom: 5px;
+	line-height: 1.2em;
+}
+
+.scale_3x p {
+	margin-bottom: 15px;
+	line-height: 1.4em;
+}
+
+.scale_3x h2 {
+	width: 400px;
+	margin: 0 auto;
+}
+
+.scale_3x #container  {
+	margin: 20px auto;
+	min-width: 1500px;
+	max-width: 1728px;
+	height: auto;
+	padding: 10px;
+	border-radius: 30px;
+}
+
+.scale_3x #container_login {
+	margin: 20px auto;
+	max-width: 800px;
+	min-width: 600px;
+	height: auto;
+	padding: 10px;
+	border-radius: 30px;
+}
+
+.scale_3x #questions #header {
+	margin: 0 0 0 50px;
+}
+
+.scale_3x .loginContent {
+	margin: 25px auto 40px auto;
+	height: auto;
+}
+
+.scale_3x .loginContent h2 {
+	width: 500px;
+	font-size: 16pt;
+	margin: 0 auto 50px auto;
+}
+
+.scale_3x .loginContent div {
+	margin: 0 0 10px 0;
+}
+
+.scale_3x .loginContent form {
+	height: 200px;
+	width: 500px;
+	margin: 0px auto 0 auto;
+}
+
+.scale_3x #loginContent_field {
+	height: 50px;
+	margin: 0 auto 30px auto;
+	width: 500px;
+}
+
+.scale_3x .loginContent label {
+	font-size: 24px;
+	margin: 10px 0 0;
+	padding: 5px 15px;
+	width: 27%;
+}
+
+.scale_3x .loginContent input {
+	font-size: 24px;
+	border-radius: 15px;
+	margin: 0 0px 30px 19px;
+	padding: 5px 15px;
+	width: 50%;
+}
+
+.scale_3x .loginContent button {
+	margin: 0 0 0 100%;
+}
+
+.scale_3x .loginContentText {
+	border-radius: 8px;
+}
+
+.scale_3x .button {
+	font-size: 14pt;
+	border-radius: 20px;
+	padding: .25em 2em;
+	margin: 10px auto 0 100%;
+}
+
+.scale_3x hr {
+	width: 50%;
+	border: 0;
+}
+
+.scale_3x .error {
+	font-size: 12pt;
+	margin: 60px 0 20px -60px;
+}
+
+/* ************************* 
+Top Nav
+************************* */
+.scale_3x .topPassageNav {
+	margin: 0 0 10px 0;
+	font-size: 18pt;
+}
+
+.scale_3x .topPassageNav a {
+	padding: 0px 8px;
+	text-decoration: none;
+}
+
+/* ************************* 
+Pagination 
+************************* */
+.scale_3x .pagination {
+    margin: 0 auto 0.5em 3em;
+}
+
+.scale_3x .pagesWrap {
+	width:89%;
+}
+
+.scale_3x .pagesWrap a {
+	padding: 0px .5em;
+	font-size: 18pt;
+	line-height: 1.4em;
+}
+
+.scale_3x .pageBack span,.scale_3x .pageNext span {
+	margin-left: -99999px;
+}
+
+.scale_3x .pageBack,.scale_3x .pageNext {
+	height: 31px;
+	width: 31px;
+}
+
+.scale_3x .pageNext {
+	margin-left: 2px;
+}
+
+/* ************************* 
+Tool Bars
+************************* */
+.scale_3x .toolBars {
+	line-height: 1em;
+	width: 50px;
+}
+
+.scale_3x #toolbar_tools img {
+	margin: 0;
+}
+
+.scale_3x #toolbar_tools a img {
+	-moz-border-radius: 0.25em;
+	-webkit-border-radius: 0.25em;
+    border-radius: 0.25em 0.25em 0.25em 0.25em;
+    float: left;
+    font-size: 1em;
+    height: 1em;
+    width: 1em;    
+}
+.scale_3x #toolbar_tools a{
+	font-size:1em;
+	-moz-border-radius: 0.25em;
+	-webkit-border-radius: 0.25em;
+    border-radius: 0.25em 0.25em 0.25em 0.25em;
+    margin: 0.25em 0 0;
+	float: left;    
+}
+.scale_3x #toolbar_tools a img:active {
+	top: 1px;
+}
+
+.scale_3x .toolbar_drawer {
+	width: 300px;
+	top: -46px;
+	left: 40px;
+}
+
+.scale_3x .closebutton {
+	font-size: 16px;
+	border-radius: 15px;
+	left: 13px;
+	width: 90%;
+	height: auto;
+}
+
+.scale_3x .toolButton {
+	margin: 2px 2px 0;
+	height: 22px;
+	padding: 0 5px 0 10px;
+	line-height: 4px
+}
+
+.scale_3x .toolButton img {
+	top: 3px;
+}
+
+/* ************************* 
+Viewports
+************************* */
+.scale_3x .notice {
+	border-radius: 1em;
+	padding: 1em;
+}
+
+.scale_3x .viewPort {
+	border-radius: 30px;
+	min-width: 1410px;
+}
+
+.scale_3x .viewportPortable {
+	border-radius: 20px;
+	margin: 0;
+	padding: 3em;
+	font-size: 14px;
+	line-height: 1.6em;
+}
+
+.scale_3x #viewportPortable {
+	height: auto;
+	margin: auto;
+}
+
+.scale_3x .viewportPortable h2 {
+	width: 100%;
+}
+
+.scale_3x .viewportPortable2 {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: auto;
+	height: auto;
+	margin: 115px 10px 10px 10px;
+	padding: 0;
+	border-radius: 20px;
+}
+
+.scale_3x .directionsContent {
+	margin: 35px auto 50px auto;
+	height: 100%;
+	padding: 0 20px 0 20px;
+}
+
+.scale_3x .directionsContent h2 {
+	width: 500px;
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+/* ************************* 
+Testing Port
+************************* */
+.scale_3x .testingPort {
+	margin: 7px auto 7px 72px;
+}
+
+.scale_3x .halfwidth {
+	width: 47%;
+}
+
+.scale_3x .fullwidth {
+	width: 96%;
+}
+
+.scale_3x .testingPort #leftCol,.scale_3x .testingPort #rightCol {
+	margin: 5px 0 0 15px;
+}
+
+.scale_3x .testingPort h2 {
+	margin: 8px auto;
+	font-size: 22pt;
+}
+
+.scale_3x #passageText {
+	border-radius: 15px;
+	margin-left: 20px;
+	padding: 15px 20px 15px 15px;
+	height: 340px;
+}
+
+.scale_3x #passageText h3,.scale_3x #passageText h5 {
+	line-height: 1.2em;
+	margin: 0 0 10px 0;
+}
+
+/* ************************* 
+Section Tabs
+************************* */
+.scale_3x #sectionTabs {
+	left: -3px;
+	top: 50px;
+	font-size: 13px;
+}
+
+.scale_3x #sectionTabs a {
+	width: 22px;
+	margin: 1px 0;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 3px 0;
+}
+
+/* ************************* 
+Question Col Head
+************************* */
+.scale_3x #questionsHead {
+	height: 29px;
+	margin-top: 5px;
+}
+
+.scale_3x #view {
+	font-size: 18pt;
+	padding-right: 26px;
+	top: 2px;
+	margin: 8px auto;
+}
+
+.scale_3x #questionsHead	a span {
+	margin-left: -9999px
+}
+
+.scale_3x #questionArrowBack {
+	left: 0;
+	top: 10px;
+	width: 46px;
+	height: 27px;
+}
+
+.scale_3x #questionArrowNext {
+	right: 26px;
+	top: 10px;
+	width: 46px;
+	height: 27px;
+}
+
+/* Question Layout classes */
+
+.scale_3x .passage .radio,.scale_3x .vertical_stacked .radio,.scale_3x .stacked_z .radio,.scale_3x .right_z .radio,.scale_3x .right_vertical_stacked .radio,.scale_3x .rating_scale_vertical .radio
+	{
+	margin: 0 .5em;
+}
+
+.scale_3x .stacked_z .foils li {
+	width: 40%;
+}
+
+.scale_3x .right_z .stem {
+	width: 45%;
+}
+
+.scale_3x .right_z .foils {
+	width: 45%;
+}
+
+.scale_3x .right_z .foils li {
+	width: 35%;
+	float: left;
+}
+
+.scale_3x .right_vertical_stacked .stem {
+	width: 60%;
+}
+
+.scale_3x .right_vertical_stacked .foils {
+	width: 35%;
+}
+
+.scale_3x .rating_scale .foils ul {
+	width: 100%;
+	margin: 0 auto;
+	float: left;
+}
+
+.scale_3x .rating_scale .foils li {
+	margin: .5em;
+	max-width: 7%;
+}
+
+.scale_3x .rating_scale .foils li span.radio {
+	margin: 0 auto;
+}
+
+.scale_3x .rating_scale .foils li span.foil {
+	width: 100%;
+}
+
+.scale_3x .rating_scale_vertical .foils li {
+	padding-top: .5em;
+	width: 90%;
+}
+
+/* 
+ * Test complete confirmation. 
+ */
+.scale_3x #confirmEnd, .scale_3x #navigationAlert {
+	height: 30%;
+	width: 40%;
+	padding: 2em;
+	border-radius: 10px;
+}
+
+.scale_3x #maskWarn {
+	height: 15%;
+	width: 40%;
+	padding: 2em;
+	border-radius: 10px;
+}
+
+.scale_3x #confirmDeleteNote {
+	height: 20%;
+	width: 40%;
+	padding: 2em;
+	border-radius: 10px;
+}
+
+.scale_3x #confirmEnd .button, .scale_3x #confirmDeleteNote .button, .scale_3x #navigationAlert .button {
+	width: auto;
+}
+
+.scale_3x #backgroundMask {
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+
+/* ************************* 
+Question Col Questions
+************************* */
+.scale_3x #questionsCol {
+	height: 936px;
+	margin-top: 14px
+}
+
+.scale_3x .questionBox {
+	border-radius: 15px;
+	margin: 0 10px 2px 0;
+}
+
+.scale_3x .questionBoxHead {
+	height: 38px;
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+	padding: 0 0 0 10px;
+}
+
+.scale_3x .review {
+	padding: 4px 10px 0;
+	right: 60px;
+	top: 4px;
+	border-radius: 10px;
+	height: 14px;
+	line-height: 1em;
+	font-size: 10px;
+}
+
+.scale_3x .questionWrapper {
+	margin: 0 0 10px 0;
+}
+
+.scale_3x .expandArea {
+	border-radius: 10px;
+	padding: 5px 6px 0;
+	height: 15px;
+	line-height: 1em;
+	right: 5px;
+	top: 2px;
+}
+
+.scale_3x .questionBox h4 {
+	font-size: 18pt;
+	margin: 0;
+	padding: 10px;
+}
+
+.scale_3x .questionAnswers {
+	padding: 6px 10px 0px 10px;
+	line-height: 1.4em
+}
+
+.scale_3x .questionAnswers label,.scale_3x .questionAnswers span.foil {
+	margin: 0 0 15px 0;
+	font-size: 18pt;
+	padding: 0 0 0 0px;
+}
+
+.scale_3x .accordionContent {
+	border-radius: 10px;
+	margin: 0 10px 15px 0;
+}
+
+.scale_3x #passageQuestion_foot {
+	width: 100%;
+	margin: 0;
+}
+
+.scale_3x .footer {
+	margin: 1em 1em 1em 50px;
+	min-width: 1410px;
+}
+
+.scale_3x .footer a {
+	margin: 0 1em;
+}
+
+.scale_3x .backButton {
+	margin: 0;
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em 0 0 2.5em;
+	-webkit-border-radius: 2.5em 0 0 2.5em;
+	border-radius: 2.5em 0 0 2.5em;
+}
+
+.scale_3x .backButton2 {
+	width: 75px;
+	margin: 5px 0 0 30px;
+}
+
+.scale_3x #begin {
+	margin: 10px 0 20px 0;
+}
+
+.scale_3x .nextButton {
+	margin-right: 0;
+	padding: .5em 2em;
+	-moz-border-radius: 0 2.5em 2.5em 0;
+	-webkit-border-radius: 0 2.5em 2.5em 0;
+	border-radius: 0 2.5em 2.5em 0;
+}
+
+.scale_3x .clear {
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em;
+	-webkit-border-radius: 2.5em;
+	border-radius: 2.5em;
+}
+
+.scale_3x .reviewBig {
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em;
+	-webkit-border-radius: 2.5em;
+	border-radius: 2.5em;
+}
+
+.scale_3x .end {
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em;
+	-webkit-border-radius: 2.5em;
+	border-radius: 2.5em;
+}
+
+.scale_3x .button2 {
+	font-size: 16px;
+	border-radius: 30px;
+	padding: 1px 40px 3px 0;
+	margin: 20px auto 0;
+	line-height: 30px;
+	width: 180px;
+}
+
+.scale_3x .button2 img {
+	margin: 0 10px
+}
+
+.scale_3x .homeContent {
+	margin: 35px auto 50px auto;
+}
+
+.scale_3x .homeContent h2 {
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+.scale_3x .takeContent {
+	margin: 35px auto 50px auto;
+	height: auto;
+}
+
+.scale_3x .takeContent h2 {
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+.scale_3x .homeButton {
+	margin: 15px 10px 0 0;
+}
+
+.scale_3x .buttonLink {
+	border-radius: 15px;
+	padding: 0 30px;
+	height: 25px;
+	font-size: 14px;
+}
+
+.scale_3x .buttonLink img {
+	top: 1px;
+	margin: 0;
+}
+
+.scale_3x .selectTestContent {
+	margin: 35px auto 50px auto;
+}
+
+.scale_3x .selectTestContent h2 {
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+.scale_3x .selectTestContent label {
+	margin: .5em 0 10px 0;
+	font-size: 18px;
+}
+
+.scale_3x .selectTestContent select {
+	border-radius: 5px;
+	margin: .5em 0 10px 0;
+}
+
+.scale_3x .selectTest {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-radius: 30px;
+	padding: 15px;
+}
+
+.scale_3x .selectTest ul,.scale_3x .selectTest li {
+	margin: 0;
+	padding: 5px;
+}
+
+.scale_3x .selectTest ul {
+	padding: 0 5px;
+}
+
+.scale_3x .directionsTests {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-radius: 30px;
+	padding: 15px;
+}
+
+.scale_3x .question {
+	margin: 35px;
+	padding: 15px;
+	border-radius: 30px;
+}
+
+/*.scale_3x .question ul {
+	font-size: 18px;
+}*/
+
+.scale_3x .question ul li {
+	margin-bottom: 10px;
+}
+
+.scale_3x .question h3 {
+	margin: 0 20px 20px 20px;
+}
+
+.scale_3x .topSpace {
+	height: 20px;
+}
+
+.scale_3x .radio {
+	width: 22px;
+	height: 22px;
+}
+
+.scale_3x .checkbox {
+	width: 25px;
+	height: 25px;
+}
+
+/* Hidden by default, do not remove */
+.scale_3x #reviewer div.reviewerContent {
+	margin: 35px auto 50px auto;
+	height: 100%;
+	padding: 0 20px 0 20px;
+}
+
+.scale_3x #reviewer h2 {
+	font-size: 1.5em;
+}
+
+.scale_3x #reviewer div.reviewerTests {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-radius: 30px;
+	padding: 15px;
+}
+
+.scale_3x #reviewer div.column {
+	width: 45%;
+	margin-right: 2em;
+}
+
+.scale_3x #reviewer #reviewbox h4 {
+	padding-top: 1em;
+}
+
+.scale_3x #reviewer div.reviewquestion {
+	width: 60px;
+	border-radius: 5px;
+	margin: .5em;
+	padding: .3em;
+}
+
+.scale_3x #reviewer div.reviewquestion img {
+	margin-left: .2em;
+	width: 16px;
+	height: 16px;
+}
+
+.scale_3x .reviewerTests .button {
+	padding: 3px 30px;
+	margin: 5px;
+	width: 125px;
+}
+
+/* Magnification tool */
+.scale_3x #magnificationBox {
+	width: 12em;/*250px;*/
+	left: 20px;
+	top: 20px;
+	padding: 1.1em;
+	border-radius: 1.8em;
+}
+
+.scale_3x #magnificationBox h1 {
+	font-size: 1.5em;
+}
+
+.scale_3x #magnificationBox .slider_key div {
+	/*margin-right: .5em;*/
+	width:2em;
+	float:left;
+}
+
+.scale_3x #magnificationBox .slider_key div img {
+	vertical-align: bottom;
+}
+
+
+/* Reference */
+.scale_3x #reference {
+	width: 40%;
+	height: 60%;
+	left: 20px;
+	top: 20px;
+	padding: 1.5em;
+	border-radius: 2em;
+}
+
+.scale_3x #reference .container {
+	height: 100%;
+}
+
+.scale_3x #reference .entry {
+	padding: .5em;
+}
+
+/********************* /Calculator ********************/
+.scale_3x #calculator {
+	width: 266px;
+	height: 400px;
+	left: 20px;
+	top: 20px;
+}
+
+.scale_3x #graphCalculator {
+	height: 600px;
+	left: 20px;
+	top: 20px;
+}
+
+/******************** /Mask **************************/
+
+.scale_3x .mask{
+	width: 30%; 
+	height: 15%; 
+}
+
+/********************* /Highlighter ********************/
+
+.scale_3x .closer-all {
+	top: -8px;
+	left: -9px;
+}
+
+/********************* /GuideLine ********************/
+.scale_3x .guidetopper {
+	height: 20px;
+	margin-left: 12px;
+	width: 90%;
+	opacity: .4;
+}
+
+/********************* /Ruler ******************************/
+.scale_3x #rulerDiv {
+	width: 292px;
+	height: 62px;
+	top: 100px;
+	left: 200px;
+}
+
+.scale_3x #rulerCircle {
+	top: 45%;
+	left: 90%
+}
+
+/******************* Search Tool **************************/
+.scale_3x #searchBox {
+	border-radius: 2em;
+	width: 200px;
+	left: 80px;
+	top: 80px;
+	padding: 2em;
+}
+
+/************periodic table ************/
+.scale_3x #periodicTable {
+	left: 20px;
+	top: 20px
+}
+
+.scale_3x #pTElem {
+	width: 200px;
+	height: 250px;
+}
+
+.scale_3x .lft-sym {
+	padding-left: 15px;
+	padding-top: 10px;
+	font-size: 8pt
+}
+
+.scale_3x .rgt-sym {
+	padding-left: 10px;
+	padding-top: 10px;
+	font-size: 8pt;
+}
+
+.scale_3x table.navbar {
+	width: 600px;
+	border-spacing: 0px;
+	left: 10px;
+	top: 10px;
+}
+
+.scale_3x table.navbar td a,.scale_3x table.navbar td a.he {
+	font-size: 10pt;
+}
+
+.scale_3x table.navbar td {
+	padding: 0px;
+}
+
+/*dlm added*/
+.scale_3x #calculator {
+	width: 266px;
+	height: 400px;
+	top: 20px;
+	left: 430px;
+}
+
+.scale_3x #calculator	 a {
+	font-size: 18px;
+}
+
+.scale_3x #calculator #display {
+	top: 15px;
+	left: 15px;
+	width: 197px;
+	font: 35px "Arial Black", Arial, Sans-Serif;
+}
+
+.scale_3x #calculator .num-button {
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_3x #calculator .clear-button {
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_3x #calculator .function-button {
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_3x #calculator .seven {
+	top: 86px;
+	left: 15px;
+}
+
+.scale_3x #calculator .eight {
+	top: 86px;
+	left: 66px;
+}
+
+.scale_3x #calculator .nine {
+	top: 86px;
+	left: 118px;
+}
+
+.scale_3x #calculator .four {
+	top: 137px;
+	left: 15px;
+}
+
+.scale_3x #calculator .five {
+	top: 137px;
+	left: 66px;
+}
+
+.scale_3x #calculator .six {
+	top: 137px;
+	left: 118px;
+}
+
+.scale_3x #calculator .one {
+	top: 188px;
+	left: 15px;
+}
+
+.scale_3x #calculator .two {
+	top: 188px;
+	left: 66px;
+}
+
+.scale_3x #calculator .three {
+	top: 188px;
+	left: 118px;
+}
+
+.scale_3x #calculator .zero {
+	top: 237px;
+	left: 15px;
+}
+
+.scale_3x #calculator .dot {
+	top: 237px;
+	left: 66px;
+}
+
+.scale_3x #calculator .clearButton {
+	top: 237px;
+	left: 118px;
+}
+
+.scale_3x #calculator .add {
+	top: 86px;
+	left: 169px;
+}
+
+.scale_3x #calculator .subtract {
+	top: 137px;
+	left: 169px;
+}
+
+.scale_3x #calculator .multiply {
+	top: 188px;
+	left: 169px;
+}
+
+.scale_3x #calculator .divide {
+	top: 237px;
+	left: 169px;
+}
+
+.scale_3x #calculator .equals-button {
+	width: 90px;
+	height: 42px;
+	top: 288px;
+	left: 15px;
+	line-height: 42px;
+}
+
+.scale_3x #calculator #plusminus {
+	top: 288px;
+	left: 118px;
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_3x #calculator #calc-back {
+	top: 288px;
+	left: 169px;
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_3x .tag {
+	width:1.8em;
+	height:1.8em;
+}

@@ -1,0 +1,701 @@
+<?xml version="1.0"?>
+
+<project name="AART" basedir="." default="deploy-LOCAL">
+	<property name="project.dir" value="${basedir}" />
+	<property file="build.properties"/>
+
+	<property name="lib.dir" value="lib"/>
+	<property name="src.dir" value="${project.dir}/docroot/src"/>
+	<property name="web.dir" value="${project.dir}/docroot/web"/>
+	<property name="env.dir" value="${project.dir}/docroot/env/"/>
+	<property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
+	<property name="build.test.dir" value="${project.dir}/test"/>
+	<property name="javadoc.dir" value="javadocs"/>
+	<!--<property name="name" value="ROOT"/>-->
+	<property name="warname" value="AART"/>
+
+	<path id="master-classpath">
+		<fileset dir="${web.dir}/WEB-INF/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${appserver.lib}">
+			<include name="servlet*.jar"/>
+		</fileset>
+		<!-- it is not necessary to compile junit classes -->
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement path="${build.dir}"/>
+	</path>
+	<path id="master-test-classpath">
+	<!-- TODO refer master-classpath and add only the deltas-->
+
+		<fileset dir="${web.dir}/WEB-INF/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${appserver.lib}">
+			<include name="servlet*.jar"/>
+		</fileset>
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${deploy.path}">
+			<include name="*.war"/>
+		</fileset>		
+		<pathelement path="${build.test.dir}/WEB-INF/classes"/>
+	</path>
+	<import file="${basedir}/build-deploy.xml" />
+	<import file="${basedir}/build-database.xml" />
+	<import file="${basedir}/build-auditdatabase.xml" />
+	
+	<target name="all">
+		<antcall target="deploywar" />
+	</target>
+
+	<target name="all-DEV">
+		<property name="env" value="dev" />
+
+		<antcall target="deploy-DEV" />
+	</target>
+
+	<target name="all-QA">
+		<property name="env" value="qa" />
+
+		<antcall target="all" />
+		<antcall target="deploy-QA" />
+	</target>
+
+	<target name="all-QA2">
+		<property name="env" value="qa2" />
+
+		<antcall target="all" />
+		<antcall target="deploy-QA2" />
+	</target>
+
+
+	<target name="all-QA-STAGE">
+                <property name="env" value="qa-stage" />
+
+                <antcall target="all" />
+                <antcall target="deploy-QA-STAGE" />
+        </target>
+
+
+	<target name="all-DEMO">
+		<property name="env" value="demo" />
+
+		<antcall target="all" />
+		<antcall target="deploy-DEMO" />
+	</target>
+	
+	<target name="all-STAGING">
+		<property name="env" value="staging" />
+
+		<antcall target="all" />
+		<antcall target="deploy-STAGING" />
+	</target>
+
+		<target name="all-MCI-DEMO">
+                <property name="env" value="mci-demo" />
+
+                <antcall target="all" />
+                <antcall target="deploy-MCI-DEMO" />
+        </target>
+
+	
+        <target name="all-PROD">
+                <property name="env" value="prod" />
+
+                <antcall target="all" />
+                <antcall target="deploy-PROD" />
+        </target>
+	<!--TODO optimize here build only the classes needed-->
+	<target name="build-test" depends="clean" description="Compile main source tree java files">
+		<mkdir dir="${build.test.dir}"/>
+		<mkdir dir="${build.test.dir}/WEB-INF/classes"/>
+		<javac destdir="${build.test.dir}/WEB-INF/classes" source="1.6" target="1.6" debug="true"
+               deprecation="false" optimize="false" failonerror="true">
+			<src path="${src.dir}" />
+			<classpath refid="master-test-classpath"/>
+		</javac>
+		<copy todir="${build.test.dir}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<exclude name="**/**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="build" depends="clean,js.minify,css.minify" description="Compile main source tree java files">
+		<mkdir dir="${build.dir}"/>
+		<javac destdir="${build.dir}" source="1.6" target="1.6" debug="true"
+               deprecation="false" optimize="false" failonerror="true">
+			<src path="${src.dir}"/>
+			<classpath refid="master-classpath"/>
+		</javac>
+		<copy todir="${build.dir}" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml"/>			
+			</fileset>
+		</copy>
+	</target>
+	<target name="cleanLocal" description="Clean output directories">
+		<echo message="Deleting log files from: ${appserver.home}/logs"/>
+		<delete>
+			<fileset dir="${appserver.home}/logs">
+				<include name="**/*.*"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="clean" description="Clean output directories">
+		<echo message="Deleting class files from: ${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+
+		<delete>
+			<fileset dir="${build.dir}">
+				<include name="**/*.class"/>
+				<include name="**/*.properties"/>
+				<include name="**/*.xml"/>
+			</fileset>
+		</delete>
+		<echo message="Deleting class files from: ${build.test.dir}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${build.test.dir}">
+				<include name="**/*.class"/>
+				<include name="**/*.properties"/>
+				<include name="**/*.xml"/>
+			</fileset>
+		</delete>
+		<!-- Clean the webapps directory-->
+		<echo message="Deleting deploy target: ${deploy.path}/${warname}"/>
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${deploy.path}/${warname}">
+				<include name="**/*" />
+			</fileset>
+		</delete>		
+		<delete dir="${deploy.path}/${ant.project.name}" failonerror="false"/>
+
+		<echo message="Deleting deploy target: ${deploy.path}/${warname}.war"/>
+		<delete file="${deploy.path}/${warname}.war"/>
+		<echo message="Deleting deploy target: ${deploy.path}/${warname}-test.war"/>
+		<delete file="${deploy.path}/${warname}-test.war"/>
+		<echo message="Deleting deploy target: ${deploy.work}/${ant.project.name}"/>
+		<delete includeemptydirs="true" failonerror= "false">
+			<fileset dir="${deploy.work}/${ant.project.name}">
+				<include name="**/*" />
+			</fileset>
+		</delete>
+		<delete dir="${deploy.work}/${ant.project.name}" failonerror="false"/>		
+		
+		
+		
+	</target>
+
+	<!--<target name="deploy" depends="build" description="Deploy application">
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+
+		<echo message="Deploy to: ${deploy.path}/${name} [${env}]" />
+		
+		<antcall target="sql-deploy-ddl"/>
+
+		<echo message="Deploying code >>"/>
+		<copy todir="${deploy.path}/${name}" preservelastmodified="true">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+
+		<echo message="Deploying property files >> ${env.dir}${env}"/>
+		<copy todir="${deploy.path}/${name}" preservelastmodified="true">
+			<fileset dir="${web.dir}">
+				<include name="WEB-INF/classes/*.*"/>
+			</fileset>
+		</copy>
+		<copy todir="${deploy.path}/${name}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${env.dir}${env}">
+				<include name="*.*"/>
+			</fileset>
+		</copy>-->
+		<!-- Copy the common environment parts over -->
+		<!--<copy todir="${deploy.path}/${name}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${env.dir}common">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+	</target>-->
+
+	<target name="deploywar" depends="build" description="Deploy application as a WAR file">
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+
+		<echo message="Environment ${env}"/>
+
+		<!-- Put the right env stuff into ${web.dir}. -->
+		<copy todir="${web.dir}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${env.dir}${env}">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+		
+		<!-- Copy the common environment parts over -->
+		<copy todir="${web.dir}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${env.dir}common">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+
+		<!-- Build the war from the ${web.dir} directory. -->
+		<war destfile="${deploy.path}/${warname}.war"
+             webxml="${web.dir}/WEB-INF/web.xml">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*"/>
+				<exclude name="WEB-INF/classes/test/**/*.*"/>
+			</fileset>
+		</war>
+
+		<copy todir="${deploy.path}" preservelastmodified="true">
+			<fileset dir=".">
+				<include name="*.war"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="deploy-test" depends="build-test" description="Deploy application as a test WAR file">
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+
+		<echo message="Environment ${env}"/>
+
+		<!-- Put the right env stuff into ${web.dir}. -->
+		<copy todir="${build.test.dir}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${env.dir}${env}">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+		
+		<!-- Copy the common environment parts over -->
+		<copy todir="${build.test.dir}/WEB-INF/classes" preservelastmodified="true">
+			<fileset dir="${env.dir}common">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+
+		<!-- Build the war from the ${web.dir} directory. -->
+		<war destfile="${deploy.path}/${warname}-test.war"
+             webxml="${web.dir}/WEB-INF/web.xml">
+			<fileset dir="${build.test.dir}">
+				<include name="**/*.*"/>
+			</fileset>
+		</war>
+
+		<copy todir="${deploy.path}" preservelastmodified="true">
+			<fileset dir=".">
+				<include name="*.war"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="undeploy" description="Un-Deploy application">
+		<delete includeemptydirs="true">
+			<fileset dir="${deploy.path}/${name}">
+				<include name="**/**"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- Load Database -->
+	<target name="database-load-snapshot" description="Load database from snapshot.">
+		<exec executable="${db.loader}">
+			<env key="PGPASSWORD" value="${db.password}" />
+			<arg value="-U${db.username}" />
+			<arg value="-h${db.hostname}" />
+			<arg value="-f${snapshot.fullname}" />
+			<arg value="${db.name}" />
+		</exec>
+	</target>
+
+	<!-- Dump database -->
+	<target name="database-save-snapshot" description="Save database to snapshot.">
+		<exec executable="${db.dumper}">
+			<env key="PGPASSWORD" value="${db.password}" />
+			<arg value="-c" />
+			<arg value="-U${db.username}" />
+			<arg value="-h${db.hostname}" />
+			<arg value="-f${snapshot.fullname}" />
+			<arg value="${db.name}" />
+		</exec>
+	</target>
+	
+	<target name="database-load-tables" description="Load database from sql file.">
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+		
+		<property file="${env.dir}${env}/build.properties" />
+		
+		<echo message="Load tables using: ${db.driver} ${db.url}"/>
+		<sql driver="${db.driver}"
+				url="${db.url}"
+				userid="${db.username}"
+	            password="${db.password}"
+				onerror="continue"
+				src="db/tables.sql">
+			<classpath refid="master-classpath"/>
+		</sql>
+	</target>
+	
+	<target name="database-load-data" description="Load data from sql file.">
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+		
+		<property file="${env.dir}${env}/build.properties" />
+		
+		<echo message="Load data using: ${db.driver} ${db.url}"/>
+		<sql driver="${db.driver}"
+				url="${db.url}"
+				userid="${db.username}"
+	            password="${db.password}"
+				onerror="continue"
+				src="db/load_data.sql">
+			<classpath refid="master-classpath"/>
+		</sql>
+	</target>
+
+	<target name="database-remove-tables" description="Remove all tables from database.">
+		<condition property="env" value="local">
+			<not>
+				<isset property="env" />
+			</not>
+		</condition>
+		
+		<property file="${env.dir}${env}/build.properties" />
+		
+		<echo message="Load data using: ${db.driver} ${db.url}"/>
+		<sql driver="${db.driver}"
+				url="${db.url}"
+				userid="${db.username}"
+	            password="${db.password}"
+				onerror="continue"
+				src="db/drop_tables.sql">
+			<classpath refid="master-classpath"/>
+		</sql>
+	</target>
+	<target name="tomcat-start">
+	    <java jar="${appserver.home}/bin/bootstrap.jar" fork="true" failonerror="true">
+	        <jvmarg value="-Dcatalina.home=${appserver.home}"/>
+	    </java>
+	</target>
+	 
+	<target name="tomcat-stop">
+	    <java jar="${appserver.home}/bin/bootstrap.jar" fork="true" failonerror="false">
+	        <jvmarg value="-Dcatalina.home=${appserver.home}"/>
+	        <arg line="stop"/>
+	    </java>
+	</target>
+	
+	<target name="deploy-LOCAL" depends="deploywar"  description="Deploy project to remote development environment.">
+		<antcall target="sql-deploy-ddl"/>
+		<antcall target="sql-deploy-stage-ddl"/>
+	</target>
+	<target name="cleanDeploy-LOCAL" depends="clean,cleanLocal,deploywar"  description="Deploy project to remote development environment.">
+		<antcall target="sql-deploy-ddl"/>
+		<antcall target="sql-deploy-stage-ddl"/>
+	</target>
+	<target name="cleanDeployReStart-LOCAL" depends="tomcat-stop,clean,deploywar"  description="Deploy project to remote development environment.">
+		<antcall target="sql-deploy-ddl"/>
+		<antcall target="sql-deploy-stage-ddl"/>
+		<antcall target="tomcat-start"/>
+	</target>
+		
+	<target name="deploy-DEV" depends="deploywar"  description="Deploy project to remote development environment.">
+
+		<property file="${env.dir}${env}/build.properties" />
+		
+		<!-- Deploy the application to the Development environment  -->
+		<antcall target="remote-deploy" inheritall="false">
+			<param name="local.deploy.path" value="${deploy.path}"/>
+			<param name="deploy.host" value="${deploy.server}"/>
+			<param name="deploy.path" value="${deploy.base.path}"/>
+			<param name="deploy.user" value="${scp.user}"/>
+			<param name="deploy.keyfile" value="${scp.keyfile}" />
+			<param name="deploy.env" value="dev"/>
+			<param name="env.dir" value="${env.dir}"/>
+			<param name="env" value="${env}"/>
+		</antcall>
+	</target>
+
+	<target name="deploy-QA" depends="deploywar" description="Deploy project to remote QA environment.">
+		<property file="${env.dir}/${env}/build.properties" />
+		
+		<!-- Deploy the application to the QA environment  -->
+		<antcall target="remote-deploy" inheritall="false">
+			<param name="local.deploy.path" value="${deploy.path}"/>
+			<param name="deploy.host" value="${deploy.server}"/>
+			<param name="deploy.path" value="${deploy.base.path}"/>
+			<param name="deploy.user" value="${scp.user}"/>
+			<param name="deploy.keyfile" value="${scp.keyfile}" />
+			<param name="deploy.env" value="qa"/>
+			<param name="env.dir" value="${env.dir}"/>
+			<param name="env" value="${env}"/>
+		</antcall>
+	</target>
+
+	<target name="deploy-QA2" depends="deploywar" description="Deploy project to remote QA environment.">
+		<property file="${env.dir}/${env}/build.properties" />
+		
+		<!-- Deploy the application to the QA environment  -->
+		<antcall target="remote-deploy" inheritall="false">
+			<param name="local.deploy.path" value="${deploy.path}"/>
+			<param name="deploy.host" value="${deploy.server}"/>
+			<param name="deploy.path" value="${deploy.base.path}"/>
+			<param name="deploy.user" value="${scp.user}"/>
+			<param name="deploy.keyfile" value="${scp.keyfile}" />
+			<param name="deploy.env" value="qa2"/>
+			<param name="env.dir" value="${env.dir}"/>
+			<param name="env" value="${env}"/>
+		</antcall>
+	</target>
+
+
+        <target name="deploy-QA-STAGE" depends="deploywar" description="Deploy project to remote QA-Stage environment.">
+                <property file="${env.dir}/${env}/build.properties" />
+
+                <!-- Deploy the application to the QA environment  -->
+                <antcall target="remote-deploy" inheritall="false">
+                       <param name="local.deploy.path" value="${deploy.path}"/>
+                       <param name="deploy.host" value="${deploy.server}"/>
+                       <param name="deploy.path" value="${deploy.base.path}"/>
+                       <param name="deploy.user" value="${scp.user}"/>
+                       <param name="deploy.keyfile" value="${scp.keyfile}" />
+                       <param name="deploy.env" value="qa"/>
+                       <param name="env.dir" value="${env.dir}"/>
+                       <param name="env" value="${env}"/>
+                </antcall>
+        </target>
+
+	<target name="deploy-DEMO" depends="deploywar" description="Deploy project to remote Demo environment.">
+		<property file="${env.dir}/${env}/build.properties" />
+		
+		<!-- Deploy the application to the QA environment  -->
+		<antcall target="remote-deploy" inheritall="false">
+			<param name="local.deploy.path" value="${deploy.path}"/>
+			<param name="deploy.host" value="${deploy.server}"/>
+			<param name="deploy.path" value="${deploy.base.path}"/>
+			<param name="deploy.user" value="${scp.user}"/>
+			<param name="deploy.keyfile" value="${scp.keyfile}" />
+			<param name="deploy.env" value="demo"/>
+			<param name="env.dir" value="${env.dir}"/>
+			<param name="env" value="${env}"/>
+		</antcall>
+	</target>
+
+	<target name="deploy-STAGING" depends="deploywar" description="Deploy project to remote Staging environment.">
+		<property file="${env.dir}/${env}/build.properties" />
+		
+		<!-- Deploy the application to the QA environment  -->
+		<antcall target="remote-deploy" inheritall="false">
+			<param name="local.deploy.path" value="${deploy.path}"/>
+			<param name="deploy.host" value="${deploy.server}"/>
+			<param name="deploy.path" value="${deploy.base.path}"/>
+			<param name="deploy.user" value="${scp.user}"/>
+			<param name="deploy.keyfile" value="${scp.keyfile}" />
+			<param name="deploy.env" value="staging"/>
+			<param name="env.dir" value="${env.dir}"/>
+			<param name="env" value="${env}"/>
+		</antcall>
+	</target>
+
+        <target name="deploy-PROD" depends="deploywar" description="Deploy project to remote Production environment.">
+                        <property file="${env.dir}/${env}/build.properties" />
+
+                <!-- Deploy the application to the QA environment  -->
+            <antcall target="remote-deploy" inheritall="false">
+                        <param name="local.deploy.path" value="${deploy.path}"/>
+                        <param name="deploy.host" value="${deploy.server}"/>
+                        <param name="deploy.path" value="${deploy.base.path}"/>
+                        <param name="deploy.user" value="${scp.user}"/>
+                        <param name="deploy.keyfile" value="${scp.keyfile}" />
+                        <param name="deploy.env" value="prod"/>
+                        <param name="env.dir" value="${env.dir}"/>
+                        <param name="env" value="${env}"/>
+                </antcall>
+        </target>
+
+		<target name="deploy-MCI-DEMO" depends="deploywar" description="Deploy project to remote Production environment.">
+                        <property file="${env.dir}/${env}/build.properties" />
+
+                <!-- Deploy the application to the QA environment  -->
+            <antcall target="remote-deploy" inheritall="false">
+                        <param name="local.deploy.path" value="${deploy.path}"/>
+                        <param name="deploy.host" value="${deploy.server}"/>
+                        <param name="deploy.path" value="${deploy.base.path}"/>
+                        <param name="deploy.user" value="${scp.user}"/>
+                        <param name="deploy.keyfile" value="${scp.keyfile}" />
+                        <param name="deploy.env" value="mci-demo"/>
+                        <param name="env.dir" value="${env.dir}"/>
+                        <param name="env" value="${env}"/>
+                </antcall>
+        </target>
+
+
+	<target name="remote-deploy">
+		<!-- Deploy the application to the environment that is passed in  -->
+		<echo message="The deploy-host is ${deploy.host} and the deploy-path is ${deploy.path}" />
+		<echo message="The deploy-user is ${deploy.user}" />
+		
+		<antcall target="sql-deploy-ddl"/>
+		<antcall target="sql-deploy-stage-ddl"/>
+		
+		<!-- Shutdown tomcat in the remote environement, then clean the temp and work directories -->
+		<sshexec host="${deploy.host}" username="${deploy.user}" keyfile="${deploy.keyfile}" 
+	               failonerror="false" trust="true"
+	               command="${deploy.path}/bin/shutdown.sh"  />
+
+		<sshexec host="${deploy.host}" username="${deploy.user}" keyfile="${deploy.keyfile}" 
+	               failonerror="false" trust="true"
+	               command="rm -rf ${deploy.path}/work/*"  />
+
+		<sshexec host="${deploy.host}" username="${deploy.user}" keyfile="${deploy.keyfile}" 
+	               failonerror="false" trust="true"
+	               command="rm -rf ${deploy.path}/temp/*"  />
+		
+
+		<sshexec host="${deploy.host}" username="${deploy.user}" keyfile="${deploy.keyfile}" 
+	               failonerror="false" trust="true"
+	               command="rm -rf ${deploy.path}/webapps/AART"  />
+		
+
+		<!-- Copy all WAR files in the plugins/components/dist folder to the remote environment -->
+		<scp  todir="${deploy.user}@${deploy.host}:${deploy.path}/webapps"
+	               keyfile="${deploy.keyfile}" passphrase="No" trust="true"  >
+			<fileset dir="${local.deploy.path}" includes="*.war" />
+		</scp>
+
+		<!-- Startup tomcat in the remote environement -->
+		<sshexec host="${deploy.host}" username="${deploy.user}" keyfile="${deploy.keyfile}" 
+                    failonerror="true" trust="true"
+                command="${deploy.path}/bin/startup.sh"  />
+	</target>
+	
+	<target name="javadoc" description="Create project javadoc">
+		
+		<delete dir="${javadoc.dir}" />
+		<mkdir dir="${javadoc.dir}" />
+
+		<javadoc
+			breakiterator="yes"
+			classpathref="master-classpath"
+			destdir="${javadoc.dir}"
+			doctitle="AART ${tde.version} API Documentation"
+			header="&lt;b&gt;AART ${tde.version}&lt;/b&gt;"
+			maxmemory="1024m"
+			noqualifier="java.*"
+			useexternalfile="yes"
+			use="yes"
+			windowtitle="AART ${tde.version} API"
+		>
+
+			<link href="http://java.sun.com/javase/6/docs/api" />
+
+			<packageset dir="docroot/src" />
+			
+			<tag name="mbggenerated" description="Mybatis generated." />
+		</javadoc>
+		
+	</target>
+	
+	<target name="css.concatenate">
+			<property name="css.dir" value="${web.dir}/css"/>
+			<echo message="Remember, do not edit any .concatenated.css files. They will be overwritten." />
+			
+			<!-- This version, shows how to specify order of the files to concatenate -->
+		    <concat destfile="${css.dir}/theme.concatenated.css">
+		        <filelist dir="${css.dir}/theme"
+		             files="core.css, scale_1x.css, scale_2x.css, scale_3x.css, scale_4x.css, scale_5x.css, scale_6x.css"/>
+		        <fileset dir="${css.dir}/theme"
+		            includes="*.css"
+		            excludes="core.css, scale_1x.css, scale_2x.css, scale_3x.css, scale_4x.css, scale_5x.css, scale_6x.css"/>
+		    </concat>
+		</target>
+	
+	<target name="css.minify" depends="css.concatenate" description="Minify project JS.">
+		<property name="css.dir" value="${web.dir}/css"/>
+		
+		<echo message="Remember, do not edit any .min.css files. They will be overwritten." />
+		
+	    <apply executable="java" parallel="false">
+	        <fileset dir="${css.dir}" excludes="**/*.min.css,**theme/*"/>
+	        <arg line="-jar"/>
+	        <arg path="${lib.dir}/yuicompressor-2.4.6.jar"/>
+	    	<arg line="--line-break 0"/>
+	        <srcfile/>
+	        <arg line="-o"/>
+	        <mapper type="glob" from="*.css" to="${css.dir}/*.min.css"/>
+	        <targetfile/>
+	    </apply>
+	    
+	</target>
+	
+	<target name="js.concatenate">
+		<property name="js.dir" value="${web.dir}/js"/>
+		<echo message="Remember, do not edit any .concatenated.js files. They will be overwritten." />
+		
+		<!-- This version, shows how to specify order of the files to concatenate -->
+		<!--
+	    <concat destfile="${js.dir}/tools.concatenated.js">
+	        <filelist dir="${js.dir}/tools"
+	             files="a.js, b.js"/>
+	        <fileset dir="${js.dir}/tools"
+	            includes="*.js"
+	            excludes="a.js, b.js"/>
+	    </concat>
+	    -->
+
+	</target>
+	
+	<target name="js.minify" depends="js.concatenate" description="Minify project JS.">
+		<property name="js.dir" value="${web.dir}/js"/>
+		
+		<echo message="Remember, do not edit any .min.js files. They will be overwritten." />
+		
+	    <apply executable="java" parallel="false">
+	        <fileset dir="${js.dir}" excludes="**/*.min.js,**tools/*"/>
+	        <arg line="-jar"/>
+	        <arg path="${lib.dir}/yuicompressor-2.4.6.jar"/>
+	        <srcfile/>
+	        <arg line="-o"/>
+	        <mapper type="glob" from="*.js" to="${js.dir}/*.min.js"/>
+	        <targetfile/>
+	    </apply>
+	    
+	</target>
+	
+    <target name="junit" depends="deploy-test">    	
+        <junit printsummary="no">
+            <classpath>
+<!--                <path refid="classpath"/>
+                <path refid="application"/>-->
+    			<path refid="master-test-classpath"/>
+            	
+            </classpath>
+            <formatter type="brief" usefile="false"  />            
+            <batchtest fork="yes">
+                <fileset dir="${src.dir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+    </target>
+</project>

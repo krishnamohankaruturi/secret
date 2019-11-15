@@ -1,0 +1,25 @@
+/* Color overlays */
+
+.overlay_white #passageText, .overlay_white .accordionContent, .overlay_white .question, .overlay_white .questionBox, .overlay_white .questionBoxHead {
+	/* This means it is off */
+}
+
+.overlay_light_blue #passageText, .overlay_light_blue .accordionContent, .overlay_light_blue .question, .overlay_light_blue .questionBox, .overlay_light_blue .questionBoxHead {
+	background: #a0c4fc;
+}
+
+.overlay_light_yellow #passageText, .overlay_light_yellow .accordionContent, .overlay_light_yellow .question, .overlay_light_yellow .questionBox, .overlay_light_yellow .questionBoxHead {
+	background: #ffe68e;
+}
+
+.overlay_light_gray #passageText, .overlay_light_gray .accordionContent, .overlay_light_gray .question, .overlay_light_gray .questionBox, .overlay_light_gray .questionBoxHead {
+	background: #dddddd;
+}
+
+.overlay_light_pink #passageText, .overlay_light_pink .accordionContent, .overlay_light_pink .question, .overlay_light_pink .questionBox, .overlay_light_pink .questionBoxHead {
+	background: #e79998;
+}
+
+.overlay_light_green #passageText, .overlay_light_green .accordionContent, .overlay_light_green .question, .overlay_light_green .questionBox, .overlay_light_green .questionBoxHead {
+	background: #b8d8a3;
+}

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.InterimFeedbackDao">
+
+	<resultMap id="QuestionAndAnswerMap" type="edu.ku.cete.domain.interim.FeedbackQuestionAndResponse">
+		<result column="questionid" property="questionId" jdbcType="BIGINT" />
+		<result column="testletfeedbackid" property="testletFeedbackId" jdbcType="BIGINT" />
+		<result column="testletexternalid" property="testletExternalId" jdbcType="BIGINT" />
+		<result column="tasktype" property="taskType" jdbcType="VARCHAR" />
+		<result column="questionsequence" property="questionSequence" jdbcType="BIGINT" />
+		<result column="questiontext" property="questionText" jdbcType="VARCHAR" />
+		<result column="questionoptions" property="questionOptions" jdbcType="VARCHAR" />
+		<result column="required" property="required" jdbcType="BOOLEAN" />
+		<result column="startdate" property="startDate" jdbcType="TIMESTAMP" />
+		<result column="enddate" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="assessmentprogramid" property="assessmentProgramId" jdbcType="BIGINT" />
+		<result column="contentareaid" property="contentAreaId" jdbcType="BIGINT" />
+		<result column="questioncreateduser" property="questionCreatedUser" jdbcType="BIGINT" />
+		<result column="questionmodifieduser" property="questionModifiedUser" jdbcType="BIGINT" />
+		<result column="questioncreateddate" property="questionCreatedDate" jdbcType="TIMESTAMP" />
+		<result column="questionmodifieddate" property="questionModifiedDate" jdbcType="TIMESTAMP" />
+		<result column="responseid" property="responseId" jdbcType="BIGINT" />
+		<result column="testletfeedbackid" property="testletFeedbackId" jdbcType="BIGINT" />
+		<result column="userid" property="userId" jdbcType="BIGINT" />
+		<result column="response" property="response" jdbcType="VARCHAR" />
+		<result column="responseactive" property="responseActive" jdbcType="BOOLEAN" />
+		<result column="responsecreateddate" property="responseCreatedDate" jdbcType="TIMESTAMP" />
+		<result column="responsemodifieddate" property="responseModifiedDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="getQandA" resultMap="QuestionAndAnswerMap">
+		SELECT
+			q.id AS questionid, tf.id AS testletfeedbackid, tf.testletexternalid, tt.code AS tasktype, q.questionsequence, q.questiontext,
+			q.questionoptions, q.required, q.startdate, q.enddate, q.assessmentprogramid, q.contentareaid, 
+			q.createduser AS questioncreateduser, q.modifieduser AS questionmodifieduser,
+			q.createddate AS questioncreateddate, q.modifieddate AS questionmodifieddate,
+			r.id AS responseid, r.response, r.activeflag AS responseactive,
+			r.userid, r.createddate AS responsecreateddate, r.modifieddate AS responsemodifieddate
+		FROM
+			feedbackquestions q 
+			INNER JOIN (
+				SELECT DISTINCT tfb.*, tl.contentareaid FROM testletfeedback tfb JOIN testlet tl ON tl.externalid = tfb.testletexternalid) tf 
+				ON tf.assessmentprogramid = q.assessmentprogramid AND (tf.contentareaid = q.contentareaid OR q.contentareaid IS NULL)
+			LEFT OUTER JOIN (SELECT DISTINCT ON (externalid) code, externalid FROM tasktype ORDER BY externalid ASC, modifieddate DESC) tt ON tt.externalid = q.tasktypeexternalid
+			LEFT OUTER JOIN (
+				SELECT DISTINCT ON (feedbackquestionid, testletfeedbackid) id, feedbackquestionid, testletfeedbackid, response, activeflag, userid, createddate, modifieddate
+				FROM testletfeedbackresponses WHERE activeflag IS TRUE
+				<if test="startDate != null">
+					AND modifieddate &gt; #{startDate,jdbcType=DATE} 
+				</if>
+				<if test="userId != null">
+					AND userid = #{userId,jdbcType=BIGINT}
+				</if>
+				ORDER BY feedbackquestionid, testletfeedbackid, modifieddate DESC ) r 
+			ON q.id = r.feedbackquestionid AND tf.id = r.testletfeedbackid AND r.activeflag IS NOT FALSE
+		WHERE
+			q.startdate &lt; now() AND q.enddate &gt; now()	
+			<if test="assessmentProgramId != null">
+				AND tf.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+			</if>
+			<if test="testletExternalIds != null">
+				AND tf.testletexternalid in
+				<foreach collection="testletExternalIds" item="testletExternalId" open="(" close=")" separator=",">
+					#{testletExternalId}
+				</foreach>
+			</if>
+		ORDER BY
+			tf.testletexternalid, q.questionsequence
+	</select>
+	
+	<select id="getTestletsByTest" resultType="java.lang.Long">
+		SELECT DISTINCT tl.externalid
+		FROM test t 
+			JOIN testsection ts ON ts.testid = t.id 
+			JOIN testsectionstaskvariants tstv ON tstv.testsectionid = ts.id 
+			LEFT JOIN testlet tl ON tl.id = tstv.testletid
+		WHERE t.id = ${testId}
+	</select>
+	
+	<select id="getResponse" resultType="edu.ku.cete.domain.interim.FeedbackResponse">
+		SELECT
+			id as responseid, testletfeedbackid, feedbackquestionid, response, userid, 
+			activeflag as responseactive, createddate as responsecreateddate, modifieddate as responsemodifieddate
+		FROM
+			testletfeedbackresponses
+		WHERE
+			id = #{responseId,jdbcType=BIGINT}
+	</select>
+	
+	<insert id="insertResponse" parameterType="edu.ku.cete.domain.interim.FeedbackResponse">
+		INSERT INTO	testletfeedbackresponses
+			(testletfeedbackid, feedbackquestionid, userid, response, activeflag, createddate, modifieddate)
+		VALUES
+			(
+				#{testletFeedbackId,jdbcType=BIGINT},
+				#{feedbackQuestionId,jdbcType=BIGINT},
+				#{userId,jdbcType=BIGINT},
+				#{response,jdbcType=VARCHAR},
+				TRUE,
+				NOW(),
+				NOW()
+			)
+	</insert>
+	
+	<update id="updateResponse" parameterType="edu.ku.cete.domain.interim.FeedbackResponse">
+		UPDATE testletfeedbackresponses
+			<set>
+				<if test="testletFeedbackId != null"> testletfeedbackid = #{testletFeedbackId,jdbcType=BIGINT},</if>
+				<if test="feedbackQuestionId != null"> feedbackquestionid = #{feedbackQuestionId,jdbcType=BIGINT},</if>
+				<if test="userId != null"> userid = #{userId,jdbcType=BIGINT},</if>
+				<if test="response != null"> response = #{response,jdbcType=VARCHAR},</if>
+				<if test="responseActive != null"> activeflag = #{responseActive, jdbcType=VARCHAR},</if>
+			</set>
+			, modifieddate = NOW()
+		WHERE
+			id = #{responseId,jdbcType=BIGINT}
+			
+	</update>
+
+</mapper>

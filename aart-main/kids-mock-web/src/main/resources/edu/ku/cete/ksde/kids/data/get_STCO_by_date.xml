@@ -1,0 +1,30 @@
+<STCO_Data>
+	<STCO_Record>
+		<Create_Date></Create_Date>
+		<Record_Common_ID></Record_Common_ID>
+		<Record_Type>STCO</Record_Type>
+		<State_Student_Identifier>241</State_Student_Identifier>
+		<AYP_QPA_Bldg_No></AYP_QPA_Bldg_No>
+		<Student_Legal_Last_Name>Jerod</Student_Legal_Last_Name>
+		<Student_Legal_First_Name>Lyles</Student_Legal_First_Name>
+		<Student_Legal_Middle_Name></Student_Legal_Middle_Name>
+		<Student_Generation_Code></Student_Generation_Code>
+		<Student_Gender>0</Student_Gender>
+		<Student_Birth_Date></Student_Birth_Date>
+		<Current_Grade_Level></Current_Grade_Level>
+		<Local_Student_Identifier></Local_Student_Identifier>
+		<Hispanic_Ethnicity></Hispanic_Ethnicity>
+		<Current_School_Year>2012</Current_School_Year>
+		<Attendance_Bldg_No>WCHS</Attendance_Bldg_No>
+		<Comprehensive_Race></Comprehensive_Race>
+		<Educator_Bldg_No>WCHS</Educator_Bldg_No>
+		<KCC_ID></KCC_ID>
+		<section>Sync Failure UAT 3</section>
+		<Local_Course_ID></Local_Course_ID>
+		<Course_Status></Course_Status>
+		<teacher_identifier>987666</teacher_identifier>
+		<Teacher_Last_Name>Fail LN</Teacher_Last_Name>
+		<Teacher_First_Name>Fail FN</Teacher_First_Name>
+		<Teacher_Middle_Name></Teacher_Middle_Name>
+	</STCO_Record>
+</STCO_Data>

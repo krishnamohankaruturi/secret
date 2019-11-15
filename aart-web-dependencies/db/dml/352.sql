@@ -1,0 +1,17 @@
+--US15741: Data Extract - Test Tickets for KAP and AMP
+DO
+$BODY$
+BEGIN
+	IF ((SELECT count(id) FROM authorities WHERE authority = 'DATA_EXTRACTS_TEST_TICKETS' AND activeflag = TRUE) = 0) THEN
+		RAISE NOTICE '%', 'Permission DATA_EXTRACTS_TEST_TICKETS does not exist. Inserting...';
+		INSERT INTO authorities(
+				id, authority, displayname, objecttype, createddate, createduser,
+				activeflag, modifieddate, modifieduser)
+			VALUES (nextval('authorities_id_seq'), 'DATA_EXTRACTS_TEST_TICKETS', 'Create Test Tickets Data Extract',
+				'Reports-Data Extracts', now(), (select id from aartuser where username='cetesysadmin'),
+				TRUE, now(), (Select id from aartuser where username='cetesysadmin'));
+	ELSE
+		RAISE NOTICE '%', 'Permission DATA_EXTRACTS_TEST_TICKETS exists. Skipping...';
+	END IF;
+END;
+$BODY$;

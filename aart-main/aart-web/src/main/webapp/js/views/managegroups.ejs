@@ -1,0 +1,203 @@
+<div class="container-fluid">
+    <span class="pull-left" style="margin-top:24px;">
+        <a href="interim.htm" title="Back to Interim Home">
+            <i class="fa fa-arrow-circle-o-left  fa-lg"></i>Back to Interim Home &gt; </a>
+    </span>
+    <span class="manageMyGroups">&nbsp;&nbsp;Manage My Groups</span>
+    <div class="row assemble_dropdown">
+        <form>
+            <div class="form-group col-sm-3">
+                <label>NAME</label>
+                <input type="text" id="js-groupname" class="form-control" title="Type Group Name" placeholder="Type Group Name">
+            </div>
+            <div class="form-group col-sm-3">
+                <label>CREATED BY</label>
+                <input type="text" id="js-username" class="form-control" title="Type User Name" placeholder="Type User Name">
+            </div>
+            <div class="form-group col-sm-2">
+                <a href="#" class="btn btn-primary m_top " id="searchgroup">Search</a>
+            </div>
+            <div class="form-group col-sm-3 pull-right add_group">
+                <a href="#" class="btn btn-link m_top" id="addnewgroup">
+                    <p>
+                        <i class="fa fa-plus-circle fa-lg"></i> ADD NEW GROUP </p>
+                </a>
+            </div>
+
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 assemble_box">
+            <div class="row">
+                <%for(var i=0;i <groups.length; i++) {%>
+                    <div class="col-sm-6">
+                        <div class="">
+                            <h4>
+                                <%= groups[i].groupName%>
+                            </h4>
+                            <span class="pull-right">
+                                <%if(groups[i].access){%>
+                                    <a href="" data-groupid="<%=groups[i].id%>" data-groupname="<%=groups[i].groupName%>" title="Preview Group" class="viewGroup">
+                                        <i class="fa fa-eye fa-2x text_blue_view"></i>
+                                    </a>
+                                    <a href="" data-groupid="<%=groups[i].id%>" data-groupname="<%=groups[i].groupName%>" title="Edit Group" class="editGroup">
+                                        <i class="fa fa-pencil-square fa-2x"></i>
+                                    </a>
+                                    <%}else{%>
+                                        <a href="" data-groupid="<%=groups[i].id%>" data-groupname="<%=groups[i].groupName%>" title="Preview Group" class="viewGroup">
+                                            <i class="fa fa-eye fa-2x text_blue_view"></i>
+                                        </a>
+                                    <%}%>
+                            </span>
+
+                        </div>
+                    </div>
+                <%}%>
+            </div>
+        </div>
+        <div class="col-sm-6 manage_form">
+            <div class="row js-creategroupdiv">
+                <div>
+                    <h4 class="m_bot">
+                        <b>Create New Group:</b>
+                    </h4>
+                </div>
+                <form class="row">
+                    <div class="form-group col-sm-8">
+                        <label>ROSTER</label>
+                        <select multiple="true" data-placeholder="Select Roster" title="Roster" id="interimRostercreate" class="form-control">
+                            <%for(var i=0;i <dropdownObject.rostername.length; i++) {%>
+                                <option value="<%=dropdownObject.rostername[i].id%>">
+                                    <%=dropdownObject.rostername[i].name%>
+                                </option>
+                            <%}%>
+                        </select>
+                    </div>
+                     <%if (currentAssessmentProgramName != 'PLTW'){%> 
+                    <div class="form-group col-sm-8">
+                        <label>GRADE</label>
+                        <select multiple="true" data-placeholder="Select Grade" title="Grade" id="interimRosterGradecreate" class="form-control">
+                            <%for(var i=0;i <dropdownObject.gradename.length; i++) {%>
+                                <option value="<%=dropdownObject.gradename[i].id%>">
+                                    <%=dropdownObject.gradename[i].name%>
+                                </option>
+                            <%}%>
+                        </select>
+                    </div>
+                     <%}%>
+                    <div class="form-group col-sm-3">
+                        <label id="transparentStudentgroupcreateSearch" class="transparent">Search</label>
+                        <a href="#" class="btn btn-primary btn-block" id="studentgroupcreateSearch">Search</a>
+                    </div>
+                </form>
+
+                <div class="m-table row table-responsive studentgrouptable">
+                    <table id="studentgroupcreateTable" role="presentation">
+                        <tr>
+                            <td />
+                        </tr>
+                    </table>
+                    <div id="studentgroupcreateTablePager"></div>
+                </div>
+                <form class="row form-horizontal h_form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input id="groupname" type="text" name="groupName" class="form-control" title="Group Name">
+                            <span class="groupnameerror" style="display:none;color:red">Please Give Student Group Name.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" id="createGroup">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row js-editgroupdiv hide">
+                <div>
+                    <h4 class="m_bot">
+                        <b>Selected Students:</b>
+                    </h4>
+                    <h4 class="m_bot groupnameload">Group 1 Details</h4>
+                </div>
+                <form class="row">
+                    <div class="form-group col-sm-8">
+                        <label>ROSTER</label>
+                        <select multiple="true" data-placeholder="Select Roster" title="Roster" id="interimRosteredit" class="form-control">
+
+                            <%for(var i=0;i <dropdownObject.rostername.length; i++) {%>
+                                <option value="<%=dropdownObject.rostername[i].id%>">
+                                    <%=dropdownObject.rostername[i].name%>
+                                </option>
+                            <%}%>
+                        </select>
+                    </div>
+                    <%if (currentAssessmentProgramName != 'PLTW'){%> 
+                    <div class="form-group col-sm-8">
+                        <label>GRADE</label>
+                        <select multiple="true" data-placeholder="Select Grade" title="Grade" id="interimRosterGradeedit" class="form-control">
+
+                            <%for(var i=0;i <dropdownObject.gradename.length; i++) {%>
+                                <option value="<%=dropdownObject.gradename[i].id%>">
+                                    <%=dropdownObject.gradename[i].name%>
+                                </option>
+                            <%}%>
+                        </select>
+                    </div>
+                     <%}%>
+                    <div class="form-group col-sm-3">
+                        <label id="transparentStudentgroupeditSearch" class="transparent">Search</label>
+                        <a href="#" class="btn btn-primary btn-block" id="studentgroupeditSearch">Search</a>
+                    </div>
+                </form>
+                <div class="m-table row table-responsive js-newstudentsdiv row" style="display:none;">
+                    <table id="addingnewstudentsgroupTable" class="row">
+                        <tr>
+                            <td />
+                        </tr>
+                    </table>
+                    <div id="addingnewstudentsgroupTablePager"></div>
+                    <div class="row modal-footer ">
+                        <a class="col-sm-offset-5 col-sm-3 col-md-3 btn btn-primary" id="js-addstudentstoexistinggroup">Save</a>
+                        <a class="col-sm-3 col-md-3 btn btn-default" id="js-cancelgroup">Cancel</a>
+                    </div>
+                </div>
+                <div class="m-table row table-responsive studentgrouptableinedit">
+                    <table id="studentGroupEditTable">
+                        <tr>
+                            <td />
+                        </tr>
+                    </table>
+                    <div id="studentGroupEditTablePager"></div>
+                </div>
+                <form class="row form-horizontal h_form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="eidt_groupname" class="form-control" placeholder="Name" title="Name" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" id="js-updategroup">Update Group</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row js-grouppreviewdiv hide">
+                <div>
+                    <h4 class="m_bot groupnameload"></h4>
+                    <div class="m-table row table-responsive studentgrouptableinpreview">
+                        <table id="studentGroupPreviewTable">
+                            <tr>
+                                <td />
+                            </tr>
+                        </table>
+                        <div id="studentGroupPreviewTablePager"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

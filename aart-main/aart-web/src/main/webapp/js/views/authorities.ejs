@@ -1,0 +1,174 @@
+<% 	var groupingsRendering = null;
+	var labelNameRendering = null; 
+	var isUsersLimitPerRoleVisible = data.isUsersLimitPerRoleVisible;
+	var isUsersLimitedToOnePerRole = data.isUsersLimitedToOnePerRole;
+	var rolesCheck = 0;
+	var tabIndexCount = 0;
+	var tabActiveClass="";
+%>
+<ul class="nav nav-tabs sub-nav" id="rolesPermissionTabsContent">
+	<% for(tabIndex in data.authoritiesTabs){	
+		if(tabIndexCount==0) tabActiveClass = "active show";
+		else tabActiveClass = "";
+	 %>
+	<li class="nav-item get-roles" >
+		<a class="nav-link <%=tabActiveClass%>" data-toggle="tab" role="tab"
+			href='#tab_<%= data.authoritiesTabs[tabIndex].tabCode %>'><%= data.authoritiesTabs[tabIndex].tabName%></a>
+	</li>
+	<% tabIndexCount++;} %>	
+</ul>
+	
+<div id='save_<%= data.authoritiesTabs[tabIndex].tabCode %>' class ="save" style="float:right;margin-right: 2%;">
+	<security:authorize access="hasRole('PERM_ROLE_MODIFY')">
+		<a class="btn_blue" id="saveRolesBtnTop" href="javascript:void(0)">Save</a>
+	</security:authorize>
+</div>
+<div class="tab-content">
+<% for(tabIndex in data.authoritiesTabs){ 
+	var firstTab=data.authoritiesTabs[tabIndex].tabCode;
+	var firstTabClass="tab-pane fade";
+%>
+<% if(firstTab == "Settings") {
+	firstTabClass = "tab-pane fade in active show";
+}
+%>
+	<div id="tab_<%= data.authoritiesTabs[tabIndex].tabCode %>" class='<%=  firstTabClass %>' >
+	<table style="width:100%;" role="presentation"><tbody><tr>
+		<% for(containerIndex in data.authoritiesTabs[tabIndex].authorityContainers){ %>
+			<td style="vertical-align: top;padding: 0% 1%;">
+			<% 
+				for(var authorityIndex=0; authorityIndex< data.authoritiesTabs[tabIndex].authorityContainers[containerIndex].length; authorityIndex++){
+					var authorityLevel = data.authoritiesTabs[tabIndex].authorityContainers[containerIndex][authorityIndex].authority.level;
+					var marginLeft;
+					var authorityGroupingName = data.authoritiesTabs[tabIndex].authorityContainers[containerIndex][authorityIndex].authority.groupingName;
+					var authorityLabelName = data.authoritiesTabs[tabIndex].authorityContainers[containerIndex][authorityIndex].authority.labelName;
+					var authorityAssigned = data.authoritiesTabs[tabIndex].authorityContainers[containerIndex][authorityIndex].assigned;
+					var authorityDisplayName = data.authoritiesTabs[tabIndex].authorityContainers[containerIndex][authorityIndex].authority.displayName;
+					var authorityId = data.authoritiesTabs[tabIndex].authorityContainers[containerIndex][authorityIndex].authority.authoritiesId;
+					var authorityClass = 'divNestedBlock';
+			%>
+			<% if(authorityLevel == 0 && authorityGroupingName == null) {
+                    marginLeft = 0;
+                }else if(authorityLevel == 1 && authorityGroupingName == null){
+                	marginLeft =(authorityLevel) * 5;
+                }else if(authorityLevel == 1 && authorityGroupingName != null){
+                	marginLeft = 0;
+                }else if(authorityLevel == 2){
+                	marginLeft =4;
+                }else if(authorityLevel == 3){
+                	marginLeft =8;
+                }else {
+                	marginLeft = (authorityLevel) * 3;
+                }
+            %>
+			<% if(authorityLevel == 0) {
+						authorityClass = 'divNestedBlock divBlockFont';
+				}
+			%>
+				<% if(authorityGroupingName != null
+					&& groupingsRendering != authorityGroupingName) { 
+					groupingsRendering = authorityGroupingName;
+				%>
+					</fieldset>
+					<fieldset id="<%= authorityGroupingName %>_Grouping" style="margin-left:6px;margin-right:6px;margin-bottom:16px;margin-top:8px;">
+						<legend>
+							<label class='divBlockFont' style="margin-left: 8px;margin-right: 8px;">
+								<%= authorityGroupingName %>
+							</label>
+						</legend>
+						<% if(authorityGroupingName == 'Roles' && rolesCheck == 0) { 
+							rolesCheck = rolesCheck + 1; 
+						%>
+							<% if(isUsersLimitPerRoleVisible === true) { %>
+								<div style="margin-left:-4%;margin-top: 2%;margin-bottom: 2%;">
+								<label for="limitUsers" class="field-label divNestedBlock" style = "margin-left:17px">Limit number of users (1) per role</label>
+								<% if (isUsersLimitedToOnePerRole === true) { %>
+									<div class="slider-frame" style = "margin-left:27px; margin-top:-5px;float: left;">
+										<div class="slider-button slider-button-limitusers">
+											<font color="white">ON</font>
+										</div>
+									</div>
+								<% } else { %>
+									<div class="slider-frame" style = "margin-left:27px; margin-top:-5px;float: left;">
+										<div class="slider-button on slider-button-limitusers">OFF</div>
+									</div>
+								<% } %>
+								<div style="clear:both;"></div>
+								<span id="limitRolesProcessing" class="hidden" style="">Processing...</span></div>
+							<% } %>
+						<% } %>
+				<% } %>
+					<% if(authorityLabelName != null
+						&& labelNameRendering != authorityLabelName) { 
+						labelNameRendering = authorityLabelName;
+						var marginLeftForLabel = marginLeft +2;
+					%>
+						<div style="margin-top: 2%;margin-bottom: 1%;margin-left:<%= marginLeftForLabel %>%;" >
+						<b>
+							<%= authorityLabelName %>
+						</b></div>
+					<% } %>
+					<% if(data.authoritiesTabs[tabIndex].authorityContainers[containerIndex][authorityIndex].restricted) { %>
+						<div 
+							style='margin-left:<%= marginLeft %>%;'
+							class='<%=  authorityClass %>'>
+							<input class='authCheckbox restricted' type='checkbox' 
+								value='<%=  authorityId %>' 
+								<% if(authorityAssigned) { %>
+									checked='<%=  authorityAssigned %>' 
+								<% } %>
+								title='<%= authorityDisplayName %>'
+								><%= authorityDisplayName %>
+							</input>
+						</div>
+					<% } else { %>
+						<div 
+							style='margin-left:<%= marginLeft %>%;' 
+							class='<%=  authorityClass %>'>
+							<input class='authCheckbox' type='checkbox' 
+								value='<%=  authorityId %>' 
+								<% if(authorityAssigned) { %>
+									checked='<%=  authorityAssigned %>' 
+								<% } %> 
+								title='<%= authorityDisplayName %>'
+								><%= authorityDisplayName %>
+							</input>
+						</div>
+					<% } %>
+			<% } %>
+			</td>
+		<% } %>
+	</tr></tbody></table>
+
+	<div id="saveBottom_<%= data.authoritiesTabs[tabIndex].tabCode %>" class= "save" style="float: right; margin-right: -0.25%;">
+		<security:authorize access="hasRole('PERM_ROLE_MODIFY')">
+			<a class="saveRolesBtnBottom btn_blue" id="saveRolesBtnBottom_<%= data.authoritiesTabs[tabIndex].tabCode %>" href="javascript:void(0)">Save</a>
+		</security:authorize>
+	</div>
+
+</div>
+<% } %>
+</div>
+<script type='text/javascript'>
+$(document).ready(function() {
+	$(".saveRolesBtnBottom,#saveRolesBtnTop").on("click",function() {
+	savePermissions();
+	});
+	$('#rolesPermissionTabsContent li.nav-item:first a').tab('show');
+	$('#groupIdentifier').find('#groupId').val(<%= data.group.groupId %>);
+	if (!viewRolesReadOnly) {
+		$('.slider-button-limitusers').on("click",function() {
+			$('#limitRolesProcessing').removeClass('hidden');
+			$('#limitRolesProcessing').show();
+			$('.slider-button-limitusers').toggle(function() {
+				if (isUsersLimitedToOnePerRole === true) {
+					limitUser("<%= data.group.groupCode %>", 'OFF');
+				} else {
+					limitUser("<%= data.group.groupCode %>", 'ON');
+				}
+				$(this).show();
+			});
+		});
+	}
+});
+</script> 

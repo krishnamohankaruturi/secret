@@ -1,0 +1,21 @@
+<div id="writingStudentReport">
+	<div id="writingStudentDropDownDiv">
+		<img src="images/search.png" alt="Search Students" />
+		<select name="writingStudentDropDown" id="writingStudentDropDown" title="Student">
+		<% if (data != null && data.length > 0) {
+			for (var x = 0; x < data.length; x++) { %>
+				<option value="<%=data[x].studentId%>">
+					<%= data[x].legalFirstName + ' ' +  data[x].legalLastName + ' (ID:' + data[x].stateStudentIdentifier + ')' %>
+				</option>
+		<% }
+		} %>
+			
+		</select>
+		
+		<input type="checkbox" id="writingIncludeScored" name="writingIncludeScored" /><label for="writingIncludeScored">&nbsp;Include Scored Responses</label>
+		<input type="button" id="viewWritingResponses" class="writingbutton" value="View" />
+		<input type="button" id="saveWritingResponsePDF" class="writingbutton" value="Save"/>
+	</div>
+	
+	<div id="writingReportDisplayDiv"></div>
+</div>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.help.HelpTopicDao">
+	<resultMap type="edu.ku.cete.domain.help.HelpTopic" id="BaseResultMap">
+		<id property="id" column="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+		<result column="url" property="slug" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="saveHelpTopic" parameterType="edu.ku.cete.domain.help.HelpTopic" useGeneratedKeys="true" keyColumn="id"
+		keyProperty="id">
+		insert into helptopic (name,description,activeflag,createduser,modifieduser,createddate,modifieddate)
+		values (#{name,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},
+		#{activeFlag,jdbcType=BIT},#{createdUser,jdbcType=BIGINT},
+		#{modifiedUser,jdbcType=BIGINT},#{createdDate,jdbcType=TIMESTAMP},
+		#{modifiedDate,jdbcType=TIMESTAMP});
+	</insert>
+	<update id="updateHelpTopic" parameterType="edu.ku.cete.domain.help.HelpTopic">
+		update helptopic
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activeFlag != null">
+				activeflag = #{activeFlag,jdbcType=BIT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+
+	</update>
+
+	<update id="deleteHelpTopic" parameterType="edu.ku.cete.domain.help.HelpTopic">
+		update helptopic
+		<set>
+			activeflag = false,
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="getHelpTopicsById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		ht.name,ht.description,ht.createddate,
+		ht.modifieddate,ht.createduser,ht.modifieduser,
+		ht.activeflag
+		from
+		helptopic ht
+		where
+		ht.activeflag is true
+		and
+		ht.id=#{id}
+	</select>
+	<select id="getHelpTopics" resultMap="BaseResultMap">
+		select * from helptopic where activeflag is
+		true order by lower(name)
+	</select>
+
+	<select id="getHelpTopic" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select ht.*, case when hts.url is null then replace(ht.name, ' ', '-') else hts.url end  from helptopic ht left join helptopicslug hts on hts.helptopicid = ht.id 
+		where ht.activeflag is
+		true and ht.id = #{helpTopicId, jdbcType=BIGINT} order by lower(ht.name)
+	</select>
+
+
+	<select id="getByHelpContentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select * from helptopic ht
+		inner join
+		helpcontent hc on hc.helptopicid = ht.id and ht.activeflag is true and hc.activeflag is true
+		where ht.activeflag is
+		true and hc.id = #{helpContentId, jdbcType=BIGINT}
+	</select>
+
+	<select id="getHelpTopicCount" resultType="java.lang.Long">
+		select count(1) from helptopic where
+		activeflag is true
+	</select>
+	
+	<select id="existsTopicByNames" parameterType="java.lang.String" resultType="java.lang.Boolean">
+		select count(1) > 0 from helptopic  where lower(name) = lower(#{name,jdbcType=VARCHAR});
+	</select>
+	
+	<select id="existsTopicBySlug" parameterType="java.lang.String" resultType="java.lang.Boolean">
+		select count(1) > 0 from helptopicslug  where lower(url) = lower(#{slug,jdbcType=VARCHAR});
+	</select>
+	
+	<select id="existsEditTopicByNames" resultType="java.lang.Boolean">
+		select count(1) > 0 from helptopic  where id!=#{helpTopicId, jdbcType=BIGINT} and lower(name) = lower(#{name,jdbcType=VARCHAR})
+	</select>
+	
+	<select id="existsEditTopicBySlug" resultType="java.lang.Boolean">
+		select count(1) > 0 from helptopicslug  where helptopicid!=#{helpTopicId, jdbcType=BIGINT} and lower(url) = lower(#{slug,jdbcType=VARCHAR})
+	</select>
+
+</mapper>

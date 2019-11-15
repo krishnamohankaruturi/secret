@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!-- install My Batis Generator plugin to Eclipse to use this feature -->
+ <generatorConfiguration>
+  <classPathEntry location="/home/bkoelper/git/aart/aart-web-dependencies/build_lib/postgresql-9.0-801.jdbc4.jar" />
+
+  <context id="DB2Tables" targetRuntime="MyBatis3">
+    <jdbcConnection driverClass="org.postgresql.Driver"
+        connectionURL="jdbc:postgresql://localhost:5432/ep"
+        userId="postgres"
+        password="caveman2">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+      <!-- http://mybatis.org/generator/configreference/javaTypeResolver.html -->
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="edu.ku.cete.domain" targetProject="aart-web/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <!-- http://mybatis.org/generator/configreference/javaModelGenerator.html -->
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="edu.ku.cete.model"  targetProject="aart-web/src/main/resources">
+      <property name="enableSubPackages" value="true" />
+      <!-- http://mybatis.org/generator/configreference/sqlMapGenerator.html -->
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="XMLMAPPER"
+     targetPackage="edu.ku.cete.model"  targetProject="aart-web/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <!-- http://mybatis.org/generator/configreference/javaClientGenerator.html -->
+    </javaClientGenerator>
+    
+    <table tableName="linkagelevelsortorder"
+    	domainObjectName="LinkageLevelSortOrder"
+    	enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		
+		<columnOverride column="id" property="id" />
+		<columnOverride column="displayname" property="displayName" />
+		<columnOverride column="contentareaid" property="contentAreaId" />
+		<columnOverride column="sortorder" property="sortOrder" />
+		<columnOverride column="createduser" property="createdUser" />
+		<columnOverride column="modifieduser" property="modifiedUser" />
+		<columnOverride column="createddate" property="createdDate" />
+		<columnOverride column="modifieddate" property="modifiedDate" />
+		<columnOverride column="activeflag" property="activeFlag" />
+    </table>
+    
+    <!--
+    <table tableName="apirequest"
+    	domainObjectName="APIRequest"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		
+		<generatedKey column="id" sqlStatement="SELECT nextval('apirequest_id_seq')" />
+		<columnOverride column="id" property="id" />
+		<columnOverride column="requesttype" property="requestType" />
+		<columnOverride column="endpoint" property="endpoint" />
+		<columnOverride column="method" property="method" />
+		<columnOverride column="headers" property="headers" />
+		<columnOverride column="body" property="body" />
+		<columnOverride column="responsecode" property="responseCode" />
+		<columnOverride column="response" property="response" />
+		<columnOverride column="receivedtime" property="receivedTime" />
+		<columnOverride column="responsetime" property="responseTime" />
+	</table>
+    
+    <table tableName="scoringapireprocess"
+    	domainObjectName="ScoringAPIReprocess"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		
+		<generatedKey column="id" sqlStatement="SELECT nextval('scoringapireprocess_id_seq')" />
+		<columnOverride column="id" property="id" />
+		<columnOverride column="studentid" property="studentId" />
+		<columnOverride column="contentareaid" property="contentAreaId" />
+		<columnOverride column="reprocesseddate" property="reprocessedDate" />
+	</table>
+    
+    <table tableName="outgoingrequests"
+    	domainObjectName="OutgoingRequest"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		
+		<generatedKey column="id" sqlStatement="SELECT nextval('outgoingrequests_id_seq')" />
+		<columnOverride column="id" property="id" />
+		<columnOverride column="url" property="url" />
+		<columnOverride column="method" property="method" />
+		<columnOverride column="headers" property="headers" />
+		<columnOverride column="body" property="body" />
+		<columnOverride column="responsecode" property="responseCode" />
+		<columnOverride column="response" property="response" />
+		<columnOverride column="senttime" property="sentTime" />
+		<columnOverride column="responsetime" property="responseTime" />
+	</table>
+    
+    <table tableName="dashboardmessage"
+    	domainObjectName="DashboardMessage"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('dashboardmessage_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>		
+		<columnOverride column="assessmentprogramid" property="assessmentProgramId"></columnOverride>	
+		<columnOverride column="schoolyear" property="schoolYear"></columnOverride>
+		<columnOverride column="recordtype" property="recordType"></columnOverride>
+		<columnOverride column="studentid" property="studentId"></columnOverride>
+		<columnOverride column="enrollmentid" property="enrollmentId"></columnOverride>
+		<columnOverride column="attendanceschoolid" property="attendanceSchoolId"></columnOverride>
+		<columnOverride column="contentareaid" property="contentAreaId"></columnOverride>
+		<columnOverride column="rosterid" property="rosterId"></columnOverride>
+		<columnOverride column="classroomid" property="classroomId"></columnOverride>
+		<columnOverride column="message" property="message"></columnOverride>
+		<columnOverride column="batchregistrationid" property="batchRegistrationId"></columnOverride>
+		<columnOverride column="activeflag" property="activeFlag"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>	
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>	
+	</table>
+	
+    <table tableName="studentreportquestioninfo"
+    	domainObjectName="StudentReportQuestionInfo"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('studentreportquestioninfo_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="interimstudentreportid" property="interimStudentReportId"></columnOverride>
+		<columnOverride column="taskvariantposition" property="taskVariantPosition"></columnOverride>		
+		<columnOverride column="questioninformationid" property="questionInformationId"></columnOverride>
+		<columnOverride column="creditearned" property="creditEarned"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>	
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>	
+	</table>
+	
+	
+    <table tableName="interimstudentreport"
+    	domainObjectName="InterimStudentReport"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('interimstudentreport_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="studentid" property="studentId"></columnOverride>
+		<columnOverride column="enrollmentid" property="enrollmentId"></columnOverride>		
+		<columnOverride column="schoolyear" property="schoolYear"></columnOverride>
+		<columnOverride column="assessmentprogramid" property="assessmentProgramId"></columnOverride>		
+		<columnOverride column="testingprogramid" property="testingProgramId"></columnOverride>
+		<columnOverride column="reportcycle" property="reportCycle"></columnOverride>
+		<columnOverride column="contentareaid" property="contentAreaId"></columnOverride>
+		<columnOverride column="gradeid" property="gradeId"></columnOverride>
+		<columnOverride column="attendanceschoolid" property="attendanceSchoolId"></columnOverride>
+		<columnOverride column="schoolname" property="schoolName"></columnOverride>
+		<columnOverride column="districtid" property="districtId"></columnOverride>
+		<columnOverride column="districtname" property="districtName"></columnOverride>
+		<columnOverride column="stateid" property="stateId"></columnOverride>
+		<columnOverride column="testid" property="testId"></columnOverride>
+		<columnOverride column="externaltestid" property="externalTestId"></columnOverride>
+		<columnOverride column="rawscore" property="rawScore"></columnOverride>
+		<columnOverride column="scalescore" property="scaleScore"></columnOverride>
+		<columnOverride column="standarderror" property="standardError"></columnOverride>
+		<columnOverride column="status" property="status"></columnOverride>
+		<columnOverride column="scorerangedisplayreasonid" property="scoreRangeDisplayReasonId"></columnOverride>
+		<columnOverride column="exitstatus" property="exitStatus"></columnOverride>
+		<columnOverride column="transferred" property="transferred"></columnOverride>
+		<columnOverride column="totalincludeditemcount" property="totalIncludedItemCount"></columnOverride>
+		<columnOverride column="respondeditemcount" property="respondedItemCount"></columnOverride>
+		<columnOverride column="excludeditemcount" property="excludedItemCount"></columnOverride>
+		<columnOverride column="filepath" property="filePath"></columnOverride>
+		<columnOverride column="generated" property="generated"></columnOverride>
+		<columnOverride column="operationaltestwindowid" property="operationalTestWindowId"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>	
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+		<columnOverride column="batchreportprocessid" property="batchReportProcessId"></columnOverride>		
+	</table>
+	
+	
+    <table tableName="questioninformation"
+    	domainObjectName="QuestionInformation"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('questioninformation_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>		
+		<columnOverride column="schoolyear" property="schoolYear"></columnOverride>
+		<columnOverride column="assessmentprogramid" property="assessmentProgramId"></columnOverride>		
+		<columnOverride column="testingprogramid" property="testingProgramId"></columnOverride>
+		<columnOverride column="reportcycle" property="reportCycle"></columnOverride>
+		<columnOverride column="contentareaid" property="contentAreaId"></columnOverride>
+		<columnOverride column="gradeid" property="gradeId"></columnOverride>
+		<columnOverride column="externalTestId" property="externalTestId"></columnOverride>
+		<columnOverride column="taskvariantexternalid" property="taskvariantexternalId"></columnOverride>
+		<columnOverride column="questiondescription" property="questionDescription"></columnOverride>
+		<columnOverride column="creditpercent" property="creditPercent"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>		
+		<columnOverride column="comment" property="comment"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>	
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+		<columnOverride column="batchuploadid" property="batchUploadId"></columnOverride>		
+	</table>
+	
+	
+    <table tableName="organizationreportdetails"
+    	domainObjectName="OrganizationReportDetails"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('organizationreportdetails_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="assessmentprogramid" property="assessmentProgramId"></columnOverride>
+		<columnOverride column="contentareaid" property="contentAreaId"></columnOverride>
+		<columnOverride column="gradeid" property="gradeId"></columnOverride>
+		<columnOverride column="organizationid" property="organizationId"></columnOverride>
+		<columnOverride column="schoolyear" property="schoolYear"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="detailedreportpath" property="detailedReportPath"></columnOverride>
+		<columnOverride column="schoolreportpdfpath" property="schoolReportPdfPath"></columnOverride>
+		<columnOverride column="schoolreportpdfsize" property="schoolReportPdfSize"></columnOverride>
+		<columnOverride column="schoolreportzipsize" property="schoolReportZipSize"></columnOverride>
+		<columnOverride column="batchreportprocessid" property="batchReportProcessId"></columnOverride>		
+		<columnOverride column="gradecourseabbrname" property="gradeCourseAbbrName"></columnOverride>
+		<columnOverride column="summaryreportpath" property="summaryReportPath"></columnOverride>
+		<columnOverride column="reporttype" property="reportType"></columnOverride>
+		<columnOverride column="summaryreportcsvpath" property="summaryReportCsvPath"></columnOverride>
+		<columnOverride column="detailedreportpath_csv" property="csvDetailedReportPath"></columnOverride>		
+		<columnOverride column="createduser" property="createdUser"></columnOverride>		
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>	
+		<columnOverride column="teacherid" property="teacherId"></columnOverride>		
+		<columnOverride column="schoolname" property="schoolName"></columnOverride>		
+	</table>
+    
+    <table tableName="reporttestlevelsubscores"
+    	domainObjectName="ReportTestLevelSubscores"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('reporttestlevelsubscores_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="studentid" property="studentId"></columnOverride>
+		<columnOverride column="studentreportid" property="studentReportId"></columnOverride>		
+		<columnOverride column="testid" property="testId"></columnOverride>
+		<columnOverride column="subscoredefinitionname" property="subscoreDefinitionName"></columnOverride>				
+		<columnOverride column="subscorerawscore" property="subscoreRawScore"></columnOverride>
+		<columnOverride column="totalitemsincluded" property="totalItems"></columnOverride>
+		<columnOverride column="itemsresponded" property="itemsResponded"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+	</table>
+
+	<table tableName="subscoresmissingstages"
+    	domainObjectName="SubScoresMissingStages"
+    	enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('subscoresmissingstages_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="schoolyear" property="schoolYear"></columnOverride>
+		<columnOverride column="assessmentprogramid" property="assessmentProgramId"></columnOverride>
+		<columnOverride column="subject" property="subject"></columnOverride>
+		<columnOverride column="grade" property="grade"></columnOverride>
+		<columnOverride column="default_stage2_externaltestid" property="testId2"></columnOverride>
+		<columnOverride column="default_stage3_externaltestid" property="testId3"></columnOverride>
+		<columnOverride column="default_performance_externaltestid" property="performanceTestId"></columnOverride>
+		<columnOverride column="comment" property="comment"></columnOverride>
+		<columnOverride column="default_stage2_testid" property="defaultStage2EpTestId"></columnOverride>
+		<columnOverride column="default_stage3_testid" property="defaultStage3EpTestId"></columnOverride>
+		<columnOverride column="default_performance_testid" property="defaultPerformanceEpTestId"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+		<columnOverride column="subjectid" property="subjectId"></columnOverride>
+		<columnOverride column="gradeid" property="gradeId"></columnOverride>
+		<columnOverride column="batchuploadid" property="batchUploadId"></columnOverride>
+    </table>
+    	
+    <table tableName="nonscorablecode"
+    	domainObjectName="NonScorableCode"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="code" property="code"></columnOverride>
+		<columnOverride column="name" property="name"></columnOverride>
+		<columnOverride column="description" property="description"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="activeflag" property="activeFlag"></columnOverride>
+	</table>
+    
+    <table tableName="studentresponsescore"
+    	domainObjectName="StudentResponseScore"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<columnOverride column="studentstestsectionsid" property="studentsTestSectionsId"></columnOverride>
+		<columnOverride column="taskvariantexternalid" property="taskVariantExternalId"></columnOverride>
+		<columnOverride column="score" property="score"></columnOverride>
+		<columnOverride column="dimension" property="dimension"></columnOverride>
+		<columnOverride column="diagnosticstatement" property="diagnosticStatement"></columnOverride>
+		<columnOverride column="raterid" property="raterId"></columnOverride>
+		<columnOverride column="ratername" property="raterName"></columnOverride>
+		<columnOverride column="raterorder" property="raterOrder"></columnOverride>
+		<columnOverride column="raterexposure" property="raterExposure"></columnOverride>
+		<columnOverride column="createdate" property="createDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="activeflag" property="activeFlag"></columnOverride>
+		<columnOverride column="scorable" property="scorable"></columnOverride>
+		<columnOverride column="nonscorablecodeid" property="nonScorableCodeId"></columnOverride>
+	</table>
+    
+     
+    <table tableName="suppressedlevel" domainObjectName="SuppressedLevel"
+    	enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+    	<generatedKey column="id" sqlStatement="SELECT nextval('suppressedlevel_id_seq')" />
+    	<columnOverride column="id" property="id"></columnOverride>
+    	<columnOverride column="contentareaid" property="contentAreaId"></columnOverride>
+    	<columnOverride column="gradecourseid" property="gradeCourseId"></columnOverride>
+    	<columnOverride column="activeflag" property="activeflag"></columnOverride>
+    	<columnOverride column="createddate" property="createdDate"></columnOverride>
+    	<columnOverride column="createduser" property="createdUser"></columnOverride>
+    	<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+    	<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+    </table>
+    
+     <table tableName="questar_staging"
+    	domainObjectName="QuestarStagingRecord"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('questar_staging_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="questar_staging_file_id" property="questarStagingFileId"></columnOverride>
+		<columnOverride column="createdate" property="createDate"></columnOverride>
+		<columnOverride column="refid" property="refId"></columnOverride>
+		<columnOverride column="assessmentadministrationrefid" property="assessmentAdministrationRefId"></columnOverride>
+		<columnOverride column="studentpersonalrefid" property="studentPersonalRefId"></columnOverride>
+		<columnOverride column="walkin" property="walkIn"></columnOverride>
+		<columnOverride column="formnumber" property="formNumber"></columnOverride>
+		<columnOverride column="districtcode" property="districtCode"></columnOverride>
+		<columnOverride column="schoolcode" property="schoolCode"></columnOverride>
+		<columnOverride column="subject" property="subject"></columnOverride>
+		<columnOverride column="studentfirstname" property="studentFirstName"></columnOverride>
+		<columnOverride column="studentlastname" property="studentLastName"></columnOverride>
+		<columnOverride column="studentmiddlename" property="studentMiddleName"></columnOverride>
+		<columnOverride column="grade" property="grade"></columnOverride>
+		<columnOverride column="studentkitenumber" property="studentKiteNumber"></columnOverride>
+		<columnOverride column="studentid" property="studentStateId"></columnOverride>
+		<columnOverride column="studentdateofbirth" property="studentDateOfBirth"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="batchstatus" property="batchStatus"></columnOverride>
+		<columnOverride column="sccode" property="scCode"></columnOverride>
+		<columnOverride column="accommodation" property="accommodation"></columnOverride>
+	</table>
+    
+    <table tableName="studentreporttestscores"
+    	domainObjectName="StudentReportTestScores"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('studentreporttestscores_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="studentreportid" property="studentReportId"></columnOverride>
+		<columnOverride column="test1idrawscore" property="test1IdRawScore"></columnOverride>
+		<columnOverride column="test2idrawscore" property="test2IdRawScore"></columnOverride>
+		<columnOverride column="test3idrawscore" property="test3IdRawScore"></columnOverride>
+		<columnOverride column="test4idrawscore" property="test4IdRawScore"></columnOverride>
+		<columnOverride column="prfrmtestrawscore" property="prfrmTestRawScore"></columnOverride>
+		<columnOverride column="test1idtaskvariantcount" property="test1IdTaskVariantCount"></columnOverride>
+		<columnOverride column="test2idtaskvariantcount" property="test2idTaskVariantCount"></columnOverride>
+		<columnOverride column="test3idtaskvariantcount" property="test3idTaskVariantCount"></columnOverride>
+		<columnOverride column="test4idtaskvariantcount" property="test4idTaskVariantCount"></columnOverride>
+		<columnOverride column="prfrmtesttaskvariantcount" property="prfrmTestTaskVariantCount"></columnOverride>
+		<columnOverride column="test1idresponsecount" property="test1IdResponseCount"></columnOverride>
+		<columnOverride column="test2idresponsecount" property="test2IdResponseCount"></columnOverride>
+		<columnOverride column="test3idresponsecount" property="test3IdResponseCount"></columnOverride>
+		<columnOverride column="test4idresponsecount" property="test4IdResponseCount"></columnOverride>
+		<columnOverride column="prfrmtestresponsecount" property="prfrmTestResponseCount"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+	</table>
+    
+    <table tableName="externalstudentreports"
+    	domainObjectName="Externalstudentreports"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('externalstudentreports_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="schoolyear" property="schoolYear"></columnOverride>
+		<columnOverride column="assessmentprogramid" property="assessmentProgramid"></columnOverride>
+		<columnOverride column="subjectid" property="subjectId"></columnOverride>
+		<columnOverride column="gradeid" property="gradeId"></columnOverride>
+		<columnOverride column="studentid" property="studentId"></columnOverride>
+		<columnOverride column="stateid" property="stateId"></columnOverride>
+		<columnOverride column="districtid" property="districtId"></columnOverride>
+		<columnOverride column="schoolid" property="schoolId"></columnOverride>
+		<columnOverride column="level2_text" property="level2_text"></columnOverride>
+		<columnOverride column="level1_text" property="level1_text"></columnOverride>
+		<columnOverride column="activeflag" property="activeFlag"></columnOverride>
+		<columnOverride column="filepath" property="filePath"></columnOverride>		
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>		
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>	
+		<columnOverride column="reporttype" property="reportType"></columnOverride>	
+		<columnOverride column="reportprocessid" property="reportProcessId"></columnOverride>	
+		<columnOverride column="schoolname" property="schoolName"></columnOverride>		
+	</table>
+    
+    <table tableName="combinedlevelmap"
+    	domainObjectName="CombinedLevelMap"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('combinedlevelmap_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="schoolyear" property="schoolYear"></columnOverride>
+		<columnOverride column="assessmentprogramid" property="assessmentProgramId"></columnOverride>
+		<columnOverride column="subjectid" property="subjectId"></columnOverride>
+		<columnOverride column="gradeid" property="gradeId"></columnOverride>
+		<columnOverride column="stageslowscalescore" property="stagesLowScaleScore"></columnOverride>
+		<columnOverride column="stageshighscalescore" property="stagesHighScaleScore"></columnOverride>
+		<columnOverride column="performancescalescore" property="performanceScaleScore"></columnOverride>
+		<columnOverride column="comibinedlevel" property="comibinedLevel"></columnOverride>
+		<columnOverride column="batchuploadid" property="batchUploadId"></columnOverride>
+		<columnOverride column="activeflag" property="activeFlag"></columnOverride>
+		<columnOverride column="comment" property="comment"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>		
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+	</table>
+    
+        <table tableName="dailyaccesscode"
+    	domainObjectName="DailyAccessCode"
+		enableSelectByExample="false"
+		enableDeleteByPrimaryKey="false"
+		enableDeleteByExample="false"
+		enableCountByExample="false"
+		enableUpdateByExample="false"
+		selectByExampleQueryId="false">
+		<generatedKey column="id" sqlStatement="SELECT nextval('dailyaccesscode_id_seq')" />
+		<columnOverride column="id" property="id"></columnOverride>
+		<columnOverride column="contentareaid" property="contentAreaId"></columnOverride>
+		<columnOverride column="gradecourseid" property="gradeCourseId"></columnOverride>
+		<columnOverride column="stageid" property="stageId"></columnOverride>
+		<columnOverride column="operationaltestwindowid" property="operationalTestwindowId"></columnOverride>
+		<columnOverride column="partnumber" property="partNumber"></columnOverride>
+		<columnOverride column="effectivedate" property="effectiveDate"></columnOverride>
+		<columnOverride column="accesscode" property="accessCode"></columnOverride>
+		<columnOverride column="createddate" property="createdDate"></columnOverride>
+		<columnOverride column="modifieddate" property="modifiedDate"></columnOverride>
+		<columnOverride column="createduser" property="createdUser"></columnOverride>
+		<columnOverride column="modifieduser" property="modifiedUser"></columnOverride>
+	</table>
+	-->
+  </context>
+</generatorConfiguration>

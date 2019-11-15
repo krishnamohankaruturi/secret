@@ -1,0 +1,136 @@
+<%
+ var educatorName = reportData.rosterReportData.educatorName;
+ var schoolName = reportData.rosterReportData.schoolName;
+ var contentAreaName = reportData.rosterReportData.contentAreaName;
+ var stateStudentIdentifier = reportData.rosterReportData.stateStudentIdentifier;
+ 
+ var schoolId = reportData.rosterReportData.schoolId;
+ var rosterId = reportData.rosterReportData.rosterId;
+ var rosterName = reportData.rosterReportData.rosterName;
+ var studentStateIds = reportData.rosterReportData.studentStateIds;
+ var studentIds = reportData.rosterReportData.studentIds;
+ var studentNames = reportData.rosterReportData.studentNames;
+ var assessmentProgramId = reportData.rosterReportData.assessmentProgramId;
+ var contentAreaId = reportData.rosterReportData.contentAreaId;
+ 
+ var rosterReportUrl = "getDLMRosterReportFile.htm?schoolId=" + schoolId +
+  "&rosterId="+  rosterId + "&rosterName=" +  rosterName+ "&studentIds=" + studentIds + "&studentStateIds=" + studentStateIds 
+  + "&schoolName=" + schoolName + "&contentAreaName=" + contentAreaName + "&studentNames=" 
+  + studentNames + "&assessmentProgramId=" + assessmentProgramId + "&contentAreaId=" + contentAreaId;
+ 
+%>
+
+<div class="rosterreport">
+	<div class="main">
+		<div class="heading">
+			 <div class="headrow1">
+			   <div id="dateDiv">
+			   		<%=reportData.rosterReportData.reportDate%>
+			   </div>
+	           <div id="printdiv_<%=studentIds%>">
+	           		<a id="printStudentReport_<%=studentIds%>" class="panel_btn" href="<%=rosterReportUrl%>">Save</a>
+	           </div>
+			 </div>
+			 <div class="headrow2">
+	            Class Roster Report For <%=educatorName%>
+	         </div>
+	         <div class="headrow3">
+	            <%=schoolName%>                   <%=contentAreaName%> 
+	         </div>  
+	     </div>
+	     
+	    <br/>
+	 	<table border="1" cellspacing="0" class="strTable">			 	
+		 	<tr>
+		 		<th colspan="2" scope="colgroup">Essential Element</th>
+		 		<th colspan="2" scope="colgroup">Recently Assessed</th>
+		 		<th colspan="2" scope="colgroup">Current Instructional Goals</th>
+		 	</tr>
+		 	<% 
+		 		if(reportData.rosterReportData.gradeStudentDataList != null && reportData.rosterReportData.gradeStudentDataList.length>0){		 		
+		 		for(var i=0; i<reportData.rosterReportData.gradeStudentDataList.length; i++) {
+		 	%>
+		 		<tr>
+			 		<td colspan="6" class="yellow">
+			 			<%=reportData.rosterReportData.gradeStudentDataList[i].gradeCourseName%>
+			 		</td>
+		 		</tr>
+		 		<tr>
+			 		<td colspan="6" class="yellow">
+			 			<%=reportData.rosterReportData.gradeStudentDataList[i].studentName%>
+			 		</td>
+		 		</tr>
+			 	<% 
+			 		for(var j=0; j<reportData.rosterReportData.gradeStudentDataList[i].eeDataList.length; j++) {
+			 			var eeRow = reportData.rosterReportData.gradeStudentDataList[i].eeDataList[j];
+			 	%>
+			 			<tr>
+			 		    	<td>
+			 		    				<%=eeRow.essentialElement%>
+			 		    	</td>
+			 		    	<td>
+			 		    				<%=eeRow.essentialElementDesc%>
+			 		    	</td>
+			 		    	<td>
+			 		    					<%=eeRow.raLinkageLevel%>
+			 		    	</td>
+			 		    	<td>
+			 		    		<%
+			 		    			if(	eeRow.raLinkageLevel == null || eeRow.raLinkageLevel==''){
+			 		    		%>
+			 		    				Not Yet Assessed
+			 		    		<%		
+			 		    				} else{			 		    					 		    		
+			 		    		%>
+			 		    				<%=eeRow.raLinkageLevelShortDesc%>
+			 		    		<%
+			 		    					if(	eeRow.endDateTime != null){
+			 		    		%>
+			 		    						<br/>Assessed: <%=eeRow.endDateTimeStr%>
+			 		    		<%		
+			 		    					}
+			 		    				}
+			 		    		%>
+			 		    	</td>
+			 		    	<td><%=eeRow.cigLinkageLevel%>
+			 		    	<%			 		    		
+			 		    		if(eeRow.icon=='plus'){
+			 		    	%>
+			 		    		<img class="reporticon" src='images/plusicon.png' />
+			 		    	<%	
+			 		    		} else if(eeRow.icon==''){
+			 		    		
+			 		    		} else if(eeRow.icon=='minus'){
+			 		    	%>
+			 		    		<img class="reporticon" src='images/minusicon.png' />
+			 		    	<%	
+			 		    		}
+			 		    	%>
+			 		    	</td>
+			 		    	<td><%=eeRow.cigLinkageLevelShortDesc%></td>
+			 		    </tr>	
+		 		<% 
+		 			} 
+		 		%> 
+		 	<% 
+		 		}
+		 		
+		 		}
+		 		
+		 		if(reportData.rosterReportData.noPlanMessages != null && reportData.rosterReportData.noPlanMessages.length > 0){
+		 			for(var i=0; i<reportData.rosterReportData.noPlanMessages.length; i++) {
+		 	%>
+				 		<tr>
+				 			<td colspan="6">
+				 				<%=reportData.rosterReportData.noPlanMessages[i]%>
+				 			</td>
+				 		</tr>
+		 	<%
+		 			}
+		 		}
+		 		
+		 	%>
+		 	</table>
+		 	
+	</div>
+</div>

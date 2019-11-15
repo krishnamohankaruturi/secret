@@ -1,0 +1,31 @@
+/*
+For some reason, jqgrid's column chooser is not behaving correctly.
+If this is the case, try including this file and see what happens.
+*/
+
+div.ui-widget div.selected,
+div.ui-widget div.available {
+	float: left;
+}
+
+/* links to add/remove all */
+div.ui-widget div.selected a.remove-all,
+div.ui-widget div.available a.add-all {
+	float: right;
+}
+
+div.ui-widget div.selected ul.selected,
+div.ui-widget div.available ul.available {
+	width: 100%;
+	padding-left: 0;
+}
+
+div.ui-widget div.selected ul.selected li,
+div.ui-widget div.available ul.available li {
+	border-radius: 0;
+}
+
+div.ui-widget div.selected ul.selected li a.action,
+div.ui-widget div.available ul.available li a.action {
+	float: right;
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="kids-wsdl" basedir=".">   
+	
+   <property file="../build.properties"/>
+
+   <path id="cxf.classpath">
+      <fileset dir="${cxf.home}/lib">
+         <include name="*.jar"/>
+      </fileset>
+   </path>
+      
+    <target name="clean">
+    	<echo level="warning"> You should not be Doing This !! unless the wsdl has changed</echo>
+        <delete dir="${wsdl-gen-out}" failonerror="false"/>
+        <delete dir="${wsdl-gen-src}" failonerror="false"/>
+    	<delete file="${wsdl-gen-jar}/${ant.project.name}.jar"></delete>
+    	<mkdir dir="${wsdl-gen-out}"/>
+    	<mkdir dir="${wsdl-gen-src}"/>
+    </target>
+
+ 
+	<target name="cxfWSDLToJava" depends="clean">
+      <java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+         <arg value="-client"/>
+         <arg value="-exsh"/>
+         <arg value="true"/>
+         <arg value="-d"/>
+         <arg value="${wsdl-gen-src}"/>
+         <arg value="${wsdl-dir}/kids_webservice.wsdl"/>
+         <classpath>
+            <path refid="cxf.classpath"/>
+         </classpath>
+      </java>
+   </target>
+   
+ 
+    <target name="compile" depends="cxfWSDLToJava">
+        <javac destdir="${wsdl-gen-out}">
+            <src path="${wsdl-gen-src}"/>
+            <classpath refid="cxf.classpath"/>
+        </javac>
+    </target>
+ 
+    <target name="jar" depends="compile">
+        <jar destfile="${wsdl-gen-jar}/${ant.project.name}.jar">
+            <fileset dir="${wsdl-gen-out}"/>
+        </jar>
+    </target>
+	
+    <target name="copyWsdlStubs" depends="jar">
+    	  <copy file="${wsdl-gen-jar}/${ant.project.name}.jar"
+    	  	tofile="${aart-lib}/${ant.project.name}.jar"/>
+    </target>  
+</project>

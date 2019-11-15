@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+	<!ENTITY ns_flows "http://ns.adobe.com/Flows/1.0/">
+]>
+<svg version="1.0"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" width="3em" height="3em" viewBox="-8.594 -4.145 128 128" enable-background="new -8.594 -4.145 128 128"
+	 xml:space="preserve">
+<defs>
+</defs>
+<polygon fill="#FAED24" stroke="#FAED24" stroke-width="4" points="3.362,14.411 8.618,19.665 13.422,14.76 3.26,4.808 "/>
+<rect x="7.126" y="15.357" transform="matrix(0.7145 0.6997 -0.6997 0.7145 18.3099 -4.1483)" fill="#FAED24" stroke="#8C8332" stroke-width="8" width="14.224" height="10.005"/>
+<rect x="13.307" y="19.946" transform="matrix(0.7145 0.6997 -0.6997 0.7145 25.1269 -7.1424)" fill="#FAED24" stroke="#8C8332" stroke-width="8" width="16.014" height="14.537"/>
+<rect x="86.271" y="89.459" transform="matrix(0.7143 0.6998 -0.6998 0.7143 96.0912 -37.7453)" fill="#FAED24" stroke="#8C8332" stroke-width="8" width="16.014" height="18.731"/>
+<rect x="7.614" y="53.296" transform="matrix(-0.7145 -0.6997 0.6997 -0.7145 56.789 152.6806)" fill="#FAED24" stroke="#8C8332" stroke-width="8" width="103.868" height="22.915"/>
+</svg>

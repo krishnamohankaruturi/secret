@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.TestFormDao">
+    
+   <resultMap id="testFormAssignmentExtractReport" type="edu.ku.cete.web.TestFormAssignmentsInfoDTO">
+    <result column="formname" jdbcType="VARCHAR" property="formName" />
+    <result column="formidcontentbuilder" jdbcType="BIGINT" property="formIdContentBuilder" />
+    <result column="formideducatorportal" jdbcType="BIGINT" property="formIdEducatorPortal" />
+    <result column="cbtestcollevtionid" jdbcType="BIGINT" property="CBTestCollevtionId" />
+    <result column="cbtestcollevtionname" jdbcType="VARCHAR" property="CBTestCollectionName" />
+    <result column="overviewid" jdbcType="BIGINT" property="overViewId" />
+    <result column="overviewname" jdbcType="VARCHAR" property="overViewName" />
+    <result column="overviewphase" jdbcType="VARCHAR" property="overViewPhase" />
+    <result column="overviewpool" jdbcType="VARCHAR" property="overViewPool" />
+    <result column="stage" jdbcType="VARCHAR" property="stage" />
+    <result column="panelname" jdbcType="VARCHAR" property="panelName" />
+    <result column="panelid" jdbcType="BIGINT" property="panelId" />
+    <result column="testletid" jdbcType="VARCHAR" property="testletId" />
+    <result column="qccompletestatusflag" jdbcType="BOOLEAN" property="qCCompleteStatusFlag" />
+    <result column="formsaccessibilityflagfield" jdbcType="VARCHAR" property="formsAccessibilityFlagField" />
+    <result column="formlastmodifieddate" jdbcType="TIMESTAMP" property="formLastModifiedDate" />
+    <result column="testname" jdbcType="VARCHAR" property="testName" />
+    <result column="formpublicationdate" jdbcType="TIMESTAMP" property="formPublicationDate" />
+  </resultMap>
+    
+    
+    
+    <sql id="select">
+        SELECT id, formid, formname, numitems, testid
+    </sql>
+    
+    <select id="findByTest" resultType="TestForm" parameterType="long">
+        <include refid="select"/>
+        FROM testform
+        WHERE testid = #{testId}
+    </select>
+    
+     <!--  Added during US16344 : for Extracting reports on TEst Form assign to TestCollection for quality check -->
+     
+    <select id="getTestFormAssignmentsExtracts" resultMap="testFormAssignmentExtractReport" parameterType="java.util.Map">
+       SELECT  DISTINCT 
+       t.testname           as formname,
+       t.testinternalname   as testname,
+       t.id                 as formideducatorportal,
+       t.externalid         as formidcontentbuilder,
+       t.qccomplete         as qccompletestatusflag,
+       t.createdate         as formpublicationdate,
+       tc.id                as cbtestcollevtionid,
+       tc.name              as cbtestcollevtionname,
+       ts.id                as overviewid,
+       ts.specificationname as overviewname,
+       ts.phase             as overviewphase,
+       ts.contentpool       as overviewpool,
+       s.name               as stage,
+       tp.id                as panelid,
+       tp.panelname         as panelname,
+       t.modifieddate       as formlastmodifieddate,
+       array_to_string(ARRAY(select accessibilityflagcode from testaccessibilityflag taf where t.id = taf.testid),',') as formsaccessibilityflagfield,
+       array_to_string(ARRAY(select DISTINCT tstv.testletid from testlet tl
+		INNER JOIN testsectionstaskvariants tstv ON tl.id = tstv.testletid
+		INNER JOIN testsection tsec ON tstv.testsectionid = tsec.id
+		where tsec.testid=t.id),',') as testletid     
+      from studentassessmentprogram  sap
+        INNER JOIN studentstests st ON sap.studentid = st.studentid  
+        inner join testsession tsess on tsess.id = st.testsessionid
+		inner join operationaltestwindow op on op.id = tsess.operationaltestwindowid 
+        INNER JOIN test t ON st.testid = t.id
+        INNER JOIN testcollectionstests tct ON t.id = tct.testid
+        INNER JOIN testcollection tc ON tct.testcollectionid = tc.id
+        LEFT JOIN testspecification ts ON t.testspecificationid = ts.id
+        LEFT JOIN stage s ON tc.stageid = s.id
+        LEFT JOIN testpanelstagetestcollection tpsc ON tc.id = tpsc.externaltestcollectionid
+        LEFT JOIN testpanelstage tps on tpsc.testpanelstageid = tps.id
+        LEFT JOIN testpanel tp ON tp.id = tps.testpanelid 
+        <if test="assessmentPrograms !=null">
+     where sap.assessmentprogramid in 
+       <foreach collection="assessmentPrograms" item="assessmentprogramid" open="(" close=")" separator=",">
+       #{assessmentprogramid} 
+       </foreach>
+       </if>
+        AND sap.activeflag = true
+        AND t.activeflag = true
+		<choose>
+		 <when test="qcCompleteStatus == 'true'">       
+            AND t.qccomplete = true
+        </when>
+        <when test="qcCompleteStatus == 'false'">       
+            AND t.qccomplete = false
+        </when>
+        </choose>        
+        AND t.createdate BETWEEN to_date(#{beginDate},'MM/DD/YYYY') AND to_date(#{toDate},'MM/DD/YYYY')        
+    </select>
+    
+    <select id="getAll" resultType="TestForm">
+        <include refid="select"/>
+        FROM testform
+    </select>
+</mapper>

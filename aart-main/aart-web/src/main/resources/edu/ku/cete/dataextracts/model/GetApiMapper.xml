@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.dataextracts.model.GetApiMapper" >
+
+	<resultMap id="userGetApiMap" type="edu.ku.cete.domain.api.UserAPIObject">
+         <result property="recordType" column="recordType"/>
+         <result property="uniqueId" column="uniqueId"/>
+         <result property="firstName" column="firstName" />
+         <result property="lastName" column="lastName" />         
+		 <result property="email" column="email" />		 		
+		 <result property="active" column="active" />		  
+		 <collection property="courseAccreditation" ofType="java.lang.String" javaType="list">
+           <result column="accreditation" />
+         </collection>         
+          <collection property="roles" ofType="edu.ku.cete.domain.api.UserRolesAPIObject" javaType="list" >
+            <result property="organizationId" column="r_organizationId" />
+            <result property="role" column="roleName" />
+            <result property="active" column="r_active" />
+         </collection>        
+    </resultMap>
+    
+    <select id="getApiStudents" resultType="edu.ku.cete.domain.api.StudentAPIObject">
+		SELECT DISTINCT
+			'student' as recordType,
+			s.externalid as uniqueStudentId,
+			s.statestudentidentifier as stateStudentId,
+			s.legallastname as lastName,
+			s.legalfirstname as firstName,
+			CASE 
+				WHEN s.gender = 0 THEN 'FEMALE'
+				ELSE 'MALE'
+			END AS gender,
+			s.dateofbirth AS dateOfBirth,
+			s.username AS userName,
+			grade.gradelevel AS currentGradeLevel,
+			school.externalid AS schoolIdentifier,
+		 	s.activeflag AS active
+		FROM
+			student s
+			JOIN enrollment e ON e.studentid = s.id
+			JOIN enrollmentsrosters er ON er.enrollmentid = e.id
+			JOIN roster r ON r.id = er.rosterid
+			JOIN aartuser teacher ON teacher.id = r.teacherid
+			JOIN organization school ON school.id = r.attendanceschoolid
+			JOIN gradecourse grade ON grade.id = e.currentgradelevel
+		<if test="searchParams != null">
+			WHERE
+				e.currentschoolyear= #{searchParams.currentYear}
+			<if test="searchParams.uniqueStudentId != null">
+				AND s.externalid = #{searchParams.uniqueStudentId}
+			</if>
+			<if test="searchParams.enrollmentId != null">
+				AND er.externalid = #{searchParams.enrollmentId}
+			</if>
+			<if test="searchParams.username != null">
+				AND s.username = #{searchParams.username}
+			</if>
+			<if test="searchParams.classroomId != null">
+				AND r.classroomid = #{searchParams.classroomId}
+			</if>
+		</if>
+	</select>
+	
+	<select id="getApiOrgs" resultType="edu.ku.cete.domain.api.OrganizationAPIObject" parameterType="map">
+  		SELECT distinct 
+  			'org' as recordType,
+  			o.externalid as uniqueId,
+  			p.externalid as parentId,
+  			t.typecode as level,
+  			o.organizationname as name,
+  			a.orgaddress1 as address1,
+  			a.orgaddress2 as address2,
+  			a.city as city,
+  			a.state as stateId,
+  			a.zip as zip,
+  			o.activeflag as active  		  		
+		FROM
+			organization o
+			JOIN organizationaddress a ON a.orgid = o.id  
+			JOIN organizationrelation r ON r.organizationid = o.id
+			JOIN organization p ON p.id = r.parentorganizationid
+			JOIN organizationtype t ON t.id = o.organizationtypeid
+		<if test="searchParams != null">
+			WHERE
+				TRUE
+			<if test="searchParams.externalId != null">
+				AND o.externalid = #{searchParams.externalId}
+			</if>
+			<if test="searchParams.parentOrgExtId != null">
+				AND p.externalid = #{searchParams.parentOrgExtId}
+			</if>
+			<if test="searchParams.level!= null">
+				AND t.typecode = #{searchParams.level}
+			</if>
+		</if>
+  	</select>
+  	
+  	<select id="getApiUsers" resultMap="userGetApiMap" parameterType="map">
+  		SELECT distinct
+  			'user' as recordType,
+  			u.externalid as uniqueId,
+  			u.surname as lastName,
+  			u.firstname as firstName,
+  			u.email as email,
+  			o.externalid as r_organizationId,
+  			g.groupcode as roleName,
+  			CASE 
+				WHEN c.abbreviatedname = 'SEC' THEN 'CS'
+				ELSE c.abbreviatedname
+			END AS accreditation,
+  			u.activeflag as active,  	
+  			og.activeflag as r_active
+		FROM
+			aartuser u
+			JOIN usersorganizations uo ON uo.aartuserid = u.id  
+			JOIN organization o ON o.id = uo.organizationid
+			JOIN userorganizationsgroups og ON og.userorganizationid = uo.id
+			JOIN groups g ON g.id = og.groupid
+			LEFT JOIN usercontentareas uc ON  u.id = uc.userid 
+			LEFT JOIN contentarea c ON c.id = uc.contentareaid
+		<if test="searchParams != null">
+			WHERE 
+				TRUE
+			<if test="searchParams.externalId != null">
+				AND u.externalid = #{searchParams.externalId}
+			</if>
+			<if test="searchParams.email != null">
+				AND u.email = #{searchParams.email}
+			</if>
+			<if test="searchParams.organizationId!= null">
+				AND o.externalid = #{searchParams.organizationId}
+			</if>
+			<if test="searchParams.role!= null">
+				AND g.groupcode = #{searchParams.role}
+			</if>
+			<if test="searchParams.credit!= null">
+				AND c.abbreviatedname = #{searchParams.credit}
+			</if>
+		</if>
+  	</select>
+  	<!-- //add active flag check -->
+  	<select id="getApiRosters" resultType="edu.ku.cete.domain.api.RosterAPIObject" parameterType="map">
+  		SELECT distinct 
+  			'roster' as recordType,
+  			u.externalid as educatorUniqueId,
+  			r.classroomid as classroomId,
+  			o.externalid as schoolIdentifier,
+  			CASE 
+				WHEN c.abbreviatedname = 'SEC' THEN 'CS'
+				ELSE c.abbreviatedname
+			END AS courseCode
+		FROM
+			roster r
+			JOIN aartuser u ON u.id = r.teacherid
+			JOIN organization o ON o.id = r.attendanceschoolid 
+			JOIN contentarea c on c.id= r.statesubjectareaid 
+		<if test="searchParams != null">
+			WHERE
+				r.activeflag is TRUE  
+				AND r.currentschoolyear= #{searchParams.currentYear}
+			<if test="searchParams.schoolIdentifier != null">
+				AND o.externalid = #{searchParams.schoolIdentifier}
+			</if>
+			<if test="searchParams.educatorExtId != null">
+				AND u.externalid = #{searchParams.educatorExtId}
+			</if>
+			<if test="searchParams.classroomId!= null">
+				AND r.classroomid = #{searchParams.classroomId}
+			</if>
+			<if test="searchParams.courseCode!= null">
+				AND c.abbreviatedname = #{searchParams.courseCode}
+			</if>
+		</if>
+  	</select>
+  	<!-- //add active flag -->
+  	<select id="getApiEnrollments" resultType="edu.ku.cete.domain.api.EnrollmentAPIObject" parameterType="map">
+  		SELECT distinct 
+  			'enrollment' as recordType,
+  			s.externalid as uniqueStudentId,
+  			r.classroomid as classroomId,
+  			er.externalid as enrollmentId
+		FROM
+			enrollment en
+			JOIN enrollmentsrosters er ON en.id = er.enrollmentid
+			JOIN roster r ON r.id = er.rosterid 
+			JOIN student s ON s.id = en.studentid
+		<if test="searchParams != null">
+			WHERE 
+				er.activeflag is TRUE  
+				AND en.currentschoolyear= #{searchParams.currentYear}
+			<if test="searchParams.studentIdExt != null">
+				AND s.externalid = #{searchParams.studentIdExt}
+			</if>
+			<if test="searchParams.enrollmentIdExt != null">
+				AND er.externalid = #{searchParams.enrollmentIdExt}
+			</if>
+			<if test="searchParams.classroomId!= null">
+				AND r.classroomid = #{searchParams.classroomId}
+			</if>
+		</if>
+  	</select>
+
+</mapper>

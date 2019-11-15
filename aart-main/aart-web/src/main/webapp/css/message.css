@@ -1,0 +1,371 @@
+#announcementsView .container{
+    height:500px;
+    margin: 0px auto;
+    padding:0px;
+}
+#announcementsView .message{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:16px;
+    color:#191b1a;
+    margin-left:1%;
+    font-weight: bold;
+}
+#announcementsView table.data {
+    background: #f5f5f5;
+    font-size: 15px;
+    line-height: 24px;
+    margin: 30px auto;
+    text-align: left;
+    width: 800px;
+    border-radius: 5px;
+    margin-top:30px;
+}
+
+#announcementsView th.info{
+    background:#5b5c5e  !important;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 10px 15px;
+    position: relative;
+
+}
+
+#announcementsView th.info:after {
+
+    content: '';
+    display: block;
+    height: 25%;
+    left: 0;
+    margin: 1px 0 0 0;
+    position: absolute;
+    top: 25%;
+    width: 100%;
+}
+td.tabledata{
+    position: relative;
+    transition: all 300ms;
+    background:#efefef;
+    color: #191b1a;
+    padding: 10px 15px;
+    position: relative;
+}
+
+  .createMsg{
+    background-color: #FFFFFF;
+    margin:0px;
+    padding:0px;
+}
+ .message-boxmain{
+    margin:0px;
+    padding:0px;
+}
+.message-boxfilters {
+    height: auto;
+    width: 30%;
+    display: inline-block;
+    margin: 0 1% 3%;
+}
+.message-boxfilter-headers {
+    height: auto;
+    width: 30%;
+    display: inline-block;
+    margin: 0 1% 0%;
+}
+.message-boxfilter-headers h5,h4{
+  font-family:  "Helvetica Neue";
+    margin-left:15px;
+}
+
+#announcementsView .wrapper-dropdown-5 {
+    /* Size & position */
+    position: relative;
+    width: 220px;
+    margin: 0 auto;
+    padding: 6px 12px;
+
+    /* Styles */
+
+    border-radius: 5px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+    margin-top:-10px;
+}
+
+#announcementsView .wrapper-dropdown-5:after { /* Little arrow */
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin-top: -3px;
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: #4cbeff transparent;
+}
+#announcementsView .calendar {
+    width:500px;
+    font-family:"Helvetica Neue";
+    margin-top:28%;
+    padding-left: 15px;
+
+}
+
+#announcementsView .calendar h2{
+    font-size:20px;
+    font-family:"Helvetica Neue";
+
+}
+#announcementsView .calendar-dropdown{
+    position: relative;
+    width: 125px;
+    margin: 0 auto;
+    padding: 5px 8px;
+
+    /* Styles */
+    background: #fff;
+    color:black !important;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+    margin-top:-10px;
+}
+
+ .calendarCreateMsg {
+    font-family: "Helvetica Neue";
+    margin-top: 1%;
+    padding-left: 15px;
+    width: 500px;
+}
+
+ .calendarCreateMsg h2{
+    font-size:20px;
+    font-family:"Helvetica Neue";
+
+}
+ .calendarCreateMsg-dropdown{
+    position: relative;
+    width: 125px;
+    margin: 0 auto;
+    padding: 5px 8px;
+
+    /* Styles */
+    background: #fff;
+    color:black !important;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+    margin-top:-10px;
+}
+
+ .message-title{
+    width: 95%;
+    font-family: "Helvetica Neue";
+    margin-top: 3%;
+    padding-left: 15px;
+}
+ .message_title{
+    position: relative;
+    width: 440px;
+    margin:10px auto;
+    padding: 10px 15px;
+    background: #fff;
+    border-radius: 5px;
+    color:black !important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    outline: none;
+    transition: all 0.3s ease-out;
+
+}
+ .message-content{
+    width: 95%;
+    font-family: "Helvetica Neue";
+    margin-top: 3%;
+    padding-left: 15px;
+}
+ .message_content{
+    position: relative;
+    width: 440px;
+    margin:10px auto;
+    padding: 10px 15px;
+    background: #ffffff;
+    border-radius: 5px;
+    color:black !important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    outline: none;
+    transition: all 0.3s ease-out;
+}
+ .message-btn{
+    width: 400px;
+    font-family: "Helvetica Neue";
+    margin-top: 3%;
+    margin-left: 30%;
+}
+#announcementsView .btn{
+    width:80px;
+    padding: 5px 8px;
+    background: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+    margin-top:-10px;
+    margin-bottom: 10px;
+
+}
+
+.btnCreateMsg{
+   background: #0e76bc url("../images/btn-bg.png") no-repeat center center;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	border: 0;
+	display: inline-block;
+	padding: 10px 10px;
+	color: white;
+	text-decoration: none;
+	font-size: 1em;
+	font-weight: 300;
+	line-height: 20px;
+}
+.btnCreateMsg:hover{
+	cursor: pointer;
+}
+#announcementsView #confirm_msg{
+    width:500px;
+    height:auto;
+    background:#f6f6f6;
+    border-radius: 4px;
+    border: 1px solid #d8d8d8 ;
+}
+
+#announcementsView .reactive_msg{
+    width:500px;
+    height:auto;
+    background:#f6f6f6;
+    border-radius: 4px;
+    border: 1px solid #d8d8d8 ;
+}
+#announcementsView .reactive_msg h2{
+    font-family: "Helvetica Neue";
+    font-size:20px;
+    color:#94b54d;
+    padding-left: 15px;
+}
+
+#announcementsView .reactive_msg p{
+    font-family: "Helvetica Neue";
+    font-size:14px;
+    color:#000000;
+    padding-left: 15px;
+}
+#announcementsView #confirm_msg h2{
+    font-family: "Helvetica Neue";
+    font-size:20px;
+    color:#94b54d;
+    padding-left: 15px;
+}
+#announcementsView #confirm_msg p{
+    font-family: "Helvetica Neue";
+    font-size:14px;
+    color:#000000;
+    padding-left: 15px;
+}
+#announcementsView .home{
+    width:auto;
+    height:auto;
+    background-color:#CCCCCC;
+    border-color:1px solid black;
+    border-radius: 5px;
+}
+
+#announcementsView .home h1{
+
+  padding-left:20px;
+  padding-top:20px;
+}
+
+#announcementsView .home ul li{
+    font-family:Helvetica Neue;
+    font-size: 15px;
+    line-height: 30px;
+
+}
+ #addMessagesForm .error{
+	border:1px solid red;
+}
+#messagetitleparagraph{
+	font-weight: bold;
+}
+
+#list .btn_close {
+    margin-top: -1px;
+    margin-right: -1px;
+    float: right;
+}
+.calendarAuditHistory {
+    font-family: "Helvetica Neue";
+    margin-top: 1%;
+    padding-left: 15px;
+    width: 500px;
+}
+
+.calendarAuditHistory #startDate{
+	margin-left: 3%; 
+	height: 30px;
+	width: 135px;
+	padding-left: 25px;
+}
+.calendarAuditHistory #endDate{
+	margin-left: 23px;
+	height: 30px; 
+ 	width: 135px;
+ 	padding-left: 25px;
+}
+.calendarAuditHistory #startTime{
+	height: 30px; 
+	width: 125px;
+	padding-left: 25px; 
+	
+}
+
+.calendarAuditHistory #endTime{
+	  height: 30px;
+	  width: 125px; 
+	  padding-left: 25px;
+	  margin-left: 3%;
+}
+
+ .calendarAuditHistory-dropdown{
+    position: relative;
+    width: 125px;
+    margin: 0 auto;
+    padding: 5px 8px;
+    background: #fff;
+    color:black !important;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-out;
+    margin-top:-10px;
+}
+
+.quickLinks{
+	font-family: inherit;
+	line-height: 1.2;
+	display: block;
+	-webkit-margin-before: 0.67em;
+	-webkit-margin-after: 0.67em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	 
+}

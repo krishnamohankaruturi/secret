@@ -1,0 +1,2 @@
+--DE9936: Raw score and Subscore Raw score can have the value '0'
+--For /dml/408.sql

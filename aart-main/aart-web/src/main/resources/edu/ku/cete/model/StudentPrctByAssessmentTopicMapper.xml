@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.StudentPrctByAssessmentTopicMapper">
+
+   <insert id="insert" parameterType="edu.ku.cete.report.domain.StudentPrctByAssessmentTopic">
+   		INSERT INTO studentpctbyassessmenttopic(
+            schoolyear, assessmentcode, studentid, gradeid, contentareaid, 
+            schoolid, assessmenttopicid, percentcorrect, reportcycle, 
+            activeflag, createduser, createddate, modifieduser, modifieddate, batchuploadid, testingprogramid)
+    VALUES (#{schoolYear,jdbcType=BIGINT}, #{testType,jdbcType=VARCHAR}, #{studentId,jdbcType=BIGINT}, #{gradeId,jdbcType=BIGINT}, #{subjectId,jdbcType=BIGINT}, 
+             #{schoolInternalId,jdbcType=BIGINT}, #{topicId,jdbcType=BIGINT}, #{percentCorrect,jdbcType=FLOAT}, #{reportCycle,jdbcType=VARCHAR}, 
+            #{activeFlag,jdbcType=BOOLEAN}, #{createdUser,jdbcType=BIGINT}, now(), 
+            #{modifiedUser,jdbcType=BIGINT}, now(),#{batchUploadedId,jdbcType=BIGINT}, #{testingProgramInternalId, jdbcType=BIGINT});
+   </insert>
+   
+   <update id="update">   
+   	    update studentpctbyassessmenttopic 
+	    set  batchuploadid = #{batchUploadedId,jdbcType=BIGINT},
+        schoolid = #{schoolInternalId,jdbcType=BIGINT}, 
+	    percentcorrect = #{percentCorrect,jdbcType=FLOAT},
+	    modifieduser = #{createdUser,jdbcType=BIGINT}, 
+	    modifieddate = now() 
+	    where studentid = #{studentId,jdbcType=BIGINT} 
+		<if test="subjectId != null">
+			and contentareaid =#{subjectId,jdbcType=BIGINT}
+		</if>
+		<if test="gradeId != null">
+			and gradeid =#{gradeId,jdbcType=BIGINT} 
+		</if> 
+		and assessmentcode = #{testType,jdbcType=VARCHAR}
+	    and reportcycle = #{reportCycle, jdbcType=VARCHAR}
+	    and assessmenttopicid = #{topicId,jdbcType=BIGINT}
+	    and testingprogramid = #{testingProgramInternalId, jdbcType=BIGINT}
+		and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+		and activeflag is true
+       </update>
+   
+     <delete id="delete">
+        DELETE FROM studentpctbyassessmenttopic
+	    where contentareaid =#{contentAreaId,jdbcType=BIGINT}
+	    <if test="schoolYear != null">		
+	      and schoolyear = #{schoolYear,jdbcType=BIGINT}
+	    </if> 
+	    <if test="testingProgramId != null">
+	      and testingprogramid = #{testingProgramId, jdbcType=BIGINT}
+	    </if>
+	    <if test="schoolYear != null"> 
+	      and schoolyear = #{schoolYear,jdbcType=BIGINT}
+	    </if>
+	    <if test="reportCycle != null"> 
+	      and reportcycle = #{reportCycle, jdbcType=VARCHAR}
+	    </if>
+	    <if test="stateId != null"> 
+	      and schoolid in (select id from organization_children_Active_or_Inactive(#{stateId,jdbcType=BIGINT}) where organizationtypeid in(select id from organizationtype where typecode = 'SCH'))
+	    </if>
+    </delete> 
+    
+    <select id="getStudentDetails" resultType="edu.ku.cete.report.domain.StudentPrctTopicReportsDTO">
+		       select stst.*,
+		<foreach close=")" collection="topicsId" item="topicId" open="(" separator="||','||">
+		      (select case  WHEN (select count(id)
+		                      from studentpctbyassessmenttopic where studentid = stst.id and assessmenttopicid = #{topicId,jdbcType=BIGINT}  
+								and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+								and reportcycle = #{reportCycle,jdbcType=VARCHAR} 
+								and activeflag is true
+								and assessmentcode = #{assessmentCode,jdbcType=VARCHAR} ) = 0 then 'N/A' 
+						ELSE (select ROUND(percentcorrect)::text
+							from studentpctbyassessmenttopic where studentid = stst.id and assessmenttopicid = #{topicId,jdbcType=BIGINT} 
+								and schoolyear = #{schoolYear,jdbcType=BIGINT} 
+								and reportcycle = #{reportCycle,jdbcType=VARCHAR} 
+								and activeflag is true
+								and assessmentcode = #{assessmentCode,jdbcType=VARCHAR}) END ):: text
+		</foreach> as percents
+		
+		 from (		
+		select distinct s.id, 
+		s.statestudentidentifier, 
+		s.legalfirstname, 
+		s.legallastname, 
+		esr.scalescore,
+		(select levelname from leveldescription where id = esr.achievementlevel) as achievementlevel
+		from studentpctbyassessmenttopic spat
+		left join (select distinct on (studentid) studentid, scalescore, achievementlevel from externalstudentreports 
+		                                               where assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+		                                               and schoolyear = #{schoolYear,jdbcType=BIGINT}
+		                                               and activeflag is true
+		                                               and assessmentcode = #{assessmentCode,jdbcType=VARCHAR}
+		                                               and testingprogramid = #{testingProgramId,jdbcType=BIGINT} order by studentid, id desc) esr on spat.studentid = esr.studentid
+		inner join student s on s.id =spat.studentid and s.activeflag is true
+		inner join assessmenttopic ast on ast.id = spat.assessmenttopicid and ast.activeflag is true
+		where spat.schoolid = #{schoolId,jdbcType=BIGINT}
+		and spat.schoolyear = #{schoolYear,jdbcType=BIGINT}  
+		and spat.reportcycle = #{reportCycle,jdbcType=VARCHAR}
+		and spat.activeflag is true
+		and spat.assessmentcode = #{assessmentCode,jdbcType=VARCHAR}
+		order by s.id) stst order by stst.legallastname, stst.legallastname
+    </select>    
+</mapper>

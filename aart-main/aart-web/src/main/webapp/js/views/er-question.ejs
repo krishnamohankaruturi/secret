@@ -1,0 +1,17 @@
+<div class="span1">
+	
+	<% var html;
+		if(uiType == 'genTest') { 
+			html = new EJS({url: path+'/js/views/temarker.ejs'}).render({qNum: qNum, markedReview: markedReview})	
+		} 
+	%>
+	<%= html %>
+	
+	<div class="taskstem"><%= task['question'] %></div>
+		
+	<div class="foils">	
+	<p>	
+		<textarea class="ckeditor tabable" cols="85%" id="answer_<%= qNum%>_0" name="answer_<%=qNum%>_0" rows="<%=task.expectedLines%>" tabindex="1"></textarea>
+	</p>
+	</div>
+</div>

@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.UserOrganizationsGroupsDao">
+
+	<sql id="selectImmRel">
+		SELECT uog.id, aartuserid as userId, uog.groupId,uog.isdefault,uo.organizationid,uo.isdefault as userOrganizationDefault,
+		 uog.userorganizationid, activationNo, activationNoExpirationDate,
+	     uog.status as status, au.id as "user.id", au.username as "user.userName", au.firstname as "user.firstName",
+	      au.middlename as "user.middleName", au.surname as "user.surname", au.email as "user.email",
+	       gr.id as "group.groupid",
+	       gr.groupname as "group.groupName", gr.defaultrole as "group.defaultRole", gr.groupcode as "group.groupCode"
+	</sql>
+	
+	<sql id="selectAllRel">
+		SELECT uog.id                                                                  ,
+		       uo.aartuserid AS userId                                                 ,
+		       uog.groupid   AS groupId                                                ,
+		       uo.id AS userOrganizationId,
+		       uo.organizationid                                                       ,
+		       uog.status             AS status                                        ,
+		       au.id                  AS "user.id"                                     ,
+		       au.username            AS "user.userName"                               ,
+		       au.firstname           AS "user.firstName"                              ,
+		       au.middlename          AS "user.middleName"                             ,
+		       au.surname             AS "user.surname"                                ,
+		       au.email               AS "user.email"                                  ,
+		       0                      AS "group.organizationid"                        ,
+		       uog.groupid            AS "group.groupid"                               ,
+		       0                      AS "group.groupName"                             ,
+		       org.id                 AS "organization.id"                       ,
+		       org.organizationname   AS "organization.organizationName"         ,
+		       org.organizationtypeid AS "organization.organizationTypeId"       ,
+		       org.displayidentifier  AS "organization.displayIdentifier"        ,
+		       orgtype.typecode       AS "organization.organizationType.typeCode",
+		       orgtype.id             AS "organization.organizationType.organizationTypeId"
+		FROM   aartuser               AS au ,
+		       organization           AS org,
+		       organizationtype       AS orgtype,
+		       usersorganizations     AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid
+		WHERE  uo.aartuserid          = au.id
+		AND    uo.activeflag = true
+		AND    uog.activeflag = true
+		AND	   au.activeFlag is true
+		AND    uo.organizationid      = org.id
+		AND    org.organizationtypeid = orgtype.id
+	</sql>
+	
+    <insert id="addUserOrganizationsGroups" parameterType="UserOrganizationsGroups" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+	        INSERT INTO userorganizationsgroups(userorganizationid, groupid,status,isdefault,createduser,modifieduser, activeflag)
+	        ( 
+	        Select id as userOrganizationId,#{groupId} as groupId,#{status},#{isdefault},#{createdUser} as createduser,#{modifiedUser} as modifieduser,
+	        	true as activeflag
+	         from usersorganizations where aartuserId = #{userId} and organizationId = #{organizationId} and activeflag = true
+	         ); 
+    </insert>
+    <insert id="addUsersOrganizations" parameterType="UserOrganizationsGroups" useGeneratedKeys="true" keyColumn="id" keyProperty="userOrganizationId">
+	    INSERT INTO usersorganizations(aartuserid,organizationid,isdefault,createduser,modifieduser, activeflag)
+	    ( 
+	    Select #{userId} as aartuserid,#{organizationId} as organizationid,#{isdefault},#{createdUser} as createduser,#{modifiedUser} as modifieduser,
+	     true as activeflag
+	    where not exists (select 1 from usersorganizations where aartuserId = #{userId} and organizationId = #{organizationId})
+	    );      
+    </insert>    
+    
+    <update id="updateUsersOrganizationsForKidsProcess" parameterType="UserOrganizationsGroups">
+        UPDATE usersorganizations
+        SET activeflag = true,
+        modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate}
+        WHERE aartuserid = #{userId}
+        and organizationid = #{organizationId}
+        and activeflag is false
+    </update>
+    
+    <insert id="addUsersOrganization" parameterType="UserOrganization" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+	    INSERT INTO usersorganizations(aartuserid,organizationid,isdefault,createduser,modifieduser, activeflag)
+	    ( 
+	    Select #{userId} as aartuserid,#{organizationId} as organizationid,#{isDefault},#{createdUser} as createduser,#{modifiedUser} as modifieduser,
+	     true as activeflag
+	    where not exists (select 1 from usersorganizations where aartuserId = #{userId} and organizationId = #{organizationId})
+	    );      
+    </insert>
+   
+   <update id="updateUsersOrganizations">
+        UPDATE usersorganizations
+        SET organizationid = #{organizationId},
+        modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate}
+        WHERE aartuserid = #{aartUserId}
+        and organizationid != #{organizationId}
+    </update>
+    
+    <update id="updateUserOrganizationByUserIdAndOrganizationId">
+        UPDATE usersorganizations
+        SET organizationid = #{newOrganizationId},
+        modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate}
+        WHERE aartuserid = #{userId}
+        and organizationid = #{oldOrganizationId}
+    </update>
+    
+    
+  <insert id="insertUserOrgGroup" parameterType="UserOrganizationsGroups">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT nextval('usergroups_id_seq')
+    </selectKey>
+    insert into userorganizationsgroups (id, userorganizationid, groupid, status
+    		, isdefault, activationno, activationnoexpirationdate, createduser, modifieduser)
+    values (#{id,jdbcType=BIGINT}, (Select id as userOrganizationId from usersorganizations where aartuserId = #{userId} and organizationId = #{organizationId} limit 1), 
+      #{groupId,jdbcType=BIGINT}, #{status,jdbcType=BIGINT}, #{isdefault,jdbcType=BIT}, 
+      #{activationNo,jdbcType=VARCHAR}, #{activationNoExpirationDate,jdbcType=TIMESTAMP},#{createdUser,jdbcType=BIGINT},#{modifiedUser,jdbcType=BIGINT})
+  </insert>
+      
+	<update id="updateUserOrgSelectiveByPrimaryKey" parameterType="UserOrganizationsGroups">
+	   UPDATE usersorganizations
+	   <set>
+	       <if test="organization.id != null">
+	           organizationid = #{organization.id},
+	       </if>
+	       <if test="userId != null">
+               <if test="userId != 0">	         
+	              aartuserid = #{userId},
+	           </if>
+	       </if>
+	       <if test="userOrganizationDefault != null">
+	           isdefault = #{userOrganizationDefault},
+	       </if>
+	       <if test="modifiedUser != null">
+	           modifieduser = #{modifiedUser},
+	       </if>
+	       <if test="modifiedDate != null">
+	           modifieddate = #{modifiedDate},
+	       </if>
+	       <if test="activeFlag != null">
+	           activeflag = #{activeFlag},
+	       </if>
+	   </set>
+	   where id = #{id}
+	</update>
+	
+	<update id="updateUserOrgGrpSelectiveByPrimaryKey" parameterType="UserOrganizationsGroups">
+	   UPDATE userorganizationsgroups
+	   <set>
+	       <if test="userOrganizationId != null">
+	           <if test="userOrganizationId != 0">
+	             userorganizationid = #{userOrganizationId},
+	           </if>
+	       </if>
+	       <if test="groupId != null">
+	           groupid = #{groupId},
+	       </if>
+	       <if test="status != null">
+	           status = #{status},
+	       </if>	
+	       <if test="activationNo != null">
+	           activationno = #{activationNo},
+	       </if>
+	       <if test="activationNoExpirationDate != null">
+	           activationnoexpirationdate = #{activationNoExpirationDate},
+	       </if>		              
+	       <if test="isdefault != null">
+	           isdefault = #{isdefault},
+	       </if>
+	        <if test="modifiedUser != null">
+	           modifieduser = #{modifiedUser},
+	       </if>
+	       <if test="modifiedDate != null">
+	           modifieddate = #{modifiedDate},
+	       </if>
+	        <if test="activeFlag != null">
+	           activeflag = #{activeFlag},
+	       </if>
+	   </set>
+	   <!-- Do not add active flag check here. -->
+	   where id = #{id} and
+	   groupid != (select id from groups where groupcode = 'GSAD');
+	</update>
+	   	   
+    <update id="updateUserOrganizationsGroups" parameterType="UserOrganizationsGroups">
+        UPDATE userorganizationsgroups
+        SET 
+        <if test="status!=null">
+        	status = #{status},
+        </if>
+        <if test="activationNo!=null">
+         activationno = #{activationNo}, 
+        </if>
+        <if test="activationNoExpirationDate">
+         activationnoexpirationdate = #{activationNoExpirationDate},
+         </if>
+         modifieduser = #{modifiedUser},
+         modifieddate = #{modifiedDate}
+        WHERE id = #{id}
+    </update>
+
+	<update id="updateUserOrganizationsGroupsForKidsProcess" parameterType="UserOrganizationsGroups">
+        update userorganizationsgroups
+		set activeflag = true,		
+		status = #{status},
+		modifieddate = now(),
+		modifieduser = #{modifiedUser}
+			where userOrganizationId = (select id from usersorganizations where aartuserId = #{userId} 
+			and organizationId = #{organizationId} and activeflag = true)
+			and groupid = #{groupId}
+			and activeflag is false
+    </update>
+    
+    <delete id="deleteUserOrganizationsGroups" parameterType="long">
+        DELETE FROM userorganizationsgroups WHERE id = #{id}
+    </delete>
+    
+    <delete id="deleteUserOrganizations" parameterType="long">
+        DELETE FROM usersorganizations WHERE id = #{id}
+    </delete>
+    
+     <!-- Manoj Kumar O : Added for US_16244(provide UI TO merge Users) -->
+    <delete id="purgeUser" parameterType="long">
+        Delete from userorganizationsgroups  where userorganizationid IN (Select id from usersorganizations where aartuserid=#{id})
+    </delete>
+    <delete id="deleteUserOrganizationsbyUserId" parameterType="long">
+    	DELETE from usersorganizations WHERE aartuserid IN (Select id from aartuser where id=#{id})
+    </delete>
+    <select id="getUserOrganizationsGroups" resultType="UserOrganizationsGroups" parameterType="long">
+        <include refid="selectImmRel"/>
+        FROM aartuser au, groups as gr,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        WHERE uo.aartuserid = au.id 
+        AND uog.groupid = gr.id
+        AND uog.id = #{id}
+        AND uo.activeflag = true
+        AND uog.activeflag = true
+    </select>
+    
+    
+     <select id="getInactiveUserOrganizationsGroups" resultType="UserOrganizationsGroups" parameterType="long">
+        <include refid="selectImmRel"/>
+        FROM aartuser au, groups as gr,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        WHERE uo.aartuserid = au.id 
+        AND uog.groupid = gr.id
+        AND uog.id = #{id}
+        AND uo.activeflag = true
+    </select>
+    
+    <select id="getByUserId" resultType="UserOrganizationsGroups" parameterType="long">
+        <include refid="selectImmRel"/>
+		,orgtype.id as "group.organizationType.organizationTypeId", orgtype.typelevel as "group.organizationType.typeLevel",
+	       orgtype.typeCode as "group.organizationType.typeCode"
+	       FROM aartuser au
+		inner join usersorganizations uo on uo.aartuserid = au.id and uo.activeflag = true
+		inner join userorganizationsgroups uog on uo.id = uog.userorganizationid and uog.activeflag = true
+		inner join groups gr on uog.groupid = gr.id
+		inner join organizationtype orgtype on gr.organizationtypeid = orgtype.id
+		inner join organization o on o.id = uo.organizationid
+		WHERE uo.aartuserid = #{userId}
+		order by o.organizationname
+    </select>
+    
+    <select id="getUserOrganizationsByUserId" resultType="UserOrganizationsGroups" parameterType="long">
+          select uo.id, uo.aartuserid as userId, uo.organizationid, uo.isdefault as userOrganizationDefault, uo.createddate as userOrganizationCreatedDate
+        ,uo.createduser as userOrganizationCreatedUser,uo.modifieddate as userOrganizationModifiedDate,uo.modifiedUser as userOrganizationModifiedUser,o.organizationname 
+        FROM usersorganizations uo inner join organization o on o.id = uo.organizationid
+        WHERE aartuserid = #{aartUserId} and uo.activeflag = true       
+    </select>
+    
+    <select id="getUserOrganizationsGroupsByUserId" resultType="UserOrganizationsGroups" parameterType="long">
+          select uog.*,g.groupname 
+        FROM userorganizationsgroups uog 
+        inner join usersorganizations uo on uo.id = uog.userorganizationid
+        inner join groups g on g.id = uog.groupId
+        WHERE uo.aartuserid = #{aartUserId} and uo.activeflag = true and uog.activeflag = true
+    </select>
+        
+    <select id="getByUserIds" resultType="UserOrganizationsGroups" parameterType="long">
+        <include refid="selectImmRel"/>
+        FROM aartuser as au, groups as gr,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        WHERE uo.aartuserid = au.id
+        AND uo.activeflag = true
+        AND uog.activeflag = true 
+        AND uog.groupid = gr.id 
+        AND uog.activationno is not null
+        <if test="userIds != null" >
+          AND uo.aartuserid in  
+	      <foreach collection="userIds" item="userId" open="(" close=")" separator="," >
+	         #{userId}
+	      </foreach>
+        </if>
+    </select>   
+     
+     <select id="getAllOrganizationsByUserId" resultType="long" parameterType="long">
+        select organizationid 
+        FROM usersorganizations 
+        WHERE aartuserid = #{userId}
+        and activeflag = true        
+    </select>
+    
+    <select id="getByUserIdAndOrganization" resultType="UserOrganizationsGroups" parameterType="map">
+        <include refid="selectImmRel"/>
+        FROM aartuser au, groups as gr,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        WHERE uo.aartuserid = au.id 
+        AND uo.organizationid = #{organizationId}
+        AND uog.groupid = gr.id
+        AND uo.aartuserid = #{userId}
+        AND uo.activeflag = true
+        AND uog.activeflag = true
+    </select>
+    
+    <select id="getByUserIdOrganizationIdGroupId" resultMap="UserOrganizationGroupsMap">
+    	select uogrp.id as id, uo.organizationid as userOrganizationId, uo.aartuserid aartuserid, uogrp.groupid
+		FROM userorganizationsgroups uogrp
+		join usersorganizations uo on uo.id = uogrp.userorganizationid
+		where uo.organizationid =  #{organizationId} and uo.activeflag is true
+		and uo.aartuserId = #{userId}
+		and groupid = #{groupId}
+		and uogrp.activeflag is true
+	</select>
+    
+    <select id="getByUserOrgAndOrgChildren" resultType="UserOrganizationsGroups" parameterType="map">
+        <include refid="selectImmRel"/>
+        FROM aartuser as au, groups as gr,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid
+        WHERE uo.aartuserid = au.id 
+        AND uog.groupid = gr.id
+        AND uo.activeflag = true
+        AND uog.activeflag = true
+        AND uo.aartuserid = #{userId}
+           AND
+            (
+            ug.organizationid = #{organizationId} OR ug.organizationid IN (
+            SELECT id
+            FROM organization_children(#{organizationId}))
+            )
+    </select>
+    
+    <select id="getByUserAndStatus" resultType="UserOrganizationsGroups" parameterType="map">
+        <include refid="selectImmRel"/>
+        FROM 
+        aartuser as au, groups as gr,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid        
+        WHERE uo.aartuserid = au.id 
+        AND uog.groupid = gr.id
+        AND uo.aartuserid = #{userId}
+        AND au.activeflag is true
+        AND uo.activeflag = true
+        AND uog.activeflag = true
+      <if test="status != null" >
+        AND status = #{status}
+      </if>        
+      <if test="status == null" >
+        AND status is null
+      </if>       
+    </select>
+    
+    <select id="getByOrganizationAndStatus" resultType="UserOrganizationsGroups" parameterType="map">
+        <include refid="selectAllRel"/>
+        <if test="organizationIds != null" >
+        AND uo.organizationid in
+	        <foreach collection="organizationIds"
+	         item="organizationId" open="(" close=")" separator="," >
+	        	#{organizationId}
+	        </foreach>
+        </if>       	                 
+      <if test="status != null" >
+        AND status = #{status}
+      </if>        
+      <if test="status == null" >
+        AND status is null
+      </if>       
+    </select>
+    
+    <select id="getByGroupIdAndStatus" resultType="UserOrganizationsGroups" parameterType="map">
+         <include refid="selectAllRel"/> AND uog.status = #{status} AND gr.id = #{groupId}
+    </select>
+    <!--Added during US16368 : check user is authorized or not  -->
+    <select id="checkIsUserAuthorized" resultType="Long" parameterType="Long">
+        SELECT count( DISTINCT grinner.groupname) AS noofroles FROM aartuser AS auuinner LEFT JOIN usersorganizations AS uoinner 
+		ON auuinner.id = uoinner.aartuserid LEFT JOIN userorganizationsgroups uoginner ON uoginner.userorganizationid = uoinner.id 
+		LEFT JOIN groups grinner ON grinner.id = uoginner.groupid WHERE auuinner.id=#{userId} and uoinner.activeflag = true and uoginner.activeflag = true and 'PD User' not in(grinner.groupname)
+    </select>
+    
+    <select id="getByActivationNo" parameterType="String" resultType="UserOrganizationsGroups">
+        <include refid="selectImmRel"/>
+        FROM aartuser au, groups as gr,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        WHERE uo.aartuserid = au.id 
+        AND uog.groupid = gr.id
+        AND activationNo = #{activationNo}
+        AND uo.activeflag = true
+        order by uog.activationnoexpirationdate desc nulls last
+        limit 1
+    </select>
+    
+    <select id="getUserOrganizationsGroupsFull" parameterType="long" resultType="UserOrganizationsGroups">
+        SELECT ug.id, aartuserid as userId, groupid, activationNo, au.firstname, au.middlename, au.surname, au.email
+        FROM aartuser au,
+        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        WHERE uo.aartuserid = au.id 
+        AND uog.groupid = gr.id
+        AND uog.id = #{userOrganizationsGroupsDaoId}
+        AND uo.activeflag = true
+        AND uog.activeflag = true 
+    </select>
+    
+     <!--US16245 : Added to activate and Deactivate the User Manually -->
+	<update id="changeUserStatusByIds" parameterType="map">
+		UPDATE userorganizationsgroups SET 
+		     status = #{status},modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate}
+		WHERE id in(select id from userorganizationsgroups WHERE userorganizationid
+		in(select id from usersorganizations WHERE aartuserid in (${aartUserIds})))
+	</update>
+	
+	<select id="checkUserStatusById" resultType="long">        
+       select max(uog.status) as statuscode from userorganizationsgroups uog 
+					inner join usersorganizations uo on uog.userorganizationid = uo.id 
+					where uo.aartuserid = #{userId}
+					and uo.activeflag = true and uog.activeflag = true
+    </select>	
+		
+    <select id="getLastId" resultType="long">
+        SELECT lastval() as id
+    </select>
+    
+    <update id="updateDefaultUserOrganizationAndGroup" parameterType="map">
+    	UPDATE userorganizationsgroups SET isdefault = false, modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} WHERE userorganizationid = #{userOrganizationId} and activeflag = true;
+        UPDATE userorganizationsgroups SET isdefault = true,modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} WHERE id = #{userOrganizationGroupId} and activeflag = true;
+        UPDATE usersorganizations SET isdefault = false, modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} WHERE aartuserid = #{userId} and activeflag = true;
+        UPDATE usersorganizations SET isdefault = true, modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} WHERE id = #{userOrganizationId} and activeflag = true;
+    </update>
+    
+    <update id="updateUserDefaultRoleByOrganizationAndGroup" parameterType="map">
+    	update usersorganizations set isdefault = false, modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} where aartuserid = #{userId} and activeflag = true;
+    	update usersorganizations set isdefault = true,modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} where aartuserid = #{userId} and organizationid = #{userOrganizationId} and activeflag = true;
+    	update userorganizationsgroups set isdefault = false,modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} where userorganizationid in (select id from usersorganizations 
+											where aartuserId = #{userId} and organizationid = #{userOrganizationId} and activeflag = true) and activeflag = true;
+		update userorganizationsgroups set isdefault = true,modifieduser = #{modifiedUser},
+        modifieddate = #{modifiedDate} where userorganizationid in (select id from usersorganizations 
+											where aartuserId = #{userId} and organizationid = #{userOrganizationId} and activeflag = true)		
+					and groupid = #{userGroupId} and activeflag = true;
+    </update>
+      <resultMap id="UserOrganizationMap" type="edu.ku.cete.domain.user.UserOrganization">         
+            <id property="id" column="o_id" />
+            <result property="organizationId" column="o_organizationId" />
+            <result property="organizationName" column="o_organizationName" />
+            <result property="isDefault" column="o_isdefault" />
+            <result property="activeFlag" column="o_activeFlag" />
+            <result property="createdDate" column="o_createdDate" />
+		    <result property="modifiedDate" column="o_modifiedDate" />
+		    <result property="createdUser" column="o_createdUser" />
+		    <result property="modifiedUser" column="o_modifiedUser" />		    
+            <collection property="roles" column="o_r_id"  ofType="edu.ku.cete.domain.user.UserRoles"  javaType="list">
+                <id property="id" column="o_r_id" />
+                <result property="groupName" column="o_r_groupName" />
+                <result property="isDefault" column="o_r_isDefault" />
+                <result property="groupId" column="o_r_groupId" />
+                <result property="status" column="o_r_status" />
+                <result property="activeFlag" column="o_r_activeFlag" />
+                <result property="createdDate" column="o_r_createdDate" />
+		        <result property="modifiedDate" column="o_r_modifiedDate" />
+		        <result property="createdUser" column="o_r_createdUser" />
+		        <result property="modifiedUser" column="o_r_modifiedUser" />
+            </collection>  
+         
+    </resultMap>
+    
+    <!-- Please don't add active flag condition here because its taking all the userorganizations-->
+    <select id="getAllUserOrganizationAndRole" resultMap="UserOrganizationMap" parameterType="long">
+        	SELECT  
+			       uorg.id                     as o_id                   ,
+			       uorg.organizationid         as o_organizationId       ,
+			       uorg.isdefault              as o_isdefault            ,
+ 			       uorg.activeflag             as o_activeFlag           ,
+			       uorgrp.id                   as o_r_id                 ,
+			       uorgrp.isdefault            as o_r_isDefault          ,
+			       uorgrp.status               as o_r_status             ,
+			       uorgrp.groupid              as o_r_groupId            ,
+			       uorgrp.activeflag           as o_r_activeFlag     
+		           FROM usersorganizations uorg 
+		           inner join userorganizationsgroups uorgrp on uorgrp.userorganizationid = uorg.id		 
+		         where uorg.aartuserid = #{userId}
+    </select>
+    <select id="getGroupsByUserOrganization" resultType="Groups" parameterType="long" >
+    select distinct g.id as groupId, g.organizationid, g.groupname, g.defaultrole, g.organizationtypeid, 
+        g.roleorgtypeid, g.groupcode from groups g
+    inner join userorganizationsgroups uog on g.id = uog.groupid and g.activeflag is true and uog.activeflag is true
+    inner join usersorganizations uo on uog.userorganizationid=uo.id and uo.aartuserid=#{userId}  and uo.activeflag is true
+    order by g.groupname
+    </select>
+    
+    <resultMap id="UserOrganizationGroupsMap" type="edu.ku.cete.domain.user.UserOrganizationsGroups">         
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="organizationId" column="organizationId" jdbcType="BIGINT"/>
+            <result property="userId" column="aartuserid" />
+    </resultMap>
+
+    <select id="getUserOrganizationsGroupsByOrgType" resultMap="UserOrganizationGroupsMap" parameterType="GroupRestrictions">
+    	select uorgrp.id as id, uorg.organizationid as organizationId, uorg.aartuserid aartuserid
+		FROM usersorganizations uorg 
+   		inner join userorganizationsgroups uorgrp on uorgrp.userorganizationid = uorg.id 
+			and uorgrp.activeflag is true and uorg.activeflag is true
+   		inner join userassessmentprogram ua on ua.aartuserid = uorg.aartuserid and ua.activeflag is true
+		where uorgrp.groupid = (select id from groups where groupcode= #{groupCode} and activeflag is true)
+		and uorg.organizationid in (select org.id from organization_children(#{organizationId}) org
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		WHERE orgtype.typecode = #{organizationType} and orgtype.activeflag is true)
+		and ua.assessmentprogramid = #{assessmentProgramId}
+    </select>
+
+    <update id="downgradeUserTo">
+    	update userorganizationsgroups u1 set groupid = 
+		(select id from groups where groupcode = #{downgradeUserGroupType}),
+		modifieduser = #{group.modifiedUser},
+        modifieddate = #{group.modifiedDate}
+		where id =#{organizationUserGroupId}
+		and not exists (select 1 from userorganizationsgroups u2 
+			where u2.userorganizationid = u1.userorganizationid and u2.groupid = 
+			(select id from groups where groupcode = #{downgradeUserGroupType}))
+    </update>
+    <select id="getUserIdsByUserOrgGroupIds" parameterType="java.lang.Long" resultType="java.lang.Long">
+   select uo.aartuserid from usersorganizations uo inner join userorganizationsgroups uog on uo.id = uog.userorganizationid 
+   and uog.activeflag = true where uog.id in    	
+   <foreach collection="userOrgGroupIds" item="userOrgGroupId" open="(" close=")" separator="," >
+        	#{userOrgGroupId}
+        </foreach>
+    </select>
+    
+    <!-- Should not have active flag check here. -->
+    <select id="getAllUserOrganiztionGroupIds" parameterType="java.lang.Long" resultType="java.lang.Long">
+   		select uog.id from usersorganizations uo 
+   		inner join userorganizationsgroups uog on uo.id = uog.userorganizationid and uo.aartuserid=#{userId}
+   		<!-- Do not add activeflag check here. -->
+    </select>
+    
+    <select id="getByOrganizationRoleId" parameterType="java.lang.Long" resultType="UserOrganizationsGroups">
+    	select  uog.id, uo.aartuserid as userId, uog.groupId, uo.organizationid
+        FROM  usersorganizations AS uo inner join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        <!-- Do not add an activeflag check here. -->
+        WHERE uo.aartuserid = #{userId}
+        and uo.organizationid = #{organizationId}
+        and uog.groupid = #{groupId} limit 1
+    </select>
+    <select id="getActivationNoByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
+    	select distinct uog.activationno
+        FROM  usersorganizations AS uo inner join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+        WHERE uo.aartuserid = #{userId} and uog.activationno is not null limit 1
+    </select>
+    
+    <select id="hasDefaultOrganization"  parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT count(uog.id)
+		FROM aartuser au, groups as gr,
+	        usersorganizations AS uo left join userorganizationsgroups AS uog on uo.id = uog.userorganizationid 
+	        WHERE uo.aartuserid = au.id 
+	        AND uog.groupid = gr.id
+	        AND uo.aartuserid = #{userId}
+	        AND uo.activeflag = true
+	        AND uog.activeflag = true
+	        AND uog.isdefault = true
+	</select>
+	
+    <select id="getDistinctGroupCodesBasedOnUserIds" resultType="UserOrganizationsGroups">
+       select distinct groupcode AS "group.groupCode", iuo.aartuserid AS "userId"
+       from usersorganizations iuo
+	   inner join userorganizationsgroups iuog on iuog.userorganizationid = iuo.id 
+	   inner join groups gs on gs.id = iuog.groupid and iuog.activeflag is true 
+	   and gs.groupcode = 'TEA'
+		<if test="userIds != null" >
+			AND	aartuserid = ANY(ARRAY 
+		    <foreach collection="userIds" item="userId" open="[" close="]" separator="," >
+		      	#{userId}
+		    </foreach>)
+       </if> 
+	   and iuo.activeflag is true
+	  </select> 
+    <select id="checkIfAuthorizedUser"  parameterType="java.lang.Long" resultType="java.lang.Long">
+	select count(*) 
+	from aartuser a
+	inner join usersorganizations uo on uo.aartuserid=a.id 
+	inner join userorganizationsgroups uog on uog.userorganizationid=uo.id
+	inner join userassessmentprogram uap on uap.userorganizationsgroupsid=uog.id
+	inner join groups g on g.id=uog.groupid 
+	where a.id=#{userId} AND uo.activeflag is true and assessmentprogramid=#{assessmentProgramId} and uog.activeflag is true and uap.activeflag is true
+	and uog.activeflag is true and uap.activeflag is true and
+	((g.hierarchy &lt;(select hierarchy from groups where id=#{currentGroupId}) OR 
+	g.roleorgtypeid &lt;(select roleorgtypeid from groups where id=#{currentGroupId}))
+	OR (g.hierarchy=(select hierarchy from groups where id=#{currentGroupId}) AND 
+	g.roleorgtypeid=(select roleorgtypeid from groups where id=#{currentGroupId})))
+
+ </select>
+
+</mapper>

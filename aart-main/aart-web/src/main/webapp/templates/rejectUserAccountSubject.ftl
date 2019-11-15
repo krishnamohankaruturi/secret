@@ -1,0 +1,1 @@
+Your account request for Kite has been denied

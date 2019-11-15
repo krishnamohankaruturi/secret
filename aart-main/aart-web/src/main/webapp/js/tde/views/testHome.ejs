@@ -1,0 +1,73 @@
+<header class="red-header">
+	<h1 id="logo">
+		<a href="<%= pageContextPath %>/studentHome.htm"><img src="/images/kite-logo.png" alt="kite" /></a>
+	</h1>
+	
+	<ul class="main-nav">
+		<li>
+			<a class="studentsTests" href="#studentsTests">
+				<img src="/images/pencil-sm-icon.png" alt="<%= messages.testHome.takeaTest %>" /><%= messages.testHome.takeaTest %>
+			</a>
+		</li>
+		<li>
+			<a class="practiceTests" href="#practiceTests">
+				<img src="/images/watch-sm-icon.png" alt="<%= messages.testHome.practice %>" /><%= messages.testHome.practice %>
+			</a>
+		</li>
+	</ul>
+	
+	<ul class="global-nav">
+		<li>
+			<a href='#' onClick="signOut()">
+				<img src="/images/signout-icon.png" alt="" /><%= messages.testHome.signout %>
+			</a>
+		</li>
+		<% if(secureBrowser) { %>
+			<li>
+				<a id="closeBrowser" href="#">
+					<img src="/images/close-icon.png" alt="Close" /><%= messages.testHome.closebrowser %>
+				</a>
+			</li>
+		<% } %>
+	</ul>
+</header>
+
+<h1 class="page-header">
+	<%= messages.testHome.takeTest %>
+</h1>
+
+<div id="selection">
+	<div id="selection-tabs">
+		<div class="tabs-c">
+			
+			<ul>
+				<% for(var i=0; i<assessmentNames.length; i++) { %>
+					<li>
+						<a class="btn" href="#tabset-<%= assessmentNames[i] %>"><%= assessmentNames[i] %></a>
+					</li>
+				<% } %>
+			</ul>
+		
+		</div>
+		
+		<br class="clear" />
+		<!-- /clear float right -->
+		<section id="tests"></section>
+		<div id="testdatabytesttype" data-json='<%= JSON.stringify(studentsTests) %>' style="display: none;"></div>
+		
+	</div>
+	<!-- /select tabs -->
+	
+</div>
+<!-- /select contain -->
+
+<div class="select-missing">
+	<img src="/images/test-missing.jpg" alt="Sorry, No Tests To Take." />
+		<h1>
+			<%= messages.testHome.noTestMessage1 %>
+		</h1>
+		<p>
+			<%= messages.testHome.noTestMessage2 %>
+		</p>
+</div>
+<!-- /missing -->

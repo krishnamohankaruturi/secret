@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.report.model.OrganizationManagementAuditDao">
+	<insert id="insertManagementAudit" parameterType="edu.ku.cete.report.domain.OrganizationManagementAudit"
+		useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into organizationmanagementaudit
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sourceOrgId != null">
+				sourceorgid,
+			</if>
+			<if test="destOrgId != null">
+				destorgid,
+			</if>
+			<if test="studentId != null">
+				studentid,
+			</if>
+			<if test="aartUserId != null">
+				aartuserid,
+			</if>
+			<if test="rosterId != null">
+				rosterid,
+			</if>
+			<if test="enrollmentId != null">
+				enrollmentid,
+			</if>
+			<if test="currentSchoolYear != null">
+				currentschoolyear,
+			</if>
+			<if test="operationType != null">
+				operationtype,
+			</if>
+			createddate,
+			createduser,
+			activeflag,
+			modifieddate,
+			modifieduser,
+			sourceorgnamewithidentifier,
+			destorgnamewithidentifier,
+			rostername,
+			aartusername,
+			statestudentidentifier,
+			sourceorgdistrictid,
+			sourceorgdistrictname,
+			destorgdistrictid,
+			destorgdistrictname,
+			stateid,
+			statename,
+			modifiedusername
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sourceOrgId != null">
+				#{sourceOrgId,jdbcType=BIGINT},
+			</if>
+			<if test="destOrgId != null">
+				#{destOrgId,jdbcType=BIGINT},
+			</if>
+			<if test="studentId != null">
+				#{studentId,jdbcType=BIGINT},
+			</if>
+			<if test="aartUserId != null">
+				#{aartUserId,jdbcType=BIGINT},
+			</if>
+			<if test="rosterId != null">
+				#{rosterId,jdbcType=BIGINT},
+			</if>
+			<if test="enrollmentId != null">
+				#{enrollmentId,jdbcType=BIGINT},
+			</if>
+			<if test="currentSchoolYear != null">
+				#{currentSchoolYear,jdbcType=BIGINT},
+			</if>
+			<if test="operationType != null">
+				#{operationType,jdbcType=VARCHAR},
+			</if>
+			#{createdDate},
+			#{createdUser},
+			#{activeFlag},
+			#{modifiedDate},
+			#{modifiedUser},
+			#{sourceOrgNameWithIdentifier},
+			#{destOrgNameWithIdentifier},
+			#{rosterName},
+			#{aartUserName},
+			#{stateStudentIdentifier},
+			#{sourceOrgDistrictId},
+			#{sourceOrgDistrictName},
+			#{destOrgDistrictId},
+			#{destOrgDistrictName},
+			#{sateId},
+			#{stateName},
+			#{modifiedUserName}
+		</trim>
+	</insert>
+<select id="getOrganizationManagementAuditHistory" resultType="edu.ku.cete.report.domain.OrganizationManagementAudit">
+SELECT *, to_char(modifieddate AT time zone 'US/Central', 'MM-DD-YYYY hh12:mi:ss AM') modifieddateStr       
+       from organizationmanagementaudit orgmngtaudit
+	where orgmngtaudit.createddate &gt;=#{startDateTimes,jdbcType=TIMESTAMP} 
+	AND orgmngtaudit.createddate &lt;=#{endDateTimes,jdbcType=TIMESTAMP}
+		<if test="filterValues.organizationId!=null">
+			and (sourceorgid ::text =#{filterValues.organizationId} OR destorgid ::text =#{filterValues.organizationId})
+         </if>
+         <if test="filterValues.stateId!=null">
+			and stateid ::text=#{filterValues.stateId}
+         </if>
+         <if test="filterValues.sourceordestorgdistrictid!=null">
+			and (sourceorgdistrictid ::text=#{filterValues.sourceordestorgdistrictid} OR destorgdistrictid ::text=#{filterValues.sourceordestorgdistrictid})
+         </if>
+         <if test="filterValues.schoolId!=null">
+			and (sourceorgid ::text =#{filterValues.schoolId} OR destorgid ::text =#{filterValues.schoolId})
+         </if>
+         order by id
+         <if test="offset !=null ">
+	offset #{offset,jdbcType=INTEGER}
+	</if>
+	<if test="limit !=null">
+	limit #{limit,jdbcType=INTEGER}
+	</if>
+         
+</select>
+</mapper>

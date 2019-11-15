@@ -1,0 +1,1025 @@
+
+/* Default sizes and scalings for site */
+body.scale_4x {
+	font-size: 22pt;
+	line-height: 1.8em;
+}
+
+.scale_4x h1,.scale_4x h2,.scale_4x h3, .scale_4x h4,.scale_4x h5,.scale_4x h6 {
+	margin-bottom: 5px;
+	line-height: 1.2em;
+}
+
+.scale_4x p {
+	margin-bottom: 15px;
+	line-height: 1.4em;
+}
+
+.scale_4x h2 {
+	width: 400px;
+	margin: 0 auto;
+}
+
+.scale_4x #container  {
+	margin: 20px auto;
+	min-width: 2000px;
+	max-width: 2074px;
+	height: auto;
+	padding: 10px;
+	border-radius: 30px;
+}
+
+.scale_4x #container_login {
+	margin: 20px auto;
+	max-width: 800px;
+	min-width: 600px;
+	height: auto;
+	padding: 10px;
+	border-radius: 30px;
+}
+
+.scale_4x #questions #header {
+	margin: 0 0 0 50px;
+}
+
+.scale_4x .loginContent {
+	margin: 25px auto 40px auto;
+	height: auto;
+}
+
+.scale_4x .loginContent h2 {
+	width: 500px;
+	font-size: 16pt;
+	margin: 0 auto 50px auto;
+}
+
+.scale_4x .loginContent div {
+	margin: 0 0 10px 0;
+}
+
+.scale_4x .loginContent form {
+	height: 200px;
+	width: 500px;
+	margin: 0px auto 0 auto;
+}
+
+.scale_4x #loginContent_field {
+	height: 50px;
+	margin: 0 auto 30px auto;
+	width: 500px;
+}
+
+.scale_4x .loginContent label {
+	font-size: 24px;
+	margin: 10px 0 0;
+	padding: 5px 15px;
+	width: 27%;
+}
+
+.scale_4x .loginContent input {
+	font-size: 24px;
+	border-radius: 15px;
+	margin: 0 0px 30px 19px;
+	padding: 5px 15px;
+	width: 50%;
+}
+
+.scale_4x .loginContent button {
+	margin: 0 0 0 100%;
+}
+
+.scale_4x .loginContentText {
+	border-radius: 8px;
+}
+
+.scale_4x .button {
+	font-size: 14pt;
+	border-radius: 20px;
+	padding: .25em 2em;
+	margin: 10px auto 0 100%;
+}
+
+.scale_4x hr {
+	width: 50%;
+	border: 0;
+}
+
+.scale_4x .error {
+	font-size: 12pt;
+	margin: 60px 0 20px -60px;
+}
+
+/* ************************* 
+Top Nav
+************************* */
+.scale_4x .topPassageNav {
+	margin: 0 0 10px 0;
+	font-size: 22pt;
+}
+
+.scale_4x .topPassageNav a {
+	padding: 0px 8px;
+	text-decoration: none;
+}
+
+/* ************************* 
+Pagination 
+************************* */
+.scale_4x .pagination {
+    margin: 0 auto 0.5em 3em;
+}
+
+.scale_4x .pagesWrap {
+	width: 89%;
+}
+
+.scale_4x .pagesWrap a {
+	padding: 0px .5em;
+	font-size: 32pt;
+	line-height: 1.4em;
+}
+
+.scale_4x .pageBack span,.scale_4x .pageNext span {
+	margin-left: -99999px;
+}
+
+.scale_4x .pageBack,.scale_4x .pageNext {
+	height: 31px;
+	width: 31px;
+}
+
+.scale_4x .pageNext {
+	margin-left: 2px;
+}
+
+/* ************************* 
+Tool Bars
+************************* */
+.scale_4x .toolBars {
+	line-height: 1em;
+	width: 50px;
+}
+
+.scale_4x #toolbar_tools img {
+	margin: 0;
+}
+
+.scale_4x #toolbar_tools a img {
+	-moz-border-radius: 0.25em;
+	-webkit-border-radius: 0.25em;
+    border-radius: 0.25em 0.25em 0.25em 0.25em;
+    float: left;
+    font-size: 1em;
+    height: 1em;
+    width: 1em;    
+}
+.scale_4x #toolbar_tools a{
+	font-size:1em;
+	-moz-border-radius: 0.25em;
+	-webkit-border-radius: 0.25em;
+    border-radius: 0.25em 0.25em 0.25em 0.25em;
+    margin: 0.25em 0 0;
+	float: left;    
+}
+.scale_4x #toolbar_tools a img:active {
+	top: 1px;
+}
+
+.scale_4x .toolbar_drawer {
+	width: 300px;
+	top: -46px;
+	left: 40px;
+}
+
+.scale_4x .closebutton {
+	font-size: 16px;
+	border-radius: 15px;
+	left: 13px;
+	width: 90%;
+	height: auto;
+}
+
+.scale_4x .toolButton {
+	margin: 2px 2px 0;
+	height: 22px;
+	padding: 0 5px 0 10px;
+	line-height: 4px
+}
+
+.scale_4x .toolButton img {
+	top: 3px;
+}
+
+/* ************************* 
+Viewports
+************************* */
+.scale_4x .notice {
+	border-radius: 1em;
+	padding: 1em;
+}
+
+.scale_4x .viewPort {
+	border-radius: 30px;
+	min-width: 1710px;
+}
+
+.scale_4x .viewportPortable {
+	border-radius: 20px;
+	margin: 0;
+	padding: 3em;
+	font-size: 14px;
+	line-height: 1.6em;
+}
+
+.scale_4x #viewportPortable {
+	height: auto;
+	margin: auto;
+}
+
+.scale_4x .viewportPortable h2 {
+	width: 100%;
+}
+
+.scale_4x .viewportPortable2 {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: auto;
+	height: auto;
+	margin: 115px 10px 10px 10px;
+	padding: 0;
+	border-radius: 20px;
+}
+
+.scale_4x .directionsContent {
+	margin: 35px auto 50px auto;
+	height: 100%;
+	padding: 0 20px 0 20px;
+}
+
+.scale_4x .directionsContent h2 {
+	width: 500px;
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+/* ************************* 
+Testing Port
+************************* */
+.scale_4x .testingPort {
+	margin: 9px auto 9px 86px;
+}
+
+.scale_4x .halfwidth {
+	width: 47%;
+}
+
+.scale_4x .fullwidth {
+	width: 96%;
+}
+
+.scale_4x .testingPort #leftCol,.scale_4x .testingPort #rightCol {
+	margin: 5px 0 0 15px;
+}
+
+.scale_4x .testingPort h2 {
+	margin: 8px auto;
+	font-size: 26pt;
+}
+
+.scale_4x #passageText {
+	border-radius: 15px;
+	margin-left: 20px;
+	padding: 15px 20px 15px 15px;
+	height: 340px;
+}
+
+.scale_4x #passageText h3,.scale_4x #passageText h5 {
+	line-height: 1.2em;
+	margin: 0 0 10px 0;
+}
+
+/* ************************* 
+Section Tabs
+************************* */
+.scale_4x #sectionTabs {
+	left: -3px;
+	top: 50px;
+	font-size: 13px;
+}
+
+.scale_4x #sectionTabs a {
+	width: 22px;
+	margin: 1px 0;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 3px 0;
+}
+
+/* ************************* 
+Question Col Head
+************************* */
+.scale_4x #questionsHead {
+	height: 35px;
+	margin-top: 5px;
+}
+
+.scale_4x #view {
+	font-size: 22pt;
+	padding-right: 26px;
+	top: 2px;
+	margin: 8px auto;
+}
+
+.scale_4x #questionsHead	a span {
+	margin-left: -9999px
+}
+
+.scale_4x #questionArrowBack {
+	left: 0;
+	top: 10px;
+	width: 46px;
+	height: 27px;
+}
+
+.scale_4x #questionArrowNext {
+	right: 26px;
+	top: 10px;
+	width: 46px;
+	height: 27px;
+}
+
+/* Question Layout classes */
+
+.scale_4x .passage .radio,.scale_4x .vertical_stacked .radio,.scale_4x .stacked_z .radio,.scale_4x .right_z .radio,.scale_4x .right_vertical_stacked .radio,.scale_4x .rating_scale_vertical .radio
+	{
+	margin: 0 .5em;
+}
+
+.scale_4x .stacked_z .foils li {
+	width: 40%;
+}
+
+.scale_4x .right_z .stem {
+	width: 45%;
+}
+
+.scale_4x .right_z .foils {
+	width: 45%;
+}
+
+.scale_4x .right_z .foils li {
+	width: 35%;
+	float: left;
+}
+
+.scale_4x .right_vertical_stacked .stem {
+	width: 60%;
+}
+
+.scale_4x .right_vertical_stacked .foils {
+	width: 35%;
+}
+
+.scale_4x .rating_scale .foils ul {
+	width: 100%;
+	margin: 0 auto;
+	float: left;
+}
+
+.scale_4x .rating_scale .foils li {
+	margin: .5em;
+	max-width: 7%;
+}
+
+.scale_4x .rating_scale .foils li span.radio {
+	margin: 0 auto;
+}
+
+.scale_4x .rating_scale .foils li span.foil {
+	width: 100%;
+}
+
+.scale_4x .rating_scale_vertical .foils li {
+	padding-top: .5em;
+	width: 90%;
+}
+
+/* 
+ * Test complete confirmation. 
+ */
+.scale_4x #confirmEnd, .scale_4x #navigationAlert {
+	height: 30%;
+	width: 40%;
+	padding: 2em;
+	border-radius: 10px;
+}
+
+.scale_4x #maskWarn {
+	height: 15%;
+	width: 40%;
+	padding: 2em;
+	border-radius: 10px;
+}
+
+.scale_4x #confirmDeleteNote {
+	height: 20%;
+	width: 40%;
+	padding: 2em;
+	border-radius: 10px;
+}
+
+.scale_4x #confirmEnd .button, .scale_4x #confirmDelete .button, .scale_4x #navigationAlert .button {
+	width: auto;
+}
+
+.scale_4x #backgroundMask {
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+
+/* ************************* 
+Question Col Questions
+************************* */
+.scale_4x #questionsCol {
+	height: 1123px;
+	margin-top: 15px
+}
+
+.scale_4x .questionBox {
+	border-radius: 15px;
+	margin: 0 10px 2px 0;
+}
+
+.scale_4x .questionBoxHead {
+	height: 45px;
+	border-top-left-radius: 16px;
+	border-top-right-radius: 16px;
+	padding: 0 0 0 10px;
+}
+
+.scale_4x .review {
+	padding: 4px 10px 0;
+	right: 60px;
+	top: 4px;
+	border-radius: 10px;
+	height: 14px;
+	line-height: 1em;
+	font-size: 10px;
+}
+
+.scale_4x .questionWrapper {
+	margin: 0 0 10px 0;
+}
+
+.scale_4x .expandArea {
+	border-radius: 10px;
+	padding: 5px 6px 0;
+	height: 15px;
+	line-height: 1em;
+	right: 5px;
+	top: 2px;
+}
+
+.scale_4x .questionBox h4 {
+	font-size: 22pt;
+	margin: 0;
+	padding: 10px;
+}
+
+.scale_4x .questionAnswers {
+	padding: 6px 10px 0px 10px;
+	line-height: 1.4em
+}
+
+.scale_4x .questionAnswers label,.scale_4x .questionAnswers span.foil {
+	margin: 0 0 15px 0;
+	font-size: 22pt;
+	padding: 0 0 0 0px;
+}
+
+.scale_4x .accordionContent {
+	border-radius: 10px;
+	margin: 0 10px 15px 0;
+}
+
+.scale_4x #passageQuestion_foot {
+	width: 100%;
+	margin: 0;
+}
+
+.scale_4x .footer {
+	margin: 1em 1em 1em 50px;
+	min-width: 1710px;
+}
+
+.scale_4x .footer a {
+	margin: 0 1em;
+}
+
+.scale_4x .backButton {
+	margin: 0;
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em 0 0 2.5em;
+	-webkit-border-radius: 2.5em 0 0 2.5em;
+	border-radius: 2.5em 0 0 2.5em;
+}
+
+.scale_4x .backButton2 {
+	width: 75px;
+	margin: 5px 0 0 30px;
+}
+
+.scale_4x #begin {
+	margin: 10px 0 20px 0;
+}
+
+.scale_4x .nextButton {
+	margin-right: 0;
+	padding: .5em 2em;
+	-moz-border-radius: 0 2.5em 2.5em 0;
+	-webkit-border-radius: 0 2.5em 2.5em 0;
+	border-radius: 0 2.5em 2.5em 0;
+}
+
+.scale_4x .clear {
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em;
+	-webkit-border-radius: 2.5em;
+	border-radius: 2.5em;
+}
+
+.scale_4x .reviewBig {
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em;
+	-webkit-border-radius: 2.5em;
+	border-radius: 2.5em;
+}
+
+.scale_4x .end {
+	padding: .5em 2em;
+	-moz-border-radius: 2.5em;
+	-webkit-border-radius: 2.5em;
+	border-radius: 2.5em;
+}
+
+.scale_4x .button2 {
+	font-size: 16px;
+	border-radius: 30px;
+	padding: 1px 40px 3px 0;
+	margin: 20px auto 0;
+	line-height: 30px;
+	width: 180px;
+}
+
+.scale_4x .button2 img {
+	margin: 0 10px
+}
+
+.scale_4x .homeContent {
+	margin: 35px auto 50px auto;
+}
+
+.scale_4x .homeContent h2 {
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+.scale_4x .takeContent {
+	margin: 35px auto 50px auto;
+	height: auto;
+}
+
+.scale_4x .takeContent h2 {
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+.scale_4x .homeButton {
+	margin: 15px 10px 0 0;
+}
+
+.scale_4x .buttonLink {
+	border-radius: 15px;
+	padding: 0 30px;
+	height: 25px;
+	font-size: 14px;
+}
+
+.scale_4x .buttonLink img {
+	top: 1px;
+	margin: 0;
+}
+
+.scale_4x .selectTestContent {
+	margin: 35px auto 50px auto;
+}
+
+.scale_4x .selectTestContent h2 {
+	font-size: 16pt;
+	margin: 0px auto 35px auto;
+}
+
+.scale_4x .selectTestContent label {
+	margin: .5em 0 10px 0;
+	font-size: 18px;
+}
+
+.scale_4x .selectTestContent select {
+	border-radius: 5px;
+	margin: .5em 0 10px 0;
+}
+
+.scale_4x .selectTest {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-radius: 30px;
+	padding: 15px;
+}
+
+.scale_4x .selectTest ul,.scale_4x .selectTest li {
+	margin: 0;
+	padding: 5px;
+}
+
+.scale_4x .selectTest ul {
+	padding: 0 5px;
+}
+
+.scale_4x .directionsTests {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-radius: 30px;
+	padding: 15px;
+}
+
+.scale_4x .question {
+	margin: 35px;
+	padding: 15px;
+	border-radius: 30px;
+}
+
+/*.scale_4x .question ul {
+	font-size: 18px;
+}*/
+
+.scale_4x .question ul li {
+	margin-bottom: 10px;
+}
+
+.scale_4x .question h3 {
+	margin: 0 20px 20px 20px;
+}
+
+.scale_4x .topSpace {
+	height: 20px;
+}
+
+.scale_4x .radio {
+	width: 22px;
+	height: 22px;
+}
+
+.scale_4x .checkbox {
+	width: 25px;
+	height: 25px;
+}
+
+/* Hidden by default, do not remove */
+.scale_4x #reviewer div.reviewerContent {
+	margin: 35px auto 50px auto;
+	height: 100%;
+	padding: 0 20px 0 20px;
+}
+
+.scale_4x #reviewer h2 {
+	font-size: 1.5em;
+}
+
+.scale_4x #reviewer div.reviewerTests {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-radius: 30px;
+	padding: 15px;
+}
+
+.scale_4x #reviewer div.column {
+	width: 45%;
+	margin-right: 2em;
+}
+
+.scale_4x #reviewer #reviewbox h4 {
+	padding-top: 1em;
+}
+
+.scale_4x #reviewer div.reviewquestion {
+	width: 60px;
+	border-radius: 5px;
+	margin: .5em;
+	padding: .3em;
+}
+
+.scale_4x #reviewer div.reviewquestion img {
+	margin-left: .2em;
+	width: 16px;
+	height: 16px;
+}
+
+.scale_4x .reviewerTests .button {
+	padding: 3px 30px;
+	margin: 5px;
+	width: 125px;
+}
+
+/* Magnification tool */
+.scale_4x #magnificationBox {
+	width: 12em;/*300px;*/
+	left: 20px;
+	top: 20px;
+	padding: 0.8em;
+	border-radius: 1.5em;
+}
+
+.scale_4x #magnificationBox h1 {
+	font-size: 1.5em;
+}
+
+.scale_4x #magnificationBox .slider_key div {
+	/*margin-right: .5em;*/
+	width: 2em;
+	float: left;
+}
+
+.scale_4x #magnificationBox .slider_key div img {
+	vertical-align: bottom;
+	position: relative;
+	left: 0.3em;
+}
+
+/* Reference */
+.scale_4x #reference {
+	width: 40%;
+	height: 60%;
+	left: 20px;
+	top: 20px;
+	padding: 1.5em;
+	border-radius: 2em;
+}
+
+.scale_4x #reference .container {
+	height: 100%;
+}
+
+.scale_4x #reference .entry {
+	padding: .5em;
+}
+
+/********************* /Calculator ********************/
+.scale_4x #calculator {
+	width: 266px;
+	height: 400px;
+	left: 20px;
+	top: 20px;
+}
+
+.scale_4x #graphCalculator {
+	height: 600px;
+	left: 20px;
+	top: 20px;
+}
+
+/******************** /Mask **************************/
+
+.scale_4x .mask{
+	width: 35%; 
+	height: 20%; 
+}
+
+/********************* /Highlighter ********************/
+
+.scale_4x .closer-all {
+	top: -8px;
+	left: -9px;
+}
+
+/********************* /GuideLine ********************/
+.scale_4x .guidetopper {
+	height: 20px;
+	margin-left: 12px;
+	width: 90%;
+	opacity: .4;
+}
+
+/********************* /Ruler ******************************/
+.scale_4x #rulerDiv {
+	width: 292px;
+	height: 62px;
+	top: 100px;
+	left: 200px;
+}
+
+.scale_4x #rulerCircle {
+	top: 45%;
+	left: 90%
+}
+
+/******************* Search Tool **************************/
+.scale_4x #searchBox {
+	border-radius: 2em;
+	width: 200px;
+	left: 80px;
+	top: 80px;
+	padding: 2em;
+}
+
+/************periodic table ************/
+.scale_4x #periodicTable {
+	left: 20px;
+	top: 20px
+}
+
+.scale_4x #pTElem {
+	width: 200px;
+	height: 250px;
+}
+
+.scale_4x .lft-sym {
+	padding-left: 15px;
+	padding-top: 10px;
+	font-size: 8pt
+}
+
+.scale_4x .rgt-sym {
+	padding-left: 10px;
+	padding-top: 10px;
+	font-size: 8pt;
+}
+
+.scale_4x table.navbar {
+	width: 600px;
+	border-spacing: 0px;
+	left: 10px;
+	top: 10px;
+}
+
+.scale_4x table.navbar td a,.scale_4x table.navbar td a.he {
+	font-size: 10pt;
+}
+
+.scale_4x table.navbar td {
+	padding: 0px;
+}
+
+/*dlm added*/
+.scale_4x #calculator {
+	width: 266px;
+	height: 400px;
+	top: 20px;
+	left: 430px;
+}
+
+.scale_4x #calculator	 a {
+	font-size: 18px;
+}
+
+.scale_4x #calculator #display {
+	top: 15px;
+	left: 15px;
+	width: 197px;
+	font: 35px "Arial Black", Arial, Sans-Serif;
+}
+
+.scale_4x #calculator .num-button {
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_4x #calculator .clear-button {
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_4x #calculator .function-button {
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_4x #calculator .seven {
+	top: 86px;
+	left: 15px;
+}
+
+.scale_4x #calculator .eight {
+	top: 86px;
+	left: 66px;
+}
+
+.scale_4x #calculator .nine {
+	top: 86px;
+	left: 118px;
+}
+
+.scale_4x #calculator .four {
+	top: 137px;
+	left: 15px;
+}
+
+.scale_4x #calculator .five {
+	top: 137px;
+	left: 66px;
+}
+
+.scale_4x #calculator .six {
+	top: 137px;
+	left: 118px;
+}
+
+.scale_4x #calculator .one {
+	top: 188px;
+	left: 15px;
+}
+
+.scale_4x #calculator .two {
+	top: 188px;
+	left: 66px;
+}
+
+.scale_4x #calculator .three {
+	top: 188px;
+	left: 118px;
+}
+
+.scale_4x #calculator .zero {
+	top: 237px;
+	left: 15px;
+}
+
+.scale_4x #calculator .dot {
+	top: 237px;
+	left: 66px;
+}
+
+.scale_4x #calculator .clearButton {
+	top: 237px;
+	left: 118px;
+}
+
+.scale_4x #calculator .add {
+	top: 86px;
+	left: 169px;
+}
+
+.scale_4x #calculator .subtract {
+	top: 137px;
+	left: 169px;
+}
+
+.scale_4x #calculator .multiply {
+	top: 188px;
+	left: 169px;
+}
+
+.scale_4x #calculator .divide {
+	top: 237px;
+	left: 169px;
+}
+
+.scale_4x #calculator .equals-button {
+	width: 90px;
+	height: 42px;
+	top: 288px;
+	left: 15px;
+	line-height: 42px;
+}
+
+.scale_4x #calculator #plusminus {
+	top: 288px;
+	left: 118px;
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_4x #calculator #calc-back {
+	top: 288px;
+	left: 169px;
+	width: 44px;
+	height: 41px;
+	line-height: 35px;
+	padding: 3px 0 0 0;
+}
+
+.scale_4x .tag {
+	width:1.9em;
+	height:1.9em;
+}

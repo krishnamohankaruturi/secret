@@ -1,0 +1,1 @@
+-- ddl script for ddl/774.sql

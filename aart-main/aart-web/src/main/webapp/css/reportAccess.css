@@ -1,0 +1,172 @@
+@charset "ISO-8859-1";
+
+#reportAccessTabContainer button {
+	cursor: pointer;
+}
+
+#reportAccessGridSelectOneToModify {
+	color: red;
+	display: none;
+	margin-left: 30px;
+}
+
+.ui-th-column, .ui-jqgrid .ui-jqgrid-htable th.ui-th-column{
+    border-bottom: 0 none;
+    border-top: 0 none;
+    overflow: hidden;
+    text-align: center;
+    height: 100px;
+}
+
+#reportAccessGridTableId  .ui-jqgrid tr.ui-row-ltr td {
+	padding-left: 4px;
+	text-align: left !important;
+}
+
+.ui-search-toolbar {
+	display: none;
+}
+
+.disableToggle {
+	pointer-events: none;
+}
+
+#reportAccessGridTableId tr {
+	height: 50px;
+}
+
+
+ #reportAccessGridTableId .ui-state-highlight {
+    background-color: gainsboro !important;
+    border: 1px solid #f9f9f4;
+} 
+
+.frozen-div {
+	overflow-y: hidden !important;
+}
+
+/*  .frozen-bdiv {
+	top: 40px !important;
+}  */
+#reportAccessGridTableId_frozen tr td:nth-child(2) {
+	font-weight: bold !important;
+}
+
+#reportAccessGridTableId .jqgfirstrow {
+	height: 0px;
+}
+
+#refresh_reportAccessGridTableId,
+	#reportAccessGridTableIdbuttonColumnChooser {
+	display: none !important;
+}
+
+#reportAccessGridPager_left, #reportAccessGridPager_center,
+	#reportAccessGridPager_right {
+    white-space: normal !important;
+	width: 300% !important;
+	pointer-events: none;
+}
+
+#reportAccessGridPager_left p {
+	float: right;
+	margin-right: 100px;
+}
+
+#reportAccessGridPager_center p {
+	float: right !important;
+	margin-right: 95px !important;
+}
+
+#reportAccessGridPager_right p {
+	float: right;
+	margin-right: 70px;
+}
+
+.questionMark {
+	width: 20px;
+	height: 20px;
+	float: right;
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 15px;
+	margin-left: 5px;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.switch.unChecked .slider {
+	background-color: #f4e2ae;
+}
+
+.switch.unChecked .slider:before {
+	background-color: #f1bf21;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 23px;
+	width: 23px;
+	left: 0px;
+	bottom: -3px;
+	background-color: #a8a8a8;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #76bc7a;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+	background-color: #008100;
+}
+
+/* Rounded sliders */
+.slider.round {
+	border-radius: 34px;
+}
+
+.slider.round:before {
+	border-radius: 50%;
+}
+
+#reportAccessGridPager_center table td, #reportAccessGridPager_center table th {
+    height: 0px !important;
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv { 
+	overflow-y: scroll;
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv {
+	max-height: 400px;
+}

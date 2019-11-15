@@ -1,0 +1,124 @@
+	<div class="config">
+	<h1 class="panel_head sub">Select Report Criteria</h1>
+    <span class="panel_subhead">Specify the criteria below and click on view report.</span>
+
+     <form name="reportFilterForm" id="reportFilterForm" class="form"> 
+     	
+     	<div id="assessmentProgramDiv" class="form-fields">     		
+     		<label for="assessmentProgram">
+     			Assessment Program<font color="red">*</font>
+     		</label>
+        	<select name="assessmentProgram"  class="bcg_select" id="assessmentProgram">
+        		<option value="">Select</option>
+        	</select>
+        </div>
+
+		<div id="reportCategoryDiv" class="form-fields">               
+	        <label for="reportCategory">
+	        	Report Category<font color="red">*</font>
+	        </label>
+	        <select name="reportCategory"  class="bcg_select" id="reportCategory">
+	        	<option value="">Select</option>
+	        </select>
+        </div>	
+        
+		<div id="testingProgramDiv" class="form-fields"> 
+	        <label for="testingProgram">
+	        	Testing Program<font color="red">*</font>
+	        </label>
+	        <select name="testingProgram" class="bcg_select" id="testingProgram">
+	        	<option value="">Select</option>
+	        </select>
+        </div>
+        
+        <div id="contentAreaDiv" class="form-fields"> 
+        	<label for="contentArea" class="field-label">Content Area<font color="red">*</font></label>
+        	<input type="hidden" name="contentAreaName" id = "contentAreaName" />
+	        <select name="contentArea" class="bcg_select" id="contentArea">
+	            <option value="">Select</option>
+	        </select>
+        </div>
+			
+			 	
+		<div id="stateDiv" class="form-fields"> 
+	        <label for="state">
+	        	State<font color="red">*</font>
+	        </label>
+	        <input type="hidden" name="stateName" id = "stateName" />
+	        <select name="state"  class="bcg_select" id="state">
+	        	<option value="">Select</option>
+	        </select>
+        </div>
+
+		<div id="districtDiv" class="divHide form-fields"> 
+	        <label for="district">
+	        	District<font color="red">*</font>
+	        </label>
+	        <input type="hidden" name="districtName" id = "districtName" />
+	        <select name="district" class="bcg_select" id = "district">
+	            <option value="">Select</option>
+	        </select>
+    	</div>
+
+		<div id="schoolDiv" class="divHide form-fields"> 
+	        <label for="school">
+	        	School<font color="red">*</font>
+	        </label>
+	        <input type="hidden" name="schoolName" id = "schoolName" />
+	        <select name="school" class="bcg_select" id = "school">
+	            <option value="">Select</option>
+	        </select>
+        </div>
+		
+        <div id="rosterDiv" class="divHide form-fields">
+      		<label for="roster">
+      			Roster<font color="red">*</font>
+      		</label>
+        	<select name="roster" class="bcg_select" id="roster">
+        		<option value="">Select</option>
+        	</select>
+        </div>
+        
+        <% /* <label for="testSession">Test Session</label>
+        <select name="testSessionId" class="bcg_select" id="testSession">
+        	 <option value="">Select</option>
+        </select>
+        */%>
+
+		<div id="gradeDiv" class="form-fields"> 
+	        <label for="grade">
+	        	Grade/Course<font color="red">*</font>
+	        </label>
+	        <input type="hidden" name="gradeName" id = "gradeName" />
+	        <select name="grade" class="bcg_select" id="grade">            
+	            <option value="">Select</option>
+	        </select>
+        </div>
+		
+		<div id="yearDiv" class="form-fields"> <!-- hard coded for now while only one year -->
+	        <label for="year">
+	        	Year<font color="red">*</font>
+	        </label>
+	        <select name="year" class="bcg_select" id="year">            
+	            <option value="">Select</option>
+	            <option value="2014">2014</option>
+	        </select>
+        </div>
+        
+        <div id="studentDiv" class="form-fields"> 
+	        <label for="student">
+	        	Student<font color="red">*</font>
+	        </label>
+	        <input type="hidden" name="studentName" id = "studentName" />
+	        <select name="student" class="bcg_select" id="student">            
+	            <option value="">Select</option>
+	        </select>
+	        <span id="requiredmessage" style="display:none"><font color="red">This Field is required</font></span>
+        </div>
+        
+		
+    </form> 
+  
+    <a class="panel_btn" href="#" id="btnReset">Reset</a>
+    <a class="panel_btn" href="#" id="viewReport">View Report</a>
+</div>	

@@ -1,0 +1,16 @@
+<%for(var i=0;i <groups.length; i++) {%>
+                <div class="col-sm-6">
+                    <div class="">
+                        <h4><%= groups[i].groupName%></h4>
+                        <span class="pull-right">
+                        <%if(groups[i].access){%>
+                            <a href="" data-groupid="<%=groups[i].id%>" data-groupname="<%=groups[i].groupName%>" title="Preview Group" class="viewGroup"><i class="fa fa-eye fa-2x text_blue_view"></i></a>
+                            <a href="" data-groupid="<%=groups[i].id%>" data-groupname="<%=groups[i].groupName%>" title="Edit Group" class="editGroup"><i class="fa fa-pencil-square fa-2x"></i></a>
+                            <%}else{%>
+                            <a href="" data-groupid="<%=groups[i].id%>" data-groupname="<%=groups[i].groupName%>" title="Preview Group" class="viewGroup"><i class="fa fa-eye fa-2x text_blue_view"></i></a>
+                            <%}%>
+                        </span>
+
+                    </div>
+                </div> 
+                 <%}%>  

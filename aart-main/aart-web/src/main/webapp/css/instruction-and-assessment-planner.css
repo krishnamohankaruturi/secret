@@ -1,0 +1,464 @@
+/* Style to make the overall page wider */
+._bcg .wrap_bcg {
+	max-width: 1200px;
+	width: 1200px;
+}
+
+/* override this bootstrap CSS on this page to make the wider page look more natural */
+.container {
+	width: 100%;
+	max-width: 100%;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+#themes-content .themes-button {
+	background-color: #0E76BC;
+	color: white;
+	font-weight: bold;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+/* this can't have a parent otherwise it won't work, this is mainly for the dropdown under sensitive themes */
+.select2-dropdown {
+	z-index: 99999;
+}
+
+#iap-content .iap-header {
+	color: #666666;
+}
+
+span.window-text {
+	color: #0E76BC;
+	font-size: 36px;
+	font-weight: bold;
+	float: right;
+}
+
+div.student-info {
+	width: 40%;
+	float: left;
+}
+
+div.iap-icons {
+	width: 60%;
+	float: left;
+}
+
+div.icon-legend {
+	font-size: 12px;
+	font-weight: bold;
+	overflow: hidden;
+	
+	display: flex;
+	flex-flow: row;
+	align-items: flex-start;
+	justify-content: flex-start;
+	
+	vertical-align: middle;
+	position: sticky;
+	top:0;
+}
+
+div.icon-legend div.icon-legend-item {
+	margin-right: 15px;
+	display: flex;
+}
+
+/* Adding style to fit icons inside the parent div (avoid overflowing in IE) */
+div.icon-legend-item img.legend-icon-img{
+	height: 100%;
+	width: 100%;
+}
+
+div.icon-legend div.icon-legend-image-container {
+	margin-right: 0.2em;
+	width: 35px;
+	min-width: 35px;
+	max-width: 35px;
+	height: 35px;
+	min-height: 35px;
+	max-height: 35px;
+}
+
+/* background colors for the legend icons */
+div.icon-legend div.icon-legend-image-container.instruction-in-progress {
+	background-color: #41A3D3;
+}
+div.icon-legend div.icon-legend-image-container.testlet-assigned {
+	background-color: #24368B;
+}
+div.icon-legend div.icon-legend-image-container.testing-in-progress {
+	background-color: #F4B12A;
+}
+div.icon-legend div.icon-legend-image-container.complete {
+	background-color: #587D23;
+}
+div.icon-legend div.icon-legend-image-container.recommended-linkage-level {
+	background-color: #707070;
+}
+div.icon-legend div.icon-legend-image-container.mastery-demonstrated {
+	background-color: #587D23;
+}
+div.icon-legend div.icon-legend-image-container.mastery-not-demonstrated {
+	background-color: #587D23;
+}
+div.icon-legend div.icon-legend-image-container.results-not-available {
+	background-color: #587D23;
+}
+/* end background colors for the legend icons */
+
+div.icon-legend div.icon-legend-item .icon-legend-text {
+	align-self: center;
+}
+
+.iap-iconandtext {
+	/* To correctly align image, regardless of content height: */
+    vertical-align: top;
+    display: inline-block;
+    /* To horizontally center images and caption */
+    text-align: center;
+    /* The width of the container also implies margin around the images. */
+    width: 95px;
+}
+
+.iap-iconandtext .caption {
+	display: block;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.iap-iconandtext img.header-icon {
+	width: 30px;
+	cursor: pointer;
+}
+
+div.student-info .student-name {
+	font-weight: bold;
+	color: #0E76BC;
+	border-bottom: 2px solid #0E76BC;
+	padding-right: 30px;
+	cursor: pointer;
+}
+
+div.ee-row {
+	font-size: 13px;
+	/*display: block;*/
+	margin-top: 8px;
+	margin-bottom: 8px;
+	/*height: 150px;*/ /* same as the tile height, for some reason these won't auto-size */
+	/*text-align: center;*/
+}
+
+div.ll-short-desc {
+	display: inline-block;
+	vertical-align: middle;
+	width: 92%;
+	float: left;
+}
+div.ll-right-menu {
+	width: 5%;
+	float: right;
+}
+
+div.ee-linkage-level-tile div.tile-top-content {
+	width: 100%;
+	height: 70%;
+}
+
+div.ee-linkage-level-tile div.tile-bottom-content {
+	width: 100%;
+	height: 30%;
+	border-top: 1px solid black;
+	
+	/*
+	these should be a touch less than the border-radius on .ee-linkage-level-tile so that a gap isn't left,
+	but close enough such that these corners don't overlap the border
+	*/
+	border-bottom-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+div.tile-bottom-content.blank {
+	background-color: #EAEAFF;
+	color: black;
+}
+
+div.tile-bottom-content.instruction-in-progress {
+	background-color: #41A3D3;
+	color: black;
+}
+
+div.tile-bottom-content.testlet-assigned {
+	background-color: #24368B;
+	color: white;
+}
+
+div.tile-bottom-content.testlet-in-progress {
+	background-color: #F4B12A;
+	color: black;
+}
+
+div.tile-bottom-content.testlet-complete {
+	background-color: #587D23;
+	color: white;
+}
+
+img.three-dot-menu {
+	position : absolute;
+	width: 1.1em;
+	height: 1.1em;
+	float: right;
+}
+
+button.instruction-button {
+	border: 2px solid black;
+	border-radius: 5px;
+	margin: 0 12.5%;
+	width: 75%;
+	height: 50px;
+	cursor: pointer;
+	text-align: inherit;
+}
+button.instruction-button .button-image-container {
+	width: auto;
+	float: left;
+}
+button.instruction-button .button-image-container img {
+	width: 30px;
+}
+button.instruction-button .button-text {
+	margin-left: 3px;
+	font-weight: bold;
+	float: left;
+}
+
+button.instruction-button.begin-instruction {
+	background-color: #41A3D3;
+	color: black;
+}
+
+button.instruction-button.finish-instruction-assign-testlet {
+	background-color: #24368B;
+	color: white;
+}
+
+button.instruction-button.finish-instruction-no-testlet {
+	background-color: #C4E2F2;
+	color: black;
+}
+
+button.instruction-button.cancel-testlet {
+	background-color: #383838;
+	text-align: center;
+	color: white;
+}
+
+button.disabled-button {
+	opacity: 0.6;
+}
+
+.sc-button-container {
+	width: 95%;
+}
+
+button.apply-sc-code, button.approve-sc-code {
+	float: right;
+}
+
+img.sc-image {
+	width: 1.25em;
+	height: 1.25em;
+}
+
+img.sc-image.approved {
+	background-color: #587D23;
+	border-radius: 50%;
+}
+
+.criteria {
+	border: 1px solid black;
+	padding: 0 0.2em;
+}
+
+.criteria legend {
+	font-size: 16px;
+	font-weight: bold;
+	color: #0E76BC;
+	width: auto;
+	max-width: 90%; /* keep the top line of the box at least SOMEWHAT visible */
+	margin-left: 0.5em;
+	padding: 0 0.35em;
+}
+
+.claim-text-container {
+	max-width: 85%;
+	float: left;
+}
+
+.criteria .completion-container {
+	max-width: 15%;
+	float: right;
+	
+	position: relative;
+	top: -42px;
+}
+
+.criteria .completion-image-container {
+	height: 45px;
+	width: 45px;
+	border: 1px solid black;
+	border-radius: 50%;
+	display: inline-block;
+	background-color: white;
+}
+
+.criteria .completion-image {
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	display: inherit;
+	background-color: #587D23;
+}
+
+.claim, .conceptual-area {
+	margin-left: 25px;
+}
+
+.claim {
+	font-weight: bold;
+}
+
+.header-row {
+	background-color: #707070;
+	color: white;
+	font-size: 13px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.header-row div {
+	outline: 1px solid white;
+	
+	/* these get rid of bootstrap's styles that provide extra padding */
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.header-row .recommended-level {
+	width: 20px;
+}
+
+.ee-col {
+	margin-left: auto;
+	margin-right: auto;
+	
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.ee-col .empty {
+	background-color: #EAEAEA;
+	width: 96%;
+	height: 100%;
+	margin: auto;
+}
+
+.ee-content-code {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.ee-desc {
+	font-size: 12px;
+}
+
+/* card modifications */
+.card {
+	max-width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	min-height: 100%;
+	height: 100%;
+	/*opacity: inherit;*/
+}
+
+.card .card-body {
+	cursor: pointer;
+	min-height: 45px;
+	
+	/*background-color: inherit;
+	opacity: inherit;*/
+}
+
+.card .card-body, .card .card-header, .card .card-footer {
+	padding: 5px;
+	min-height: 45px;
+	
+	/*opacity: inherit;*/
+}
+
+.card .card-footer {
+	padding-left: 2px;
+	padding-right: 2px;
+	
+	display: flex;
+	flex-direction: row;
+	line-height: 16px;
+}
+
+.card .card-footer .card-footer-image-container {
+	width: 15%;
+	display: table-cell;
+}
+.card .card-footer .card-footer-image-container img {
+	width: 30px;
+}
+.card .card-footer .card-footer-text {
+	text-align: center;
+	width: 65%;
+	display: table-cell;
+}
+.card .card-footer .card-footer-date-text {
+	text-align: right;
+	/*
+	be careful when editing these percents or the ones in other portions of card-footer...
+	they behave strangely because ELA/M have very different widths than Sci
+	*/
+	min-width: 21%;
+	max-width: 25%;
+	display: table-cell;
+}
+
+/* this is mainly for the confirm dialog, because it would show up behind the bootstrap popovers */
+.ui-dialog {
+	z-index: 999999;
+}
+
+img.mastery-image {
+	width: 30px;
+	margin: -1em 0; /* the image has some padding of its own, and we need to trim it down. */
+}
+
+
+/* popover customization */
+.popover {
+	border-color: black;
+	box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.4);
+	min-width: 300px;
+}
+.popover.bs-popover-right .arrow:before {
+	border-right-color: black;
+}
+.popover.bs-popover-left .arrow:before {
+	border-left-color: black;
+}
+.popover.bs-popover-bottom .arrow:before {
+	border-bottom-color: black;
+}
+.popover.bs-popover-top .arrow:before {
+	border-top-color: black;
+}

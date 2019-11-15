@@ -1,0 +1,111 @@
+<div class="schoolDetail">
+<% if (data != null && data.length > 0) {
+	var mergedorg = false;
+	var record = data[0];
+%>
+	<div class="subject">
+		<span class="heading"><%= record.subjectName %></span>
+	</div> 
+	
+	<%	
+		for (var x = 1; x < data.length; x++) {
+			 record = data[x]; 
+			
+			if(data[x].subjectName!=data[x-1].subjectName)
+			{
+	%>		
+			<div class="subject">
+				<span class="heading"><%= record.subjectName %></span>
+			</div>
+	<% 
+			}
+		} 
+	%>
+		<hr>
+		<div class="subject">
+				<div class="item">
+					<% record = data[0]; 
+					   var newSubject = false;
+					%>
+					
+					<% 
+					for (var x = 1; x < data.length; x++) {
+						if(data[x].action == 'merged' )
+						{
+							mergedorg = true;
+							break;
+						}
+					}
+					
+					if(mergedorg){
+					%>
+					<br/>
+					<a href="getSchoolSummaryReportFile.htm?id=<%= record.id %>&reportyear=<%=record.schoolYear%>">
+						<%= record.organizationname %>
+					</a>
+					<br/> 
+					
+					<% } else{ %>
+					<br/>
+					<a href="getSchoolSummaryReportFile.htm?id=<%= record.id %>&reportyear=<%=record.schoolYear%>">
+						All grades
+					</a>
+					<br/> 
+					<% } %>
+					
+	<%	
+		for (var x = 1; x < data.length; x++) {
+		    record = data[x];
+			
+			if(data[x].subjectName!=data[x-1].subjectName)
+			{	
+				newSubject = true;
+				
+		%>
+					</div>
+				</div>
+		
+		<% } %>
+	 	
+		<%		
+			if(newSubject)
+			{	
+		%>
+				<div class="subject">
+					<div class="item">
+		<%	
+			  newSubject = false;
+			}  
+		%>
+			
+		<% 
+			if(data[x].subjectName==data[x-1].subjectName)
+			{
+				newSubject=false;
+			}	
+		%>
+			
+		<%	if(mergedorg){
+					%>
+					<br/>
+					<a href="getSchoolSummaryReportFile.htm?id=<%= record.id %>&reportyear=<%=record.schoolYear%>">
+						<%= record.organizationname %>
+					</a>
+					<br/> 
+					
+					<% } else{ %>
+					<br/>
+					<a href="getSchoolSummaryReportFile.htm?id=<%= record.id %>&reportyear=<%=record.schoolYear%>">
+						All grades
+					</a>
+					<br/> 
+					<% } %>
+	
+	<% } %>
+		
+<%}else{ %>
+		<div style="margin:0px;">
+			Report Not Available		
+	    </div>
+	<%}%>
+</div>

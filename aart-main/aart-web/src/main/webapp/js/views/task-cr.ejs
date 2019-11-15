@@ -1,0 +1,37 @@
+<div class="scroller span1">
+	<% var html;
+		if(uiType == 'genTest'){ 
+			html = new EJS({url: path+'/js/views/temarker.ejs'}).render({qNum: qNum, markedReview: markedReview})	
+		} 
+	%>
+	<%= html %>
+	<%  var stem = task.question;
+			var matches = stem.match(/\[([&nbsp;]*|\s*)\]/g);
+			
+			if(response == null || response == undefined) {
+				
+				for(var i=0; i<matches.length; i++) {
+					var replaceText = '';
+					if(task.foils[i].responseType && task.foils[i].responseType == 2) {
+						replaceText = '<input type="text" class="response tabable numeric" maxlength="'+ task.foils[i].maxCharacters +'" size="'+ task.foils[i].maxFieldSize +'"></input>';
+					} else {
+						replaceText = '<input type="text" class="response tabable" maxlength="'+ task.foils[i].maxCharacters +'" size="'+ task.foils[i].maxFieldSize +'"></input>';
+					}
+					//var replaceText = '<input type="text" class="response tabable" maxlength="'+ task.foils[i].maxCharacters +'" size="'+ task.foils[i].maxFieldSize +'"></input>';
+					stem = stem.replace(/\[([&nbsp;]*|\s*)\]/, replaceText);
+				}
+			} else {
+				var answer = response.split('~~~');
+				for(var i=0; i<matches.length; i++) { 
+					var replaceText = '';
+					if(task.foils[i].responseType && task.foils[i].responseType == 2) {
+						replaceText = '<input type="text" class="response tabable numeric" maxlength='+ task.foils[i].maxCharacters +' value="'+ answer[i] +'" size="'+ task.foils[i].maxFieldSize +'"></input>';
+					} else {
+						replaceText = '<input type="text" class="response tabable" maxlength='+ task.foils[i].maxCharacters +' value="'+ answer[i] +'" size="'+ task.foils[i].maxFieldSize +'"></input>';
+					}
+					stem = stem.replace(/\[([&nbsp;]*|\s*)\]/, replaceText);
+				}
+			}
+		%>
+	<div class="taskstem"><%=stem%></div>
+</div>

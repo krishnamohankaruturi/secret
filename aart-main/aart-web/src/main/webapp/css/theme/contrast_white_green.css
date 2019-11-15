@@ -1,0 +1,846 @@
+/* White background, black text */
+body.white_green {
+	background: url(/images/pagebg2.jpg);
+	color: green;
+}
+
+.white_green h1, .white_green h2, .white_green h3,.white_green h4,.white_green h5,.white_green h6 {
+	color: #333;
+}
+
+.white_green h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.white_green #container {
+	background: #fff;
+	border: 1px solid #999;
+	box-shadow: 4px 4px 12px #888888;
+	background: -webkit-gradient(linear, left bottom, left top, from(#cecece),
+		to(#FFFFFF) );
+	background-image: -moz-linear-gradient(bottom, #cecece 0%, #FFFFFF 30%);
+}
+
+.white_green #container_login {
+	background: #fff;
+	border: 1px solid #999;
+	box-shadow: 4px 4px 12px #888888;
+	background: -webkit-gradient(linear, left bottom, left top, from(#cecece),
+		to(#FFFFFF) );
+	background-image: -moz-linear-gradient(bottom, #cecece 0%, #FFFFFF 30%);
+}
+
+.white_green .loginContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.white_green .loginContent input {
+	border: 1px solid #333;
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#d6d6d6),
+		to(#fff) );
+	background: -moz-linear-gradient(top, #d6d6d6, #fff);
+	box-shadow: 2px 2px 5px #333333;
+}
+
+.white_green .button {
+	border: 1px solid #666;
+	background: #6f89b8;
+	background: -webkit-gradient(linear, left top, left bottom, from(#b0c0da),
+		to(#6f89b8) );
+	background: -moz-linear-gradient(top, #b0c0da, #6f89b8);
+	color: #fff;
+	text-shadow: #000 1px 1px 1px;
+	box-shadow: 2px 2px 5px #333333;
+}
+
+.white_green .button:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#6f89b8),
+		to(#b0c0da) );
+	background: -moz-linear-gradient(top, #6f89b8, #b0c0da);
+}
+
+.white_green hr {
+	color: #0d4272;
+	background: #0d4272;
+}
+
+.white_green a {
+	color: #333;
+}
+
+.white_green .active {
+	background: #9ac1ec;
+	color: #333;
+}
+
+.white_green .error {
+	color: #ff0000;
+}
+
+/* ************************* 
+Top Nav
+************************* */
+.white_green .topPassageNav a {
+	border-left: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+}
+
+.white_green .topPassageNav a:hover {
+	background: #9ac1ec;
+	color: #333;
+}
+
+/* ************************* 
+Pagination 
+************************* */
+.white_green .pagesWrap {
+	border: 1px solid #b5b5b5;
+	background: url(/images/paginateBG.jpg) repeat-x
+}
+
+.white_green .pagesWrap a {
+	border-left: 1px solid #fff;
+	border-right: 1px solid #b5b5b5;
+}
+
+.white_green .pagesWrap a:hover {
+	background: #9ac1ec;
+}
+
+.white_green .paginateAnswered {
+	background: #e0ffd6
+}
+
+.white_green .paginateReview {
+	background: #fee1a3
+}
+
+.white_green .pageBack {
+	background: url(/images/paginate_Arrows.png) left top no-repeat;
+}
+
+.white_green .pageBack:hover {
+	background: url(/images/paginate_Arrows.png) left bottom no-repeat;
+}
+
+.white_green .pageNext {
+	background: url(/images/paginate_Arrows.png) right top no-repeat;
+}
+
+.white_green .pageNext:hover {
+	background: url(/images/paginate_Arrows.png) right bottom no-repeat;
+}
+
+/* ************************* 
+Tool Bars
+************************* */
+.white_green #toolbar_tools a{
+	-moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+	box-shadow: inset 0px 1px 0px 0px #ffffff;
+	background-color: #ededed;
+	border: 1px solid #dcdcdc;
+	color: #777777;
+	text-shadow: 1px 1px 0px #ffffff;
+	background-image: url('/images/icons/tools/tde-icons.svg');
+	background-size: 20em 1em;
+	background-origin: content-box;
+	background-color:#EDEDED;
+	display: block;
+	width:1em;
+	height:1em;			
+}
+
+.white_green #toolbar_tools a:hover {
+	background-color: #dfdfdf;
+}
+
+.white_green #toolbar_tools .selected {
+	background-color: #9ac1ec;
+}
+
+.white_green .closebutton {
+	border: 1px solid #CCC;
+	background: #E0E0E0;
+	background: -webkit-gradient(linear, left bottom, left top, from(#cecece),
+		to(#FFFFFF) );
+	background-image: -moz-linear-gradient(bottom, #cecece 0%, #FFFFFF 90%);
+}
+
+.white_green .closebutton:hover {
+	background: #e6e6e6;
+}
+
+.white_green .toolButton {
+	border: 1px solid #b4b4b4;
+}
+
+.white_green .toolButton:hover {
+	background: #fff
+}
+
+/* ************************* 
+Viewports
+************************* */
+.white_green .notice {
+	border: 1px solid #000;
+	background: #ffffcc;
+}
+
+.white_green .viewPort {
+	background: #9ac1ec;
+	box-shadow: inset 4px 4px 12px #666;
+}
+
+.white_green .viewportPortable {
+	background: #9ac1ec;
+	border: 1px solid #fff;
+	box-shadow: inset 4px 4px 12px #666;
+}
+
+.white_green .viewportPortable h2 {
+	color: #0d4272;
+}
+
+.white_green .viewportPortable2 {
+	background: #9ac1ec;
+	border: 1px solid #fff;
+	box-shadow: inset 4px 4px 12px #666;
+}
+
+.white_green .directionsContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+/* ************************* 
+Testing Port
+************************* */
+.white_green .testingPort {
+	border: 1px solid #fff;
+}
+
+.white_green .testingPort h2 {
+	color: #0d5db6;
+}
+
+.white_green #passageText {
+	border: 1px solid #ccc;
+	background: #FFF;
+}
+
+.white_green #passageText h3,.white_green #passageText h5 {
+	color: #457ab0;
+}
+
+/* ************************* 
+Section Tabs
+************************* */
+.white_green #sectionTabs a {
+	background: #e9e9e9;
+	border: 1px solid #ccc;
+}
+
+.white_green #sectionTabs a:hover {
+	background: #9ac1ec;
+	color: #333;
+}
+
+/* ************************* 
+Question Col Head
+************************* */
+
+.white_green #questionArrowBack {
+	background: url(/images/questionsArrows.png) no-repeat left top;
+}
+
+.white_green #questionArrowNext {
+	background: url(/images/questionsArrows.png) no-repeat right top;
+}
+
+.white_green #questionArrowBack:hover {
+	background: url(/images/questionsArrows.png) no-repeat left bottom;
+}
+
+.white_green #questionArrowNext:hover {
+	background: url(/images/questionsArrows.png) no-repeat right bottom;
+}
+
+/* Question Layout classes */
+
+/* 
+ * Test complete confirmation. 
+ */
+.white_green #confirmEnd, .white_green #confirmDeleteNote, .white_green #maskWarn, .white_green #navigationAlert {
+	background: #FFFFFF;
+	border: 2px solid #333;
+}
+
+.white_green #backgroundMask {
+	border: 1px solid #333;
+}
+
+/* ************************* 
+Question Col Questions
+************************* */
+.white_green .questionBox {
+	background: #FFF;
+	border: 1px solid #ccc
+}
+
+.white_green .questionBoxHead {
+	border-bottom: 1px solid #999;
+	background: url(/images/paginateBG.jpg) repeat-x;
+	color: #457ab0;
+}
+
+.white_green .review {
+	background: #fee1a3;
+	border: 1px solid #999;
+	color: #857658;
+}
+
+.white_green .expandArea {
+	background: #CCC;
+	border: 1px solid #dbdbdb;
+	background: -webkit-gradient(linear, left top, left bottom, from(#c4c4c4),
+		to(#fff) );
+	background: -moz-linear-gradient(top, #c4c4c4, #fff);
+}
+
+.white_green .expandArea:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#c4c4c4) );
+	background: -moz-linear-gradient(top, #fff, #c4c4c4);
+}
+
+.white_green .questionBox h4 {
+	color: #457ab0;
+}
+
+.white_green .questionAnswers label,.white_green .questionAnswers span.foil {
+	color: green;
+}
+
+.white_green .accordionContent {
+	background: #fff;
+	border: 1px solid #ccc;
+}
+
+.white_green .footer a {
+	color: #0f4379;
+	text-shadow: #fff 1px 1px 1px;
+}
+
+.white_green .backButton {
+	background: #d8d8d8; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#d8d8d8),
+		to(#eeeeee) );
+	background-image: -moz-linear-gradient(bottom, #d8d8d8 0%, #eeeeee 30%);
+	border: 1px solid #efefef;
+	box-shadow: 2px 2px 4px #999;
+}
+
+.white_green .backButton:hover {
+	background: #eeeeee; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#eeeeee),
+		to(#d8d8d8) );
+	background-image: -moz-linear-gradient(bottom, #eeeeee 0%, #d8d8d8 30%);
+}
+
+.white_green .nextButton {
+	background: #d8d8d8; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#d8d8d8),
+		to(#eeeeee) );
+	background-image: -moz-linear-gradient(bottom, #d8d8d8 0%, #eeeeee 30%);
+	border: 1px solid #efefef;
+	color: #0D5DB6;
+}
+
+.white_green .nextButton:hover {
+	background: #eeeeee; /* #dddddd */
+	background: -webkit-gradient(linear, left bottom, left top, from(#eeeeee),
+		to(#d8d8d8) );
+	background-image: -moz-linear-gradient(bottom, #eeeeee 0%, #d8d8d8 30%);
+}
+
+.white_green .clear {
+	background: #e3c7dd; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#e3c7dd),
+		to(#dbbbd3) );
+	background-image: -moz-linear-gradient(bottom, #e3c7dd 0%, #dbbbd3 30%);
+	border: 1px solid #ac8ea8;
+}
+
+.white_green .clear:hover {
+	background: #dbbbd3;
+	background: -webkit-gradient(linear, left bottom, left top, from(#dbbbd3),
+		to(#e3c7dd) );
+	background-image: -moz-linear-gradient(bottom, #dbbbd3 0%, #e3c7dd 30%);
+}
+
+.white_green .reviewBig {
+	background: #fedd8e; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#fedd8e),
+		to(#f9d889) );
+	background-image: -moz-linear-gradient(bottom, #fedd8e 0%, #f9d889 30%);
+	border: 1px solid #ac8ea8;
+}
+
+.white_green .reviewBig:hover {
+	background: #f9d889; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#f9d889),
+		to(#fedd8e) );
+	background-image: -moz-linear-gradient(bottom, #f9d889 0%, #fedd8e 30%);
+}
+
+.white_green .end {
+	background: #facfcf; /* #eec3c3 */
+	background: -webkit-gradient(linear, left bottom, left top, from(#facfcf),
+		to(#fddede) );
+	background-image: -moz-linear-gradient(bottom, #facfcf 0%, #fddede 30%);
+	box-shadow: 2px 2px 4px #999;
+	border: 1px solid #ac8ea8;
+}
+
+.white_green .end:hover {
+	background: #fddede;
+	background: -webkit-gradient(linear, left bottom, left top, from(#fddede),
+		to(#facfcf) );
+	background-image: -moz-linear-gradient(bottom, #fddede 0%, #facfcf 30%);
+}
+
+.white_green .button2 {
+	background: url(/images/buttonBG.png) left top no-repeat #6f89b8;
+	background: -webkit-gradient(linear, left top, left bottom, from(#b0c0da),
+		to(#6f89b8) );
+	background: -moz-linear-gradient(top, #b0c0da, #6f89b8);
+	border: 1px solid #57738c;
+	color: #fff;
+	text-shadow: #000 1px 1px 1px;
+	box-shadow: 2px 2px 6px #666;
+}
+
+.white_green .button2:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#6f89b8),
+		to(#b0c0da) );
+	background: -moz-linear-gradient(top, #6f89b8, #b0c0da);
+}
+
+.white_green .homeContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.white_green .takeContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.white_green .buttonLink {
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#d7d7d7) );
+	background: -moz-linear-gradient(top, #fff, #d7d7d7);
+	box-shadow: 2px 2px 3px #d7d6d6;
+	border: 1px solid #999;
+	box-shadow: 2px 2px 3px #D7D6D6;
+}
+
+.white_green .buttonLink:hover {
+	box-shadow: none;
+}
+
+.white_green .selectTestContent h2 {
+	border-bottom: 1px solid #1d295d;
+	color: #1d295d;
+}
+
+.white_green .selectTestContent label {
+	color: #0D4272
+}
+
+.white_green .selectTestContent select {
+	border-color: #ccc;
+}
+
+.white_green .selectTest {
+	border: 1px solid #ccc;
+	background: #fff;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.white_green .selectTest li+li {
+	border-top: 1px solid #CCC
+}
+
+.white_green .alternate {
+	background-color: #e7e7e7;
+}
+
+.white_green .selectTest ul {
+	background-color: #fff;
+}
+
+.white_green .selectTest li:hover,.white_green .selectTest .chosen {
+	background: #a2d394
+}
+
+.white_green .directionsTests {
+	border: 1px solid #ccc;
+	background: #fff;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.white_green .question {
+	border: 1px solid #ccc;
+	background: #FFF;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.white_green .radio {
+	background: url(/images/radioButtons.jpg) no-repeat;
+}
+
+.white_green .checkbox {
+	background: url(/images/checkbox.png) no-repeat;
+}
+
+.white_green #reviewer div.reviewerTests {
+	border: 1px solid #ccc;
+	background: #fff;
+	box-shadow: 2px 2px 5px #b9b9b9;
+}
+
+.white_green #reviewer #reviewbox h4 {
+	border-bottom: 1px solid gray;
+}
+
+.white_green #reviewer div.reviewquestion {
+	border: 1px solid black;
+}
+
+.white_green #magnificationBox {
+	background: white;
+	border: 4px solid black;
+}
+
+.white_black #magnifyingGlassControl {
+	background: white;
+	border: 4px solid black;
+}
+
+/* Reference */
+.white_green #reference {
+	background: white;
+	border: 4px solid black;
+}
+
+/********************* /Calculator ********************/
+.white_green #calculator {
+	background: url(/images/calc-bg.png) no-repeat;
+	z-index: 999999;
+}
+
+.white_green #graphCalculator {
+	background: white;
+	border: 1px solid black;
+} 
+
+/********************* /Highlighter ********************/
+.white_green .tts_hightlight {
+	background-color:yellow;
+}
+
+.white_green .tts_underline {
+	border-bottom:1px solid red;
+}
+
+.white_green .highlight {
+	background-color: yellow;
+}
+
+.white_green .strikethrough {
+	text-decoration: line-through;
+}
+
+/********************* /GuideLine ********************/
+.white_green .guidetopper {
+	background: gold;
+}
+
+/********************* /Ruler ******************************/
+.white_green #rulerDiv {
+	background: url('/images/tools/ruler-cmtop.png') no-repeat;
+}
+
+/******************* Search Tool **************************/
+.white_green #searchBox {
+	background: #cccccc;
+}
+
+.white_green .search_highlight {
+	background-color: #FFA824;
+}
+
+/************periodic table ************/
+.white_green #periodicTable {
+	background: white;
+	border: 1px solid black;
+}
+
+.white_green #pTElem {
+	background: white;
+	border: 1px solid black;
+}
+
+.white_green table.navbar td a,.white_green table.navbar td a.he {
+	color: #000000;
+}
+
+.white_green table.navbar td {
+	border: 1px solid white;
+}
+
+.white_green .info {
+	background-color: #F5F5F5;
+	color: #333333;
+}
+
+.white_green .navbar td a:hover,.white_green .navbar td a:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #FFFFFF;
+}
+
+.white_green .navbar td a.unnamed:link,.white_green .navbar td a.unnamed:visited {
+	background-color: #FFFFFF;
+	border: 1px solid #0F5782;
+	color: #A52A2A;
+}
+
+.white_green .navbar td a.rare-synthetic:link,.white_green .navbar td a.rare-synthetic:visited {
+	background-color: #DDDDDD;
+	border: 1px solid #0F5782;
+	color: #A52A2A;
+}
+
+.white_green .navbar td a.rare-synthetic:hover,.white_green .navbar td a.rare-synthetic:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #FFFFFF;
+}
+
+.white_green .navbar td a.rare:link,.white_green .navbar td a.rare:visited {
+	background-color: #DDDDDD;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.rare:hover,.white_green .navbar td a.rare:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.tmetals:link {
+	background-color: #EBB8B8; /*#F5F5DC;*/
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.tmetals:hover,.white_green .navbar td a.tmetals:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.tmetals-synthetic:link,.white_green .navbar td a.tmetals-synthetic:visited
+	{
+	background-color: #EBB8B8;
+	border: 1px solid #0F5782;
+	color: #A52A2A;
+}
+
+.white_green table.navbar td a.ngases:link {
+	background-color: #C3D4FF; /*#E6E6FA;*/
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.white_green .navbar td a.halogens-gases:link,.white_green .navbar td a.halogens-gases:visited {
+	background-color: #ADE8C7;
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.white_green .navbar td a.halogens-gases:hover,.white_green .navbar td a.halogens-gases:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.white_green table.navbar td a.onm-gases:link,.white_green table.navbar td a.onm-gases:visited {
+	background-color: #FFEEDD;
+	border: 1px solid #0F5782;
+	color: #225588;
+}
+
+.white_green table.navbar td a.onm-gases:hover,.white_green table.navbar td a.onm-gases:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #008000;
+}
+
+.white_green .navbar td a.metalloid:link,.white_green .navbar td a.metalloid:visited {
+	background-color: #7ED38F; 
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.metalloid:hover,.white_green .navbar td a.metalloid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.ometals:link,.white_green .navbar td a.ometals:visited {
+	background-color: #CDEB8B;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.ometals:hover,.white_green .navbar td a.ometals:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.alkali:link,.white_green .navbar td a.alkali:visited {
+	background-color: #DDCCDD;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.alkali:hover,.white_green .navbar td a.alkali:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.alkalie:link,.white_green .navbar td a.alkalie:visited {
+	background-color: #FFF3BB;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.alkalie:hover,.white_green .navbar td a.alkalie:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.alkali-liquid:link,.white_green .navbar td a.alkali-liquid:visited {
+	background-color: #DDCCDD;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.white_green .navbar td a.alkali-liquid:hover,.white_green .navbar td a.alkali-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.white_green .navbar td a.halogens:link,.white_green .navbar td a.halogens:visited {
+	background-color: #ADE8C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.halogens:hover,.white_green .navbar td a.halogens:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green table.navbar td a.onm:link,.white_green table.navbar td a.onm:visited {
+	background-color: #FF9966;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green table.navbar td a.onm:hover,.white_green table.navbar td a.onm:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #000000;
+}
+
+.white_green .navbar td a.halogens-liquid:link,.white_green .navbar td a.halogens-liquid:visited {
+	background-color: #ADE8C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.white_green .navbar td a.halogens-liquid:hover,.white_green .navbar td a.halogens-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.white_green .navbar td a.ometals-liquid:link,.white_green .navbar td a.ometals-liquid:visited {
+	background-color: #CDEB8B;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.white_green .navbar td a.ometals-liquid:hover,.white_green .navbar td a.ometals-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.white_green .navbar td a.tmetals-liquid:link,.white_green .navbar td a.tmetals-liquid:visited {
+	background-color: #EBB8B8;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+.white_green .navbar td a.tmetals-liquid:hover,.white_green .navbar td a.tmetals-liquid:active {
+	background-color: #AFC7C7;
+	border: 1px solid #0F5782;
+	color: #0000FF;
+}
+
+/*dlm added*/
+.white_green #calculator {
+	background: url(/images/calc-bg.png) no-repeat;
+}
+
+.white_green #calculator .num-button {
+	background: url(/images/button-bg.png) no-repeat;
+}
+
+.white_green #calculator .clear-button {
+	background: url(/images/button-bg.png) no-repeat;
+}
+
+.white_green #calculator .function-button {
+	background: url(/images/function-button-bg.png) no-repeat;
+}
+
+.white_green #calculator .equals-button {
+	background: url(/images/equals-bg.png) no-repeat;
+}
+
+.white_green #calculator #plusminus {
+	background: url(/images/function-button-bg.png) no-repeat;
+}
+
+.white_green #calculator #calc-back {
+	background: url(/images/function-button-bg.png) no-repeat;
+}

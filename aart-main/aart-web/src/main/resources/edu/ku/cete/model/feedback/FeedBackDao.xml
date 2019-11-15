@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="edu.ku.cete.model.feedback.FeedBackDao">
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.feedback.FeedBack">
+		<id property="id" column="id" jdbcType="BIGINT" />
+		<result property="aartUserId" column="aartuserid" jdbcType="BIGINT" />
+		<result property="userName" column="username" jdbcType="VARCHAR" />
+		<result property="email" column="email" jdbcType="VARCHAR" />
+		<result property="feedBack" column="feedback" jdbcType="VARCHAR" />
+		<result property="createdDate" column="createddate" jdbcType="TIMESTAMP" />
+		<result property="modifiedDate" column="modifieddate" jdbcType="TIMESTAMP" />
+		<result property="webPage" column="webpage" jdbcType="VARCHAR" />
+		<result property="createdUser" column="createduser" jdbcType="BIGINT" />
+		<result property="activeFlag" column="activeflag" jdbcType="BIT" />
+		<result property="modifiedUser" column="modifieduser" jdbcType="BIGINT" />
+	</resultMap>
+
+
+	<insert id="insertUserFeedBack" parameterType="edu.ku.cete.domain.feedback.FeedBack" useGeneratedKeys="true"
+		keyColumn="id" keyProperty="id">
+		INSERT INTO userfeedback(
+		aartuserid,username,email,feedback,createddate, modifieddate,
+		webpage, createduser, activeflag, modifieduser)
+		VALUES(
+		#{aartUserId,jdbcType=BIGINT},#{userName,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{feedBack,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP},
+		#{modifiedDate,jdbcType=TIMESTAMP}, #{webPage,jdbcType=VARCHAR}, #{createdUser,jdbcType=BIGINT},
+		#{activeFlag,jdbcType=BIT}, #{modifiedUser,jdbcType=BIGINT})
+	</insert>
+	
+	<update id="updateUserFeedBack" parameterType="FeedBack">
+      update userfeedback
+      set username = #{username,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      createddate = #{createddate,jdbcType=TIMESTAMP},
+      createduser = #{createduser,jdbcType=INTEGER},
+      activeflag = #{activeflag,jdbcType=BIT},
+      modifieddate = #{modifieddate,jdbcType=TIMESTAMP},
+      modifieduser = #{modifieduser,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT} and where activeflag = true
+  </update>
+  
+	<delete id="deleteUserFeedBack" parameterType="FeedBack">
+		update
+        userfeedback set activeflag=false,
+	      modifieddate = #{modifieddate,jdbcType=TIMESTAMP},
+	      modifieduser = #{modifieduser,jdbcType=INTEGER}
+        where
+        id=#{id,jdbcType=BIGINT}
+	</delete>
+</mapper>

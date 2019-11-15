@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="edu.ku.cete.model.announcements.CMStateDAO">
+	
+    <resultMap id="BaseResultMap" type="edu.ku.cete.domain.announcements.CMState" >
+      <result column="stateid" property="stateId" jdbcType="BIGINT" />
+      <result column="comminicationmessageid" property="comminicationMessageId" jdbcType="BIGINT" />
+      <result column="groupid" property="roleId" jdbcType="BIGINT" />
+    </resultMap>
+
+	<insert id="insert"
+		parameterType="edu.ku.cete.domain.announcements.CMState">
+		INSERT INTO
+		communicationmessagestate(stateid, comminicationmessageid, groupid)
+		values(#{stateId}, #{comminicationMessageId}, #{roleId})
+	</insert>
+
+	<delete id="delete"
+		parameterType="edu.ku.cete.domain.announcements.CMState">
+		DELETE FROM communicationmessagestate
+		WHERE stateid = #{stateId} and
+		comminicationmessageid=#{comminicationMessageId}
+	</delete>
+
+	<delete id="deleteByMessageId">
+		DELETE FROM communicationmessagestate
+		WHERE comminicationmessageid=#{messageId}
+	</delete>
+	<select id="getMessageStates"
+		resultMap="BaseResultMap">
+		select * FROM communicationmessagestate WHERE
+		comminicationmessageid=#{messageId}
+	</select>
+
+</mapper>

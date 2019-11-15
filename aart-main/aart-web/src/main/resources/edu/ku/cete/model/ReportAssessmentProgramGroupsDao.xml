@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.ku.cete.model.ReportAssessmentProgramGroupsDao">
+
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.report.ReportAssessmentProgramGroups" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="reportassessmentprogramid" property="reportAssessmentProgramId" jdbcType="BIGINT" />
+	    <result column="groupid" property="groupId" jdbcType="BIGINT" />
+	    <result column="activeflag" property="activeFlag" jdbcType="BIT" />
+	</resultMap>
+	
+	<insert id="add"  parameterType="ReportAssessmentProgramGroups">	
+		INSERT INTO reportassessmentprogramgroup(reportassessmentprogramid, groupid, activeflag)
+    			VALUES (#{reportAssessmentProgramId}, #{groupId}, #{activeFlag})
+	</insert>
+	  
+
+	<delete id="delete">
+		DELETE FROM reportassessmentprogramgroup
+			WHERE id = #{id}
+	</delete>
+
+	<select id="get" resultType="ReportAssessmentProgramGroups" parameterType="java.lang.Long">
+		SELECT id, reportassessmentprogramid, groupid, activeflag
+			FROM reportassessmentprogramgroup 
+				WHERE id = #{id}
+	</select>
+
+	<select id="getAll" resultType="ReportAssessmentProgramGroups">
+		SELECT id, reportassessmentprogramid, groupid, activeflag
+  			FROM reportassessmentprogramgroup;
+	</select>
+	
+	<update id="update" parameterType="ReportAssessmentProgramGroups">
+		UPDATE reportassessmentprogramgroup
+			SET reportassessmentprogramid = #{reportAssessmentProgramId}, groupid = #{groupId}, activeflag=#{activeFlag}
+ 				WHERE id = #{id} 		
+	</update>
+	
+	<update id="updateActiveFlag" parameterType="ReportAssessmentProgramGroups">
+		UPDATE reportassessmentprogramgroup
+			SET activeflag=#{activeFlag}
+ 				WHERE id = #{id} AND groupid = #{groupId} AND
+ 					reportassessmentprogramid = #{reportAssessmentProgramId} 
+	</update>
+	
+	<insert id="insertMultipleAssessmentProgramGroup" parameterType="java.util.Map" >
+    insert into reportassessmentprogramgroup (reportassessmentprogramid, groupid) values (
+        <foreach collection="groupids" item="groupid" open="" close="" separator="),(">
+             #{reportassessmentprogramid},#{groupid}
+        </foreach>
+        );
+   </insert>
+   
+   <select id="getReportAssessmentGroupSelect" resultType="ReportAssessmentProgramGroups" parameterType="java.lang.Long" >
+    SELECT id, reportassessmentprogramid, groupid, activeflag
+			FROM reportassessmentprogramgroup 
+				WHERE reportassessmentprogramid = #{reportassessmentprogramid,jdbcType=BIGINT}
+  </select>
+	
+	
+	<select id="getAllGroupsSelectedPermission" resultType="Groups" parameterType="java.lang.Long" >
+    select id as groupId,groupname as groupName from groups where id in (select groupid from groupauthorities where 
+    	authorityid = #{groupAuthoirityId,jdbcType=BIGINT} and activeflag is true 
+    	and assessmentprogramid=#{assessmentProgId,jdbcType=BIGINT} 
+    	and organizationid =#{stateId,jdbcType=BIGINT}
+    	) and activeflag is true order by organizationtypeid
+ 		asc 
+   </select>
+   
+   
+	<select id="getGroupsSelectedPermission" resultType="Groups" parameterType="java.lang.Long" >
+    select id as groupId,groupname as groupName from groups where id in (select groupid from groupauthorities where 
+    	authorityid = #{groupAuthoirityId,jdbcType=BIGINT} and activeflag is true) and activeflag is true order by groupname asc
+   </select>
+   
+    <select id="getByReportAssessmentProgId" resultType="Long" parameterType="java.lang.Long" >
+    SELECT groupid
+			FROM reportassessmentprogramgroup 
+				WHERE reportassessmentprogramid = #{reportassessmentprogramid,jdbcType=BIGINT} and activeflag is true
+  </select>
+  
+     
+    <select id="getReportAssessmentForGroupCode" resultType="Long" >
+	SELECT id FROM reportassessmentprogramgroup 
+				WHERE reportassessmentprogramid = #{editReportAccessId,jdbcType=BIGINT} 
+				AND groupid = #{groupId,jdbcType=BIGINT} 
+  </select>
+
+	
+	<insert id="insertAssessmentProgramGroup" parameterType="java.util.Map" >
+    insert into reportassessmentprogramgroup (reportassessmentprogramid, groupid) values (
+             #{reportAssessmentPgmId},#{groupId} );
+   </insert>
+
+     
+    <select id="getExtractAssessmentForGroupCode" resultType="Long" >
+	SELECT id FROM extractassessmentprogramgroup 
+				WHERE extractassessmentprogramid = #{editReportAccessId,jdbcType=BIGINT} 
+				AND groupid = #{groupId,jdbcType=BIGINT} 
+  </select>
+
+
+	
+	<update id="updateActiveFlagForExtractAccess" parameterType="ReportAssessmentProgramGroups">
+		UPDATE extractassessmentprogramgroup
+			SET activeflag=#{activeFlag}
+ 				WHERE id = #{id} AND groupid = #{groupId} AND
+ 					extractassessmentprogramid = #{reportAssessmentProgramId} 
+	</update>
+	
+	<insert id="insertExtractAssessmentProgramGroup" parameterType="java.util.Map" >
+    insert into extractassessmentprogramgroup (extractassessmentprogramid, groupid) values (
+             #{reportAssessmentPgmId},#{groupId} );
+   </insert>
+
+  
+</mapper>

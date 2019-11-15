@@ -1,0 +1,14 @@
+Here are the steps,
+
+1) create tables with "_".
+2) modify generatorConfig.xml for table name ,domain object name and package name.
+3) run the build generate.xml.
+4) the source files will be under auto.
+
+
+-----------then-------
+
+5) go back and remove underscores from *Dao.xml
+6) go back and remove underscores from *Example.java
+7) Remove the criterion inner class from *Example.java
+8) remove the _ from table name.

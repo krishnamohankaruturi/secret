@@ -1,0 +1,27 @@
+.leftText{
+	float:left;
+}
+.buttons{
+	overflow:hidden;
+	float:right;
+}
+
+.clear{
+	clear:both;
+}
+#shortDurationUpdated{
+	float:right;
+}
+
+#shortDurationUpdated p {
+    margin-right: 11px;
+}
+
+#tabs_short_duration_test .ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+    padding-top:10px; 
+    font-size : 14px;
+}
+
+#tabs_short_duration_test .ui-jqgrid .ui-jqgrid-bdiv {
+	overflow: auto;
+}

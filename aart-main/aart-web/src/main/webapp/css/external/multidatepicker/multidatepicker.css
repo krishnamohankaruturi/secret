@@ -1,0 +1,112 @@
+.divLabelwidth{
+	width: 240px;
+    height: auto;
+    line-height: 20px;
+    min-height: 28px;
+    color: #000;
+    border: 1px solid #d0dbe6 !important;
+}
+.disabledhighlight{
+	background: #136a9f;
+    color: #eee !important;
+}
+
+.divbtn{
+	width:100%;
+	height:45px;
+	margin: 6px;
+	padding:15px;
+}
+.multicalenCancelbtn{
+    font-size: 15px;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    padding: 0px 7px;
+    background: #0e76bc;
+    text-align: center;
+    border-radius: 4px;
+	margin-left: 65px;
+	width:65px;
+	height:25px;
+	cursor:pointer;
+}
+/* .weekendDisable {
+   opacity: .35;
+} */
+.opacity-not-in-month{
+	opacity: .35;
+}
+.pmu-disabled{
+	opacity: .35;
+}
+.multicalenSavebtn{
+    font-size: 15px;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    padding: 0px 7px;
+    background: #0e76bc;
+    text-align: center;
+    border-radius: 4px;
+	float:right;
+	width:65px;
+	height:25px;
+	cursor:pointer;
+}
+.pickmeup{
+	border: 1px solid #d0dbe6 !important;
+	background:#fff;
+	border-radius:.4em;
+	-moz-box-sizing:content-box;
+	box-sizing:content-box;
+	display:none;
+	position:absolute
+}
+
+.pickmeup *{
+	-moz-box-sizing:border-box;
+	box-sizing:border-box
+}
+.pickmeup .pmu-instance{
+	display:inline-block;
+	height:12em;
+	padding:.5em;
+	text-align:center;
+	width:15em
+}
+.pickmeup .pmu-instance .pmu-button{
+	color:#000;
+	cursor:pointer;
+	outline:none;
+	text-decoration:none
+}
+.pmu-monthbutton{
+	color:#000;
+	outline:none;
+	text-decoration:none
+}
+.pickmeup .pmu-instance .pmu-today{
+	background:#17384d;
+	color:#88c5eb
+}
+.pickmeup .pmu-instance .pmu-button:hover{background:transparent;color:#88c5eb}
+.pickmeup .pmu-instance .pmu-not-in-month{color:#666}
+.pickmeup .pmu-instance .pmu-disabled,.pickmeup .pmu-instance .pmu-disabled:hover{color:#333;cursor:default}
+.pickmeup .pmu-instance .pmu-selected{background:#136a9f;color:#eee}
+.pickmeup .pmu-instance .pmu-not-in-month.pmu-selected{background:#17384d}
+.pickmeup .pmu-instance nav{color:#eee;display:-ms-flexbox;display:-webkit-flex;display:flex;line-height:2em}
+.pickmeup .pmu-instance nav *:first-child :hover{color:#88c5eb}
+.pickmeup .divLabelwidth  .pmu-instance nav .pmu-prev,
+.pickmeup .pmu-instance nav .pmu-next{display:none;height:2em;width:1em}
+.pickmeup .pmu-instance nav .pmu-month{width:14em}
+.pickmeup .pmu-instance .pmu-years *,.pickmeup .pmu-instance .pmu-months *{display:inline-block;line-height:3.6em;width:3.5em}
+.pickmeup .pmu-instance .pmu-day-of-week{color:#999;cursor:default}
+.pickmeup .pmu-instance .pmu-day-of-week *,
+.pickmeup .pmu-instance .pmu-days *{display:inline-block;line-height:1.5em;width:2em}
+.pickmeup .pmu-instance .pmu-day-of-week *{line-height:1.8em}
+.pickmeup .pmu-instance:first-child .pmu-prev,.pickmeup .pmu-instance:last-child .pmu-next{display:block}
+.pickmeup .pmu-instance:first-child .pmu-month,.pickmeup .pmu-instance:last-child .pmu-month{width:13em}
+.pickmeup .pmu-instance:first-child:last-child .pmu-month{width:12em}.pickmeup:not(.pmu-view-days) .pmu-days,.pickmeup:not(.pmu-view-days) 
+.pmu-day-of-week,.pickmeup:not(.pmu-view-months) .pmu-months,.pickmeup:not(.pmu-view-years) 
+.pmu-years{display:none}

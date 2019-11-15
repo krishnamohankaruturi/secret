@@ -1,0 +1,27 @@
+<div id="timeroverlay" style="display: none;" class="popupOverlay">
+	<div class="overlay-content overlayShowing" style="opacity: 1; display: block;">
+		<div class="activation-form">
+			<h3>
+				<%=expirywarning%>
+			</h3>
+			<p>
+				<%=selecttext%>
+			</p>
+			<p>
+				<%=timeremaining%>
+				<span id="timerSelector"></span>
+			</p>
+
+			<div class="activation">
+				<button type="button" id="extendSession" class="btn-rev btn">
+					<%=extendsession%>
+				</button>
+				<button type="button" id="sessionLogout" class="btn-rev btn">
+					<%=studentLogout%>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="overlay-bg"
+	style="width: 100%; height: 100%; opacity: 1; display: block;"></div>
+</div>

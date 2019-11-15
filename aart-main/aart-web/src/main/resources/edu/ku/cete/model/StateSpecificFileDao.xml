@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.StateSpecificFileDao">
+
+	<resultMap id="StateSpecificFileMap" type="edu.ku.cete.report.domain.StateSpecificFile">
+		<id column="id" jdbcType="BIGINT" />
+		<result column="filename" jdbcType="VARCHAR" property="fileName" />
+    		<result column="filedescription" jdbcType="VARCHAR" property="fileDescription" />
+    		<result column="filelocation" jdbcType="VARCHAR" property="fileLocation" />
+    		<result column="stateid" jdbcType="BIGINT" property="stateId" />
+    		<result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramId" />
+    		<result column="createddate" jdbcType="TIMESTAMP" property="createdDate" />
+    		<result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+    		<result column="createduser" jdbcType="BIGINT" property="createdUser" />
+    		<result column="modifieduser" jdbcType="BIGINT" property="modifiedUser" />
+    		<result column="activeflag" jdbcType="BIT" property="activeFlag" />
+    		<result column="totalrecords" jdbcType="INTEGER" property="totalRecords" />
+	</resultMap>
+    
+    <sql id="Base_Column_List">
+    		id, filename, filedescription, filelocation, stateid, assessmentprogramid,
+    		createddate, modifieddate, createduser, modifieduser, activeflag
+	</sql>
+  
+	<insert id="insertStateSpecificFileData" parameterType="edu.ku.cete.report.domain.StateSpecificFile">
+		insert into statespecificfile (filename, filedescription, filelocation, stateid, assessmentprogramid,
+		createddate, modifieddate, createduser, modifieduser, activeflag)
+		values (#{fileName,jdbcType=VARCHAR}, #{fileDescription,jdbcType=VARCHAR},#{fileLocation,jdbcType=VARCHAR},
+		#{stateId,jdbcType=BIGINT}, #{assessmentProgramId,jdbcType=BIGINT},
+		#{createdDate,jdbcType=TIMESTAMP}, #{modifiedDate,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=BIGINT}, 
+		#{modifiedUser,jdbcType=BIGINT}, #{activeFlag,jdbcType=BIT})
+  	</insert>
+	<select id="getStateSpecificFileData" resultType="edu.ku.cete.report.domain.StateSpecificFile" >
+	 	select count(1) OVER() AS totalrecords, * 
+	 	from (select <include refid="Base_Column_List" /> from statespecificfile 
+	  		where stateid = #{stateId} and assessmentprogramid = #{assessmentProgramId}
+	  		and activeflag is true
+	  		<if test="recordCriteriaMap.fileName != null">
+				AND filename ilike #{recordCriteriaMap.fileName}
+			</if>
+			<if test="recordCriteriaMap.fileDescription != null">
+				AND filedescription ilike #{recordCriteriaMap.fileDescription}
+			</if>
+	  		) as records
+ 		<if test="sortByColumn != null">
+    			ORDER BY
+	    		<choose>
+	      		<when test="sortByColumn == 'fileDescription'">filedescription</when>
+	      		<when test="sortByColumn == 'fileName'">filename</when>
+	      		<when test="sortByColumn == 'createdDate'">createddate</when>
+			</choose>
+	    	 	<if test="sortType=='desc'">
+		    		desc
+	    	 	</if>
+	    	 	<if test="sortType=='asc' or sortType==null">
+	    	 		asc
+	    	 	</if>
+		</if> 
+		<if test="limit != null and limit != 0 ">
+			limit #{limit} 
+		</if>
+		<if test="offset!=null">
+			offset #{offset};
+		</if>
+	</select>
+	
+   <update id="removeStateSpecificFile" parameterType="edu.ku.cete.report.domain.StateSpecificFile">
+   		update statespecificfile set activeflag = false,
+   		modifieduser = #{modifiedUserId}, modifieddate = #{modifiedDate} 
+   		where id=#{id};
+  </update>
+  
+  <select id="getStateSpecificFileById" resultType="edu.ku.cete.report.domain.StateSpecificFile">
+  	select <include refid="Base_Column_List" />
+  	from statespecificfile where id=#{id} and activeflag is true;
+  </select>
+</mapper>

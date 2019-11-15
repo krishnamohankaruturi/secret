@@ -1,0 +1,68 @@
+<div>
+ <%	
+	var kbType = "KB";
+	var mbType = "MB";
+	var gbType = "GB";
+	
+	 	if(data!=null && data!=undefined && data.length > 0){
+	 %>
+	<div class="heading_left">
+		<span class="heading">School (Bundled) Report File</span>
+	</div>
+	<br/><br/>
+	 <% 
+	 	for (var x = 0; x < data.length; x++) {
+	 	 	var pdfRecord = data[x];
+			var pdfRecordFileName = pdfRecord.detailedReportPath;
+		 
+			pdfRecordFileName = pdfRecordFileName.substring(pdfRecordFileName.lastIndexOf('/')+1);
+			
+			var pdfRecordSize = pdfRecord.schoolReportPdfSize;
+			
+			var pdfSizeType = "";
+			if(pdfRecordSize >= Math.pow(10, 9)){
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 9))).toFixed(1);
+				pdfSizeType = gbType;
+			}
+			else if (pdfRecordSize >= Math.pow(10, 6)){
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 6))).toFixed(1);
+				pdfSizeType = mbType;
+			}
+			else{
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 3))).toFixed(1);
+				pdfSizeType = kbType;
+			}
+			
+			
+	%>
+		<div id="#allSchoolSummaryBunDiv<%=x%>" class="allSchoolSummaryDiv">   
+			<a href="getSchoolSummaryBundledReport.htm?id=<%=pdfRecord.id %>&reportyear=<%=pdfRecord.schoolYear%>" class="schSummaryBundledLink" title="<%= pdfRecordFileName %>"> <%= pdfRecordFileName %>
+			</a>			
+			<span class="size"><%= pdfRecordSize %> <%=pdfSizeType%></span>
+		</div>
+	<%}%>	
+	
+		<br/><br/>
+	
+		<div style="margin:0px;" >
+				
+				<div style="margin-left:10px;" id="studentBundledCreatedDate">
+					Created <span id="submittedDate"></span>  by System 			
+				</div>
+				<div>&nbsp;</div>
+			<div style="margin-left:10px;" id="schoolReportInclude">
+				<div style="margin:0px;">School reports include: </div>
+			    <div id='schoolBundleDiv' style="margin-left:20px;">Schools: All</div>
+			</div>
+			<br/>
+			<div style="margin-left:10px;" id='schBundledSortedBy'>
+			  School reports sorted by: School Name		
+			</div>	
+		</div>	
+		
+	<%}else{ %>
+		<div style="margin:0px;">
+			Report Not Available		
+	    </div>
+	<%}%>
+</div>

@@ -1,0 +1,61 @@
+<div class="stateDetail">
+
+	<%
+	 if(data!=null && data!=undefined && data.length>0){	 
+		 var report = data[0];
+		 var pdfRecordSize = report.schoolReportPdfSize;
+		 var kbType = "KB";
+		 var mbType = "MB";
+	 	 var gbType = "GB";
+		 var pdfSizeType = "";
+		
+			if(pdfRecordSize >= Math.pow(10, 9))
+			{
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 9))).toFixed(1);
+				pdfSizeType = gbType;
+			}
+			else if (pdfRecordSize >= Math.pow(10, 6))
+			{
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 6))).toFixed(1);
+				pdfSizeType = mbType;
+			}
+			else
+			{
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 3))).toFixed(1);
+				pdfSizeType = kbType;
+			}
+	%>
+	
+	<div class="dlmSummaryTitleHeading">
+		<span class="dlmSummaryHeading">State Aggregate Report</span>
+	</div> 
+
+	<hr>
+	<div class="dlmSummaryHeading">
+		<div class="itemDlmSummaryHeading">
+					<%
+				 if(report.summaryReportCsvPath != null){
+				%>
+					<div class="itemDlmSummaryLinkText" >DLM_<%=report.attSchDisplayIdentifier%>_State_Aggregate_<%=report.schoolYear%></div>
+					<div>
+						<a href="getDlmStateSummaryReportFile.htm?id=<%=report.id%>&reportyear=<%=report.schoolYear%>&downloadType=pdf" class="itemDlmSummaryLink" ><img src="images/pdf.png" style="height: 25px;width: 25px;"/></a>
+						<a href="getDlmStateSummaryReportFile.htm?id=<%=report.id%>&reportyear=<%=report.schoolYear%>&downloadType=csv" ><img src="images/icon-csv.png" style="height: 25px;width: 25px;"/></a>
+					</div>			
+				<%
+				 }else{	
+				%>
+					<a href="getDlmStateSummaryReportFile.htm?id=<%=report.id%>&reportyear=<%=report.schoolYear%>&downloadType=pdf" class="itemDlmSummaryLink" >DLM_<%=report.attSchDisplayIdentifier%>_State_Aggregate_<%=report.schoolYear%>.pdf</a>
+					<span class="size"><%= pdfRecordSize %> <%=pdfSizeType%></span>
+				<%
+				 }
+				%>
+			<br/>	
+		</div>
+	</div>
+	<%
+	} else { %>
+		<div style="margin:0px;">
+			Report Not Available		
+	    </div>
+	<%}%>
+</div>

@@ -1,0 +1,1 @@
+-- empty ddl script for dml/769.sql

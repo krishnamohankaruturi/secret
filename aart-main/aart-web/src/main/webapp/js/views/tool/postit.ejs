@@ -1,0 +1,30 @@
+<div id="posit-notes">	
+	<div id="postIt" class="sticky">
+			<div class="tool-hdr">
+				<a id="postIt-close" href="#" class="ind-tool-close tool-close"></a>
+				<a id="postIt-minimize" href="#" class="ind-tool-min tool-min"></a>
+			</div><!-- /tool hdr -->
+			<div id="postitdrag" style="width:100%; text-align:center;">DRAG</div>
+	</div>
+	<div id="confirmNoteDelete" class="popupOverlay">
+		<div class="overlay-content overlayShowing">
+			<div class="activation-form">
+	   			<p><%=tool_names.postItNotes.delete%></p>
+	   			<div class="activation">
+					<button type="button" id="confirmDeleteNoteButton" class="btn-rev"><%=tool_names.postItNotes.yes%></button>
+					<button type="button" id="confirmCancelDeleteNoteButton" class="btn-rev"><%=tool_names.postItNotes.no%></button>
+				</div>
+			</div>
+    	</div>
+ 	</div>
+ 	<div id="postItWarn" class="popupOverlay">
+		<div class="overlay-content overlayShowing">
+			<div class="activation-form">
+	   			<p><%=tool_names.postItNotes.warning%></p>
+	   			<div class="activation">
+					<button type="button" id="postItWarnConfirm" class="btn-rev"><%=tool_names.postItNotes.ok%></button>
+				</div>
+			</div>
+    	</div>
+ 	</div>
+</div>

@@ -1,0 +1,138 @@
+
+
+.clearfix { clear: both; }
+
+.audioContainer {
+  width: 260px;
+  background: -webkit-linear-gradient(90deg, #1F1C2C 10%, #000 90%); /* Chrome 10+, Saf5.1+ */
+  background: -moz-linear-gradient(90deg, #1F1C2C 10%,#000 90%); /* FF3.6+ */
+  background: -ms-linear-gradient(90deg, #1F1C2C 10%, #000 90%); /* IE10 */
+  background: -o-linear-gradient(90deg, #1F1C2C 10%, #000 90%); /* Opera 11.10+ */
+  background: linear-gradient(90deg, #1F1C2C 10%, #000 90%); /* W3C */
+}
+
+input.seekbar {
+  padding: 0 !important;
+  width: 95%;
+  margin-left: 2%;
+  -webkit-appearance: none !important;
+  background: #ccc;
+  height: 1px;
+  margin-bottom: 20px;
+  margin-top:10px;
+}
+input.seekbar::-webkit-slider-thumb {
+ -webkit-appearance:none !important;
+ background:url(../images/audioPlayer/knob.png) no-repeat;
+ height:12px;
+ width:12px;
+}
+.buttons {
+  width: 60%;
+  display: block;
+  margin-left: 30px;
+  overflow: auto;
+}
+.range{
+	float:left;
+	width:80%;
+}
+.duration{
+	float:right;
+	margin-top: 5px;
+}
+button.play {
+  margin: 8px;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 30px;
+  height: 30px;
+  background: url(../images/audioPlayer/play.png) no-repeat;
+  float: left;
+  margin-left: -2px;
+  background-size: 28px 23px;
+}
+
+button.pause {
+  margin: 8px;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 30px;
+  height: 30px;
+  background: url(../images/audioPlayer/pause.png) no-repeat;
+  float: left;
+  margin-left: -2px;
+  background-size: 28px 23px;
+}
+
+button.stop {  
+  margin: 7px;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 34px;
+  height: 30px;
+  background: url(../images/audioPlayer/stop.png) no-repeat;
+  float: left;
+  margin-left: 3px;
+  background-size: 25px 25px;
+}
+
+button.prev {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 40px;
+  height: 30px;
+  background: url(../images/audioPlayer/prev.png) no-repeat;
+  float: left;
+  margin-top: 15px;
+  background-size: 25px 10px;
+}
+
+button.next {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 35px;
+  height: 30px;
+  background: url(../images/audioPlayer/next.png) no-repeat;
+  float: right;
+  margin-top: 15px;
+  background-size: 25px 10px;
+}
+
+.tracker {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  position: relative;
+  width: 100%;
+}
+
+.durationtext {
+  color: white;
+  top: 0;
+  right: 10px;
+  padding: 2px 8px;
+  background: #000;
+  border-radius: 5px;
+}
+
+.playlist { list-style: none; }
+
+.playlist li {
+  cursor: pointer;
+  margin: 5px;
+}
+
+.playlist li.active {
+  font-weight: bold;
+  padding: 3px;
+  background: #666;
+}

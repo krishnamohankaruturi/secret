@@ -1,0 +1,130 @@
+
+.report-tab-content {
+    float: left;
+    word-wrap: break-word;
+    display: block;
+    float: left; 
+    width: 100%;   
+    /*margin-bottom: 25px;*/   
+}
+
+.report-tab-content .tab-pane{
+	padding:4px;
+}
+
+.report-content{
+    float: left;
+    margin: 2% 0 10px 0;
+    width: 98%;
+    /*height: 74%;*/
+    min-height: 150px;
+    height: auto;
+    word-wrap: break-word;
+    /*overflow: auto;*/
+    display: block;
+    float: left; 
+    width: 100%;
+    /*padding: 0 10px;*/ 
+    /*height: 375px;*/
+}
+
+.report-content a{
+	text-decoration: underline;
+}
+
+.report-tab-content .bottom {
+    clear: both;
+    text-align: center;
+}
+
+.report-tab-content .pagination input {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 120px;
+    height: 100%;
+    outline: none;
+    border: none;
+    vertical-align: middle;
+    text-align: center;
+    color: #434343;
+    background-color: #ffffff;
+}
+
+.report-tab-content .pagination a.disabled, 
+.report-tab-content .pagination a.disabled:hover, 
+.report-tab-content .pagination a.disabled:focus, 
+.report-tab-content .pagination a.disabled:active {
+    background-color: #f3f3f3;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
+    background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
+    background-image: linear-gradient(#f3f3f3, lightgrey);
+    cursor: default;
+}
+
+.report-tab-content .pagination a {
+    display: block;
+    float: left;
+    width: 20px;
+    height: 20px;
+    outline: none;
+    border-right: 1px solid #CDCDCD;
+    border-left: 1px solid #CDCDCD;
+    color: #555555;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Times, 'Times New Roman', Georgia, Palatino;
+    background-color: #f3f3f3;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
+    background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
+    background-image: linear-gradient(#f3f3f3, lightgrey);
+}
+
+.report-tab-content .pagination a:first-child {
+    border: none;
+    border-radius: 2px 0 0 2px;
+}
+
+.report-tab-content .pagination a {
+    display: block;
+    float: left;
+    width: 20px;
+    height: 25px;
+    outline: none;
+    border-right: 1px solid #CDCDCD;
+    border-left: 1px solid #CDCDCD;
+    color: #555555;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: Times, 'Times New Roman', Georgia, Palatino;
+    background-color: #f3f3f3;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(100%, lightgrey));
+    background-image: -webkit-linear-gradient(#f3f3f3, lightgrey);
+    background-image: linear-gradient(#f3f3f3, lightgrey);
+}
+
+.report-tab-content .pagination a:last-child {
+    border: none;
+    border-radius: 0 2px 2px 0;
+}
+
+.report-tab-content .pagination {
+    display: inline-block;
+    border: 1px solid #CDCDCD;
+    border-radius: 3px;
+}
+
+.report-content .row .col-* {
+	height: 100%;
+}
+
+.report-content .item {
+	font-size: 14px;
+	margin: 2px 0;
+}

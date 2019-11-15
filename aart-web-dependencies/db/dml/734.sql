@@ -1,0 +1,2 @@
+--dml/734.sql
+--empty for ddl/734.sql

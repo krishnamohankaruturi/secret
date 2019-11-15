@@ -1,0 +1,2 @@
+--dml/731.sql 
+--empty for ddl/731.sql

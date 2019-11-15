@@ -1,0 +1,7 @@
+	
+		<textarea class="ckeditor response" cols="80" id="answer_<%= qNum+'_'+i %>" rows="10" tabindex="1" style="display: <%=showeditor%>" >
+		<% if (response && response.values && response.values[qNum]!=null) { %>
+			<%= responses.values[qNum] %>
+		<% } %>
+		</textarea>
+	

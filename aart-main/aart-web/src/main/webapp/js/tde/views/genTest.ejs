@@ -1,0 +1,62 @@
+<div id="oldTestPage" style="display:none">
+<div id="tool-arena"></div>
+
+<div class="w">
+
+	 <div id="toolbox-c">
+		<div id="show-toolbox">TOOLBOX <a title="Show Toolbox" href="#">SHOW</a></div>
+		
+		<div id="tools-c">
+			<ul></ul>			
+		</div>
+	</div>
+	
+	<!-- <div id="tools-holder">-->
+		
+	<!-- </div> -->
+	
+	<header class="nav-header hdr">
+		<div class="sliderkit-nav">
+			<div class="sliderkit-nav-clip">
+				<a class="test-nav-prev sliderkit-nav-btn sliderkit-nav-prev" href="#"><img src="/images/questions-prev-btn.png" alt="Previous" /></a>
+				<a class="test-nav-next sliderkit-nav-btn sliderkit-nav-next" href="#"><img src="/images/questions-next-btn.png" alt="Next" /></a>
+				<ul class="test-nav"></ul>
+			</div>
+		</div>
+	</header>
+	
+	<section id="tde-content" class="gen-content">
+		<div class="buffer"></div>
+	</section>
+	<div class="tde-controls-c footer">
+		
+		<ul class="span2-nav">
+				<li><a id="show-passage-only" href="#"><%= messages.testPage.passageOnly %></a></li>
+				<li><a id="show-questions-only" href="#"><%= messages.testPage.questionsOnly %></a></li>
+				<li><a id="show-passage-question" class="active" href="#"><%= messages.testPage.passageAndquestions %></a></li>
+		</ul>
+ 		<div class="tde-controls">
+ 			<% if(exitFlag) { %>
+ 				<ul style="margin-right:140px">
+ 					<li class="tde-controls-save"><a href="#"><img alt="Back" src="/images/signout-icon.png"><%= messages.testPage.saveasdraft %></a></li>
+            	</ul>
+            <% } %>
+ 			<ul>
+ 				<% if( !testObj.fixedLength && !linearNavigation ) { %>
+	 					<li class="tde-controls-back"><a href="#" class="tabable"><img src="/images/back-arrow.png" alt="Back"><%= messages.testPage.back %></a></li>
+ 				<% } %>
+ 				<li class="tde-controls-clear"><a href="#" class="tabable"><%= messages.testPage.clear %></a></li>
+ 				<li class="tde-controls-next"><a href="#" class="tabable"><%= messages.testPage.next %><img src="/images/next-arrow.png" alt="Next"></a></li>
+ 				<!-- ><li class="tde-controls-markreview"><a href="#">Mark for Review</a></li> -->
+ 				
+ 				<% if( !testObj.fixedLength && !linearNavigation ) { %>
+ 				<li class="tde-controls-reviewend"><a href="#" class="tabable"><%= messages.testPage.reviewAndEnd %></a></li>
+ 				<% } %>
+ 			</ul>
+ 		
+ 		</div><!-- /controls -->
+ 		<div id="actionAudio" class="jp-jplayer" style="display:none;"></div>
+	</div><!-- /controls-c -->
+</div>
+
+</div>

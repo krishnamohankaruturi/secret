@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.AuthoritiesDao">
+    <insert id="addAuthorities" parameterType="edu.ku.cete.domain.Authorities" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO authorities (authority, a.tabname, a.groupingname,a.labelname, a.level, a.sortorder,
+        createddate, createduser, activeflag, modifieddate, modifieduser)
+        VALUES (#{authority}, #{tabName}, #{groupingName}, #{labelName}, #{level}, #{sortOrder}
+        #{createdDate}, #{createdUser}, #{activeFlag},#{modifiedDate},#{modifiedUser})
+    </insert>
+    
+    <update id="updateAuthorities" parameterType="edu.ku.cete.domain.Authorities">
+        UPDATE authorities
+        SET authority = #{authority},
+        tabname = #{tabName}, 
+		groupingname = #{groupingName},
+		labelname = #{labelName},
+		level = #{level},
+		sortorder = #{sortOrder},
+        modifieddate = #{modifiedDate},
+	    modifieduser = #{modifiedUser},
+	    activeflag = #{activeFlag} 
+        WHERE id = #{authoritiesId}
+    </update>
+
+    <delete id="deleteAuthorities" parameterType="long">
+        DELETE FROM authorities WHERE id = #{authoritiesId}
+    </delete>
+    
+    <select id="getAuthorities" resultType="edu.ku.cete.domain.Authorities" parameterType="long">
+        SELECT id, authority, tabname, groupingname,labelname, level, sortorder
+        FROM authorities
+        WHERE id = #{authoritiesId} and activeflag is true
+    </select>
+    
+    <select id="getByUserAndGroupExcludeLockdown" resultType="Authorities" parameterType="map">		
+		WITH exclude_authorities AS (
+		SELECT DISTINCT ga.authorityid 
+			FROM groupauthorities ga 
+			INNER JOIN authorities a on a.id = ga.authorityid and a.activeflag is true
+			INNER JOIN groupauthoritylockdownperiod galp ON galp.groupauthorityid = ga.id 
+			INNER JOIN organizationtreedetail otd ON otd.stateid = galp.organizationid 
+			WHERE (otd.schoolid = #{organizationId} or otd.districtid = #{organizationId} or otd.stateid = #{organizationId})
+				and galp.fromdate &lt;= now() and galp.todate &gt;= now() and ga.groupid = #{groupId}
+				and galp.activeflag is true)
+		SELECT DISTINCT a.id AS authoritiesId, a.authority, a.displayname, 
+		a.tabname, a.groupingname, a.labelname, a.level,a.sortorder
+			FROM usersorganizations uo 
+			INNER JOIN userorganizationsgroups uog ON uo.id = uog.userorganizationid 
+			INNER JOIN groupauthorities ga ON ga.groupid = uog.groupid and ga.activeflag is true
+			INNER JOIN authorities a ON ga.authorityid = a.id and a.activeflag is true
+			WHERE uo.aartuserid = #{userId} and ga.groupid = #{groupId} and ga.organizationid =#{stateId} 
+				and ga.assessmentprogramid = #{assessmentProgramId}
+				and ga.authorityid not in (select authorityid FROM exclude_authorities)
+    </select>
+     <select id="getGroupExcludeLockdownForGlobalAdmin" resultType="Authorities" parameterType="map">		
+		WITH exclude_authorities AS (
+		SELECT DISTINCT ga.authorityid 
+			FROM groupauthorities ga 
+			INNER JOIN authorities a on a.id = ga.authorityid and a.activeflag is true
+			INNER JOIN groupauthoritylockdownperiod galp ON galp.groupauthorityid = ga.id 
+			INNER JOIN organizationtreedetail otd ON otd.stateid = galp.organizationid 
+			WHERE (otd.schoolid = #{organizationId} or otd.districtid = #{organizationId} or otd.stateid = #{organizationId})
+				and galp.fromdate &lt;= now() and galp.todate &gt;= now() and ga.groupid = #{groupId}
+				and galp.activeflag is true)
+		SELECT DISTINCT a.id AS authoritiesId, a.authority, a.displayname, 
+		a.tabname, a.groupingname, a.labelname, a.level, a.sortorder
+			FROM groupauthorities ga
+			INNER JOIN authorities a ON ga.authorityid = a.id and ga.activeflag is true and a.activeflag is true
+			WHERE ga.groupid = #{groupId}
+				and ga.authorityid not in (select authorityid FROM exclude_authorities)
+    </select>
+
+    <select id="getAll" resultType="Authorities">
+		select a.id as authoritiesId, a.authority, a.displayname,
+		a.tabname, a.groupingname, a.labelname, a.level, a.sortorder
+		from authorities a 
+		where a.activeflag is true
+		order by a.sortorder;
+    </select>
+    
+    <select id="getByCombinedStateAssessmentProgram" resultType="Authorities">
+		select distinct a.id as authoritiesId, a.authority, a.displayname,
+		a.tabname, a.groupingname, a.labelname, a.level, a.sortorder
+		from authorities a 
+		inner join groupauthorities ga on ga.authorityid = a.id and a.activeflag is true and ga.activeflag is true 
+		where ga.groupid = #{groupId}  and ga.assessmentprogramid = #{assessmentProgramId}
+		and ga.organizationid = #{organizationId}
+		order by a.sortorder
+    </select> 
+   
+    <select id="getByCombinedStatesAssesmentPrograms" resultType="Authorities">
+		select distinct a.id as authoritiesId, a.authority, a.displayname,
+		a.tabname, a.groupingname,a.labelname, a.level, a.sortorder
+		from authorities a 
+		inner join groupauthorities ga on ga.authorityid = a.id
+		and a.activeflag is true and ga.activeflag is true 
+		where ga.groupid = #{groupId}  and ga.assessmentprogramid = 
+ 		ANY(ARRAY
+			<foreach collection="assessmentProgramIdArray" item="assessmentProgramId" open="["
+			close="]" separator=",">
+		#{assessmentProgramId}
+		</foreach>) 
+		and ga.organizationid =
+		ANY(ARRAY
+			<foreach collection="orgIdArray" item="orgId" open="["
+			close="]" separator=",">
+		#{orgId}
+		</foreach>) 
+		order by a.sortorder
+    </select> 
+    
+    <select id="getConflictingCount" resultType="Authorities">
+		select distinct a.id as authoritiesId, a.authority, a.displayname,
+		a.tabname, a.groupingname,a.labelname, a.level, a.sortorder
+			from authorities a 
+			inner join groupauthorities ga on ga.authorityid = a.id
+			and a.activeflag is true and ga.activeflag is true
+			where ga.groupid = #{groupId,jdbcType=BIGINT}  and ga.assessmentprogramid = #{assesmentProgramIdA,jdbcType=BIGINT,jdbcType=BIGINT}
+				and ga.organizationid = #{organizationIdA,jdbcType=BIGINT,jdbcType=BIGINT}
+				and a.id not in (
+		select distinct ab.id 
+			from authorities ab 
+			inner join groupauthorities gab on gab.authorityid = ab.id
+			and ab.activeflag is true and gab.activeflag is true
+			where gab.groupid = #{groupId}  and gab.assessmentprogramid = #{assesmentProgramIdB,jdbcType=BIGINT}
+				and gab.organizationid = #{organizationIdB,jdbcType=BIGINT} ) 
+    </select> 
+    <select id="getByAuthority" resultType="Authorities">
+    	select distinct a.id as authoritiesId, a.authority, a.displayname,
+		a.tabname, a.groupingname,a.labelname, a.level, a.sortorder
+    	from authorities a 
+    	where a.authority = #{authority} and a.activeflag is true
+    </select>
+    <select id="getTabNames" resultType="java.lang.String">
+    	select tabname from (
+			select distinct tabname, min(sortorder) 
+			from authorities 
+			where activeflag is true and tabname != '--NA--'
+			group by tabname 
+			order by min(sortorder)) as tabnames
+    </select>
+    <select id="getByDisplayName" resultType="Authorities">
+    	select distinct a.id as authoritiesId, a.authority, a.displayname,
+		a.tabname, a.groupingname,a.labelname, a.level, a.sortorder
+    	from authorities a 
+    	where TRIM(upper(a.displayname)) = TRIM(upper(#{displayName})) and a.activeflag is true
+    </select>
+   <select id="checkTabIsAvailable" resultType="Boolean">
+  SELECT EXISTS ( select distinct id from  authorities  where  upper(tabname)=upper(#{tabName}) limit 1);
+   </select>
+   <select id="checkGroupingIsAvailable" resultType="Boolean">
+    SELECT EXISTS (select distinct id from  authorities  where  upper(groupingname)=upper(#{groupingName}) limit 1);
+   </select>
+    <select id="checkLabelIsAvailable" resultType="Boolean">
+   SELECT EXISTS (select distinct id from  authorities  where  upper(labelname)=upper(#{labelName}) limit 1);
+   </select>
+     
+</mapper>
+

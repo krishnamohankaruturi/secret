@@ -1,0 +1,39 @@
+<% if(currentTest.uiname == 'genTest') { %>
+	<div id="directions" class='general'>
+<% } else {%>
+	<div id="directions" class='alternate'>
+<% } %>
+		<div class="intro-header">
+			<h1><%= currentTest.name %></h1>
+		</div>
+
+			<% if(currentTest.directions != null && set == 'test') { %>
+   			 		<div id="test-description"><div><%=currentTest.directions%></div></div>
+						<div class="intro-header <%=set%>">
+							<% if(currentTest.testSections[currentTest['sectionId_'+studentTestSection.testSectionId]].directions == null || currentTest.testSections[currentTest['sectionId_'+studentTestSection.testSectionId]].directions == '') { %>
+	   			 					<div class="direction-buttons"><a id="backTestHome" class="btn" href="<%= contextPath %>/studentHome.htm"><img src="/images/arrowBack-sm-icon.png" alt="Go" /><%=messages.testPage.goBack%></a></div>
+	   			 					<div class="direction-tts"></div>
+	   			 					<div class="direction-buttons"><a href="#" class="btn" id="app-take-test"><%=messages.testPage.begin%><img alt="Go" src="/images/arrow-sm-icon.png"></a></div>
+	   			 			<% } else { %>
+	   			 					<div class="direction-buttons"><a id="backTestHome" class="btn" href="<%= contextPath %>/studentHome.htm"><img src="/images/arrowBack-sm-icon.png" alt="Go" /><%=messages.testPage.goBack%></a></div>
+	   			 					<div class="direction-tts"></div>
+	   			 					<div class="direction-buttons"><a id="gotoSectionDirections" class="btn" href="#"><%=messages.testPage.next%><img src="/images/arrow-sm-icon.png" alt="Go" /></a></div>
+	   			 			<% } %>
+	   			 		</div>
+	   		<% } else { %>
+	   			 	<div id="test-description"><div><%= currentTest.testSections[currentTest['sectionId_'+studentTestSection.testSectionId]].directions %></div></div>
+   			 		<div class="intro-header">
+   			 			<div class="direction-buttons">
+   			 			<% if(set == 'test' || (currentTest['sectionId_'+currentStudentTestSection.testSectionId] > 0 && currentTest.testSections[currentTest['sectionId_'+currentStudentTestSection.testSectionId] - 1].sectionbreak == true && !fromTestDir)) { %>
+   			 				<a id="backTestHome" class="btn" href="<%= contextPath %>/studentHome.htm"><img src="/images/arrowBack-sm-icon.png" alt="Go" /><%=messages.testPage.goBack%></a>
+   			 			<% } else if(fromTestDir) { %>
+   			 				<a id="backSectionDirection" class="btn" href="#"><img src="/images/arrowBack-sm-icon.png" alt="Go" /><%=messages.testPage.goBack%></a>
+   			 			<% } %>
+   			 			</div>
+   			 			<div class="direction-tts"></div>
+   			 			<div class="direction-buttons"><a href="#" class="btn" id="app-take-test"><%=messages.testPage.begin%><img alt="Go" src="/images/arrow-sm-icon.png"></a></div>
+   			 		</div>
+   			 <% } %>
+		<!-- </div>-->
+
+	</div>

@@ -1,0 +1,1 @@
+-- empty for ddl/767.sql

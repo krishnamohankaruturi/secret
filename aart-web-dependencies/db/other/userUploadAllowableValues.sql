@@ -1,0 +1,1 @@
+update fieldspecification set allowablevalues = null where fieldname = 'uniqueCommonIdentifier' or fieldname = 'lastName' or fieldName = 'firstName';

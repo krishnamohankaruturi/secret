@@ -1,0 +1,18 @@
+<div id="savedraft" class="popupOverlay">
+	<div class="overlay-content overlayShowing">
+		<div class="activation-form">
+	   		
+	   			<% if(exitandsave) {%>
+	   				<p><%=messages.testPage.savedraftmessage%></p>
+	   			<% } else {%>
+	   				<img src="/images/buttons_stop_sign.png">
+	   					<div class="exitmessage"><%=messages.testPage.exitwithoutsave%></div>
+	   			<% } %>
+	   		
+	   		<div class="activation">
+				<button type="button" id="savedraftyes" class="btn-rev"><%=messages.testPage.yes%></button>
+				<button type="button" id="savedraftno" class="btn-rev"><%=messages.testPage.no%></button>
+			</div>
+		</div>
+    </div>
+</div>

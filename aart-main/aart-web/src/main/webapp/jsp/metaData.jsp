@@ -1,0 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/jsp/include.jsp" %>
+<div>Build Number : <c:out value="${buildNumber}"/></div>
+<div>Built By : <c:out value="${builtBy}"/></div>

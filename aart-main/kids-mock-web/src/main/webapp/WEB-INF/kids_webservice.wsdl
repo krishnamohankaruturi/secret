@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/kids_data/KIDS_WebService" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://tempuri.org/kids_data/KIDS_WebService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/kids_data/KIDS_WebService">
+      <s:element name="getmessage">
+        <s:complexType/>
+      </s:element>
+      <s:element name="getmessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getmessageResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthenticationSoapHeader" type="tns:AuthenticationSoapHeader"/>
+      <s:complexType name="AuthenticationSoapHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string"/>
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:element name="get_kids_by_date">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strFromDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strToDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="bolRequest_Complete" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_kids_by_dateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_kids_by_dateResult" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strFromDate" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="bolRequest_Complete" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="count_kids_by_date">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strFromDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strToDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="count_kids_by_dateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="count_kids_by_dateResult" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_kids_by_SSID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SSID" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_kids_by_SSIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_kids_by_SSIDResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_STCO_by_date">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strFromDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strToDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="bolRequest_Complete" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_STCO_by_dateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_STCO_by_dateResult" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strFromDate" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="bolRequest_Complete" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_STCO_by_SSID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SSID" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_STCO_by_SSIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_STCO_by_SSIDResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_STCO_by_TeacherID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="teacherID" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_STCO_by_TeacherIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_STCO_by_TeacherIDResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_TASC_by_date">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strFromDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strToDate" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="bolRequest_Complete" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_TASC_by_dateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_TASC_by_dateResult" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strFromDate" type="s:string"/>
+            <s:element minOccurs="1" maxOccurs="1" name="bolRequest_Complete" type="s:boolean"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_TASC_by_SSID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SSID" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_TASC_by_SSIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_TASC_by_SSIDResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_TASC_by_TeacherID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="teacherID" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_TASC_by_TeacherIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_TASC_by_TeacherIDResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_OTL_Complete">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="subject" type="s:int"/>
+            <s:element minOccurs="0" maxOccurs="1" name="strSchool_Year" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_OTL_CompleteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_OTL_CompleteResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_Organizations">
+        <s:complexType/>
+      </s:element>
+      <s:element name="get_OrganizationsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_OrganizationsResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="get_Buildings">
+        <s:complexType/>
+      </s:element>
+      <s:element name="get_BuildingsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="get_BuildingsResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getmessageSoapIn">
+    <wsdl:part name="parameters" element="tns:getmessage"/>
+  </wsdl:message>
+  <wsdl:message name="getmessageSoapOut">
+    <wsdl:part name="parameters" element="tns:getmessageResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getmessageAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_kids_by_dateSoapIn">
+    <wsdl:part name="parameters" element="tns:get_kids_by_date"/>
+  </wsdl:message>
+  <wsdl:message name="get_kids_by_dateSoapOut">
+    <wsdl:part name="parameters" element="tns:get_kids_by_dateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_kids_by_dateAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="count_kids_by_dateSoapIn">
+    <wsdl:part name="parameters" element="tns:count_kids_by_date"/>
+  </wsdl:message>
+  <wsdl:message name="count_kids_by_dateSoapOut">
+    <wsdl:part name="parameters" element="tns:count_kids_by_dateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="count_kids_by_dateAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_kids_by_SSIDSoapIn">
+    <wsdl:part name="parameters" element="tns:get_kids_by_SSID"/>
+  </wsdl:message>
+  <wsdl:message name="get_kids_by_SSIDSoapOut">
+    <wsdl:part name="parameters" element="tns:get_kids_by_SSIDResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_kids_by_SSIDAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_dateSoapIn">
+    <wsdl:part name="parameters" element="tns:get_STCO_by_date"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_dateSoapOut">
+    <wsdl:part name="parameters" element="tns:get_STCO_by_dateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_dateAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_SSIDSoapIn">
+    <wsdl:part name="parameters" element="tns:get_STCO_by_SSID"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_SSIDSoapOut">
+    <wsdl:part name="parameters" element="tns:get_STCO_by_SSIDResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_SSIDAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_TeacherIDSoapIn">
+    <wsdl:part name="parameters" element="tns:get_STCO_by_TeacherID"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_TeacherIDSoapOut">
+    <wsdl:part name="parameters" element="tns:get_STCO_by_TeacherIDResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_STCO_by_TeacherIDAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_dateSoapIn">
+    <wsdl:part name="parameters" element="tns:get_TASC_by_date"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_dateSoapOut">
+    <wsdl:part name="parameters" element="tns:get_TASC_by_dateResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_dateAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_SSIDSoapIn">
+    <wsdl:part name="parameters" element="tns:get_TASC_by_SSID"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_SSIDSoapOut">
+    <wsdl:part name="parameters" element="tns:get_TASC_by_SSIDResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_SSIDAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_TeacherIDSoapIn">
+    <wsdl:part name="parameters" element="tns:get_TASC_by_TeacherID"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_TeacherIDSoapOut">
+    <wsdl:part name="parameters" element="tns:get_TASC_by_TeacherIDResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_TASC_by_TeacherIDAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_OTL_CompleteSoapIn">
+    <wsdl:part name="parameters" element="tns:get_OTL_Complete"/>
+  </wsdl:message>
+  <wsdl:message name="get_OTL_CompleteSoapOut">
+    <wsdl:part name="parameters" element="tns:get_OTL_CompleteResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_OTL_CompleteAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_OrganizationsSoapIn">
+    <wsdl:part name="parameters" element="tns:get_Organizations"/>
+  </wsdl:message>
+  <wsdl:message name="get_OrganizationsSoapOut">
+    <wsdl:part name="parameters" element="tns:get_OrganizationsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_OrganizationsAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:message name="get_BuildingsSoapIn">
+    <wsdl:part name="parameters" element="tns:get_Buildings"/>
+  </wsdl:message>
+  <wsdl:message name="get_BuildingsSoapOut">
+    <wsdl:part name="parameters" element="tns:get_BuildingsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="get_BuildingsAuthenticationSoapHeader">
+    <wsdl:part name="AuthenticationSoapHeader" element="tns:AuthenticationSoapHeader"/>
+  </wsdl:message>
+  <wsdl:portType name="KIDS_WebServiceSoap">
+    <wsdl:operation name="getmessage">
+      <wsdl:input message="tns:getmessageSoapIn"/>
+      <wsdl:output message="tns:getmessageSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_kids_by_date">
+      <wsdl:input message="tns:get_kids_by_dateSoapIn"/>
+      <wsdl:output message="tns:get_kids_by_dateSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="count_kids_by_date">
+      <wsdl:input message="tns:count_kids_by_dateSoapIn"/>
+      <wsdl:output message="tns:count_kids_by_dateSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_kids_by_SSID">
+      <wsdl:input message="tns:get_kids_by_SSIDSoapIn"/>
+      <wsdl:output message="tns:get_kids_by_SSIDSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_date">
+      <wsdl:input message="tns:get_STCO_by_dateSoapIn"/>
+      <wsdl:output message="tns:get_STCO_by_dateSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_SSID">
+      <wsdl:input message="tns:get_STCO_by_SSIDSoapIn"/>
+      <wsdl:output message="tns:get_STCO_by_SSIDSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_TeacherID">
+      <wsdl:input message="tns:get_STCO_by_TeacherIDSoapIn"/>
+      <wsdl:output message="tns:get_STCO_by_TeacherIDSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_date">
+      <wsdl:input message="tns:get_TASC_by_dateSoapIn"/>
+      <wsdl:output message="tns:get_TASC_by_dateSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_SSID">
+      <wsdl:input message="tns:get_TASC_by_SSIDSoapIn"/>
+      <wsdl:output message="tns:get_TASC_by_SSIDSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_TeacherID">
+      <wsdl:input message="tns:get_TASC_by_TeacherIDSoapIn"/>
+      <wsdl:output message="tns:get_TASC_by_TeacherIDSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_OTL_Complete">
+      <wsdl:input message="tns:get_OTL_CompleteSoapIn"/>
+      <wsdl:output message="tns:get_OTL_CompleteSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_Organizations">
+      <wsdl:input message="tns:get_OrganizationsSoapIn"/>
+      <wsdl:output message="tns:get_OrganizationsSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="get_Buildings">
+      <wsdl:input message="tns:get_BuildingsSoapIn"/>
+      <wsdl:output message="tns:get_BuildingsSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="KIDS_WebServiceSoap" type="tns:KIDS_WebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getmessage">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/getmessage" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:getmessageAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_kids_by_date">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_kids_by_date" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_kids_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="count_kids_by_date">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/count_kids_by_date" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:count_kids_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_kids_by_SSID">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_kids_by_SSID" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_kids_by_SSIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_date">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_STCO_by_date" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_STCO_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_SSID">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_STCO_by_SSID" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_STCO_by_SSIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_TeacherID">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_STCO_by_TeacherID" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_STCO_by_TeacherIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_date">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_TASC_by_date" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_TASC_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_SSID">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_TASC_by_SSID" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_TASC_by_SSIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_TeacherID">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_TASC_by_TeacherID" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_TASC_by_TeacherIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_OTL_Complete">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_OTL_Complete" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_OTL_CompleteAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_Organizations">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_Organizations" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_OrganizationsAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_Buildings">
+      <soap:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_Buildings" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+        <soap:header message="tns:get_BuildingsAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="KIDS_WebServiceSoap12" type="tns:KIDS_WebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getmessage">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/getmessage" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:getmessageAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_kids_by_date">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_kids_by_date" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_kids_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="count_kids_by_date">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/count_kids_by_date" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:count_kids_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_kids_by_SSID">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_kids_by_SSID" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_kids_by_SSIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_date">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_STCO_by_date" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_STCO_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_SSID">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_STCO_by_SSID" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_STCO_by_SSIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_STCO_by_TeacherID">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_STCO_by_TeacherID" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_STCO_by_TeacherIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_date">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_TASC_by_date" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_TASC_by_dateAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_SSID">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_TASC_by_SSID" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_TASC_by_SSIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_TASC_by_TeacherID">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_TASC_by_TeacherID" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_TASC_by_TeacherIDAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_OTL_Complete">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_OTL_Complete" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_OTL_CompleteAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_Organizations">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_Organizations" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_OrganizationsAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_Buildings">
+      <soap12:operation soapAction="http://tempuri.org/kids_data/KIDS_WebService/get_Buildings" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+        <soap12:header message="tns:get_BuildingsAuthenticationSoapHeader" part="AuthenticationSoapHeader" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="KIDS_WebService">
+    <wsdl:port name="KIDS_WebServiceSoap" binding="tns:KIDS_WebServiceSoap">
+      <soap:address location="http://kidsws.ksde.org/kids_data/kids_webservice.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="KIDS_WebServiceSoap12" binding="tns:KIDS_WebServiceSoap12">
+      <soap12:address location="http://kidsws.ksde.org/kids_data/kids_webservice.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

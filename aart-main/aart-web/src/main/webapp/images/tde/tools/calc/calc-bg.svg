@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="356px" height="416px" viewBox="0 0 356 416" enable-background="new 0 0 356 416" xml:space="preserve">
+<g>
+	<radialGradient id="SVGID_1_" cx="135.7305" cy="50.1851" r="395.8251" gradientUnits="userSpaceOnUse">
+		<stop  offset="0" style="stop-color:#808285"/>
+		<stop  offset="1" style="stop-color:#414042"/>
+	</radialGradient>
+	<path fill="url(#SVGID_1_)" stroke="#000000" stroke-miterlimit="10" d="M355.5,410.618c0,2.144-1.738,3.882-3.883,3.882H4.383
+		c-2.145,0-3.883-1.738-3.883-3.882V3.382C0.5,1.238,2.238-0.5,4.383-0.5h347.234c2.145,0,3.883,1.738,3.883,3.882V410.618z"/>
+	<path d="M334,99.256c0,2.068-1.677,3.744-3.744,3.744H22.744C20.676,103,19,101.324,19,99.256V24.744
+		C19,22.676,20.676,21,22.744,21h307.512c2.067,0,3.744,1.676,3.744,3.744V99.256z"/>
+	<path fill="#FFFFFF" d="M336,100.239c0,2.077-1.685,3.761-3.762,3.761H22.762c-2.078,0-3.762-1.684-3.762-3.761V25.761
+		C19,23.684,20.684,22,22.762,22h309.477c2.077,0,3.762,1.684,3.762,3.761V100.239z"/>
+	<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="177.4995" y1="21.9849" x2="177.4995" y2="203.1647">
+		<stop  offset="0" style="stop-color:#FFFFFF"/>
+		<stop  offset="1" style="stop-color:#27AAE1"/>
+	</linearGradient>
+	<path fill="url(#SVGID_2_)" d="M336,98.955c0,2.051-2.146,4.045-4.342,4.045H23.061C20.864,103,19,101.005,19,98.955V24.359
+		C19,22.309,20.864,21,23.061,21h308.597c2.196,0,4.342,1.309,4.342,3.359V98.955z"/>
+	<linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="176.4995" y1="43.6055" x2="176.4995" y2="81.8655">
+		<stop  offset="0" style="stop-color:#FFFFFF;stop-opacity:0"/>
+		<stop  offset="1" style="stop-color:#FFFFFF"/>
+	</linearGradient>
+	<path opacity="0.36" fill="url(#SVGID_3_)" d="M334,72.083V26.298c0-2.941-0.933-5.298-3-5.298H23.425
+		C21.358,21,19,23.357,19,26.298v45.784C77,82.319,304,79.987,334,72.083z"/>
+</g>
+</svg>

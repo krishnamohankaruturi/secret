@@ -1,0 +1,74 @@
+<div class="districtDetail">
+<% if (data != null && data.length > 0) {
+	var record = data[0];
+%>
+	<div class="subject">
+		<span class="heading"><%= record.subjectName %></span>
+	</div> 
+	
+	<%	
+		for (var x = 1; x < data.length; x++) {
+			 record = data[x]; 
+			
+			if(data[x].subjectName!=data[x-1].subjectName)
+			{
+	%>		
+			<div class="subject">
+				<span class="heading"><%= record.subjectName %></span>
+			</div>
+	<% 
+			}
+		} 
+	%>
+		<hr>
+		<div class="subject">
+				<div class="item">
+					<% record = data[0]; 
+					   var newSubject = false;
+					%>
+					
+					<a href="getDistrictDetailReportFile.htm?id=<%= record.id %>">
+						<%= record.gradeName %>
+					</a>
+					<br/>
+	<%	
+		for (var x = 1; x < data.length; x++) {
+		    record = data[x];
+			
+			if(data[x].subjectName!=data[x-1].subjectName)
+			{	
+				newSubject = true;
+				
+		%>
+					</div>
+				</div>
+		
+		<% } %>
+	 	
+		<%		
+			if(newSubject)
+			{	
+		%>
+				<div class="subject">
+					<div class="item">
+		<%	
+				newSubject = false;
+			}  
+		%>
+			
+		<% 
+			if(data[x].subjectName==data[x-1].subjectName)
+			{
+				newSubject=false;
+			}	
+		%>
+			
+			<a href="getDistrictDetailReportFile.htm?id=<%= record.id %>">
+						<%= record.gradeName %>
+			</a>
+			<br/>
+	
+	<% } %>
+		
+<% } %>
+</div>

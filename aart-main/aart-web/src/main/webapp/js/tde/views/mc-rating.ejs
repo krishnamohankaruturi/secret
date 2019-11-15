@@ -1,0 +1,60 @@
+<div class="span1 test-2">
+			
+	<% if(uiType == 'genTest') {%>	
+	<div class="q-hdr">
+		<ul>
+			<li>
+				<% if(jQuery.inArray(parseInt(qNum), markedReview) > 0) { %>
+					<a href="#" class="mark-question mark-question-active">Mark for Review</a>
+				<% } else { %>
+					<a href="#" class="mark-question">Mark for Review</a>
+				<% } %>
+				<span>Flag for Review</span>
+			</li>
+		</ul>
+	</div><!-- /q-hdr -->
+	<% } %>
+				
+	<div class="taskstem"><%= task['question'] %></div>
+		
+	<div class="foils">	
+		<ul class="q-ratingScale"> 
+					
+			<%  var css_width = 100/task['foils'].length;
+				for(var i=0; i<task['foils'].length; i++) { 
+					var foilText = task['foils'][i].text;
+				%>
+				
+				<% var foilAudios = null;
+					if(spokenPref) {
+						foilAudios = _.map(_.sortBy(_.filter(task['foils'][i].contentGroups, function(contentGroup) {
+													return contentGroup.readAloudAccommodation != null && contentGroup.readAloudAccommodation.readAloudType.replace(" ","").toLowerCase() == spokenPref;
+												}), function(contentGroup) {
+												return contentGroup.readAloudAccommodation.defaultOrder;
+											}), function(contentGroup) {
+												return contentGroup.readAloudAccommodation.accessibilityFile.fileLocation;
+									});
+						foilAudios = JSON.stringify(foilAudios);
+					}
+				%>
+			<li style="width: <%= css_width %>%">
+				<% var html;
+					if(task.taskType != 'MC-MS') {
+						html = new EJS({url: path+'/js/views/mc.ejs'}).render({qNum: qNum, i:i, response: response, showtick: showtick})
+					} else {
+						html = new EJS({url: path+'/js/views/ms.ejs'}).render({answers: answers, qNum: qNum, i:i, task: task, showtick: showtick})
+					}
+				%>
+				<div class="tick"><%= html %></div><br/><br/>
+				<% if(!showtick && ((response.values[qNum]!=null && response.values[qNum]==i) || (answers!=null && answers.indexOf(task['foils'][i].id) != -1))) { %>
+					<div class="ratingScaleFoil tabable foil mark_answered" tabindex="<%= i %>" data-audio='<%= foilAudios %>'><%= foilText %></div>
+				<% } else { %>
+				 	<div class="ratingScaleFoil tabable foil" tabindex="<%= i %>" data-audio='<%= foilAudios %>'><%= foilText %></div>
+				<% } %>
+				
+        	</li>
+    		<% } %>	
+		</ul>
+	</div>
+	<div class="clear"></div>
+</div>

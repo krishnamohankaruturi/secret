@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.dataextracts.model.DataReportDetailsMapper">
+<resultMap id="BaseResultMapext" type="edu.ku.cete.domain.Externalstudentreports">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="studentid" jdbcType="BIGINT" property="studentId" />
+    <result column="gradeid" jdbcType="BIGINT" property="gradeId" />
+    <result column="subjectid" jdbcType="BIGINT" property="subjectId" />
+    <result column="stateid" jdbcType="BIGINT" property="stateId" />
+    <result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramid" />
+    <result column="districtid" jdbcType="BIGINT" property="districtId" />
+    <result column="schoolid" jdbcType="BIGINT" property="schoolId" />
+    <result column="level1_text" jdbcType="VARCHAR" property="level1_text" />
+    <result column="level2_text" jdbcType="VARCHAR" property="level2_text" />
+    <result column="filepath" jdbcType="VARCHAR" property="filePath" />
+    <result column="createddate" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="createduser" jdbcType="BIGINT" property="createdUser" />
+    <result column="modifieduser" jdbcType="BIGINT" property="modifiedUser" />
+    <result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="activeflag" jdbcType="BIT" property="activeFlag" />
+    <result column="schoolyear" jdbcType="BIGINT" property="schoolYear" />
+    <result column="reporttype" jdbcType="VARCHAR" property="reportType" />
+    <result column="reportprocessid" jdbcType="BIGINT" property="reportProcessId" />
+    <result column="schoolname" jdbcType="VARCHAR" property="schoolName" />
+    <result column="districtname" jdbcType="VARCHAR" property="districtName" />
+  </resultMap>  
+<resultMap id="BaseResultMapind" type="edu.ku.cete.domain.report.StudentReport">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="studentid" jdbcType="BIGINT" property="studentId" />
+    <result column="enrollmentid" jdbcType="BIGINT" property="enrollmentId" />
+    <result column="gradeid" jdbcType="BIGINT" property="gradeId" />
+    <result column="contentareaid" jdbcType="BIGINT" property="contentAreaId" />
+    <result column="attendanceschoolid" jdbcType="BIGINT" property="attendanceSchoolId" />
+    <result column="districtid" jdbcType="BIGINT" property="districtId" />
+    <result column="stateid" jdbcType="BIGINT" property="stateId" />
+    <result column="studenttest1id" jdbcType="BIGINT" property="studentTest1Id" />
+    <result column="studenttest2id" jdbcType="BIGINT" property="studentTest2Id" />
+    <result column="externaltest1id" jdbcType="BIGINT" property="externalTest1Id" />
+    <result column="externaltest2id" jdbcType="BIGINT" property="externalTest2Id" />
+    <result column="levelid" jdbcType="BIGINT" property="levelId" />
+    <result column="rawscore" jdbcType="NUMERIC" property="rawScore" />
+    <result column="subscore" jdbcType="NUMERIC" property="subScore" />
+    <result column="batchreportprocessid" jdbcType="BIGINT" property="batchReportProcessId" />
+    <result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramId" />
+    <result column="standarderror" jdbcType="NUMERIC" property="standardError" />
+    <result column="scalescore" jdbcType="BIGINT" property="scaleScore" />
+    <result column="schoolyear" jdbcType="BIGINT" property="schoolYear" />
+    <result column="filepath" jdbcType="VARCHAR" property="filePath" />
+    <result column="aggregates" jdbcType="BIT" property="aggregates" />
+    <result column="exitstatus" jdbcType="BIT" property="exitStatus" />
+    <result column="incompletestatus" jdbcType="BIT" property="incompleteStatus" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="level" jdbcType="BIGINT" property="level" />
+    <result column="previousyearlevelid" jdbcType="BIGINT" property="previousYearLevelId" />
+    <result column="studenttest3id" jdbcType="BIGINT" property="studentTest3Id" />
+    <result column="studenttest4id" jdbcType="BIGINT" property="studentTest4Id" />
+    <result column="externaltest3id" jdbcType="BIGINT" property="externalTest3Id" />
+    <result column="externaltest4id" jdbcType="BIGINT" property="externalTest4Id" />
+    <result column="studentperformancetestid" jdbcType="BIGINT" property="studentPerformanceTestId" />
+    <result column="performancetestexternalid" jdbcType="BIGINT" property="performanceTestExternalId" />
+    <result column="mdptscore" jdbcType="NUMERIC" property="mdptScore" />
+    <result column="mdptscorableflag" jdbcType="BIT" property="mdptScorableFlag" />
+    <result column="combinedlevel" jdbcType="NUMERIC" property="combinedLevel" />
+    <result column="mdptLevelId" jdbcType="BIGINT" property="mdptLevelId" />
+    <result column="combinedlevelid" jdbcType="BIGINT" property="combinedLevelId" />
+    <result column="transferred" jdbcType="BIT" property="transferred" />
+    <result column="aggregatetoschool" jdbcType="BIT" property="aggregateToSchool" />
+    <result column="aggregatetodistrict" jdbcType="BIT" property="aggregateToDistrict" />
+    <result column="suppressmdptscore" jdbcType="BIT" property="suppressMdptScore" />
+    <result column="suppressmainscalescoreprfrmlevel" jdbcType="BIT" property="suppressMainScalescorePrfrmLevel" />
+    <result column="suppresscombinedscore" jdbcType="BIT" property="suppressCombinedScore" />
+    <result column="aggregatemdptscore" jdbcType="BIT" property="aggregateMdptScore" />
+    <result column="aggregatemainscalescoreprfrmlevel" jdbcType="BIT" property="aggregateMainScalescorePrfrmLevel" />
+    <result column="aggregatecombinedlevel" jdbcType="BIT" property="aggregateCombinedLevel" />
+    <result column="aggregatesubscore" jdbcType="BIT" property="aggregateSubscore" />
+    <result column="contentareaname" jdbcType="VARCHAR" property="contentAreaName" />    
+    <result column="reading_rawscore" jdbcType="NUMERIC" property="readingRawScore" />
+    <result column="listening_rawscore" jdbcType="NUMERIC" property="listeningRawScore" />
+    <result column="speaking_rawscore" jdbcType="NUMERIC" property="speakingRawScore" />
+    <result column="writing_rawscore" jdbcType="NUMERIC" property="writingRawScore" />
+    <result column="comprehension_rawscore" jdbcType="NUMERIC" property="comprehensionRawScore" />    
+    <result column="reading_scalescore" jdbcType="BIGINT" property="readingScaleScore" />
+    <result column="listening_scalescore" jdbcType="BIGINT" property="listeningScaleScore" />
+    <result column="speaking_scalescore" jdbcType="BIGINT" property="speakingScaleScore" />
+    <result column="writing_scalescore" jdbcType="BIGINT" property="writingScaleScore" />
+    <result column="comprehension_scalescore" jdbcType="BIGINT" property="comprehensionScaleScore" />    
+    <result column="reading_standarderror" jdbcType="NUMERIC" property="readingStandardError" />
+    <result column="listening_standarderror" jdbcType="NUMERIC" property="listeningStandardError" />
+    <result column="speaking_standarderror" jdbcType="NUMERIC" property="speakingStandardError" />
+    <result column="writing_standarderror" jdbcType="NUMERIC" property="writingStandardError" />
+    <result column="comprehension_standarderror" jdbcType="NUMERIC" property="comprehensionStandardError" />    
+    <result column="reading_level" jdbcType="BIGINT" property="readingLevel"/>
+    <result column="listening_level" jdbcType="BIGINT" property="listeningLevel"/>
+    <result column="speaking_level" jdbcType="BIGINT" property="speakingLevel"/>
+    <result column="writing_level" jdbcType="BIGINT" property="writingLevel"/>
+    <result column="overall_level" jdbcType="BIGINT" property="level"/>    
+    <result column="reading_sccode" jdbcType="BIT" property="readingHasSCCode" />
+    <result column="listening_sccode" jdbcType="BIT" property="listeningHasSCCode" />
+    <result column="speaking_sccode" jdbcType="BIT" property="speakingHasSCCode" />
+    <result column="writing_sccode" jdbcType="BIT" property="writingHasSCCode" />    
+  </resultMap>    
+		<resultMap type="edu.ku.cete.domain.common.Organization" id="resultMap">
+        <id column="id" property="id" javaType="long"/>
+        <result column="organizationname" property="organizationName" javaType="String"/>
+        <result column="displayidentifier" property="displayIdentifier" javaType="String"/>
+        <result column="welcomeMessage" property="welcomeMessage" javaType="String"/>
+        <result column="organizationtypeid" property="organizationType.organizationTypeId"/>
+        <result column="relatedOrganizationId" property="relatedOrganizationId" javaType="Long"/>
+        <result column="buildinguniqueness" property="buildingUniqueness" javaType="Long"/>
+        <result column="schoolstartdate" jdbcType="TIMESTAMP" property="schoolStartDate" />
+        <result column="schoolenddate" jdbcType="TIMESTAMP" property="schoolEndDate" />
+        <result column="parentOrgDisplayName" javaType="String" property="parentOrgDisplayName" />
+        <result column="parentOrgTypeCode" javaType="String" property="parentOrgTypeCode" />
+        <result column="contractingorganization" javaType="Boolean" property="contractingOrganization" />
+        <result column="expirepasswords" javaType="Boolean" property="expirePasswords" />
+        <result column="expirationdatetype" javaType="long" property="expirationDateType" />
+        <result column="expirationdatetypestring" javaType="String" property="expirationDateTypeString" />
+        <result column="assessmentprogramid" property="assessmentProgramId" javaType="String"/>
+        <result column="currentschoolyear" property="currentSchoolYear" javaType="String"/>
+        <result column="pooltype" property="poolType" javaType="String"/>
+        <result column="reportyear" javaType="Integer" property="reportYear" />
+        <result column="testingmodel" javaType="long" property="testingModel" />
+        <result column="testingmodelname" javaType="String" property="testingModelName" />
+        <result column="parentorganizationname" javaType="String" property="parentOrganizationName" />
+        <result column="assessmentprogram" property="assessmentProgram" javaType="String"/>
+        <result column="sourceorgdisplayidentifier" property="sourceorgdisplayidentifier" javaType="String"/>
+	    <result column="activeflag" property="activeFlag" javaType="Boolean"/>
+        <association property="organizationType" javaType="edu.ku.cete.domain.common.OrganizationType">
+	        <result column="organizationTypeId" property="organizationTypeId" javaType="long"/>
+	        <result column="typename" property="typeName" javaType="String"/>
+	        <result column="typecode" property="typeCode" javaType="String"/>
+	        <result column="typelevel" property="typeLevel" javaType="Integer"/>
+	    </association>    
+    </resultMap>
+<resultMap id="BaseResultMap" type="edu.ku.cete.domain.content.ContentArea" >
+    
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="externalid" property="externalId" jdbcType="BIGINT" />
+    <result column="sortorder" property="sortOrder" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="abbreviatedname" property="abbreviatedName" jdbcType="VARCHAR" />
+    <result column="createdate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+    <result column="originationcode" property="originationCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMapbun" type="edu.ku.cete.domain.report.OrganizationReportDetails">
+   
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramId" />
+    <result column="contentareaid" jdbcType="BIGINT" property="contentAreaId" />
+    <result column="gradeid" jdbcType="BIGINT" property="gradeId" />
+    <result column="organizationid" jdbcType="BIGINT" property="organizationId" />
+    <result column="schoolyear" jdbcType="BIGINT" property="schoolYear" />
+    <result column="createddate" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="detailedreportpath" jdbcType="VARCHAR" property="detailedReportPath" />
+    <result column="schoolreportpdfpath" jdbcType="VARCHAR" property="schoolReportPdfPath" />
+    <result column="schoolreportpdfsize" jdbcType="BIGINT" property="schoolReportPdfSize" />
+    <result column="schoolreportzipsize" jdbcType="BIGINT" property="schoolReportZipSize" />
+    <result column="batchreportprocessid" jdbcType="BIGINT" property="batchReportProcessId" />
+    <result column="gradecourseabbrname" jdbcType="VARCHAR" property="gradeCourseAbbrName" />
+    <result column="summaryreportpath" jdbcType="VARCHAR" property="summaryReportPath" />
+    <result column="reporttype" jdbcType="VARCHAR" property="reportType" />
+    <result column="teacherid" jdbcType="BIGINT" property="teacherId" />
+    <result column="schoolname" jdbcType="VARCHAR" property="schoolName" />
+    <result column="detailedreportpath_csv" jdbcType="VARCHAR" property="csvDetailedReportPath" />
+    <result column="summaryreportcsvpath" jdbcType="VARCHAR" property="summaryReportCsvPath" />
+    <result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="createduser" jdbcType="BIGINT" property="createdUser" />
+    <result column="modifieduser" jdbcType="BIGINT" property="modifiedUser" />
+    <result column="teachername" jdbcType="VARCHAR" property="teacherName" />
+    <result column="districtname" jdbcType="VARCHAR" property="districtName" />
+  </resultMap>
+  
+     <resultMap extends="BaseResultMapind" id="StudentReportDTOMap" type="edu.ku.cete.web.StudentReportDTO">
+     <result column="legalfirstname" jdbcType="VARCHAR" property="legalFirstName" />
+     <result column="legalmiddlename" jdbcType="VARCHAR" property="legalMiddleName" />
+     <result column="legallastname" jdbcType="VARCHAR" property="legalLastName" />
+     <result column="statestudentidentifier" jdbcType="VARCHAR" property="stateStudentIdentifier" />
+     <result column="schoolname" jdbcType="VARCHAR" property="schoolName" />
+     <result column="schoolidentifier" jdbcType="VARCHAR" property="schoolIdentifier" />
+     <result column="districtname" jdbcType="VARCHAR" property="districtName" />
+     <result column="statename" jdbcType="VARCHAR" property="stateName" />
+     <result column="gradename" jdbcType="VARCHAR" property="gradeName" />    
+   </resultMap>
+   
+   <resultMap extends="BaseResultMapbun" id="SchoolAndDistrictReportDTOMap" type="edu.ku.cete.web.SchoolAndDistrictReportDTO">
+    <result column="gradename" jdbcType="VARCHAR" property="gradeName" />
+    <result column="subjectname" jdbcType="VARCHAR" property="subjectName" />
+    <result column="assessmentprogramCode" jdbcType="VARCHAR" property="assessmentProgramCode" />
+    <result column="attschdisplayidentifier" jdbcType="VARCHAR" property="attSchDisplayIdentifier" />
+    <result column="organizationname" jdbcType="VARCHAR" property="organizationname" />
+    <result column="action" jdbcType="VARCHAR" property="action" />
+  </resultMap>
+	
+	<resultMap extends="BaseResultMapext" id="ExternalStudentReportDTO" type="edu.ku.cete.web.ExternalStudentReportDTO">
+     <result column="legalfirstname" jdbcType="VARCHAR" property="legalFirstName" />
+     <result column="legalmiddlename" jdbcType="VARCHAR" property="legalMiddleName" />
+     <result column="legallastname" jdbcType="VARCHAR" property="legalLastName" />
+     <result column="statestudentidentifier" jdbcType="VARCHAR" property="stateStudentIdentifier" />
+     <result column="gradename" jdbcType="VARCHAR" property="gradeName" />
+     <result column="subjectname" jdbcType="VARCHAR" property="subjectName" />
+     <result column="schoolname" jdbcType="VARCHAR" property="schoolName" />
+     <result column="rosterid" jdbcType="VARCHAR" property="rosterId" />
+   </resultMap>
+<select id="getCurrentReportYear" resultType="Long">
+		<choose>
+      <when test="reportType == 'general_student'">
+      select distinct schoolyear  from  studentreport where assessmentprogramid = #{assessmentProgId} and stateid =#{organizationId} and schoolyear!=#{currentYear} order by schoolyear desc
+      </when>
+      <when test="reportType == 'alternate_student_individual'">
+      select distinct schoolyear from externalstudentreports where assessmentprogramid = #{assessmentProgId} and reporttype=#{reportCode} and activeflag='t' and schoolyear!=#{currentYear} order by schoolyear desc
+      </when>
+       <otherwise>
+       select distinct schoolyear from organizationreportdetails where assessmentprogramid =#{assessmentProgId} and  reporttype=#{reportCode} and schoolyear!=#{currentYear} order by schoolyear desc
+       </otherwise>
+      </choose>
+	</select>	
+
+	<select id="getContentAreasWhereReportsHaveProcessed" parameterType="map" resultMap="BaseResultMap">
+    SELECT DISTINCT ca.*
+    FROM contentarea ca 
+    <choose>
+      <when test="reportType == 'general_student'">      
+          JOIN studentreport sr ON  sr.contentareaid = ca.id
+          AND sr.attendanceschoolid = #{schoolId,jdbcType=BIGINT}
+          AND sr.districtid = #{districtId,jdbcType=BIGINT}
+          AND sr.schoolyear = #{schoolYear,jdbcType=INTEGER}
+          where 
+           sr.assessmentprogramid in 
+    	<foreach collection="assessmentProgramIds" item="apId" open="(" separator="," close=")">
+     	 #{apId,jdbcType=BIGINT}
+        </foreach>
+      </when>
+      <when test="reportType == 'alternate_student_individual'">
+        JOIN externalstudentreports esr ON ca.id = esr.subjectid
+          AND esr.schoolid = #{schoolId,jdbcType=BIGINT}
+          AND esr.districtid = #{districtId,jdbcType=BIGINT}
+          AND esr.activeflag is true
+          AND esr.schoolyear = #{schoolYear,jdbcType=INTEGER}
+          <if test="reportCode != null">
+     	 	and esr.reporttype = #{reportCode,jdbcType=VARCHAR}
+     	  </if>
+     	   where 
+           esr.assessmentprogramid in 
+    	<foreach collection="assessmentProgramIds" item="apId" open="(" separator="," close=")">
+     	 #{apId,jdbcType=BIGINT}
+        </foreach>
+      </when>
+    </choose>
+   
+    ORDER BY ca.name 
+  </select>
+  
+  <select id="getGradesWhereReportsHaveProcessed" parameterType="map" resultMap="BaseResultMap">
+    SELECT DISTINCT ON (gc.abbreviatedname) gc.*    
+    <if test="reportType == 'general_student' || reportType == 'kelpa_student_individual'">     
+        FROM studentreport dynamic 
+        INNER JOIN gradecourse gc ON dynamic.gradeid = gc.id 
+        WHERE dynamic.attendanceschoolid = #{schoolId,jdbcType=BIGINT}
+        AND dynamic.districtid = #{districtId,jdbcType=BIGINT}
+        <if test="contentAreaIds!=null">
+        AND dynamic.contentareaid = ANY(ARRAY
+        <foreach collection="contentAreaIds" item="caId" open="[" separator="," close="]">
+          #{caId,jdbcType=BIGINT}
+        </foreach>)
+        </if>       
+        AND dynamic.schoolyear = #{schoolYear,jdbcType=INTEGER}
+        AND dynamic.assessmentprogramid IN
+    <foreach collection="assessmentProgramIds" item="apId" open="(" separator="," close=")">
+      #{apId,jdbcType=BIGINT}
+    </foreach>
+    </if>    
+    <if test="reportType == 'alternate_student_individual'">
+        FROM assessmentprogram ap
+        INNER JOIN externalstudentreports dynamic ON ap.id = dynamic.assessmentprogramid
+        INNER JOIN gradecourse gc ON dynamic.gradeid = gc.id
+        AND dynamic.schoolid = #{schoolId,jdbcType=BIGINT}
+        AND dynamic.districtid = #{districtId,jdbcType=BIGINT}
+        AND dynamic.subjectid = ANY(ARRAY
+        <foreach collection="contentAreaIds" item="caId" open="[" separator="," close="]">
+          #{caId,jdbcType=BIGINT}
+        </foreach>)
+        AND dynamic.schoolyear = #{schoolYear,jdbcType=INTEGER}
+        AND dynamic.activeflag is true
+        <if test="reportTypeCode != null">
+     	 and dynamic.reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+     	</if> 
+     	    WHERE ap.id IN
+    <foreach collection="assessmentProgramIds" item="apId" open="(" separator="," close=")">
+      #{apId,jdbcType=BIGINT}
+    </foreach>
+    </if>
+    
+    <if test="reportType == 'alternate_student_dcps'">
+        FROM assessmentprogram ap
+        INNER JOIN externalstudentreports dynamic ON ap.id = dynamic.assessmentprogramid
+        INNER JOIN gradecourse gc ON dynamic.gradeid = gc.id
+        AND dynamic.schoolid = #{schoolId,jdbcType=BIGINT}
+        AND dynamic.districtid = #{districtId,jdbcType=BIGINT}
+        AND dynamic.subjectid is null
+        AND dynamic.reporttype = #{reportTypeCode}
+        AND dynamic.schoolyear = #{schoolYear,jdbcType=INTEGER}
+        AND dynamic.activeflag is true
+            WHERE ap.id IN
+    <foreach collection="assessmentProgramIds" item="apId" open="(" separator="," close=")">
+      #{apId,jdbcType=BIGINT}
+    </foreach>
+    </if>   
+  <if test="reportType == 'alternate_student_summary'">
+        FROM assessmentprogram ap
+        INNER JOIN externalstudentreports dynamic ON ap.id = dynamic.assessmentprogramid
+        INNER JOIN gradecourse gc ON dynamic.gradeid = gc.id
+        AND dynamic.schoolid = #{schoolId,jdbcType=BIGINT}
+        AND dynamic.districtid = #{districtId,jdbcType=BIGINT}
+        AND dynamic.subjectid is null
+        AND dynamic.reporttype = #{reportTypeCode}
+        AND dynamic.schoolyear = #{schoolYear,jdbcType=INTEGER}
+        AND dynamic.activeflag is true
+            WHERE ap.id IN
+    <foreach collection="assessmentProgramIds" item="apId" open="(" separator="," close=")">
+      #{apId,jdbcType=BIGINT}
+    </foreach>
+  </if>
+    ORDER BY gc.abbreviatedname
+  </select>	
+  
+	<select id="getAllTeacherNamesForClassroomReports" parameterType="map" resultMap="BaseResultMapbun">
+     SELECT distinct ord.teacherid, (au.surname || ' ' || au.firstname) as teachername
+     FROM organizationreportdetails ord     
+     INNER JOIN aartuser au ON ord.teacherid = au.id
+     WHERE
+       ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{organizationId,jdbcType=BIGINT}
+       AND ord.gradeid IS NULL
+       AND ord.assessmentprogramid = #{assessmentProgramId} 
+       AND ord.contentareaid IS NULL
+       <if test="reportType != null">
+	    	AND ord.reporttype = #{reportType}
+	   </if>
+	   <if test="selectreportType =='alternate_classroom'">
+	   AND ord.schoolyear = #{reportYear}
+	   </if>
+	   order by teachername
+   </select>
+   <select id="countStudentReports" parameterType="map" resultType="java.lang.Long">
+     SELECT COUNT(id)
+     FROM studentreport sr     
+     WHERE sr.schoolyear=#{reportYear} and sr.filepath IS NOT NULL AND sr.generated is true
+     AND sr.attendanceschoolid = #{schoolId,jdbcType=BIGINT}
+     <if test="contentAreaId != null">    
+     	AND sr.contentareaid = #{contentAreaId,jdbcType=BIGINT}
+     </if>
+     AND sr.gradeid = #{gradeId,jdbcType=BIGINT}
+     AND sr.assessmentprogramid IN
+     <foreach close=")" collection="assessmentProgramIds" item="apId" open="(" separator=",">
+       #{apId,jdbcType=BIGINT}
+     </foreach>
+   </select>   
+   <select id="getStudentReports" parameterType="map" resultMap="StudentReportDTOMap">
+     SELECT sr.*, s.legalfirstname, s.legalmiddlename, s.legallastname, s.statestudentidentifier
+     FROM studentreport sr
+     INNER JOIN student s ON sr.studentid = s.id   
+     <if test="onlyRostered">
+       INNER JOIN enrollment e ON sr.enrollmentid = e.id
+       INNER JOIN enrollmentsrosters er ON e.id = er.enrollmentid
+       INNER JOIN roster r ON er.rosterid = r.id AND r.teacherid = #{userId,jdbcType=BIGINT}
+     </if>
+     WHERE
+       sr.schoolyear=#{reportYear} and sr.filepath IS NOT NULL AND sr.generated is true 
+       AND sr.attendanceschoolid = #{schoolId,jdbcType=BIGINT}  
+       <if test="contentAreaId != null">     
+			AND sr.contentareaid = #{contentAreaId,jdbcType=BIGINT}
+       </if>
+       AND sr.gradeid = #{gradeId,jdbcType=BIGINT}
+       AND sr.assessmentprogramid IN
+     <foreach close=")" collection="assessmentProgramIds" item="apId" open="(" separator=",">
+       #{apId,jdbcType=BIGINT}
+     </foreach>
+     ORDER BY s.legallastname, s.legalfirstname, s.legalmiddlename
+     LIMIT #{limit,jdbcType=BIGINT}
+     OFFSET #{offset,jdbcType=BIGINT}
+   </select>   
+   <select id="getSchoolIdsForDistrictDLMandCpass" resultType="java.lang.Long">
+     SELECT distinct schoolid 
+     FROM externalstudentreports
+     <if test="districtId != null">    
+    WHERE
+    schoolyear=#{reportYear} and districtid = #{districtId,jdbcType=BIGINT}
+     <if test="reportTypeCode != null">
+     	 AND reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+     </if>
+     </if>
+   </select>
+   <select id="getSchoolIdsForDistrict" resultType="java.lang.Long">
+     SELECT distinct attendanceschoolid 
+     FROM studentreport
+     <if test="districtId != null">
+          WHERE schoolyear = #{reportYear} and districtid = #{districtId,jdbcType=BIGINT}
+     </if>
+   </select>
+   
+   <select id="getAllStudentsReports" parameterType="map" resultMap="BaseResultMapbun">
+   	 SELECT *
+     FROM organizationreportdetails ord        
+     WHERE
+     ord.schoolYear = #{reportYear} AND 
+     	ord.detailedreportpath IS NOT NULL 
+   	  	<if test="schoolIds != null">
+      		AND ord.organizationid = ANY(ARRAY 
+	        <foreach close="]" collection="schoolIds" item="schoolId" open="[" separator=",">
+	    	    	#{schoolId,jdbcType=BIGINT}
+	        </foreach>)	
+	    </if>
+	    AND ord.contentareaid IS NULL
+	     AND ord.assessmentprogramid = #{assessmentId,jdbcType=BIGINT}
+	 <if test="reportTypeCode != null">
+     	 AND reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+     </if>
+     ORDER BY (select filename[array_length(regexp_split_to_array(ord.detailedreportpath, '/'), 1)]
+		from (select regexp_split_to_array(ord.detailedreportpath, '/')) as filepath(filename)) ASC
+   </select>
+   
+   <select id="getSchoolSummaryReports" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+     SELECT distinct ord.*, ca.name as subjectname,
+     orgnization.organizationname as organizationname,
+     '' as action
+     FROM organizationreportdetails ord
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+     
+     INNER JOIN organization orgnization ON orgnization.id = ord.organizationid
+     WHERE
+	   ord.schoolYear =#{reportYear} AND
+       ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{schoolId,jdbcType=BIGINT}
+       AND ord.gradeid is NULL AND ord.contentareaid IS NOT NULL
+       <if test="reportTypeCode != null">
+       	  AND ord.reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+       </if> 
+       AND ord.assessmentprogramid=#{assessmentProgramid}
+       UNION ALL
+       
+     SELECT distinct ord.*, ca.name as subjectname,
+     ood.sourceorgname as organizationname,
+     ood.action as action
+     FROM organizationreportdetails ord
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+     
+     INNER JOIN organizationoperationaldetail ood ON ood.targetorgid = #{schoolId,jdbcType=BIGINT}
+     WHERE
+     ord.schoolYear =#{reportYear} AND 
+       ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = ood.sourceorgid
+       AND ord.gradeid is NULL AND ord.contentareaid IS NOT NULL
+       AND ood.activeflag = true 
+       <if test="reportTypeCode != null">
+       	  AND ord.reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+       </if> 
+       AND ord.assessmentprogramid=#{assessmentProgramid}
+     ORDER BY subjectname
+   </select>
+   
+   <select id="getDistrictSummaryReport" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+     SELECT ord.*, ca.name as subjectname 
+     FROM organizationreportdetails ord
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+    
+     WHERE
+     ord.schoolYear = #{reportYear} AND
+       ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{districtId,jdbcType=BIGINT}
+       AND ord.gradeid IS NULL 
+       AND ord.contentareaid IS NOT NULL
+       <if test="reportTypeCode != null">
+       	  AND ord.reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+       </if> 
+        AND ord.assessmentprogramid=#{assessmentProgramid}
+     ORDER BY ca.name
+   </select>   
+   <select id="countSchoolDetailReports" parameterType="map" resultType="java.lang.Long">
+     SELECT count(ord.id)
+     FROM organizationreportdetails ord
+     INNER JOIN gradecourse gc on gc.id = ord.gradeid
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+   
+     WHERE
+     ord.reporttype=#{reportCode} AND 
+     <if test="schoolId!=null">
+      ord.schoolYear=#{reportYear}
+   	   AND ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{schoolId,jdbcType=BIGINT}
+       AND ord.assessmentprogramid = #{assessmentProgram,jdbcType=BIGINT}      
+     </if>
+     <if test="districtId!=null and schoolId==null">
+           ord.schoolYear=#{reportYear}
+   	   AND ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{districtId,jdbcType=BIGINT}       
+     </if>    
+   </select>      
+   <select id="getSchoolDetailReports" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+     SELECT distinct ord.*, gc.name as gradename, ca.name as subjectname,ap.abbreviatedname as assessmentprogramCode,
+     '' as organizationname
+     FROM organizationreportdetails ord
+     INNER JOIN gradecourse gc on gc.id = ord.gradeid
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+     INNER JOIN assessmentprogram ap on ap.id = ord.assessmentprogramid    
+     WHERE
+     ord.reporttype=#{reportCode} AND 
+     <if test="schoolId!=null">
+     	   ord.schoolYear = #{reportYear}
+       AND ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{schoolId,jdbcType=BIGINT}
+       AND ord.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+     </if>
+     <if test="districtId!=null and schoolId==null">
+       	   ord.schoolYear = #{reportYear}
+       AND ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{districtId,jdbcType=BIGINT}
+     </if>     
+      UNION ALL      
+     SELECT distinct ord.*, gc.name as gradename, ca.name as subjectname,ap.abbreviatedname as assessmentprogramCode,
+     ood.sourceorgname as organizationname
+     FROM organizationreportdetails ord
+     INNER JOIN gradecourse gc on gc.id = ord.gradeid
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+     INNER JOIN assessmentprogram ap on ap.id = ord.assessmentprogramid    
+     INNER JOIN organizationoperationaldetail ood ON ood.targetorgid = #{schoolId,jdbcType=BIGINT} 
+     WHERE
+     ord.reporttype=#{reportCode} AND 
+     <if test="schoolId!=null">
+     ord.schoolYear= #{reportYear}
+     AND
+       ord.detailedreportpath IS NOT NULL      
+       AND ord.organizationid = ood.sourceorgid
+       AND ord.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+       AND ood.activeflag = true
+     </if>
+     <if test="districtId!=null and schoolId==null">
+     ord.schoolYear= #{reportYear}
+     AND
+       ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{districtId,jdbcType=BIGINT}
+     </if>
+        
+     <if test="assessmentProgramCode !=null and assessmentProgramCode !='CPASS'">
+       ORDER BY subjectname, assessmentprogramCode,assessmentname
+     </if>
+     <if test="assessmentProgramCode !=null and assessmentProgramCode =='CPASS'">
+       ORDER BY subjectname, assessmentprogramCode,assessmentname
+     </if>
+   </select>
+   
+   
+   <select id="getExternalStudentReports" parameterType="map" resultMap="ExternalStudentReportDTO">
+     SELECT sr.*, s.legalfirstname, s.legalmiddlename, s.legallastname, s.statestudentidentifier
+     FROM externalstudentreports sr
+     INNER JOIN student s ON sr.studentid = s.id    
+      WHERE
+      sr.schoolyear = #{reportYear} AND
+       sr.filepath IS NOT NULL
+       AND sr.schoolid = #{schoolId,jdbcType=BIGINT}     
+       AND sr.subjectid = #{contentAreaId,jdbcType=BIGINT}
+       AND sr.gradeid = #{gradeId,jdbcType=BIGINT}
+       AND sr.activeflag is true
+       <if test="reportTypeCode != null">
+      	and sr.reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+       </if> 
+       AND sr.assessmentprogramid IN
+     <foreach close=")" collection="assessmentProgramIds" item="apId" open="(" separator=",">
+       #{apId,jdbcType=BIGINT}
+     </foreach>
+     ORDER BY s.legallastname, s.legalfirstname, s.legalmiddlename, sr.level1_text, sr.level2_text
+     LIMIT #{limit,jdbcType=BIGINT}
+     OFFSET #{offset,jdbcType=BIGINT}
+   </select>
+   
+   
+   <select id="getDlmStateSummaryReport" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+		SELECT ord.*,organization.displayidentifier as attschdisplayidentifier 
+		FROM organizationreportdetails ord 		
+		INNER JOIN organization organization ON organization.id=ord.organizationid 
+		WHERE 
+		ord.schoolYear = #{reportYear}
+		ANd ord.detailedreportpath IS NOT NULL 
+		AND ord.organizationid = #{stateId,jdbcType=BIGINT}
+		AND ord.gradeid IS NULL 
+		AND ord.contentareaid IS NULL
+		AND ord.assessmentprogramid =  #{assessmentProgramId,jdbcType=BIGINT} 
+		AND ord.reporttype = #{reportTypeCode,jdbcType=VARCHAR} 
+		limit 1	  
+   </select>
+   
+   
+   <select id="getDlmDistrictSummaryReport" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+		SELECT ord.*,organization.displayidentifier as attschdisplayidentifier 
+		FROM organizationreportdetails ord 	
+		INNER JOIN organization organization ON organization.id=ord.organizationid 
+		WHERE ord.detailedreportpath IS NOT NULL 
+		AND ord.organizationid =  #{districtId,jdbcType=BIGINT}
+		AND ord.gradeid IS NULL 
+		AND ord.contentareaid IS NULL
+		AND ord.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+		AND ord.reporttype = #{reportTypeCode,jdbcType=VARCHAR} 
+		AND ord.schoolyear = #{reportYear}
+		limit 1	
+   </select>
+   
+   <select id="getAllSchoolSummaryReports" parameterType="map" resultMap="BaseResultMapbun">
+     SELECT distinct ord.*
+     FROM organizationreportdetails ord
+       WHERE
+     ord.schoolYear = #{reportYear}
+     AND 
+       ord.detailedreportpath IS NOT NULL
+       AND ord.organizationid = #{organizationId,jdbcType=BIGINT}
+       AND ord.gradeid IS NULL
+       AND ord.assessmentprogramid = #{assessmentProgramId} 
+       AND ord.contentareaid IS NULL
+       <if test="reportType != null">
+	    	AND ord.reporttype = #{reportType}
+	   </if>
+	   <if test="teacherId != null">
+	   		AND ord.teacherid = #{teacherId,jdbcType=BIGINT}
+	   </if>	   
+	   UNION ALL	   
+	 SELECT distinct ord.*
+	 FROM organizationreportdetails ord  
+    INNER JOIN organizationoperationaldetail ood ON ood.targetorgid = #{organizationId,jdbcType=BIGINT}
+     WHERE
+     ord.schoolYear = #{reportYear} AND 
+       ord.detailedreportpath IS NOT NULL AND ood.activeflag = true
+       AND ord.organizationid = ood.sourceorgid
+       AND ord.gradeid IS NULL 
+       AND ord.assessmentprogramid = #{assessmentProgramId} 
+       AND ord.contentareaid IS NULL
+       <if test="reportType != null">
+	    	AND ord.reporttype = #{reportType}
+	   </if>
+	   <if test="teacherId != null">
+	   		AND ord.teacherid = #{teacherId,jdbcType=BIGINT}
+	   </if>
+   </select>
+   
+   <select id="getSchoolIdsInDistrictOfSummaryBundledReports" parameterType="map" resultType="java.lang.Long">
+     SELECT distinct organizationid
+		FROM organizationreportdetails ord
+		JOIN organizationtreedetail otd 
+	                ON otd.schoolid = ord.organizationid
+	     	WHERE ord.schoolYear = #{reportYear} AND otd.districtid = #{districtId,jdbcType=BIGINT}
+	    <if test="reportType != null"> 	 
+			AND ord.reporttype = #{reportType}
+		</if>	
+		AND ord.detailedreportpath is not null
+		AND ord.assessmentprogramid = {assessmentProgramId}
+   </select>
+   
+   <select id="getAllStudentSummaryBundledReports" parameterType="map" resultMap="BaseResultMapbun">
+   	 SELECT *
+     FROM organizationreportdetails ord
+        WHERE
+         ord.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} AND
+    	 ord.schoolYear= #{reportYear} AND
+     	 ord.detailedreportpath IS NOT NULL 
+   	  	<if test="schoolIds != null">
+      		AND ord.organizationid = ANY(ARRAY 
+	        <foreach close="]" collection="schoolIds" item="schoolId" open="[" separator=",">
+	    	    	#{schoolId,jdbcType=BIGINT}
+	        </foreach>)	
+	    </if>
+	    <if test="reportType != null">
+	    	AND ord.reporttype = #{reportType}
+	    </if>
+	    AND ord.contentareaid IS NULL
+     ORDER BY (select filename[array_length(regexp_split_to_array(ord.detailedreportpath, '/'), 1)]
+		from (select regexp_split_to_array(ord.detailedreportpath, '/')) as filepath(filename)) ASC
+   </select>
+	
+		<select id="getByTypeAndUserIdInParentByReportYear" resultType="edu.ku.cete.domain.common.Organization" parameterType="map">	
+		/*NO LOAD BALANCE*/
+			SELECT
+			distinct(org.id), org.organizationName, org.displayIdentifier, org.organizationTypeId, 
+            org.welcomeMessage, orgtype.typeName, orgtype.typeCode, orgtype.typeLevel, org.contractingorganization
+		FROM organization as org 
+		JOIN organizationtype as orgtype ON org.organizationtypeid = orgtype.id
+		JOIN usersorganizations as uo on org.id = uo.organizationid
+		JOIN (SELECT id FROM organization_children_active_or_inactive(#{parentId,jdbcType=BIGINT})) childrenids ON org.id = childrenids.id
+		JOIN organizationreportdetails ord ON ord.organizationid = org.id
+		WHERE orgtype.typecode = #{organizationTypeCode} and uo.aartuserid = #{userId} and uo.activeflag = true and ord.schoolyear = #{reportYear}
+		ORDER BY org.organizationName
+	</select>	
+	
+	<select id="selectByPrimaryKeyAndUserOrg" parameterType="map" resultMap="BaseResultMapind">
+    SELECT sr.*
+    FROM studentreport sr
+    INNER JOIN (SELECT id FROM organization_children_active_or_inactive(#{userOrgId,jdbcType=BIGINT}) UNION (SELECT #{userOrgId,jdbcType=BIGINT})) orgids ON sr.attendanceschoolid = orgids.id
+    WHERE sr.id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  
+  <select id="getSchoolAndDistrictReport" resultMap="BaseResultMapbun">
+     SELECT * 
+     FROM organizationreportdetails
+     WHERE
+     <if test="id != null">
+       id= #{id,jdbcType=BIGINT}
+     </if>
+   </select>
+   
+   <select id="getSchoolSummaryReportFile" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+     SELECT ord.*,ca.name as subjectname,orgn.displayidentifier as attschdisplayidentifier 
+     FROM organizationreportdetails ord
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+     INNER join organization orgn on orgn.id = ord.organizationid
+     INNER JOIN (SELECT id FROM organization_children_active_or_inactive(#{userOrgId,jdbcType=BIGINT}) UNION (SELECT #{userOrgId,jdbcType=BIGINT})
+     UNION    
+     select sourceorgid from organizationoperationaldetail as ood where ood.targetorgid in (SELECT id FROM organization_children_active_or_inactive(#{userOrgId,jdbcType=BIGINT}) UNION (SELECT #{userOrgId,jdbcType=BIGINT}))
+     and ood.activeflag = true) orgids ON ord.organizationid = orgids.id
+     WHERE
+     <if test="id!=null">
+       ord.id= #{id,jdbcType=BIGINT}
+     </if>
+   </select>
+   
+   <select id="getDistrictSummaryReportByPrimaryKeyAndUserOrgId" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+     SELECT ord.*, ca.name as subjectname,orgn.displayidentifier as attschdisplayidentifier 
+     FROM organizationreportdetails ord    
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+     Inner join organization orgn on orgn.id = ord.organizationid
+     INNER JOIN (SELECT id FROM organization_children(#{userOrgId,jdbcType=BIGINT}) UNION (SELECT #{userOrgId,jdbcType=BIGINT})) orgids ON ord.organizationid = orgids.id
+     WHERE
+     <if test="id!=null">
+       ord.id= #{id,jdbcType=BIGINT}
+     </if>
+   </select>
+   
+   
+   <select id="selectByPrimaryKeyAndUserOrgCpass" parameterType="map" resultMap="BaseResultMapext">
+    SELECT sr.*
+    FROM externalstudentreports sr
+    INNER JOIN (SELECT id FROM organization_children_active_or_inactive(#{userOrgId,jdbcType=BIGINT}) UNION (SELECT #{userOrgId,jdbcType=BIGINT})) orgids ON sr.schoolid = orgids.id
+    WHERE sr.id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getSchoolAndDistrictReportByPrimaryKeyAndUserOrgId" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+     SELECT ord.*, gc.name as gradename, ca.name as subjectname 
+     FROM organizationreportdetails ord
+     INNER JOIN gradecourse gc on gc.id = ord.gradeid
+     INNER JOIN contentarea ca on ca.id = ord.contentareaid
+     INNER JOIN (SELECT id FROM organization_children_active_or_inactive(#{userOrgId,jdbcType=BIGINT}) UNION (SELECT #{userOrgId,jdbcType=BIGINT})
+      UNION    
+     select sourceorgid from organizationoperationaldetail as ood where ood.targetorgid in (SELECT id FROM organization_children_active_or_inactive(#{userOrgId,jdbcType=BIGINT}) UNION (SELECT #{userOrgId,jdbcType=BIGINT}))
+     and ood.activeflag = true) orgids ON ord.organizationid = orgids.id
+     WHERE
+     <if test="id!=null">
+       ord.id= #{id,jdbcType=BIGINT}
+     </if>
+   </select>
+   
+   <select id="getDlmSummaryReportByPrimaryKeyAndUserOrgId" parameterType="map" resultMap="SchoolAndDistrictReportDTOMap">
+	 SELECT ord.*,orgn.displayidentifier as attschdisplayidentifier,orgn.organizationname 
+	 FROM organizationreportdetails ord 
+	 Inner join organization orgn on orgn.id = ord.organizationid 
+	 INNER JOIN (SELECT id FROM organization_children(#{userOrgId,jdbcType=BIGINT}) 
+	 UNION (SELECT #{userOrgId,jdbcType=BIGINT})) orgids ON ord.organizationid = orgids.id 
+	 WHERE 
+     <if test="id!=null">
+       ord.id= #{id,jdbcType=BIGINT} 
+     </if>
+     <if test="reportType != null">
+      and ord.reporttype = #{reportType,jdbcType=VARCHAR}
+     </if>    
+   </select>
+   
+   <select id="countOfStudentSummaryReports" parameterType="map" resultType="java.lang.Long">
+	     SELECT COUNT(id)
+	     FROM externalstudentreports sr
+	     WHERE sr.schoolid = #{schoolId,jdbcType=BIGINT}	    
+	     AND sr.subjectid is null
+	     AND sr.gradeid = #{gradeId,jdbcType=BIGINT}
+	     <if test="reportCode != null">
+		 	AND sr.reporttype = #{reportCode}
+		 </if>		
+			AND sr.schoolyear = #{reportyear}		
+	   	    AND sr.assessmentprogramid IN
+	     <foreach close=")" collection="assessmentProgramIds" item="apId" open="(" separator=",">
+	       #{apId,jdbcType=BIGINT}
+	     </foreach>     
+   </select>
+   
+   <select id="getExternalStudentSummaryReports" parameterType="map" resultMap="ExternalStudentReportDTO">
+	     SELECT sr.*, s.legalfirstname, s.legalmiddlename, s.legallastname, s.statestudentidentifier
+	     FROM externalstudentreports sr
+	     INNER JOIN student s ON sr.studentid = s.id
+	           WHERE
+	       sr.filepath IS NOT NULL
+	       AND sr.schoolid = #{schoolId,jdbcType=BIGINT}
+	       <!-- AND sr.districtid = #{districtId,jdbcType=BIGINT} -->
+	       AND sr.subjectid is null
+	       AND sr.gradeid = #{gradeId,jdbcType=BIGINT}
+	       AND sr.activeflag is true	     
+	       AND sr.reporttype = #{reportCode}        
+	       AND sr.schoolyear= #{reportyear}	       
+	       AND sr.assessmentprogramid IN
+	     <foreach close=")" collection="assessmentProgramIds" item="apId" open="(" separator=",">
+	       #{apId,jdbcType=BIGINT}
+	     </foreach>
+	     ORDER BY s.legallastname, s.legalfirstname, s.legalmiddlename
+	     LIMIT #{limit,jdbcType=BIGINT}
+	     OFFSET #{offset,jdbcType=BIGINT}
+   </select>
+   
+   <select id="countByCriteria" parameterType="map" resultType="java.lang.Long">
+     SELECT COUNT(id)
+     FROM externalstudentreports sr    
+     WHERE sr.schoolid = #{schoolId,jdbcType=BIGINT}
+     AND sr.schoolyear = #{reportYear}
+     AND sr.subjectid = #{contentAreaId,jdbcType=BIGINT}
+     AND sr.gradeid = #{gradeId,jdbcType=BIGINT}
+     <if test="reportTypeCode != null">
+      and sr.reporttype = #{reportTypeCode,jdbcType=VARCHAR}
+     </if> 
+     AND sr.assessmentprogramid IN
+     <foreach close=")" collection="assessmentProgramIds" item="apId" open="(" separator=",">
+       #{apId,jdbcType=BIGINT}
+     </foreach>     
+   </select>
+   
+   <select id="getAllSchoolSummaryBundledReportByDistrictId" parameterType="map" resultMap="BaseResultMapbun">
+   	 SELECT *
+     FROM organizationreportdetails ord    
+	  
+     WHERE
+     	ord.detailedreportpath IS NOT NULL 
+      		AND ord.organizationid = #{districtId,jdbcType=BIGINT}
+	       
+	    <if test="reportType != null">
+	    	AND ord.reporttype = #{reportType}
+	    </if>
+	    
+	    <if test="reportYear != null">
+	    	AND ord.schoolyear = #{reportYear}
+	    </if>
+	    
+	    
+	    AND ord.contentareaid IS NULL
+     ORDER BY (select filename[array_length(regexp_split_to_array(ord.detailedreportpath, '/'), 1)]
+		from (select regexp_split_to_array(ord.detailedreportpath, '/')) as filepath(filename)) ASC
+   </select>
+</mapper>

@@ -1,0 +1,152 @@
+div .config .tabTable {
+	display: table;
+	width: 100%;
+	/*padding: 10px;*/
+}
+
+div .config .filterTable {
+	display: table;
+	width: auto;
+}
+
+div .config .row {
+	display: table-row;
+}
+
+div .config .cell {
+	display: table-cell;
+}
+
+div .config .textrightcell {
+	display: table-cell;
+	text-align: right;
+	padding: 5px;
+	margin-right: 5px;
+}
+
+div .config .labelcell {
+	display: table-cell;
+	vertical-align: center;
+	text-align: right;
+	padding: 10px;
+}
+
+div .config .paddedcell {
+	display: table-cell;
+	padding: 5px;
+}
+
+div .config .selectcell {
+	display: table-cell;
+	padding: 0px 0px 0px 10px;
+}
+
+div .config .filtercell {
+	display: table-cell;
+	vertical-align: center;
+	padding: 5px;
+}
+
+div .config .tab-cell {
+	display: table-cell;
+	vertical-align: top;
+	width: 160px;
+}
+
+div .config .content-cell {
+	display: table-cell;
+	vertical-align: top;
+	width: 100%;
+}
+
+div .config h2 {
+	color: #4090E1;
+	font-size: 1.5em;
+	font-weight: 300;
+}
+
+div .config .linkBox {
+	color: #FFFFFF;
+	background-color: #0E76AC;
+	padding: 5px;
+}
+
+div .config .blueLabel {
+	font-size: .95em;
+	color: #4090e1;
+	text-transform: uppercase;
+}
+
+div .config .lesswidth {
+	width: 95%;
+}
+
+div .config .value {
+	color: #646567;
+	font-weight: 300;
+}
+
+div .config .tab {
+	cursor: pointer;
+}
+
+div .config .permission {
+	padding: 5px;
+	width: 30%;
+	float: left;
+	margin: 10px;
+	display: contents;
+}
+
+div .config .permission:nth-child(3n+1) {
+	clear: left;
+}
+
+div .config .buttonSave {
+	position: relative;
+	clear: both;
+}
+
+button .buttonBottomLeft {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+
+div .config .divNestedBlock {
+	color: #646567;
+	font-weight: 300;
+	margin-left: 5px;
+	padding: 5px;
+}
+
+div .config .divBlockFont {
+	color: #0e76bc;
+	font-weight: bold;
+	font-size: 16px sans-serif;
+}
+
+div .config .error {
+	color: red;
+}
+
+#summativeReportUploadTabContainer .form .form-fields {
+	display: inline-block;
+	margin: 0 10px 0 25px;
+	padding-bottom: 12px;
+	width: auto;
+}
+
+#summativeReportUploadTabContainer input.input-file {
+	width: 165px;
+	height: 27px;
+	line-height: 27px;
+}
+
+#summativeReportUploadTabContainer a.btn_right {
+	float: right;
+}
+
+span.collapser {
+	cursor: pointer;
+}

@@ -1,0 +1,291 @@
+<% var date = new Date(); %>
+<% var month = date.getMonth(); %>
+<% var day = date.getDate(); %>
+<% var year = date.getFullYear(); %>
+
+<div id="alternateMonitoringSummary" class="dlmtestadminmonitorsummary">
+	<div class="buttons"><input type="button" id="saveTestAdminMonitoringSummaryPDF" value="Save"/></div>
+	<div class="green"><%= (month + 1) + '/' + day + '/' + year; %></div>
+	<div class="green centerheader"><br/>DLM Test Administration Monitoring Summary</div>
+	<br/>
+	
+	<% if (data.isIEState === false) { %>	
+	<table id="monitoring-summary-table" class="gridlines" role="presentation">
+		<thead id="monitoring-summary-head">
+			<tr class="headerrow" role="row">
+				<% if (summaryLevel === 'district' || summaryLevel === 'school') { %>
+					<th scope="col" title="District Id">District ID</th>
+					<th scope="col" title="District Name">District Name</th>
+				<% } %>
+				<% if (summaryLevel === 'school') { %>					
+					<th scope="col" title="School ID">School ID</th>
+					<th scope="col" title="School Name">School Name</th>
+				<% } %>
+				<th scope="col" title="Grade">Grade</th>
+				<th scope="col" title="Subject">Subject</th>
+				<th scope="colgroup" colspan="4" class="left-separator" title="Instructionally Embedded Number of Rostered Students">Instructionally Embedded<br/>Number of Rostered Students</th>
+				<th scope="colgroup" colspan="3" class="left-separator" title="Year End Number of Rostered Students">Year End<br/>Number of Rostered Students</th>
+			</tr>
+			<tr class="headerrow" role="row">
+				<% var secondHeaderRowColspan = 2; %>
+				<% if (summaryLevel === 'district') { %>
+					<% secondHeaderRowColspan = 4; %>
+				<% } %>
+				<% if (summaryLevel === 'school') { %>
+					<% secondHeaderRowColspan = 6; %>
+				<% } %>
+				<td scope="colgroup" colspan="<%= secondHeaderRowColspan %>" title=""></td>
+				<th scope="col" class="left-separator" title="No Plans Created">No Plans Created</th>
+				<th scope="col" title="Plans Created; No Testlets Taken">Plans Created; No Testlets Taken</th>
+				<th scope="col" title="Only One Testlet Completed">Only One Testlet Completed</th>
+				<th scope="col" title="More Than One Testlet Completed">More Than One Testlet Completed</th>
+				<th scope="col" class="left-separator" title="No Testlets Taken">No Testlets Taken</th>
+				<th scope="col" title="Testing In Progress">Testing In Progress</th>
+				<th scope="col" title="All Required Testlets Completed">All Required Testlets Completed</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- dynamic rows -->
+			<% if (data != null && data.resultData != null && data.resultData.length > 0) { %>
+				<% for (var x = 0; x < data.resultData.length; x++) { %>
+					<tr role="row">
+						<% if (summaryLevel === 'district' || summaryLevel === 'school') { %>
+							<td  title="<%= data.resultData[x].districtIdentifier %>"><%= data.resultData[x].districtIdentifier %></td>
+							<td  title="<%= data.resultData[x].districtName %>"><%= data.resultData[x].districtName %></td>
+						<% } %>
+						<% if (summaryLevel === 'school') { %>
+							<td  title="<%= data.resultData[x].schoolIdentifier %>"><%= data.resultData[x].schoolIdentifier %></td>
+							<td  title="<%= data.resultData[x].schoolName %>"><%= data.resultData[x].schoolName %></td>
+						<% } %>
+						<td  title="<%= data.resultData[x].grade %>"><%= data.resultData[x].grade %></td>
+						<td  title="<%= data.resultData[x].subject %>"><%= data.resultData[x].subject %></td>
+						<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreated %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreated %></td>
+						<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTaken %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTaken %></td>
+						<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompleted %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompleted %></td>
+						<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompleted %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompleted %></td>
+						<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithYearEndNoTestletsTaken %>"><%= data.resultData[x].numberOfStudentsWithYearEndNoTestletsTaken %></td>
+						<td  title="<%= data.resultData[x].numberOfStudentsWithYearEndTestingInProgress %>"><%= data.resultData[x].numberOfStudentsWithYearEndTestingInProgress %></td>
+						<td  title="<%= data.resultData[x].numberOfStudentsWithYearEndAllRequiredTestletsCompleted %>"><%= data.resultData[x].numberOfStudentsWithYearEndAllRequiredTestletsCompleted %></td>
+					</tr>
+				<% } %>
+			<% } else { %>
+				<tr role="row"><td colspan="100">No data to show.</td></tr>
+			<% } %>
+		</tbody>
+	</table>
+	<% } else { %>
+				<% if (summaryLevel === 'state') { %>
+					
+					<table id="monitoring-summary-table" class="gridlines" role="presentation">
+						<thead id="monitoring-summary-head">
+							<tr class="headerrow" role="row">
+								<th scope="col" title="Grade">Grade</th>
+								<th scope="col" title="Subject">Subject</th>
+								<th scope="colgroup" colspan="4" class="left-separator" title="Instructionally Embedded Number of Rostered Students">Instructionally Embedded<br/><%= data.testingCycleName1 %> Number of Rostered Students</th>
+								<th scope="colgroup" colspan="4" class="left-separator" title="Instructionally Embedded Number of Rostered Students">Instructionally Embedded<br/><%= data.testingCycleName2 %> Number of Rostered Students</th>
+								<th scope="colgroup" colspan="3" class="left-separator" title="Year End Number of Rostered Students">Spring Science<br/>Number of Rostered Students</th>
+							</tr>
+							<tr class="headerrow" role="row">
+								<% var secondHeaderRowColspan = 2; %>
+								<td scope="colgroup" colspan="<%= secondHeaderRowColspan %>" title=""></td>
+								
+								<th scope="col" class="left-separator" title="No Plans Created">No Plans Created</th>
+								<th scope="col" title="No Testlets Taken">No Testlets Taken</th>
+								<th scope="col" title="Only One Testlet Completed">Only One Testlet Completed</th>
+								<th scope="col" title="More Than One Testlet Completed">More Than One Testlet Completed</th>
+								
+								<th scope="col" class="left-separator" title="No Plans Created">No Plans Created</th>
+								<th scope="col" title="No Testlets Taken">No Testlets Taken</th>
+								<th scope="col" title="Only One Testlet Completed">Only One Testlet Completed</th>
+								<th scope="col" title="More Than One Testlet Completed">More Than One Testlet Completed</th>
+								
+								<th scope="col" class="left-separator" title="No Testlets Taken">No Testlets Taken</th>
+								<th scope="col" title="Testing In Progress">Testing In Progress</th>
+								<th scope="col" title="All Required Testlets Completed">All Required Testlets Completed</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- dynamic rows -->
+							<% if (data != null && data.resultData != null && data.resultData.length > 0) { %>
+								<% for (var x = 0; x < data.resultData.length; x++) { %>
+									<tr role="row">
+										<td  title="<%= data.resultData[x].grade %>"><%= data.resultData[x].grade %></td>
+										<td  title="<%= data.resultData[x].subject %>"><%= data.resultData[x].subject %></td>
+										
+										<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreated %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreated %></td>
+										<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTaken %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTaken %></td>
+										<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompleted %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompleted %></td>
+										<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompleted %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompleted %></td>
+										
+										<% if (data.resultData[x].subject === 'Science') { %>
+											<td  class="left-separator" title="N/A">N/A</td>
+											<td  title="N/A">N/A</td>
+											<td  title="N/A">N/A</td>
+											<td  title="N/A">N/A</td>
+										<% } else { %>
+											<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreatedSecondWindow %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreatedSecondWindow %></td>
+											<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTakenSecondWindow %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTakenSecondWindow %></td>
+											<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompletedSecondWindow %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompletedSecondWindow %></td>
+											<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompletedSecondWindow %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompletedSecondWindow %></td>
+										<% } %>
+											
+										<% if (data.resultData[x].subject !== 'Science') { %>
+											<td  class="left-separator" title="N/A">N/A</td>
+											<td  title="N/A">N/A</td>
+											<td  title="N/A">N/A</td>
+										<% } else { %>
+											<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithYearEndNoTestletsTaken %>"><%= data.resultData[x].numberOfStudentsWithYearEndNoTestletsTaken %></td>
+											<td  title="<%= data.resultData[x].numberOfStudentsWithYearEndTestingInProgress %>"><%= data.resultData[x].numberOfStudentsWithYearEndTestingInProgress %></td>
+											<td  title="<%= data.resultData[x].numberOfStudentsWithYearEndAllRequiredTestletsCompleted %>"><%= data.resultData[x].numberOfStudentsWithYearEndAllRequiredTestletsCompleted %></td>
+										<% } %>
+									</tr>
+								<% } %>
+							<% } else { %>
+								<tr role="row"><td colspan="100">No data to show.</td></tr>
+							<% } %>
+						</tbody>
+					</table>
+				<% } else { %>
+				
+					<% var countRow = 0; %>
+					<% if (data != null && data.resultData != null && data.resultData.length > 0) { %>
+						<% for (; countRow < data.resultData.length; ) { %>
+							<% var distictIdentifier = data.resultData[countRow].districtId; %>
+							<% var x = countRow; %>
+							
+							</br> <b>District : <%= data.resultData[x].districtName %></b></br>
+							
+							<table id="monitoring-summary-table" class="gridlines" role="presentation">
+								<thead id="monitoring-summary-head">
+									<tr class="headerrow" role="row">
+										<% if (summaryLevel === 'district') { %>
+											<th scope="col" title="District Name">District Name</th>
+										<% } %>
+										<% if (summaryLevel === 'school') { %>
+											<th scope="col" title="School Name">School Name</th>
+										<% } %>
+										<th scope="col" title="Grade">Grade</th>
+										<th scope="col" title="Subject">Subject</th>
+										<th scope="colgroup" colspan="4" class="left-separator" title="Instructionally Embedded Number of Rostered Students">Instructionally Embedded<br/><%= data.testingCycleName1 %> Number of Rostered Students</th>
+										<th scope="colgroup" colspan="4" class="left-separator" title="Instructionally Embedded Number of Rostered Students">Instructionally Embedded<br/><%= data.testingCycleName2 %> Number of Rostered Students</th>
+										<th scope="colgroup" colspan="3" class="left-separator" title="Year End Number of Rostered Students">Spring Science<br/>Number of Rostered Students</th>
+									</tr>
+									<tr class="headerrow" role="row">
+										<% var secondHeaderRowColspan = 3; %>
+										<td scope="colgroup" colspan="<%= secondHeaderRowColspan %>" title=""></td>
+										
+										<th scope="col" class="left-separator" title="No Plans Created">No Plans Created</th>
+										<th scope="col" title="No Testlets Taken">No Testlets Taken</th>
+										<th scope="col" title="Only One Testlet Completed">Only One Testlet Completed</th>
+										<th scope="col" title="More Than One Testlet Completed">More Than One Testlet Completed</th>
+										
+										<th scope="col" class="left-separator" title="No Plans Created">No Plans Created</th>
+										<th scope="col" title="No Testlets Taken">No Testlets Taken</th>
+										<th scope="col" title="Only One Testlet Completed">Only One Testlet Completed</th>
+										<th scope="col" title="More Than One Testlet Completed">More Than One Testlet Completed</th>
+										
+										<th scope="col" class="left-separator" title="No Testlets Taken">No Testlets Taken</th>
+										<th scope="col" title="Testing In Progress">Testing In Progress</th>
+										<th scope="col" title="All Required Testlets Completed">All Required Testlets Completed</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- dynamic rows -->
+									
+									<% if (data != null && data.resultData != null && data.resultData.length > 0 ) { %>
+										<% for ( ; x < data.resultData.length; x++) { %>
+											<% if (distictIdentifier != data.resultData[x].districtId) { break; } %>
+											<% if ( data.resultData[x].subject ==null ) { %>
+												<tr role="row"><td colspan="100">No data to show.</td></tr>
+											<% } else { %>
+												<tr role="row">
+	
+													<% if (summaryLevel === 'district') { %>
+														<td  title="<%= data.resultData[x].districtName %>"><%= data.resultData[x].districtName %></td>
+													<% } %>
+													<% if (summaryLevel === 'school') { %>
+														<td  title="<%= data.resultData[x].schoolName %>"><%= data.resultData[x].schoolName %></td>
+													<% } %>
+													<td  title="<%= data.resultData[x].grade %>"><%= data.resultData[x].grade %></td>
+													<td  title="<%= data.resultData[x].subject %>"><%= data.resultData[x].subject %></td>
+													
+													<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreated %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreated %></td>
+													<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTaken %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTaken %></td>
+													<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompleted %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompleted %></td>
+													<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompleted %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompleted %></td>
+													
+													<% if (data.resultData[x].subject === 'Science') { %>
+														<td  class="left-separator" title="N/A">N/A</td>
+														<td  title="N/A">N/A</td>
+														<td  title="N/A">N/A</td>
+														<td  title="N/A">N/A</td>
+													<% } else { %>
+														<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreatedSecondWindow %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedNoPlansCreatedSecondWindow %></td>
+														<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTakenSecondWindow %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedPlansCreatedNoTestletsTakenSecondWindow %></td>
+														<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompletedSecondWindow %>" ><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedOnlyOneTestletCompletedSecondWindow %></td>
+														<td  title="<%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompletedSecondWindow %>"><%= data.resultData[x].numberOfStudentsWithInstructionallyEmbeddedMoreThanOneTestletCompletedSecondWindow %></td>
+													<% } %>
+													
+													<% if (data.resultData[x].subject !== 'Science') { %>
+														<td  class="left-separator" title="N/A">N/A</td>
+														<td  title="N/A">N/A</td>
+														<td  title="N/A">N/A</td>
+													<% } else { %>
+														<td class="left-separator" title="<%= data.resultData[x].numberOfStudentsWithYearEndNoTestletsTaken %>"><%= data.resultData[x].numberOfStudentsWithYearEndNoTestletsTaken %></td>
+														<td  title="<%= data.resultData[x].numberOfStudentsWithYearEndTestingInProgress %>"><%= data.resultData[x].numberOfStudentsWithYearEndTestingInProgress %></td>
+														<td  title="<%= data.resultData[x].numberOfStudentsWithYearEndAllRequiredTestletsCompleted %>"><%= data.resultData[x].numberOfStudentsWithYearEndAllRequiredTestletsCompleted %></td>
+													<% } %>
+												</tr>
+											<% } %>
+										<% } %>
+									<% } else { %>
+										<tr role="row"><td colspan="100">No data to show.</td></tr>
+									<% } %>
+								</tbody>
+							</table>
+							<% countRow = x; %>
+						<% } %>
+					<% } else { %>
+						<table id="monitoring-summary-table" class="gridlines" role="presentation">
+								<thead id="monitoring-summary-head">
+									<tr class="headerrow" role="row">
+										<% if (summaryLevel === 'district') { %>
+											<th scope="col" title="District Name">District Name</th>
+										<% } %>
+										<% if (summaryLevel === 'school') { %>
+											<th scope="col" title="School Name">School Name</th>
+										<% } %>
+										<th scope="col" title="Grade">Grade</th>
+										<th scope="col" title="Subject">Subject</th>
+										<th scope="colgroup" colspan="4" class="left-separator" title="Instructionally Embedded Number of Rostered Students">Instructionally Embedded<br/><%= data.testingCycleName1 %> Number of Rostered Students</th>
+										<th scope="colgroup" colspan="4" class="left-separator" title="Instructionally Embedded Number of Rostered Students">Instructionally Embedded<br/><%= data.testingCycleName2 %> Number of Rostered Students</th>
+										<th scope="colgroup" colspan="3" class="left-separator" title="Year End Number of Rostered Students">Spring Science<br/>Number of Rostered Students</th>
+									</tr>
+									<tr class="headerrow" role="row">
+										<% var secondHeaderRowColspan = 3; %>
+										<td scope="colgroup" colspan="<%= secondHeaderRowColspan %>" title=""></td>
+										
+										<th scope="col" class="left-separator" title="No Plans Created">No Plans Created</th>
+										<th scope="col" title="No Testlets Taken">No Testlets Taken</th>
+										<th scope="col" title="Only One Testlet Completed">Only One Testlet Completed</th>
+										<th scope="col" title="More Than One Testlet Completed">More Than One Testlet Completed</th>
+										
+										<th scope="col" class="left-separator" title="No Plans Created">No Plans Created</th>
+										<th scope="col" title="No Testlets Taken">No Testlets Taken</th>
+										<th scope="col" title="Only One Testlet Completed">Only One Testlet Completed</th>
+										<th scope="col" title="More Than One Testlet Completed">More Than One Testlet Completed</th>
+										
+										<th scope="col" class="left-separator" title="No Testlets Taken">No Testlets Taken</th>
+										<th scope="col" title="Testing In Progress">Testing In Progress</th>
+										<th scope="col" title="All Required Testlets Completed">All Required Testlets Completed</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr role="row"><td colspan="100">No data to show.</td></tr>
+								</tbody>
+							</table>
+					<% } %>
+				<% } %>
+	<% } %>
+	
+</div>

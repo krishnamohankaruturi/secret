@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.help.HelpTagsDao">
+
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.help.HelpTag">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="tag" property="tag" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+	</resultMap>
+
+	<insert id="saveHelpTags" parameterType="edu.ku.cete.domain.help.HelpTag" useGeneratedKeys="true" keyColumn="id"
+		keyProperty="id">
+		insert into
+		helptags
+		(tag,activeflag,createduser,modifieduser,createddate,modifieddate)
+		values
+		(#{tag,jdbcType=VARCHAR},
+		#{activeFlag,jdbcType=BIT},#{createdUser,jdbcType=BIGINT},
+		#{modifiedUser,jdbcType=BIGINT},#{createdDate,jdbcType=TIMESTAMP},
+		#{modifiedDate,jdbcType=TIMESTAMP});
+	</insert>
+
+	<update id="updateHelpTags" parameterType="edu.ku.cete.domain.help.HelpTag">
+		update helptags
+		<set>
+			<if test="tag != null">
+				tag = #{tag,jdbcType=VARCHAR},
+			</if>
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activeFlag != null">
+				activeflag = #{activeFlag,jdbcType=BIT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+
+	</update>
+
+	<update id="deleteHelpTags" parameterType="edu.ku.cete.domain.help.HelpTag">
+		update helptags
+		<set>
+			activeflag = FALSE,
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id};
+	</update>
+
+	<select id="getHelpTagsById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select hts.tag,hts.createddate,
+		hts.modifieddate,hts.createduser,hts.modifieduser, hts.activeflag
+		from helptags hts
+		where hts.activeflag is true and
+		hts.id=#{id}
+	</select>
+
+	<select id="getHelpTags" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select hts.id, hts.tag,hts.createddate,
+		hts.modifieddate,hts.createduser,hts.modifieduser, hts.activeflag
+		from helptags hts
+		where hts.activeflag is true and
+		hts.tag ilike #{tag, jdbcType=VARCHAR}
+	</select>
+
+	<select id="getHelpTagByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select hts.id, hts.tag,hts.createddate,
+		hts.modifieddate,hts.createduser,hts.modifieduser, hts.activeflag
+		from helptags hts
+		where hts.activeflag is true and
+		hts.tag = #{tag, jdbcType=VARCHAR}
+	</select>
+
+	<select id="getByHelpContentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		ht.id, ht.tag,ht.createddate,
+		ht.modifieddate,ht.createduser,ht.modifieduser, ht.activeflag
+		from helptags ht
+		inner join helpcontenttags hct on
+		hct.helptagid= ht.id and hct.activeflag is true and ht.activeflag is true
+		where hct.activeflag is true and
+		hct.helpcontentid = #{contentId}
+	</select>
+</mapper>

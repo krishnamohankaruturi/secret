@@ -1,0 +1,278 @@
+<style>
+.reportsEmptyBlockBottom{
+width: 105% !important; 
+height: 700px !important; 
+}
+#reportContent {
+	height: 85% !important;
+}
+
+.allStudents .titleHeading {
+width:98% !important;
+}
+.errordiv{
+	min-height: 20px;
+	color: red;
+}
+#newStudentSummaryBundledReport {
+    display: inline-block;  
+    vertical-align: text-top;
+    cursor: pointer;
+}
+#submitSummaryBundledReport{
+    display: inline-block;  
+    vertical-align: text-top;
+     cursor: pointer;
+}
+.separateSelect{
+	cursor: text;
+}
+.separateSelectDiv{
+	color: #A6A6A6;
+}
+
+
+</style>
+<div class="allStudents">
+<div class="allStudentsReportsFile">
+<% var isSchoolTabSelected = $('select[data-data-type="school"]', getFilterElement()).val(); 
+var selectedReportYear = $('select[data-data-type="reportYear"]', getFilterElement()).val();%>
+ <%	
+	var kbType = "KB";
+	var mbType = "MB";
+	var gbType = "GB";
+	
+	 	if(data!=null && data!=undefined && data.length > 0){
+	 %>
+	<div class="heading_left_summary">
+		<span class="heading">Student Summary (Bundled) Report File</span>
+	</div>
+	     <br/><br/><br/>
+	<div id="schoolFiles">
+		<div class="titleHeading">
+			
+		</div>
+	</div>
+	 <% 
+	 	for (var x = 0; x < data.length; x++) {
+	 	 	var pdfRecord = data[x];
+			var pdfRecordFileName = pdfRecord.detailedReportPath;
+		 
+			pdfRecordFileName = pdfRecordFileName.substring(pdfRecordFileName.lastIndexOf('/')+1);
+			
+			var pdfRecordSize = pdfRecord.schoolReportPdfSize;
+			
+			var pdfSizeType = "";
+			if(pdfRecordSize >= Math.pow(10, 9)){
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 9))).toFixed(1);
+				pdfSizeType = gbType;
+			}
+			else if (pdfRecordSize >= Math.pow(10, 6)){
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 6))).toFixed(1);
+				pdfSizeType = mbType;
+			}
+			else{
+				pdfRecordSize = (pdfRecordSize/(Math.pow(10, 3))).toFixed(1);
+				pdfSizeType = kbType;
+			}
+			
+			
+	%>
+		<div id="#allStudentsSummaryDiv">  
+			<a href="getStudentSummaryBundledReport.htm?id=<%=pdfRecord.id %>&reportyear=<%=pdfRecord.schoolYear%>" class="stdSummaryBundledLink" > <%= pdfRecordFileName %>
+			</a>			
+			<span class="size"><%= pdfRecordSize %> <%=pdfSizeType%></span>
+		</div>
+	<%}%>	
+		<br/><br/>
+	
+	<div style="margin:0px;" >
+			
+			<div style="margin-left:10px;" id="studentBundledCreatedDate">
+				Created <span id="submittedDate"></span>  by <span id="submittedUser"></span> 			
+			</div>
+			<div>&nbsp;</div>
+		    <div>&nbsp;</div>
+		<div style="margin-left:10px;" id="studentReportInclude">
+				<div style="margin:0px;">Student reports include: </div>
+			    <div id='studentReportSchool' style="margin-left:20px;display:none;"> </div>
+				<div id='studentReportSubject' style="margin-left:20px;"> </div>
+				<div id='studentReportGrades' style="margin-left:20px;"> </div>
+		</div>
+		<br/>	
+		
+		<div style="margin-left:10px;" id='studentBundledSortedBy'>
+		  Student reports sorted by: <span id='studentReportSort' style="margin-left:0px;"> </span>		
+		</div>	
+	</div>
+	<%}else{ %>
+		<div style="margin:0px;">
+			Report Not Available		
+	    </div>
+	<%}%>
+	
+	<div id="stdSummaryBndleRptBtnDiv"  style="margin-left: 540px;">	
+		<% if ((selectedReportYear == currentReportYear)){%>
+		<%
+			if($('#isCreateStudentSummaryBundledReport').val() == 'true'){
+		%>		
+			<input id="newStudentSummaryBundledReport" value='New bundled report' style="display: inline-block;" type="submit">
+		<%}%>
+		<%}%>
+	</div>
+		
+</div>
+		
+<!-- Second Page  -->
+<div class="studentSummaryBundledReportStatus" style="display:none;">
+	<div  style='margin:0px;'><a id='studentSummaryBundledPrev' style='color:#0e76bc !important;' href='#'>Back</a> </div>
+	<div>  &nbsp; </div>
+  	<div style="font-weight: bold;"> Bundled Report request status    </div>
+	<br/>
+	
+	<div id="gridData" class="kite-table gridContainer" style="overflow-x: hidden;width: 100%;max-height: 200px;overflow-y: scroll;" >
+		<div class="ui-jqgrid ui-widget ui-widget-content ui-corner-all">
+			<div class="ui-jqgrid-view">
+			 	
+					<table class="ui-jqgrid-htable" role="presentation" style="width:100%">
+						<thead>
+							<tr class="ui-jqgrid-labels">
+								<th width="20%" class="ui-th-column ui-th-ltr"><div>Submitted By</div></th>
+								<th width="20%" class="ui-th-column ui-th-ltr"><div>Submitted Date</div></th>
+								<th width="10%" class="ui-th-column ui-th-ltr"><div>Status</div></th>
+								<th width="15%" class="ui-th-column ui-th-ltr" id='gridSchoolName'><div>Schools</div></th>								
+								<th width="15%" class="ui-th-column ui-th-ltr"><div>Grades</div></th>
+								<th width="38%" class="ui-th-column ui-th-ltr"><div>Sorted By</div></th>
+							</tr>
+						</thead>
+						<tbody id ="studentSummaryBundledReportStatusLists" >						
+						
+						</tbody>
+					</table>
+				
+			</div>
+		</div>
+	</div>
+	<br/>
+	<hr />
+	
+	
+	<div style="font-weight: bold;"> Create new student summary(bundled) report    </div>
+	<br/> <br/>
+	<div style="font-weight: bold;"> Student summary reports to include   </div>
+		<br/>
+	
+	<!-- Dropdown  -->
+	
+	<form  class="form">
+				
+					
+				 	<div id='studentSummaryBundledReportSchoolDiv' class="form-fields" style='margin-left: 0px !important;'>
+					  <label for="studentSummaryBundledReportSchool" class="field-label isrequired">SCHOOL:<span class="lbl-required">*</span></label> 		
+						<select id="studentSummaryBundledReportSchool" title="School" class="bcg_select" name="studentSummaryBundledReportSchool">
+						  <!-- <option value="0">Select</option> --> 
+						</select>
+						<div id="emptyStudentSummarybundlereportform" class="errordiv">&nbsp;</div>
+					</div>		
+					
+					<div class="form-fields" style='margin-left: 17px !important;margin: 1px !important;padding: 2px;'>
+						  <label for="studentSummaryBundledReportGrades" class="field-label">Grade:<span class="lbl-required">*</span></label> 		
+						<select id="studentSummaryBundledReportGrades" title="Grade" class="bcg_select required" name="studentSummaryBundledReportGrades">
+						  <!--	<option value="0" selected="select">Select</option> -->
+						</select>
+						<div id="emptyStudentSummaryBundledReportGrades" class="errordiv">&nbsp;</div>
+					</div>
+					
+					<br/>
+					<div style="margin:0px;">
+						Student report sequence within the report file
+					</div>
+				
+					
+					<!-- sort option -->
+					
+					<div class="form-fields" style=' margin-left: 5px !important;'>
+					<label for="summarySortFirstBy" class="field-label">Sort first by:<span class="lbl-required">*</span></label>
+						<select id="summarySortFirstBy" class="bcg_select required" title="Sort first by">
+							<option value="0">Select </option>							
+							<% if(isSchoolTabSelected==0 || isSchoolTabSelected == null) { %>
+								<option value="school">School</option>
+							<% } %>
+							<option value="grade">Grade</option>
+							<option value="legallastname">Student Last Name</option>
+						</select>
+						<div id="summaryEmptySortFirstBy" class="errordiv">&nbsp;</div>
+					</div>
+					<div class="form-fields" id='bundledSummaryContentAreaLastName' style=' margin-left: 17px !important;display: none;'>
+					<label for="summarySortSecondBy" class="field-label">Sort second by:<span class="lbl-required">*</span></label>
+						<select id="summarySortSecondBy" class="bcg_select required" title="Sort second by">
+							<option value="0">Select </option>
+							<% if(isSchoolTabSelected==0 || isSchoolTabSelected == null) { %>
+								<option value="school">School</option>
+							<% } %>
+								<option value="grade">Grade</option>
+								<option value="legallastname">Student Last Name</option>
+						</select>
+						<div id="summaryEmptySortSecondBy" class="errordiv">&nbsp;</div>
+					</div>
+					
+					<div class="form-fields" id="bundledSummaryGradeLastName" style=' margin-left: 17px !important;display: none;'>
+					<label for="summarySortLastBy" class="field-label">Sort last by:<span class="lbl-required">*</span></label>
+						<select id="summarySortLastBy" class="bcg_select required" title="Sort last by">
+							<option value="0">Select </option>
+							<% if(isSchoolTabSelected==0 || isSchoolTabSelected == null) { %>
+							<option value="school">School</option>
+						<% } %>
+							<option value="grade">Grade</option>
+							<option value="legallastname">Student Last Name</option>
+						</select>
+						<div id="summaryEmptySortLastBy" class="errordiv">&nbsp;</div>
+					</div>
+					
+					<br/> <br/>
+					
+					<div id='studentSummaryBundledDistrictBottom' style='margin:0px;display:none;'>
+						<div id="studentSummaryBundledSelectError" class="errordiv" > </div>
+						<div style='margin:0px;'><input type="checkbox" id='districtSummaryBundledSelect'  title="Create bundled report for district"/> Create bundled report for district     </div>
+							<div  id='districtSummarySeparateSelectDiv' style='margin-left:40px;'><input  type="checkbox" id='districtSummarySeparateSelect' title="Split district report into separate files by Selected Option" />Split district report into separate files by <span id="summarySplitby1">Selected Option</span> </div>
+						<div style='margin:0px;'><input type="checkbox" id='schoolSummaryBundledSelect' title="Create bundled report for each school selected " /> Create bundled report for each school selected  </div>
+							<div  id='schoolSummarySeparateSelectDiv' style='margin-left:40px;'><input  type="checkbox" id='schoolSummarySeparateSelect' title="Split school report into separate files by Selected Option" />Split school report into separate files by <span id="summarySplitby2">Selected Option</span> </div>					
+					</div>	
+					
+					<div id='studentSummaryBundledSchoolBottom' style='margin:0px;display:none;'>
+						<div  id='summarySeparateBundledReportSelectDiv'>
+<input type="checkbox"  id='summarySeparateBundledReportSelect'  title='Create separate bundled report for each'/> Create separate bundled report for each <span id="summarySplitby3">Selected Option</span> instead of a single PDF report file </div>
+					
+					</div>
+					
+					
+												
+	</form>
+	
+	
+	<div  style="margin-left: 345px;">
+		<input id="submitSummaryBundledReport" value='Submit' style="display: inline-block;" type="submit">				
+	</div>
+	<div id="submitSummaryBundledReportDialog" style="display:none">
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<p>This version will replace the current bundled report for this <span id='summaryPopupText'></span> for all users.</p>
+		<div id="summaryBundledReportSize" class="errordiv">  </div>
+		<div id="summanryBundledReportStatus" class="errordiv"> </div>
+		<div>&nbsp;</div>
+		Would you like to continue?</p>
+	</div>
+	
+	<!-- File not found error -->
+	
+	<div id="studentSummaryBundledErrorLinksErrDialog" style="display:none;">
+		<div>&nbsp;</div>
+		<div style="margin:0px;">File not available! Please try later </div>	
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+	</div>
+	
+	
+	
+</div>		
+</div>

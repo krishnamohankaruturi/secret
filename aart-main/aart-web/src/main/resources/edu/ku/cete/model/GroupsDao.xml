@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="edu.ku.cete.model.GroupsDao">
+
+	<resultMap type="edu.ku.cete.domain.Groups" id="groupsMap">
+		<id column="groupid" property="groupId" javaType="long"/>
+		<result column="organizationId" property="organizationId" javaType="Long"/>
+		<result column="groupname" property="groupName" javaType="String"/>
+		<result column="defaultrole" property="defaultGroup" javaType="Boolean"/>
+		<result column="roleorgtypeid" property="roleOrgTypeId" javaType="Long"/>
+		<result column="hierarchy" property="hierarchy" javaType="Long"/>
+		<result column="groupcode" property="groupCode" javaType="String"/>
+		<association property="organizationType" javaType="edu.ku.cete.domain.common.OrganizationType">
+			<result column="organizationTypeId" property="organizationTypeId" javaType="long"/>
+			<result column="typename" property="typeName" javaType="String"/>
+			<result column="typecode" property="typeCode" javaType="String"/>
+			<result column="typelevel" property="typeLevel" javaType="Integer"/>
+		</association>    
+	</resultMap>
+   
+    <insert id="addGroup" parameterType="Groups" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO groups (organizationid, groupname, defaultrole, createddate, createduser, activeflag, modifieddate, modifieduser,organizationtypeid, roleorgtypeid) 
+        VALUES (#{organizationId}, #{groupName}, #{defaultGroup}, #{createdDate}, #{createdUser}, #{activeFlag},#{modifiedDate},#{modifiedUser},#{organizationTypeId}, #{roleorgtypeid})
+    </insert>
+    
+    <update id="updateGroup" parameterType="Groups">
+        UPDATE groups 
+        SET organizationid = #{organizationId}, 
+        groupname = #{groupName},
+        modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser},
+		activeflag = #{activeFlag},
+		organizationtypeid=#{organizationTypeId},
+		roleorgtypeid=#{roleorgtypeid}
+        WHERE id = #{groupId}
+    </update>
+
+    <delete id="deleteGroup" parameterType="long">
+        DELETE FROM groups WHERE id = #{groupId}
+    </delete>
+    
+    <select id="getAllGroups" resultType="Groups">
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid, 
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode, g.isdepreciated,
+        g.hierarchy 
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.activeflag = true and g.systemindicator is false order by groupname asc
+    </select>
+    
+    
+        <select id="getAllGroupsForReport" resultType="Groups">
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid, 
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode, g.isdepreciated 
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.activeflag = true and g.systemindicator is false and isdepreciated is false 
+        order by g.organizationtypeid, g.groupname asc
+        
+    </select>
+    
+    <select id="getRolesForNotifications" resultType="Groups" >
+    	SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid, 
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.activeflag = true and g.systemindicator is false order by roleorgtypeid, groupname
+    </select>
+    <select id="getAllGroupsBelowLevelOld" resultType="Groups" parameterType="Long" >
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.activeflag = true and ot.typelevel &gt; (select typelevel from organizationtype where id=#{organizationTypeId}) order by groupname asc
+    </select>
+    <select id="getAllGroupsBelowLevel" resultType="Groups" parameterType="Long" >
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.activeflag = true and g.systemindicator is false and ot.typelevel &gt; (select typelevel from organizationtype 
+        where id=(select roleorgtypeid from groups where id = #{groupId})) and g.roleorgtypeid &gt;
+         (select roleorgtypeid from groups where id = #{groupId}) order by groupname asc
+    </select>
+    
+    <select id="getExceptionalGroupsBelowLevel" resultType="Groups" parameterType="Long" >
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode, g.isdepreciated 
+        FROM groups g 
+        inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.activeflag = true and g.systemindicator is false 
+        and g.hierarchy &gt;
+        (select hierarchy from groups where id = #{groupId}) order by groupname asc
+    </select>    
+    <select id="getGroup" resultType="Groups" parameterType="long" >
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.id = #{groupId}
+    </select>
+    <select id="getGroupByName" resultType="Groups" parameterType="String" >
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.groupname = #{name}
+    </select>
+    
+    <select id="getByOrganization" resultType="Groups" parameterType="long">
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.organizationid = #{organizationId}
+    </select>
+    
+    <select id="getDefaultByOrganization" resultType="Groups" parameterType="long">
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.organizationid = #{organizationId} and defaultrole = true;
+    </select>
+    
+    <select id="getByDefaultRoleAndOrganizationTree" resultType="Groups" parameterType="map">
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.defaultrole = #{defaultRole}
+	    AND g.organizationid in (Select id from organization_parent(#{organizationId})) 
+        union all
+        SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.defaultrole = #{defaultRole}
+        AND (
+        	g.organizationid = #{organizationId}
+	        OR g.organizationid in (Select id from organization_children(#{organizationId}))
+        )        
+    </select>
+    
+     <select id="getGroupNames" resultType="String">
+        SELECT g.groupName from groups g where g.activeflag is true
+        order by g.groupName;
+    </select>                 
+    
+    <select id="getLastId" resultType="long">
+        SELECT lastval() as id;
+    </select>
+
+    <!-- Manoj Kumar O : Added for US_16244(provide UI TO merge Users) -->
+    <select id="getUserRolesByUserId" resultType="Groups" parameterType="Long">
+		SELECT DISTINCT
+  		grinner.groupname                                  AS groupName,
+  		uoinner.organizationid                             AS organizationTypeId,
+  		grinner.groupcode                                  AS groupCode
+		FROM aartuser AS auuinner
+  		LEFT JOIN usersorganizations AS uoinner
+  	 	 ON auuinner.id = uoinner.aartuserid
+  		LEFT JOIN userorganizationsgroups uoginner
+  	 	ON uoginner.userorganizationid = uoinner.id
+  		LEFT JOIN groups grinner
+   		ON grinner.id = uoginner.groupid
+		WHERE auuinner.id = #{userIdParam}
+		AND uoinner.activeflag = true
+		AND uoginner.activeflag = true
+	</select>
+
+	<select id="getGroupsByGroupCode" resultMap="groupsMap" parameterType="String">	
+		SELECT g.id as groupId, g.organizationid, g.groupname, g.defaultrole,g.organizationtypeid,
+        g.roleorgtypeid, ot.typename, ot.typecode, ot.typelevel, g.groupcode
+        FROM groups g inner join organizationtype ot on g.organizationtypeid = ot.id
+        WHERE g.activeflag = true and g.systemindicator is false and g.groupcode=#{groupCode}
+	</select>
+
+  <update id="updateUsersLimitPerRole" parameterType="GroupRestrictions">
+    	update grouprestrictions
+    	set singleuser = #{singleUser}, 
+		modifieddate = #{modifiedDate},
+		modifieduser = #{modifiedUser}
+    	where groupid = #{groupId}
+    	and organizationid = #{organizationId}
+    	and assessmentprogramid = #{assessmentProgramId}
+    	and activeflag is true
+  </update>
+ 
+  <select id="isUsersLimitedToOnePerRole" resultType="java.lang.Boolean" >
+    SELECT gr.singleuser FROM grouprestrictions gr
+    join groups g on gr.groupid = g.id  
+		WHERE g.groupcode = #{groupCode}
+		and gr.organizationid = #{organizationId}
+		and gr.assessmentprogramid = #{assessmentProgramId}
+		and gr.activeflag is true and g.activeflag is true
+  </select>
+  
+  <select id="isUsersLimitedToOnePerRoleExists" resultType="java.lang.Boolean">
+  	select exists ( select gr.singleuser
+		FROM grouprestrictions gr
+		join groups g on gr.groupid = g.id  
+		WHERE g.groupcode = #{groupCode}
+		and gr.organizationid = #{organizationId}
+		and gr.assessmentprogramid = #{assessmentProgramId}
+		and gr.activeflag is true and g.activeflag is true)
+  </select>
+	<insert id="insertUsersLimitPerRole" parameterType="GroupRestrictions">
+		insert into grouprestrictions (groupid, organizationid, assessmentprogramid, 
+			singleuser, createduser, createddate, modifieduser, modifieddate,activeflag)
+			values (#{groupId}, #{organizationId}, #{assessmentProgramId}, #{singleUser}, 
+			#{createdUser}, #{createdDate}, #{modifiedUser}, #{modifiedDate}, #{activeFlag})
+	</insert>
+	
+	<select id="getPermissionExtractGroupNames" resultType="String">
+        select groupname from groups where  activeflag is true and isdepreciated is false order by roleorgtypeid,groupname; 
+    </select> 
+    	
+	<select id="getGroupByCode" resultType="Groups">
+        select id as groupid, groupname, groupcode from groups where  activeflag is true and groupcode=#{groupCode}; 
+    </select> 
+    
+</mapper>

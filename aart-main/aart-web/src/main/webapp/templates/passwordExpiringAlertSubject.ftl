@@ -1,0 +1,1 @@
+Last Reminder: Kite Educator Portal Password expires in ${resetPasswordLinkPeriod} days

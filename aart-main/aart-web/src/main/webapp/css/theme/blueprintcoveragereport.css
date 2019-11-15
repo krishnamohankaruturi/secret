@@ -1,0 +1,160 @@
+#blueprintCoverageReport #blueprintCoverageTeacherDropdownDiv {
+	float: left;
+	width: 40%;
+	height: 40px;
+	margin: 0 0 0 1%;
+}
+
+#blueprintCoverageReport #viewBlueprintCoverageReportButtonsDiv {
+	float: right;
+	margin: 0;
+	width: 59%;
+	height: 50px;
+}
+
+#blueprintCoverageReport #viewBlueprintCoverageReportButtonsDiv input {
+	margin: 0;
+}
+
+#blueprintCoverageReport #blueprintCoverageReportDisplayDiv {
+	float: left;
+	display: none;
+	margin: 1%;
+	background-color: white;
+	width: 98%;
+	height: auto;
+	min-height: 200px;
+}
+
+#blueprintCoverageReport .button {
+	visibility: hidden;
+	line-height: 15px;
+	margin: 0;
+}
+
+.blueprintcoverage {
+	float: left;
+	width: 99%;
+	padding: 0.5%;
+}
+
+.blueprintcoverage .clear {
+	clear: both;
+}
+
+.blueprintcoverage .buttons {
+	float: right;
+}
+
+.blueprintcoverage .heading {
+    padding-bottom: 5px;
+    font-size: .9em;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.blueprintcoverage .aligntop {
+	vertical-align: top;
+}
+
+.blueprintcoverage .aligncenter {
+	text-align: center;
+}
+
+.blueprintcoverage .blueheader {
+	color: #2c80dc;
+}
+
+.blueprintcoverage .green {
+	color: #94b54d;
+}
+
+.blueprintcoverage .centerheader {
+	width: auto;
+	font-weight: bold;
+	text-align: center;
+}
+
+.blueprintcoverageStudentReport #blueprintCoverageReportDisplayDiv {
+	float: left;
+	border: 1px solid #DDDDDD;
+	margin: 1%;
+	background-color: white;
+	width: 98%;
+	height: 290px;
+	overflow: auto;
+}
+
+.blueprintcoverage .overflow-y {
+	overflow-y: auto;
+}
+
+.blueprintcoverageblock {
+}
+
+.blueprintcoverage .legend {
+	float: right;
+}
+
+.blueprintcoverage .legend span {
+	font-size: 0.8em;
+	vertical-align: middle;
+}
+
+.blueprintcoverage .legend img {
+	width: 18px;
+	height: 18px;
+	vertical-align: middle;
+}
+
+.blueprintcoverage .blueprintcoverageblock .teacherheader {
+	color: #2c80dc;
+}
+
+.blueprintcoverage .blueprintcoverageblock  table {
+	border-collapse: collapse;
+	font-size: 0.8em;
+	margin: 0;
+	outline-style: none;
+	background-color: #FFFFFF;
+}
+
+.blueprintcoverage .blueprintcoverageblock  table th, .blueprintcoverage .blueprintcoverageblock  table td {
+	border-collapse: collapse;
+	padding: 2px 4px;
+	word-wrap: break-word;
+	border: 1px solid #888888;
+	border-top-width: 0px;
+	border-left-width: 0px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+.blueprintcoverage .blueprintcoverageblock  table th:not(.criteria) {
+	text-align: center;
+	font-weight: bold;
+}
+
+.blueprintcoverage .blueprintcoverageblock  table th.criteria {
+	font-weight: normal;
+}
+
+.blueprintcoverage .blueprintcoverageblock  table td:not(.eedescription) {
+	text-align: center;
+}
+
+.blueprintcoverage .blueprintcoverageblock table td.eedescription {
+	text-align: left;
+}
+
+.blueprintcoverage .blueprintcoverageblock td.studenttested span {
+	vertical-align: middle;
+}
+
+.blueprintcoverage .blueprintcoverageblock td.studenttested img {
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+}

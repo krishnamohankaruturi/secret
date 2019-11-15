@@ -1,0 +1,22 @@
+<div id="feedbackdiv">
+<p>Please help us improve Educator Portal by providing your feedback</p>
+<p style="color:#3888b6">If you are experiencing technical difficulties with Kite, contact the Service Desk at 785-864-3537.</p>
+<p style="text-align: end;color:#eb5158;margin-right: 10px;"><span>All fields are required <span></p>
+<form id="feedback_form" style="width:100%">
+  
+<table>
+    <tbody>
+      
+<tr><td><input type="text" class="feedback-form-fields" maxlength="160" size="150" id="feedback_name" placeholder="Name" title = "Name"/></td></tr>
+<tr><td><input type="email" class="feedback-form-fields" maxlength="254" id="feedback_email" placeholder="Email" title = "Email"/></td></tr>
+<span id="feedback-email-error" style="color:#eb5158;display:none">Please provide valid email</span>
+<tr><td><textarea rows="6" maxlength="1000" class="feedback-form-textarea" id="feedback_description" cols="50" placeholder="Please write your feedback here. Please be as specific as possible." 
+title = "Feedback text" style="height: 235px;" ></textarea></td></tr>
+        </tbody>
+    </table>
+</form>
+<p style="color:#3888b6">Refrain from including any Personally Identifiable Information (PII) in compliance with PII Privacy Act and FERPA</p>
+<span style="color:red;display:none" id="exception-error"></span>
+<input type="button" id="feedback_submit" style="margin-left: 220px;" class="feedbackbuttons" value="Submit"/>
+<input type="button" id="feedback_cancel" style="margin-left: 80px;" class="feedbackbuttons" value="Cancel"/>
+</div>

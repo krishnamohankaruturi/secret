@@ -1,0 +1,17 @@
+.leftText{
+	float:left;
+}
+.buttons{
+	overflow:hidden;
+	float:right;
+}
+.clear{
+	clear:both;
+}
+#outsideUpdated{
+	float:right;
+}
+
+#outsideUpdated p {
+    margin-right: 11px;
+}

@@ -1,0 +1,3 @@
+--Student ID# 3572478782 -- Stage2 tests are not aggined
+UPDATE enrollmenttesttypesubjectarea SET activeflag = true, testtypeid =2, modifieddate = now(), modifieduser = (select id from aartuser where username = 'cetesysadmin') WHERE enrollmentid = 2278992;
+UPDATE enrollmenttesttypesubjectarea SET activeflag = false, testtypeid =19, modifieddate = now(), modifieduser = (select id from aartuser where username = 'cetesysadmin') WHERE enrollmentid = 2278991;

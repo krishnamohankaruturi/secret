@@ -1,0 +1,11 @@
+<% if (response.values && response.values[qNum]!=null && response.values[qNum]==i) { %>
+	<input type="radio" id="answer_<%= qNum+'_'+i %>" name="answer_<%= qNum %>" value="<%= i %>" checked="checked" />
+	<% if(showtick) { %>
+		<label class="paginateAnswered"></label>
+	<% } %>
+<% } else { %>
+	<input type="radio" id="answer_<%= qNum+'_'+i %>" name="answer_<%= qNum %>" value="<%= i %>" />
+	<% if(showtick) { %>
+		<label></label>
+	<% } %>
+<% } %>

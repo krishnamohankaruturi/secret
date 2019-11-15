@@ -1,0 +1,2 @@
+-- DE9812: Not reporting all errors, just the first one. 
+-- For /dml/404.sql

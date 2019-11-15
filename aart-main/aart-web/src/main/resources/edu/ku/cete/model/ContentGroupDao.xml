@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.ContentGroupDao">
+
+ <insert id="createContentGroupForInterimTest" useGeneratedKeys="true"> 
+		<!-- data population
+		create content group entries for the existing interim tests from the content groups mapped through 
+		interim test section ->interim test -> test -> test section -> content group. -->
+		insert into contentgroup (
+			externalid, accesselementid, spanstart, spanend, charindexstart, charindexend, 
+			taskvariantid, foilid, createuserid, createdate, modifieddate, modifieduserid, 
+			originationcode, stimulusvariantid, htmlelementid,  highlighted, compositemediaid,
+			instructioncode, multiparttaskvariantid, testid, testsectionid)
+		(select distinct cg.externalid, cg.accesselementid, cg.spanstart, cg.spanend, cg.charindexstart, 
+		cg.charindexend, cg.taskvariantid, cg.foilid, #{createdUserId,jdbcType=BIGINT}, 
+		now(), now(),
+		#{modifiedUserId,jdbcType=BIGINT}, #{originationCode,jdbcType=VARCHAR}, cg.stimulusvariantid, cg.htmlelementid,  cg.highlighted, 
+		cg.compositemediaid, cg.instructioncode, cg.multiparttaskvariantid,it.testtestid as interimtestid,
+		its.id as interimtestsectionid
+		 from contentgroup cg 
+				inner join testsection ts on ts.id = cg.testsectionid
+				inner join test t on t.id = ts.testid and t.activeflag is true
+		 		inner join interimtesttest itt on itt.testid = t.id and itt.activeflag is true
+				inner join interimtest it on it.id = itt.interimtestid and it.activeflag is true
+		 		inner join testsection its on its.testid = it.testtestid
+		 		and its.externalid = ts.externalid
+		 		where it.testtestid = #{testId} and its.id = #{testSectionId}
+		);
+		
+		<!-- create brailleaccomodation entries for the existing interim tests from the braille accomodations mapped through 
+		interim content group -> interim test section ->interim test -> test -> test section -> content group -> braille accomodation -->
+		insert into brailleaccommodation (externalid, brailleabbreviation, defaultorder, alternateorder, 
+			accessibilityfileid, createuserid, createdate, modifieddate, modifieduserid, originationcode, contentgroupid)
+		(select distinct ba.externalid,  ba.brailleabbreviation, ba.defaultorder, ba.alternateorder, 
+		ba.accessibilityfileid, #{createdUserId,jdbcType=BIGINT}, 
+		now(), now(), #{modifiedUserId,jdbcType=BIGINT}, 
+		#{originationCode,jdbcType=VARCHAR}, icg.id as icontentgroupid
+		 from brailleaccommodation ba
+		 		inner join contentgroup cg on cg.id = ba.contentgroupid
+				inner join testsection ts on ts.id = cg.testsectionid
+				inner join test t on t.id = ts.testid and t.activeflag is true
+		 		inner join interimtesttest itt on itt.testid = t.id and itt.activeflag is true
+				inner join interimtest it on it.id = itt.interimtestid and it.activeflag is true
+		 		inner join testsection its on its.testid = it.testtestid
+		 		inner join contentgroup icg on icg.testsectionid = its.id and it.testtestid = icg.testid
+		 		and icg.externalid = cg.externalid and its.externalid = ts.externalid
+		 		and cg.accesselementid = icg.accesselementid
+		 		where it.testtestid = #{testId} and its.id = #{testSectionId}
+		);
+		
+		<!-- create readaloudaccommodation entries for the existing interim tests from the read aloud accomodations mapped through 
+		interim content group -> interim test section ->interim test -> test -> test section -> content group -> aloud accomodation -->
+		insert into readaloudaccommodation (externalid, readaloudtypeid, synthetic, syntheticpronoun,
+		 	human, defaultorder, alternateorder, accessibilityfileid, starttime, endtime, createuserid, 
+		 	createdate, modifieddate, modifieduserid, originationcode, contentgroupid)
+		(select distinct ra.externalid, ra.readaloudtypeid, ra.synthetic, ra.syntheticpronoun, ra.human, 
+		ra.defaultorder, ra.alternateorder, ra.accessibilityfileid, ra.starttime, ra.endtime, #{createdUserId,jdbcType=BIGINT}, 
+		now(), now(), #{modifiedUserId,jdbcType=BIGINT}, #{originationCode,jdbcType=VARCHAR}, 
+		icg.id as icontentgroupid
+		 from readaloudaccommodation ra
+		 		inner join contentgroup cg on cg.id = ra.contentgroupid
+				inner join testsection ts on ts.id = cg.testsectionid
+				inner join test t on t.id = ts.testid and t.activeflag is true
+		 		inner join interimtesttest itt on itt.testid = t.id and itt.activeflag is true
+				inner join interimtest it on it.id = itt.interimtestid and it.activeflag is true
+		 		inner join testsection its on its.testid = it.testtestid
+		 		inner join contentgroup icg on icg.testsectionid = its.id and it.testtestid = icg.testid
+		 		and icg.externalid = cg.externalid
+		 		and cg.accesselementid = icg.accesselementid and its.externalid = ts.externalid
+		 		where it.testtestid = #{testId} and its.id = #{testSectionId}
+		);
+		
+		<!-- create signedaccomodation entries for the existing interim tests from the signed accomodations mapped through 
+		interim content group -> interim test section ->interim test -> test -> test section -> content group -> signed accomodation -->
+		insert into signedaccommodation (externalid, signedabbreviation, defaultorder, alternateorder,
+		 	accessibilityfileid, starttime, endtime, createuserid, createdate, modifieddate, modifieduserid,
+		  	originationcode, contentgroupid)
+		(select distinct sa.externalid, sa.signedabbreviation, sa.defaultorder, sa.alternateorder,
+		 sa.accessibilityfileid, sa.starttime, sa.endtime, #{createdUserId,jdbcType=BIGINT}, now(), now(), 
+		  #{modifiedUserId,jdbcType=BIGINT}, #{originationCode,jdbcType=VARCHAR}, icg.id as icontentgroupid
+		 from signedaccommodation sa
+		 		inner join contentgroup cg on cg.id = sa.contentgroupid
+				inner join testsection ts on ts.id = cg.testsectionid
+				inner join test t on t.id = ts.testid and t.activeflag is true
+		 		inner join interimtesttest itt on itt.testid = t.id and itt.activeflag is true
+				inner join interimtest it on it.id = itt.interimtestid and it.activeflag is true
+		 		inner join testsection its on its.testid = it.testtestid
+		 		inner join contentgroup icg on icg.testsectionid = its.id and it.testtestid = icg.testid
+		 		and icg.externalid = cg.externalid
+		 		and cg.accesselementid = icg.accesselementid and its.externalid = ts.externalid
+		 		where it.testtestid = #{testId} and its.id = #{testSectionId}
+		);
+		
+		<!-- create textaccommodation entries for the existing interim tests from the text accomodations mapped through 
+		interim content group -> interim test section ->interim test -> test -> test section -> content group -> text accomodation -->
+		insert into textaccommodation (externalid, varianttypeid, accommodationtext, sortorder, 
+			inclusion, accommodationtypeid, createuserid, createdate, modifieddate, modifieduserid, 
+			originationcode, contentgroupid)
+		(select distinct ta.externalid, ta.varianttypeid, ta.accommodationtext, ta.sortorder,
+		 ta.inclusion, ta.accommodationtypeid, #{createdUserId,jdbcType=BIGINT},now(), now(),
+		 #{modifiedUserId,jdbcType=BIGINT}, #{originationCode,jdbcType=VARCHAR}, icg.id as icontentgroupid
+		 from textaccommodation ta
+		 		inner join contentgroup cg on cg.id = ta.contentgroupid
+				inner join testsection ts on ts.id = cg.testsectionid
+				inner join test t on t.id = ts.testid and t.activeflag is true
+		 		inner join interimtesttest itt on itt.testid = t.id and itt.activeflag is true
+				inner join interimtest it on it.id = itt.interimtestid and it.activeflag is true
+		 		inner join testsection its on its.testid = it.testtestid
+		 		inner join contentgroup icg on icg.testsectionid = its.id and it.testtestid = icg.testid
+		 		and icg.externalid = cg.externalid
+		 		and cg.accesselementid = icg.accesselementid and its.externalid = ts.externalid
+		 		where it.testtestid = #{testId} and its.id = #{testSectionId}
+		);
+  </insert>
+
+</mapper>

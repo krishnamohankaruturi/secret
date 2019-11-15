@@ -1,0 +1,54 @@
+<div>
+	<% if(screen == 'stimuli') { %>
+		<h2><span class="stimuli"><%= text %></span></h2>
+	<% } else if(screen == 'question') { 
+			if(tasktype == 'tset_stim_br') { %>
+			  	<h2><span class="stimuli"><%= tasks[tde.testparam.currentQuestion].contextStimulus.text %></span></h2><br/><br/>
+		      	<div class="stem"><h2><%= text %></h2></div>
+		    <% } else if(tasktype == 'tset_stim_cb') { %>
+		    	<div class="stem"><h2><%= text %></h2></div>
+		      	<h2><span class="stimuli"><%= tasks[tde.testparam.currentQuestion].contextStimulus.text %></span></h2>
+		    <% } else { %>
+		    	<div class="stem"><h2><%= text %></h2></div>
+		    <% } %>
+	<% } else { %>
+		<h2><%= text %></h2>
+	<% } %>
+</div>	
+	<% if(screen == 'question') { %>
+		<% var layout = tasks[tde.testparam.currentQuestion].taskLayout;
+		   	if(layout == 'horizontal') { %>
+		   		<div class="foils alt-horizontal">
+		  	<% } else if(layout == 'rating_scale_vertical' || layout == 'vertical_stacked') { %>		
+				<div class="foils alt-vertical">
+			<% } else if(layout == 'right_z') { %>
+				<div class="foils alt-stackz">
+			<% } else if(layout == 'stacked_z') { %>
+				<div class="foils alt-stackz">
+			<% } else if (layout == 'right_vertical_stacked') { %>
+				<div class="foils alt-vertical">
+			<% } %>
+	   		<ul>
+	   			<%  var task = tasks[tde.testparam.currentQuestion];
+	   				for(var i=0; i<task['foils'].length; i++) { %>
+	   					<li>
+	   					<% if (responses.values[tde.testparam.currentQuestion]!=null && responses.values[tde.testparam.currentQuestion]==i) { %>
+								<input type="radio" id="answer_<%= tde.testparam.currentQuestion+'_'+i %>" name="answer_<%= tde.testparam.currentQuestion %>" value="<%= i %>" checked="checked" />
+								<span class="foil mark_highlight">
+									<button type="button" class="tabable" onfocus="task.focusOnElement(this)" onblur="task.blurElement(this)">
+										<%= task['foils'][i].text %>
+									</button>
+								</span>
+						<% } else { %>
+								<input type="radio" id="answer_<%= tde.testparam.currentQuestion+'_'+i %>" name="answer_<%= tde.testparam.currentQuestion %>" value="<%= i %>" />
+								<span class="foil">
+									<button type="button" class="tabable" onfocus="task.focusOnElement(this)" onblur="task.blurElement(this)">
+										<%= task['foils'][i].text %>
+									</button>
+								</span>
+						<% } %>
+	   					</li>
+	   			<% } %>
+	   		</ul>
+	   	</div>
+	<% } %>

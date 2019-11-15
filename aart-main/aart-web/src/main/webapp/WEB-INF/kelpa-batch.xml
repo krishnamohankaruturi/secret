@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+     http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+	
+	<bean name="kelpaPageReader" scope="step"
+		class="edu.ku.cete.batch.kelpa.auto.KELPAReader" autowire-candidate="false">
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="testType" value="#{stepExecutionContext['testType']}" />
+		<property name="assessment" value="#{stepExecutionContext['assessment']}" />
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="pageSize" value="5000" />
+	</bean>
+
+	<bean id="kelpaRegReader"
+		class="org.springframework.batch.item.support.SingleItemPeekableItemReader"
+		scope="step" autowire-candidate="false">
+		<property name="delegate" ref="kelpaPageReader" />
+	</bean>
+	
+	<bean id="kelpaPartitioner" class="edu.ku.cete.batch.kelpa.auto.KELPAPartitioner"
+		scope="step">
+		<property name="assessmentProgramId" value="#{jobParameters['assessmentProgramId']}" />
+		<property name="testingProgramId" value="#{jobParameters['testingProgramId']}" />
+		<property name="testTypeId" value="#{jobParameters['testTypeId']}" />
+		<property name="contentAreaId" value="#{jobParameters['contentAreaId']}" />
+		<property name="gradeCourseId" value="#{jobParameters['gradeCourseId']}" />
+		<property name="assessmentId" value="#{jobParameters['assessmentId']}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />
+		<property name="studentId" value="#{jobParameters['studentId']}" />
+		<property name="operationalTestWindowId" value="#{jobParameters['operationalTestWindowId']}" />
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+	</bean>
+
+	<bean name="kelpaProcessor" scope="step"
+		class="edu.ku.cete.batch.kelpa.auto.KELPABatchRegistrationProcessor">
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="gradeCourse" value="#{stepExecutionContext['gradeCourse']}" />
+		<property name="contentArea" value="#{stepExecutionContext['contentArea']}" />
+		<property name="testType" value="#{stepExecutionContext['testType']}" />		
+		<property name="testCollections" value="#{stepExecutionContext['testCollections']}" />
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgramCode" value="#{jobParameters['assessmentProgramCode']}" />	
+		<property name="enrollmentMethod" value="#{jobParameters['enrollmentMethod']}" />
+		<property name="assessment" value="#{stepExecutionContext['assessment']}" />	
+		<property name="contractingOrganization"
+			value="#{stepExecutionContext['contractingOrganization']}" />
+	</bean>
+	
+	<bean name="kelpaWriter" scope="step"
+		class="edu.ku.cete.batch.kelpa.auto.KELPAWriter" autowire-candidate="false">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<bean name="kelpaStepListener" scope="step"
+		class="edu.ku.cete.batch.kelpa.auto.KELPAStepListener">
+		<property name="batchRegistrationId"
+			value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+	
+	<batch:step id="kelpaBatchRegStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk reader="kelpaRegReader" writer="kelpaWriter"
+				processor="kelpaProcessor" commit-interval="1" skip-policy="skipPolicy" />
+			<batch:no-rollback-exception-classes>
+				<batch:include class="edu.ku.cete.batch.support.SkipBatchException" />
+			</batch:no-rollback-exception-classes>
+			<batch:transaction-attributes isolation="DEFAULT"
+				propagation="REQUIRES_NEW" timeout="60" />
+			<batch:listeners>
+				<batch:listener ref="kelpaStepListener" />
+			</batch:listeners>
+		</batch:tasklet>
+	</batch:step>
+	
+	<batch:job id="kelpaJob">
+		<batch:step id="partitionedKELPALoadStep">
+			<batch:partition step="kelpaBatchRegStep" partitioner="kelpaPartitioner">
+				<batch:handler grid-size="10" task-executor="batchTaskExecutor" />
+			</batch:partition>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegJobListener" />
+		</batch:listeners>
+	</batch:job>	
+	
+	<batch:job id="kelpaDacJob">
+		<batch:step id="kelpaDacJob.step1" next="kelpaDacJob.step2">
+			<batch:job ref="kelpaJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:step id="kelpaDacJob.step2">
+			<batch:job ref="dacJob" job-launcher="scheduledJobLauncher" />
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="batchRegParentJobListener" />
+		</batch:listeners>
+	</batch:job>
+	
+	<bean id="kelpaJobScheduler" class="edu.ku.cete.batch.ScheduledJobLauncher" >
+			<property name="job" ref="kelpaDacJob" />
+   			<property name="assesmentProgramCode" value="KELPA2" />
+   			<property name="isScheduleOn" value="OFF" />
+   			<property name="testingProgramAbbr" value="S" />
+   			<property name="enrollmentMethod" value="MLTSTG" />
+    </bean>
+   
+</beans>

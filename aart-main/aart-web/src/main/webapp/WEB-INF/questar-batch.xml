@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+     http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+	
+	<bean id="questarRegistrationReader" class="edu.ku.cete.batch.questar.QuestarRegistrationReader" scope="step">
+		<property name="pageSize" value="1000" />
+	</bean>
+	
+	<bean id="questarRegistrationProcessor" class="edu.ku.cete.batch.questar.QuestarRegistrationProcessor" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgram" value="#{jobExecutionContext['assessmentProgram']}" />
+		<property name="org" value="#{jobExecutionContext['org']}" />
+		<property name="assessment" value="#{jobExecutionContext['assessment']}" />
+		<property name="testingProgram" value="#{jobExecutionContext['testingProgram']}" />
+		<property name="schoolYear" value="#{jobExecutionContext['schoolYear']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+		<property name="operationalTestWindowId" value="#{jobExecutionContext['operationalTestWindowId']}" />
+	</bean>
+	
+	<bean id="questarRegistrationWriter" class="edu.ku.cete.batch.questar.QuestarRegistrationWriter" scope="step">
+		<property name="stepExecution" value="#{stepExecution}" />
+		<property name="assessmentProgram" value="#{jobExecutionContext['assessmentProgram']}" />
+		<property name="org" value="#{jobExecutionContext['org']}" />
+		<property name="schoolYear" value="#{jobExecutionContext['schoolYear']}" />
+		<property name="assessment" value="#{jobExecutionContext['assessment']}" />
+		<property name="testingProgram" value="#{jobExecutionContext['testingProgram']}" />
+		<property name="user" value="#{jobExecutionContext['user']}" />
+		<property name="batchRegistrationId" value="#{jobExecutionContext['batchRegistrationId']}" />
+	</bean>
+
+	<bean id="questarRegistrationJobListener" class="edu.ku.cete.batch.questar.QuestarRegistrationJobListener" />
+	
+	<batch:job id="questarJob">
+		<batch:step id="questarRegistrationStep">
+			<batch:tasklet>
+				<batch:chunk reader="questarRegistrationReader" processor="questarRegistrationProcessor" writer="questarRegistrationWriter" skip-limit="999999" commit-interval="1">
+					<batch:skippable-exception-classes>
+                		<batch:include class="edu.ku.cete.batch.questar.exception.QuestarSkipException" />
+            		</batch:skippable-exception-classes>
+				</batch:chunk>
+				<batch:no-rollback-exception-classes>
+					<!-- We want to rollback on every exception -->
+				</batch:no-rollback-exception-classes>
+			</batch:tasklet>
+		</batch:step>
+		<batch:listeners>
+			<batch:listener ref="questarRegistrationJobListener" />
+		</batch:listeners>
+	</batch:job>
+</beans>

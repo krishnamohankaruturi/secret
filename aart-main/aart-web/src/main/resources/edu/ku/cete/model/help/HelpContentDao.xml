@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.help.HelpContentDao">
+
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.help.HelpContent">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="helptopicid" property="helpTopicId" jdbcType="BIGINT" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="expiredate" property="expireDate" jdbcType="TIMESTAMP" />
+		<result column="helptitle" property="helpTitle" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="filename" property="fileName" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+		<result column="programname" property="programName" jdbcType="VARCHAR" />
+		<result column="statename" property="stateName" jdbcType="VARCHAR" />
+		<result column="roles" property="roles" jdbcType="VARCHAR" />
+		<result column="url" property="slug" jdbcType="VARCHAR" />
+		<result column="name" property="helpTopicName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BaseHelpContentResultMap" type="edu.ku.cete.domain.help.HelpContent">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="helptopicid" property="helpTopicId" jdbcType="BIGINT" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="expiredate" property="expireDate" jdbcType="TIMESTAMP" />
+		<result column="helptitle" property="helpTitle" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="filename" property="fileName" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+		<result column="name" property="helpTopicName" jdbcType="VARCHAR" />
+		<result column="description" property="helpToicDescription" jdbcType="VARCHAR" />
+		<result column="programname" property="programName" jdbcType="VARCHAR" />
+		<result column="statename" property="stateName" jdbcType="VARCHAR" />
+		<result column="roles" property="roles" jdbcType="VARCHAR" />
+		<result column="url" property="slug" jdbcType="VARCHAR" />
+		<result column="createdby" property="createdBy" jdbcType="VARCHAR" />
+		<result column="modifiedby" property="modifiedBy" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap type="edu.ku.cete.domain.help.HelpTopic" id="ViewHelpContentResultMap">
+		<id property="id" column="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="createduser" property="createdUser" jdbcType="BIGINT" />
+		<result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+		<result column="activeflag" property="activeFlag" jdbcType="BIT" />
+	</resultMap>
+	
+	<insert id="saveHelpContent" parameterType="edu.ku.cete.domain.help.HelpContent" useGeneratedKeys="true"
+		keyColumn="id" keyProperty="id">
+		insert into
+		helpcontent
+		(helptopicid,content,expiredate,helptitle,status,filename,activeflag,
+		createduser,modifieduser,createddate,modifieddate)
+		values
+		(#{helpTopicId,jdbcType=BIGINT},#{content,jdbcType=VARCHAR},#{expireDate,jdbcType=TIMESTAMP},#{helpTitle,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR},#{activeFlag,jdbcType=BIT},#{createdUser,jdbcType=BIGINT},
+		#{modifiedUser,jdbcType=BIGINT},#{createdDate,jdbcType=TIMESTAMP},#{modifiedDate,jdbcType=TIMESTAMP})
+
+	</insert>
+
+	<update id="updateHelpContent" parameterType="edu.ku.cete.domain.help.HelpContent">
+		update helpcontent
+		<set>
+			<if test="helpTopicId != null and helpTopicId != 0">
+				helptopicid = #{helpTopicId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+				expiredate = #{expireDate,jdbcType=TIMESTAMP},
+			<if test="helpTitle != null">
+				helptitle = #{helpTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				filename = #{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activeFlag != null">
+				activeflag = #{activeFlag,jdbcType=BIT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="deleteHelpContent" parameterType="edu.ku.cete.domain.help.HelpContent">
+		update helpcontent
+		<set>
+			activeflag = false,
+			<if test="modifiedUser != null">
+				modifieduser = #{modifiedUser,jdbcType=BIGINT},
+			</if>
+			<if test="modifiedDate != null">
+				modifieddate = #{modifiedDate,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id};
+	</update>
+
+	<select id="getHelpContentsById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select hc.id, ht.name, hc.helptitle,
+		hc.status, hc.content, hc.filename, hcs.url,hc.expiredate
+		from helpcontent hc
+		inner join helptopic ht on hc.helptopicid = ht.id and
+		hc.activeflag is true and ht.activeflag is true
+		inner join helpcontentslug hcs on hcs.helpcontentid = hc.id
+		where hc.id = #{id}
+	</select>
+
+	<select id="getViewHelpContentById" resultMap="BaseHelpContentResultMap" parameterType="java.lang.Long">
+		select hc.id,
+		hc.helptitle, hc.status, hc.content, hc.createddate, hc.modifieddate,ht.name, ht.description,
+		hc.filename
+		from
+		helpcontent hc
+		inner join helptopic ht on hc.helptopicid = ht.id and hc.activeflag is true and ht.activeflag is true
+		where
+		hc.id=#{id}
+	</select>
+
+	<sql id="Help_Content_Where_Clause">
+		<if test="criteria.id != null">
+			AND (hc.id || '') ilike #{criteria.id}
+		</if>
+		<if test="criteria.createdDate != null">
+			AND to_char(hc.createddate, 'MM/DD/YYYY') ilike #{criteria.createdDate}
+		</if>
+		<if test="criteria.helpTopicName != null">
+			AND name ilike #{criteria.helpTopicName}
+		</if>
+		<if test="criteria.helpTitle != null">
+			AND helptitle ilike #{criteria.helpTitle}
+		</if>
+		<if test="criteria.status != null and criteria.status != 'Expired'">
+			AND status ilike #{criteria.status}
+		</if>
+		<if test="criteria.status != null and criteria.status == 'Expired'">
+			AND expiredate &lt; now()
+		</if>
+		<if test="criteria.expireDate != null">
+			AND to_char(expiredate, 'MM/DD/YYYY') ilike #{criteria.expireDate}
+		</if>
+		<if test="criteria.programName != null">
+			AND programname ilike #{criteria.programName}
+		</if>
+		<if test="criteria.stateName != null">
+			AND statename ilike #{criteria.stateName}
+		</if>
+		<if test="criteria.stateName != null">
+			AND roles ilike #{criteria.roles}
+		</if>
+	</sql>
+
+	<select id="getAllHelpContents" resultMap="BaseHelpContentResultMap">
+		select * from (
+		select distinct hc.createddate, ht.name, hc.helptitle,
+		case when hc.expiredate &lt; now() then 'Expired' else
+		hc.status end as status, hc.id,
+		ht.description, hc.filename , hc.expiredate,
+		array_to_string(array_agg(distinct ap.abbreviatedname), ',') programname,
+ 		array_to_string(array_agg(distinct o.organizationname), ',') statename,
+ 		array_to_string(array_agg(distinct g.groupname), ',') roles
+		from helpcontent hc
+		inner join helptopic ht on hc.helptopicid = ht.id and hc.activeflag is true and ht.activeflag is true
+		inner join helpcontentcontext hcc on hc.id=hcc.helpcontentid and hcc.activeflag is true
+		left join assessmentprogram ap
+		on ap.id = hcc.assessmentprogramid and ap.activeflag is true
+		left join organization o on o.id = hcc.stateid and
+		o.activeflag is true
+		left join groups g on g.id =hcc.rolesid and hcc.helpcontentid = hc.id and g.activeflag = true
+		where hc.activeflag is true
+		<include refid="Help_Content_Where_Clause" />
+		group by  hc.createddate,ht.name,hc.helptitle,status,hc.id,ht.description,hc.filename,hc.expiredate
+		ORDER BY hc.id desc) as helpcontent
+		<if test="sortByColumn != null">
+			ORDER BY
+			<choose>
+				<when test="sortByColumn == 'createdDate'">createddate</when>
+				<when test="sortByColumn == 'helpTopicName'">name</when>
+				<when test="sortByColumn == 'helpTitle'">helptitle</when>
+				<when test="sortByColumn == 'status'">status</when>
+				<when test="sortByColumn == 'id'">id</when>
+				<when test="sortByColumn == 'assessmentProgramId'">assessmentprogramid</when>
+				<when test="sortByColumn == 'stateId'">stateid</when>
+				<when test="sortByColumn == 'rolesId'">rolesid</when>
+				<when test="sortByColumn == 'programName'">programname</when>
+				<when test="sortByColumn == 'stateName'">statename</when>
+				<when test="sortByColumn == 'roles'">roles</when>
+			</choose>
+			<if test="sortType=='desc'">
+				desc
+			</if>
+			<if test="sortType=='asc' or sortType==null">
+				asc
+			</if>
+		</if>
+		limit #{limit}
+		offset #{offset}
+	</select>
+
+	<select id="getAllHelpContentsCount" resultType="java.lang.Integer">
+		select count(1) from (
+		select distinct hc.id
+		from helpcontent hc
+		inner join helptopic ht on hc.helptopicid = ht.id and
+		hc.activeflag is true and ht.activeflag is true
+		inner join helpcontentcontext hcc on hc.id=hcc.helpcontentid and
+		hcc.activeflag is true
+		left join assessmentprogram ap on ap.id = hcc.assessmentprogramid and ap.activeflag is true
+		left
+		join organization o on o.id = hcc.stateid and o.activeflag is true
+		where hc.activeflag is true
+		<include refid="Help_Content_Where_Clause" />
+		) as helpcontent
+	</select>
+
+	<select id="getHelpContentByContext" resultMap="BaseHelpContentResultMap">
+		select * from (
+		select distinct hc.id, hc.createddate, ht.name, hc.helptitle,
+		hc.modifieddate, (select firstname||' '||surname from aartuser where id = hc.createduser) as createdby, 
+ 		(select firstname||' '||surname from aartuser where id = hc.modifieduser) as modifiedby,
+		case when hc.expiredate &lt; now() then
+		'Expired' else hc.status end as status,
+		hc.filename, hc.expiredate,
+		array_to_string(array_agg(distinct ap.abbreviatedname), ',') programname,
+ 		array_to_string(array_agg(distinct o.organizationname), ',') statename,
+ 		array_to_string(array_agg(distinct g.groupname), ',') roles,
+		hcs.url
+		from helpcontent hc
+		inner join helptopic ht on hc.helptopicid =
+		ht.id and hc.activeflag is true and ht.activeflag is true
+		inner join helpcontentcontext hcc on hc.id=hcc.helpcontentid
+		and hcc.activeflag is true
+		inner join helpcontentslug hcs on hcs.helpcontentid=hc.id
+		left join assessmentprogram ap on ap.id = hcc.assessmentprogramid and ap.activeflag is true
+		left join organization o on o.id = hcc.stateid and o.activeflag is true
+		left join groups g on g.id =hcc.rolesid and hcc.helpcontentid = hc.id and g.activeflag = true
+		where hc.activeflag is true
+		<if test="currentApId != null">
+			and hcc.assessmentprogramid = #{currentApId}
+		</if>
+		<if test="currentGroupId != null">
+			and (hcc.rolesid in(select id from groups
+			 where roleorgtypeid >= (select roleorgtypeid from groups where id = #{currentGroupId} ))  
+			 or hcc.rolesid = 0 or hcc.rolesid is null)
+		</if>
+		<if test="stateId != null">
+			and (hcc.stateid = #{stateId} or hcc.stateid = 0 or hcc.stateid is null)
+		</if>
+		group by  hc.createddate,ht.name,hc.helptitle,status,hc.id,ht.description,hc.filename,hc.expiredate,hcs.url
+		ORDER BY hc.id desc
+		) as helpcontent where 1=1
+		<include refid="Help_Content_Where_Clause" />
+		<if test="sortByColumn != null">
+			ORDER BY
+			<choose>
+				<when test="sortByColumn == 'createdDate'">createddate</when>
+				<when test="sortByColumn == 'helpTopicName'">name</when>
+				<when test="sortByColumn == 'helpTitle'">helptitle</when>
+				<when test="sortByColumn == 'status'">status</when>
+				<when test="sortByColumn == 'id'">id</when>
+				<when test="sortByColumn == 'assessmentProgramId'">assessmentprogramid</when>
+				<when test="sortByColumn == 'stateId'">stateid</when>
+				<when test="sortByColumn == 'rolesId'">rolesid</when>
+				<when test="sortByColumn == 'expireDate'">expireDate</when>
+				<when test="sortByColumn == 'programName'">programName</when>
+				<when test="sortByColumn == 'stateName'">stateName</when>
+				<when test="sortByColumn == 'roles'">roles</when>
+				<when test="sortByColumn == 'createdBy'">createdby</when>
+				<when test="sortByColumn == 'modifiedBy'">modifiedby</when>
+				<when test="sortByColumn == 'modifiedDate'">modifieddate</when>
+			</choose>
+			<if test="sortType=='desc'">
+				desc
+			</if>
+			<if test="sortType=='asc' or sortType==null">
+				asc
+			</if>
+		</if>
+		limit #{limit}
+		offset #{offset}
+	</select>
+	<select id="getHelpContentCountByContext" resultType="java.lang.Integer">
+		select count(1) from (select distinct hc.id, hc.createddate, ht.name, hc.helptitle,
+		case when hc.expiredate &lt; now() then
+		'Expired' else hc.status end as status,
+		hc.filename, hc.expiredate,
+		array_to_string(array_agg(distinct ap.abbreviatedname), ',') programname,
+ 		array_to_string(array_agg(distinct o.organizationname), ',') statename,
+ 		array_to_string(array_agg(distinct g.groupname), ',') roles,
+		hcs.url
+		from helpcontent hc
+		inner join helptopic ht on hc.helptopicid =
+		ht.id and hc.activeflag is true and ht.activeflag is true
+		inner join helpcontentcontext hcc on hc.id=hcc.helpcontentid
+		and hcc.activeflag is true
+		inner join helpcontentslug hcs on hcs.helpcontentid=hc.id
+		left join assessmentprogram ap on ap.id = hcc.assessmentprogramid and ap.activeflag is true
+		left join organization o on o.id = hcc.stateid and o.activeflag is true
+		left join groups g on g.id =hcc.rolesid and hcc.helpcontentid = hc.id and g.activeflag = true
+		where hc.activeflag is true
+		<if test="currentApId != null">
+			and hcc.assessmentprogramid = #{currentApId}
+		</if>
+		<if test="currentGroupId != null">
+			and (hcc.rolesid in(select id from groups
+			 where roleorgtypeid >= (select roleorgtypeid from groups where id = #{currentGroupId} ))  
+			 or hcc.rolesid = 0 or hcc.rolesid is null)
+		</if>
+		<if test="stateId != null">
+			and (hcc.stateid = #{stateId} or hcc.stateid = 0 or hcc.stateid is null)
+		</if>
+		group by  hc.createddate,ht.name,hc.helptitle,status,hc.id,ht.description,hc.filename,hc.expiredate,hcs.url
+		ORDER BY hc.id desc
+		) as helpcontent where 1=1
+		<include refid="Help_Content_Where_Clause" />
+	</select>
+
+	<select id="getHelpContentByUserContext" resultMap="BaseResultMap"  >
+		select distinct hc.id, hc.helptitle,  hc.status, hc.createddate, hc.expiredate, hc.helptopicid
+			,hc.content, hc.filename, hcs.url
+		from helpcontent hc
+		inner join helpcontentslug hcs on hcs.helpcontentid = hc.id
+		inner join
+		helptopic ht on hc.helptopicid = ht.id and hc.activeflag is true and ht.activeflag is true
+		inner join
+		helpcontentcontext hcc on hc.id=hcc.helpcontentid and hcc.activeflag is true
+		left join assessmentprogram ap on ap.id =
+		hcc.assessmentprogramid and ap.activeflag is true
+		left join organization o on o.id = hcc.stateid and o.activeflag is
+		true
+		where hc.activeflag is true and hc.helptopicid = #{helpTopicId}
+		and (hc.expiredate &gt;= now() or hc.expiredate is null)
+		<if test="currentApId != 0">
+			and (hcc.assessmentprogramid = #{currentApId} or hcc.assessmentprogramid =0 or hcc.assessmentprogramid is null)
+		</if>
+		<if test="currentGroupId != 0">
+			and (hcc.rolesid = #{currentGroupId} or hcc.rolesid = 0 or hcc.rolesid is null)
+		</if>	
+		<if test="stateId != 0">
+			and (hcc.stateid = #{stateId} or hcc.stateid =0 or hcc.stateid is null)
+		</if>
+		and (hc.status = 'Active')
+		ORDER BY hc.helptitle asc
+	</select>
+	
+	<select id="getHelpTopicsByUserContext" resultMap="ViewHelpContentResultMap">
+		select distinct ht.id, ht.name, ht.description
+		from helpcontent hc
+		inner join
+		helptopic ht on hc.helptopicid = ht.id and hc.activeflag is true and ht.activeflag is true
+		inner join
+		helpcontentcontext hcc on hc.id=hcc.helpcontentid and hcc.activeflag is true
+		left join assessmentprogram ap on ap.id =
+		hcc.assessmentprogramid and ap.activeflag is true
+		left join organization o on o.id = hcc.stateid and o.activeflag is
+		true
+		where hc.activeflag is true
+		and (hc.expiredate &gt;= now() or hc.expiredate is null)
+		<if test="currentApId != 0">
+			and (hcc.assessmentprogramid = #{currentApId} or hcc.assessmentprogramid =0 or hcc.assessmentprogramid is null)
+		</if>
+		<if test="currentGroupId != 0">
+			and (hcc.rolesid = #{currentGroupId} or hcc.rolesid = 0 or hcc.rolesid is null)
+		</if>	
+		<if test="stateId != 0">
+			and (hcc.stateid = #{stateId} or hcc.stateid =0 or hcc.stateid is null)
+		</if>	
+		and (hc.status = 'Active')
+		ORDER BY ht.id asc
+	</select>
+	
+	<select id="gethelpTopicBySlugUrl" resultMap="BaseResultMap"  >
+		select distinct hc.id, hc.helptitle,  hc.status, hc.createddate, hc.expiredate, hc.helptopicid
+			,hc.content, hc.filename, hcs.url, ht.name
+		from helpcontent hc
+		inner join helpcontentslug hcs on hcs.helpcontentid = hc.id
+		inner join
+		helptopic ht on hc.helptopicid = ht.id and hc.activeflag is true and ht.activeflag is true
+		inner join
+		helpcontentcontext hcc on hc.id=hcc.helpcontentid and hcc.activeflag is true
+		left join assessmentprogram ap on ap.id =
+		hcc.assessmentprogramid and ap.activeflag is true
+		left join organization o on o.id = hcc.stateid and o.activeflag is
+		true
+		where hc.activeflag is true and hcs.url = #{slugURL}
+		and (hc.expiredate &gt;= now() or hc.expiredate is null)
+		<if test="currentApId != 0">
+			and (hcc.assessmentprogramid = #{currentApId} or hcc.assessmentprogramid =0 or hcc.assessmentprogramid is null)
+		</if>
+		<if test="currentGroupId != 0">
+			and (hcc.rolesid = #{currentGroupId} or hcc.rolesid = 0 or hcc.rolesid is null)
+		</if>	
+		<if test="stateId != 0">
+			and (hcc.stateid = #{stateId} or hcc.stateid =0 or hcc.stateid is null)
+		</if>
+		limit 1
+	</select>
+	
+	<select id="existsContentByHelpTitle" parameterType="java.lang.String" resultType="java.lang.Boolean">
+		select count(1) &gt; 0 from helpcontent where lower(helptitle) = lower(#{helpContentTitle,jdbcType=VARCHAR})
+	</select>
+	
+	<select id="existsContentBySlug" parameterType="java.lang.String" resultType="java.lang.Boolean">
+		select count(1) &gt; 0 from helpcontentslug where lower(url) = lower(#{slug,jdbcType=VARCHAR})
+	</select>
+
+	<select id="existsEditContentByHelpTitle" resultType="java.lang.Boolean">
+		select count(1) &gt; 0 from helpcontent where lower(helptitle) = lower(#{helpContentTitle,jdbcType=VARCHAR})
+		and id != #{helpContentId}
+	</select>
+	
+	<select id="existsEditContentBySlug" resultType="java.lang.Boolean">
+		select count(1) &gt; 0 from helpcontentslug where lower(url) = lower(#{slug,jdbcType=VARCHAR})
+		and helpcontentid != #{helpContentId}
+	</select>
+
+	<select id="helpTopicEligibleForDelete" resultType="java.lang.Boolean">
+		select count(distinct hc.id) &lt;= 0 
+		from helptopic ht 
+		inner join helpcontent hc on ht.id = hc.helptopicid and hc.activeflag is true and ht.activeflag is true
+		where helptopicid=#{helpTopicId}
+	</select>
+</mapper>

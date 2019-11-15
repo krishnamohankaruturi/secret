@@ -1,0 +1,21 @@
+<div id="navigation-overlay" class="popupOverlay">
+	<div class="overlay-content overlayShowing">
+		<div class="activation-form">
+			<h3>
+				<%if(constraint == 'max') { %>
+					Maximum number of selections made.
+				<% } else if(constraint == 'min') { %>
+					Please make at least <%=minChoices%> selection(s).
+				<% } else { %>
+					Please make a response before proceeding.
+				<% } %>
+			</h3>
+	   			
+	   		<div class="activation">
+	   			<button type="button" id="navigationRule" class="btn actGo">
+					OK
+				</button>
+			</div>
+		</div>
+    </div>
+</div>

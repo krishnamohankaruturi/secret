@@ -1,0 +1,36 @@
+<div class="span1 test-2">
+				
+	<div class="q-hdr">
+		<ul>
+			<li>
+				<% if(jQuery.inArray(parseInt(currentQuestion), reviews) > 0) { %>
+					<a href="#" class="mark-question mark-question-active">Mark for Review</a>
+				<% } else { %>
+					<a href="#" class="mark-question">Mark for Review</a>
+				<% } %>
+				<span>Flag for Review</span>
+			</li>
+		</ul>
+	</div><!-- /q-hdr -->
+				
+	<h2><%= task['question'] %></h2>
+		
+	<div class="q-answers-vertical">	
+	<ul> 
+					
+		<% for(var i=0; i<task['foils'].length; i++) { %>
+		<li>
+			
+			<% if (responses.values[currentQuestion]!=null && responses.values[currentQuestion]==i) { %>
+				<input type="radio" id="answer_<%= qNum+'_'+i %>" name="answer_<%= qNum %>" value="<%= i %>" checked="checked" />
+				<label class="paginateAnswered"></label>
+			<% } else { %>
+				<input type="radio" id="answer_<%= qNum+'_'+i %>" name="answer_<%= qNum %>" value="<%= i %>" />
+				<label></label>
+			<% } %>
+			<%= task['foils'][i].text %>
+        </li>
+    	<% } %>	
+	</ul>
+	</div>
+</div>

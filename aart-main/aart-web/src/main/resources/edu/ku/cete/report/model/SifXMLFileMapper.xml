@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.report.model.SifXMLFileMapper">
+  <resultMap id="BaseResultMap" type="edu.ku.cete.domain.sif.SifXMLUpload">
+    
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="xml" jdbcType="VARCHAR" property="xml" />
+  </resultMap>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  
+    select *
+    from sifxmlupload
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  
+    delete from sifxmlupload
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertABC" parameterType="edu.ku.cete.domain.sif.SifXMLUpload" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into sifxmlupload (type, xml, 
+      createdate)
+    values (#{type,jdbcType=VARCHAR}, #{xml,jdbcType=VARCHAR}, 
+     now())
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="edu.ku.cete.domain.sif.SifXMLUpload">
+   
+    update sifxmlupload
+    set type = #{type,jdbcType=VARCHAR},
+      xml = #{xml,jdbcType=VARCHAR},
+      createdate = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

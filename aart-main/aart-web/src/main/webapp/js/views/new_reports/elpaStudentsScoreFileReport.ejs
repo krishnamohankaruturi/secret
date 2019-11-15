@@ -1,0 +1,34 @@
+<div>
+	<div class="elpaTitleHeading">
+			<span class="heading">Students Score File</span>
+	</div>
+	<% if (data != null && data.length > 0) {
+		for (var x = 0; x < data.length; x++) {
+		
+			var csvRecord = data[x];
+			var downloadurl = "";
+			
+			var csvRecordFileName = csvRecord.detailedReportPath;
+			csvRecordFileName = csvRecordFileName.substring(csvRecordFileName.lastIndexOf('/')+1);
+			 $.ajax({
+			    			url: 'getAllStudentsReportFile.htm',
+			    			data: {
+			    					id: csvRecord.id,
+			    					reportYear: csvRecord.schoolYear,
+			    					assessmentProgCode: programCode,
+			    					assessmentProgramId: assessmentProgid
+			    			},
+			    			type: 'GET',
+			    			success: function(responsedata){
+				    			downloadurl = responsedata.downloadurl;
+			    			}
+			  });
+			%>
+			<div class="item">
+				<a href="<%= downloadurl %>" >
+					<%= csvRecordFileName %>
+				</a>
+			</div>
+		<% } %>
+	<% } %>
+</div>

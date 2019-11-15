@@ -1,0 +1,26 @@
+<TASC_Data>
+	<TASC_Record>
+		<Create_Date>8/18/2015 11:17:42 AM</Create_Date>
+		<Record_Common_ID>188218667</Record_Common_ID>
+		<Record_Type>TASC</Record_Type>
+		<State_Student_Identifier>1111111111</State_Student_Identifier>
+		<AYP_QPA_Bldg_No>3294</AYP_QPA_Bldg_No>
+		<Student_Legal_Last_Name>Doe</Student_Legal_Last_Name>
+		<Student_Legal_First_Name>Tayler</Student_Legal_First_Name>
+		<Student_Legal_Middle_Name>Ann</Student_Legal_Middle_Name>
+		<Student_Generation_Code />
+		<Student_Gender>0</Student_Gender>
+		<Current_Grade_Level>14</Current_Grade_Level>
+		<Current_School_Year>2016</Current_School_Year>
+		<Attendance_Bldg_No>3294</Attendance_Bldg_No>
+		<Educator_Bldg_No>3294</Educator_Bldg_No>
+		<State_Subj_Area_Code>08</State_Subj_Area_Code>
+		<Local_Course_ID>30501</Local_Course_ID>
+		<Course_Status>99</Course_Status>
+		<Teacher_Identifier>2222222222</Teacher_Identifier>
+		<Teacher_Last_Name>Doeh</Teacher_Last_Name>
+		<Teacher_First_Name>Edward</Teacher_First_Name>
+		<Teacher_Middle_Name />
+		<Teacher_District_Email>eDoeh@colbyeagles.org</Teacher_District_Email>
+	</TASC_Record>
+</TASC_Data>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.common.AppConfigurationDao" >
+    
+  <resultMap id="BaseResultMap" type="edu.ku.cete.domain.common.AppConfiguration" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="attrcode" property="attributeCode" jdbcType="VARCHAR" />
+    <result column="attrtype" property="attributeType" jdbcType="VARCHAR" />
+    <result column="attrname" property="attributeName" jdbcType="VARCHAR" />
+    <result column="attrvalue" property="attributeValue" jdbcType="VARCHAR" />
+    <result column="createddate" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="createduser" jdbcType="INTEGER" property="createdUser" />
+    <result column="activeflag" jdbcType="BIT" property="activeFlag" />
+    <result column="modifieduser" jdbcType="INTEGER" property="modifiedUser" />
+    <result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramId" />    
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >    
+    id, attrcode, attrtype, attrname, attrvalue, activeflag, createduser, 
+    createddate, modifieduser, modifieddate, assessmentprogramid
+  </sql>
+     
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from appconfiguration
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectSecurityAgreementText" resultMap="BaseResultMap"> 		
+	select
+	<include refid="Base_Column_List"/>  
+  	from  appconfiguration 
+  	where  attrtype ='addsecuritytext' 
+  	and
+	coalesce(assessmentprogramid,0)= case when (select count(*) from assessmentprogram 	where abbreviatedname = #{currentEnvironment, jdbcType=VARCHAR})=0 then 0 
+	  	 								  else (select id from assessmentprogram where abbreviatedname =  #{currentEnvironment, jdbcType=VARCHAR}) end;                  
+  </select>
+  
+  <select id="selectByAttributeType" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    <include refid="Base_Column_List" />
+    from appconfiguration
+    where attrtype ilike #{attributeType,jdbcType=VARCHAR} 
+    and activeflag is true
+    order by attrname 
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from appconfiguration
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="selectByAttributeTypeAndAttributeValue" parameterType="map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from appconfiguration
+    where attrtype ilike #{attributeType,jdbcType=VARCHAR}
+    and attrvalue = #{attributeValue,jdbcType=VARCHAR} 
+    and activeflag is true
+    order by attrname
+  </select>
+  
+  <select id="selectByAttributeTypeAndAssessmentProgramId" parameterType="map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from appconfiguration
+    where attrtype ilike #{attributeType,jdbcType=VARCHAR}
+    and assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+    and activeflag is true
+    order by attrname
+  </select>
+   
+  <select id="getByAttributeType" resultType="java.lang.String">
+    select attrcode
+    from appconfiguration
+    where attrtype = #{attributeType,jdbcType=VARCHAR}
+    and activeflag is true
+    order by attrname
+  </select>
+
+	<select id="getByAttributeCode" resultType="java.lang.String">
+		select attrvalue
+		from appconfiguration
+		where attrcode = #{attributeCode,jdbcType=VARCHAR}
+		and activeflag is true
+		order by attrname
+	</select>
+	
+	<select id="getByAttributeCodeAndDefaultAssessment" resultMap="BaseResultMap" parameterType="String" >
+    	select 
+	    <include refid="Base_Column_List" />
+	    from appconfiguration
+	    where attrtype = #{attributeType,jdbcType=VARCHAR} 
+	    and activeflag is true and assessmentprogramid IS NULL order by id 
+  	</select>
+  	
+  	  <select id="selectByAttributeTypeAndAssessmentProgramIdNew"  parameterType="map" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from appconfiguration
+	    where attrtype ilike #{attributeType,jdbcType=VARCHAR}
+	    and assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+	    and activeflag is true
+	    order by id
+	  </select>
+       
+	  <select id="getValueByAttributeType" resultType="java.lang.String">
+	    select attrvalue
+	    from appconfiguration
+	    where attrtype = #{attributeType,jdbcType=VARCHAR}
+	    and activeflag is true
+	    order by attrname
+	  </select>
+  
+</mapper>

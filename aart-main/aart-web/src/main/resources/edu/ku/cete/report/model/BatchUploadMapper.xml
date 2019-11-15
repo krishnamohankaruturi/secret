@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.report.model.BatchUploadMapper">
+  <resultMap id="BaseResultMap" type="edu.ku.cete.report.domain.BatchUpload">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="filename" jdbcType="VARCHAR" property="fileName" />
+    <result column="filepath" jdbcType="VARCHAR" property="filePath" />
+    <result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramId" />
+    <result column="contentareaid" jdbcType="BIGINT" property="contentAreaId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="successcount" jdbcType="INTEGER" property="successCount" />
+    <result column="alertcount" jdbcType="INTEGER" property="alertCount" />
+    <result column="failedcount" jdbcType="INTEGER" property="failedCount" />
+    <result column="resultjson" jdbcType="VARCHAR" property="resultJson" />
+    <result column="submissiondate" jdbcType="TIMESTAMP" property="submissionDate" />
+    <result column="createddate" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="createduser" jdbcType="BIGINT" property="createdUser" />
+    <result column="activeflag" jdbcType="BIT" property="activeFlag" />
+    <result column="schoolyear" jdbcType="INTEGER" property="schoolYear" />
+    <result column="uploadtypeid" jdbcType="BIGINT" property="uploadTypeId" />
+    <result column="testingprogramname" jdbcType="VARCHAR" property="testingProgramName" />
+    <result column="reportcycle" jdbcType="VARCHAR" property="reportCycle" />
+      <!--
+	 * Added By Prasanth 
+	 * User Story: US16352:
+	 * Spring batch upload for data file(User)
+	  -->
+    <result column="stateid" jdbcType="BIGINT" property="stateId" />
+    <result column="districtid" jdbcType="BIGINT" property="districtId" />
+    <result column="schoolid" jdbcType="BIGINT" property="schoolId" />
+    <result column="selectedOrgId" jdbcType="BIGINT" property="selectedOrgId" />
+    <result column="uploadeduserorgid" jdbcType="BIGINT" property="uploadedUserOrgId" />
+    <result column="uploadedusergroupid" jdbcType="BIGINT" property="uploadedUserGroupId" />
+    <result column="documentid" jdbcType="BIGINT" property="documentId" />    
+  </resultMap>
+  <!-- Added for US16548 -->
+  <resultMap id="BatchInfoResultMap" type="edu.ku.cete.report.domain.BatchUploadInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="filename" jdbcType="VARCHAR" property="fileName" />
+    <result column="filepath" jdbcType="VARCHAR" property="filePath" />
+    <result column="organizationname" jdbcType="VARCHAR" property="organizationName" />
+    <result column="successcount" jdbcType="BIGINT" property="successCount" />
+    <result column="failedcount" jdbcType="BIGINT" property="failedCount" />
+    <result column="statusCheck" jdbcType="VARCHAR" property="statusCheck" />
+    <result column="grfprocesstype" jdbcType="VARCHAR" property="grfProcessType" />
+  </resultMap>
+  
+  
+  
+  <sql id="Base_Column_List">
+    id, filename, filepath, assessmentprogramid, contentareaid, status, successcount, 
+    failedcount, alertcount, resultjson, submissiondate, createddate, modifieddate, createduser, 
+    activeflag, schoolyear, uploadtypeid,stateid,districtid,schoolid,selectedOrgId,
+    uploadeduserorgid,uploadedusergroupid, documentid,assessmentprogramname, contentareaname,
+    createduserdisplayname,uploadtype, testingprogramname, reportcycle, grfprocesstype
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from batchupload
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <insert id="insert" parameterType="edu.ku.cete.report.domain.BatchUpload">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT nextval('batchupload_id_seq')
+    </selectKey>
+    insert into batchupload (id, filename, filepath, 
+      assessmentprogramid, contentareaid, status, 
+      successcount, failedcount, alertcount, resultjson, 
+      submissiondate, createddate, modifieddate, 
+      createduser, activeflag, schoolyear, 
+      uploadtypeid,stateid,districtid,schoolid,selectedOrgId, uploadeduserorgid,uploadedusergroupid,documentid,
+      assessmentprogramname,contentareaname, createduserdisplayname, uploadtype,reportyear, testingprogramid,testingprogramname, reportcycle, grfprocesstype)
+    values (#{id,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, 
+      #{assessmentProgramId,jdbcType=BIGINT}, #{contentAreaId,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}, 
+      #{successCount,jdbcType=INTEGER}, #{failedCount,jdbcType=INTEGER}, #{alertCount,jdbcType=INTEGER}, #{resultJson,jdbcType=VARCHAR}, 
+      #{submissionDate,jdbcType=TIMESTAMP}, #{createdDate,jdbcType=TIMESTAMP}, #{modifiedDate,jdbcType=TIMESTAMP}, 
+      #{createdUser,jdbcType=BIGINT}, #{activeFlag,jdbcType=BIT}, #{schoolYear,jdbcType=INTEGER}, 
+      #{uploadTypeId,jdbcType=BIGINT}, #{stateId,jdbcType=BIGINT},#{districtId,jdbcType=BIGINT},#{schoolId,jdbcType=BIGINT},
+      #{selectedOrgId,jdbcType=BIGINT},#{uploadedUserOrgId,jdbcType=BIGINT},#{uploadedUserGroupId,jdbcType=BIGINT},
+      #{documentId,jdbcType=BIGINT}, #{assessmentProgramName,jdbcType=VARCHAR }, #{contentAreaName,jdbcType=VARCHAR},
+       #{createdUserDisplayName,jdbcType=VARCHAR}, #{uploadType,jdbcType=VARCHAR},#{reportYear,jdbcType=BIGINT}, #{testingProgramId,jdbcType=BIGINT}, 
+       #{testingProgramName,jdbcType=VARCHAR}, #{reportCycle,jdbcType=VARCHAR}, #{grfProcessType,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="edu.ku.cete.report.domain.BatchUpload">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT nextval('batchupload_id_seq')
+    </selectKey>
+    insert into batchupload
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
+      <if test="fileName != null">
+        filename,
+      </if>
+      <if test="filePath != null">
+        filepath,
+      </if>
+      <if test="assessmentProgramId != null">
+        assessmentprogramid,
+      </if>
+      <if test="contentAreaId != null">
+        contentareaid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="successCount != null">
+        successcount,
+      </if>
+       <if test="successCount != null">
+        alertcount,
+      </if>
+      <if test="failedCount != null">
+        failedcount,
+      </if>
+      <if test="resultJson != null">
+        resultjson,
+      </if>
+      <if test="submissionDate != null">
+        submissiondate,
+      </if>
+      <if test="createdDate != null">
+        createddate,
+      </if>
+      <if test="modifiedDate != null">
+        modifieddate,
+      </if>
+      <if test="createdUser != null">
+        createduser,
+      </if>
+      <if test="activeFlag != null">
+        activeflag,
+      </if>
+      <if test="schoolYear != null">
+        schoolyear,
+      </if>
+      <if test="uploadTypeId != null">
+        uploadtypeid,
+      </if>
+      <if test="stateId != null">
+        stateid,
+      </if>
+      <if test="districtId != null">
+        districtid,
+      </if>
+      <if test="schoolId != null">
+        schoolid,
+      </if>
+      <if test="selectedOrgId != null">
+        selectedorgid,
+      </if>
+      <if test="uploadedUserOrgId != null">
+        uploadeduserorgid,
+      </if>
+      <if test="uploadedUserGroupId != null">
+        uploadedusergroupid,
+      </if>
+      <if test="assessmentProgramName != null">
+        assessmentprogramname,
+      </if>
+      <if test="contentAreaName != null">
+        contentareaname,
+      </if>
+      <if test="createdUserDisplayName != null">
+        createduserdisplayname,
+      </if>
+      <if test="uploadType != null">
+        uploadtype,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=BIGINT},
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentProgramId != null">
+        #{assessmentProgramId,jdbcType=BIGINT},
+      </if>
+      <if test="contentAreaId != null">
+        #{contentAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="successCount != null">
+        #{successCount,jdbcType=INTEGER},
+      </if>
+       <if test="successCount != null">
+        #{alertCount,jdbcType=INTEGER},
+      </if>
+      <if test="failedCount != null">
+        #{failedCount,jdbcType=INTEGER},
+      </if>
+      <if test="resultJson != null">
+        #{resultJson,jdbcType=VARCHAR},
+      </if>
+      <if test="submissionDate != null">
+        #{submissionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedDate != null">
+        #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdUser != null">
+        #{createdUser,jdbcType=BIGINT},
+      </if>
+      <if test="activeFlag != null">
+        #{activeFlag,jdbcType=BIT},
+      </if>
+      <if test="schoolYear != null">
+        #{schoolYear,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTypeId != null">
+        #{uploadTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="stateId != null">
+         #{stateId,jdbcType=BIGINT},
+      </if>
+      <if test="districtId != null">
+        #{districtId,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="selectedOrgId != null">
+        #{selectedOrgId,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="selectedOrgId != null">
+        #{selectedOrgId,jdbcType=BIGINT},
+      </if>
+      <if test="uploadedUserOrgId != null">
+        #{uploadedUserOrgId,jdbcType=BIGINT},
+      </if>
+      <if test="uploadedUserGroupId != null">
+        #{uploadedUserGroupId,jdbcType=BIGINT},
+      </if>
+      <if test="assessmentProgramName != null">
+        #{assessmentProgramName,jdbcType=BIGINT},
+      </if>
+      <if test="contentAreaName != null">
+        #{contentAreaName,jdbcType=BIGINT},
+      </if>
+      <if test="createdUserDisplayName != null">
+        #{createdUserDisplayName,jdbcType=BIGINT},
+      </if>
+      <if test="uploadType != null">
+        #{uploadType,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="edu.ku.cete.report.domain.BatchUpload">
+    update batchupload
+    <set>
+      <if test="fileName != null">
+        filename = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        filepath = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="assessmentProgramId != null">
+        assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT},
+      </if>
+      <if test="contentAreaId != null">
+        contentareaid = #{contentAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="successCount != null">
+        successcount = #{successCount,jdbcType=INTEGER},
+      </if>
+      <if test="alertCount != null">
+        alertcount = #{alertCount,jdbcType=INTEGER},
+      </if>
+      <if test="failedCount != null">
+        failedcount = #{failedCount,jdbcType=INTEGER},
+      </if>
+      <if test="resultJson != null">
+        resultjson = #{resultJson,jdbcType=VARCHAR},
+      </if>
+      <if test="submissionDate != null">
+        submissiondate = #{submissionDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdDate != null">
+        createddate = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedDate != null">
+        modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdUser != null">
+        createduser = #{createdUser,jdbcType=BIGINT},
+      </if>
+      <if test="activeFlag != null">
+        activeflag = #{activeFlag,jdbcType=BIT},
+      </if>
+      <if test="schoolYear != null">
+        schoolyear = #{schoolYear,jdbcType=INTEGER},
+      </if>
+      <if test="uploadTypeId != null">
+        uploadtypeid = #{uploadTypeId,jdbcType=BIGINT},
+      </if>
+       <if test="stateId != null">
+         stateid = #{stateId,jdbcType=BIGINT},
+      </if>
+      <if test="districtId != null">
+        districtid = #{districtId,jdbcType=BIGINT},
+      </if>
+      <if test="schoolId != null">
+        schoolid = #{schoolId,jdbcType=BIGINT},
+      </if>
+      <if test="selectedOrgId != null">
+        selectedorgid = #{selectedOrgId,jdbcType=BIGINT},
+      </if>
+      <if test="uploadedUserOrgId != null">
+        uploadeduserorgid = #{uploadedUserOrgId,jdbcType=BIGINT},
+      </if>
+      <if test="uploadedUserGroupId != null">
+        uploadedusergroupid = #{uploadedUserGroupId,jdbcType=BIGINT},
+      </if>
+      <if test="assessmentProgramName != null">
+        assessmentprogramname = #{assessmentProgramName,jdbcType=VARCHAR},
+      </if>
+      <if test="contentAreaName != null">
+        contentareaname = #{contentAreaName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdUserDisplayName != null">
+        createduserdisplayname = #{createdUserDisplayName,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadType != null">
+        uploadtype = #{uploadType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="edu.ku.cete.report.domain.BatchUpload">
+    update batchupload
+    set filename = #{fileName,jdbcType=VARCHAR},
+      filepath = #{filePath,jdbcType=VARCHAR},
+      assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT},
+      contentareaid = #{contentAreaId,jdbcType=BIGINT},
+      status = #{status,jdbcType=VARCHAR},
+      successcount = #{successCount,jdbcType=INTEGER},
+      alertcount = #{alertCount,jdbcType=INTEGER},
+      failedcount = #{failedCount,jdbcType=INTEGER},
+      resultjson = #{resultJson,jdbcType=VARCHAR},
+      submissiondate = #{submissionDate,jdbcType=TIMESTAMP},
+      createddate = #{createdDate,jdbcType=TIMESTAMP},
+      modifieddate = #{modifiedDate,jdbcType=TIMESTAMP},
+      createduser = #{createdUser,jdbcType=BIGINT},
+      activeflag = #{activeFlag,jdbcType=BIT},
+      schoolyear = #{schoolYear,jdbcType=INTEGER},
+      uploadtypeid = #{uploadTypeId,jdbcType=BIGINT},
+      stateid = #{stateId,jdbcType=BIGINT},
+      districtid = #{districtId,jdbcType=BIGINT},
+      schoolid = #{schoolId,jdbcType=BIGINT},
+      selectedorgid = #{selectedOrgId,jdbcType=BIGINT},
+      uploadeduserorgid = #{uploadedUserOrgId,jdbcType=BIGINT},
+      uploadedusergroupid = #{uploadedUserGroupId,jdbcType=BIGINT},
+      assessmentprogramname = #{assessmentProgramName,jdbcType=VARCHAR},
+      contentareaname = #{contentAreaName,jdbcType=VARCHAR},
+      createduserdisplayname = #{createdUserDisplayName,jdbcType=VARCHAR},
+      uploadtype = #{uploadType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <resultMap id="DetailedResultMap" type="edu.ku.cete.report.domain.BatchUpload">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="filename" jdbcType="VARCHAR" property="fileName" />
+    <result column="filepath" jdbcType="VARCHAR" property="filePath" />
+    <result column="uploadtype" jdbcType="VARCHAR" property="uploadType" />
+    <result column="assessmentprogramname" jdbcType="VARCHAR" property="assessmentProgramName" />
+    <result column="contentareaname" jdbcType="VARCHAR" property="contentAreaName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="successcount" jdbcType="INTEGER" property="successCount" />
+    <result column="alertcount" jdbcType="INTEGER" property="alertCount" />
+    <result column="failedcount" jdbcType="INTEGER" property="failedCount" />
+    <result column="resultjson" jdbcType="VARCHAR" property="resultJson" />
+    <result column="submissiondate" jdbcType="TIMESTAMP" property="submissionDate" />
+    <result column="createduserdisplayname" jdbcType="VARCHAR" property="createdUserDisplayName" />
+    <result column="reportyear" jdbcType="BIGINT" property="reportYear" />
+    <result column="totalrecords" jdbcType="INTEGER" property="totalRecords" />
+    <result column="stateid" jdbcType="BIGINT" property="stateId" />
+    <result column="statename" jdbcType="VARCHAR" property="stateName" />
+    <result column="testingprogramname" jdbcType="VARCHAR" property="testingProgramName" />
+    <result column="reportcycle" jdbcType="VARCHAR" property="reportCycle" />
+    <result column="grfprocesstype" jdbcType="VARCHAR" property="grfProcessType" />
+  </resultMap>
+  
+  <!-- NOTE: this query uses the category name as the uploadtype...NOT the category code -->
+  <select id="selectByAssessmentProgramIdsAndFilters" parameterType="map" resultMap="DetailedResultMap">
+    SELECT bu.id, bu.filename, bu.assessmentprogramid, bu.contentareaid, bu.status, bu.successcount,bu.alertcount,
+      bu.failedcount, bu.resultjson, bu.submissiondate, bu.schoolyear,
+      bu.assessmentprogramname, bu.contentareaname, bu.uploadtype,
+      bu.createduserdisplayname, bu.testingprogramname, bu.reportcycle
+    FROM batchupload bu
+    WHERE bu.activeflag = TRUE
+      AND bu.reportyear is null 
+      AND bu.uploadtypeid IN
+      <foreach collection="typeIds" item="typeId" open="(" separator="," close=")">
+      		 #{typeId,jdbcType=BIGINT}   			
+       </foreach>	 	
+      AND bu.assessmentprogramid IN
+        <foreach collection="assessmentProgramIds" item="id" open="(" separator="," close=")">
+          #{id,jdbcType=BIGINT}
+        </foreach>
+    <if test="orderByColumn != null">
+      ORDER BY
+      <choose>
+        <when test="orderByColumn == 'assessmentprogramname'">
+          bu.assessmentprogramname
+        </when>
+        <when test="orderByColumn == 'contentareaname'">
+          bu.contentareaname
+        </when>
+        <when test="orderByColumn == 'uploadtype'">
+          bu.uploadtype
+        </when>
+        <when test="orderByColumn == 'filename'">
+          bu.filename
+        </when>
+        <when test="orderByColumn == 'createduserdisplayname'">
+          bu.createduserdisplayname
+        </when>
+        <when test="orderByColumn == 'submissiondate'">
+          bu.submissiondate
+        </when>
+        <when test="orderByColumn == 'status'">
+          bu.status
+        </when>
+        <when test="orderByColumn == 'successcount'">
+          bu.successcount
+        </when>
+        <when test="orderByColumn == 'successcount'">
+          bu.alertcount
+        </when>
+        <when test="orderByColumn == 'failedcount'">
+          bu.failedcount
+        </when>
+        <when test="orderByColumn == 'testingprogramname'">
+          bu.testingprogramname
+        </when>
+        <when test="orderByColumn == 'reportcycle'">
+          bu.reportcycle
+        </when>
+        <otherwise>
+          bu.schoolyear
+        </otherwise>
+      </choose>
+      <choose>
+        <when test="order != null and (order == 'desc' or order == 'DESC')">
+          DESC
+        </when>
+        <otherwise>
+          ASC
+        </otherwise>
+      </choose>
+    </if>
+    <if test="limit != null">
+      LIMIT #{limit,jdbcType=INTEGER}
+    </if>
+    <if test="offset != null">
+      OFFSET #{offset,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+   <select id="getUploadCountByAssessmentProgramIdsAndFilters" parameterType="map" resultType="int">
+   SELECT count(bu.id)
+    FROM batchupload bu
+    WHERE bu.activeflag = TRUE
+      AND bu.assessmentprogramid IN
+        <foreach collection="assessmentProgramIds" item="id" open="(" separator="," close=")">
+          #{id,jdbcType=BIGINT}
+        </foreach>
+      AND bu.uploadtypeid IN
+      <foreach collection="typeIds" item="typeId" open="(" separator="," close=")">
+      		 #{typeId,jdbcType=BIGINT}   			
+       </foreach>         
+  </select>
+  
+  <select id="selectDuplicateCount" parameterType="map" resultType="int">
+    SELECT COUNT(id)
+    FROM batchupload
+    WHERE activeflag = TRUE
+    AND assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+    AND contentareaid = #{contentAreaId,jdbcType=BIGINT}
+    AND uploadtypeid = #{uploadTypeId,jdbcType=BIGINT}
+    AND schoolyear = #{schoolYear,jdbcType=INTEGER}
+    <if test="testingProgramId != null">
+    	AND testingprogramid = #{testingProgramId,jdbcType=BIGINT}
+    </if>
+    <if test="reportCycle != null">
+    	AND reportcycle = #{reportCycle,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <update id="updatePreviousToInactive" parameterType="map">
+    UPDATE batchupload
+    SET activeflag = FALSE,
+    	modifieddate = now()
+    WHERE activeflag = TRUE
+      AND assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+      AND contentareaid = #{contentAreaId,jdbcType=BIGINT}
+      AND uploadtypeid = #{uploadTypeId,jdbcType=BIGINT}
+      AND schoolyear = #{schoolYear,jdbcType=INTEGER}
+      <if test="reportYear != null">
+       AND reportyear = #{reportYear,jdbcType=BIGINT}
+	   AND stateid = #{stateId,jdbcType=BIGINT}
+      </if>
+      <if test="testingProgramId != null">
+      	AND testingprogramid = #{testingProgramId,jdbcType=BIGINT}
+      </if>
+      <if test="reportCycle != null">
+    	AND reportcycle = #{reportCycle,jdbcType=VARCHAR}
+      </if>      
+  </update>
+  
+  <resultMap extends="BaseResultMap" id="ResultWithCategoryCode" type="edu.ku.cete.report.domain.BatchUpload">
+    <result column="uploadtype" jdbcType="VARCHAR" property="uploadType" />
+     <result column="reportyear" jdbcType="BIGINT" property="reportYear" />
+     <result column="testingprogramid" jdbcType="BIGINT" property="testingProgramId" />
+     <result column="testingprogramname" jdbcType="VARCHAR" property="testingProgramName" />
+     <result column="reportcycle" jdbcType="VARCHAR" property="reportCycle" />
+  </resultMap>
+  
+  <select id="selectOnePending" resultMap="ResultWithCategoryCode">
+    select 
+      bu.id, filename, bu.filepath, bu.assessmentprogramid, bu.contentareaid, bu.status, bu.successcount, bu.alertcount,
+      bu.failedcount, bu.resultjson, bu.submissiondate, bu.createddate, bu.modifieddate, bu.createduser,
+      bu.activeflag, bu.schoolyear, bu.uploadtypeid,bu.stateid,bu.districtid,bu.schoolid,bu.selectedorgid, 
+      bu.uploadeduserorgid,bu.uploadedusergroupid, bu.uploadtype, bu.documentid as documentid,bu.reportyear,
+      bu.testingprogramid, bu.testingprogramname, bu.reportcycle
+    from batchupload bu 
+    where bu.status = #{status,jdbcType=VARCHAR} 
+    and bu.uploadtypeid in 
+    <foreach collection="categories" item="category" separator="," open="(" close=")">
+	   #{category.id,jdbcType=BIGINT}
+	</foreach> 
+    and bu.activeflag = true order by bu.id limit 1
+  </select>
+  
+  <!-- Added for US16548 -->
+  <select id="selectByCategoryCodeBatchUpload" parameterType="java.lang.Long" resultMap="BatchInfoResultMap">
+ 	Select bu.id, submissiondate as date ,submissiondate AS time,
+	status,fileName,filepath,
+	'' as organizationname,bu.successcount,alertcount,failedCount,status as statusCheck
+	from batchupload bu 
+	where bu.uploadtypeid=#{uploadTypeId} 
+	and bu.createduser = #{id} 
+	and bu.uploadedusergroupid = #{userGroupId}
+	and bu.uploadeduserorgid = #{userOrgId} and date(submissiondate) > current_date-30 order by bu.id desc 
+  </select>
+  
+    <select id="selectUploadResultsByAssessmentProgramIdsAndFilters" parameterType="map" resultMap="DetailedResultMap">
+    SELECT count(*) OVER() AS totalrecords, bu.id, bu.filename, bu.assessmentprogramid, bu.contentareaid, bu.status, bu.successcount,bu.alertcount,
+      bu.failedcount, bu.resultjson, bu.submissiondate, bu.reportyear,
+      bu.assessmentprogramname, bu.contentareaname, bu.uploadtype,
+      bu.createduserdisplayname, bu.stateid
+      ,(select distinct statename from organizationtreedetail  where stateid = bu.stateid limit 1) as stateName,
+      bu.testingprogramname,bu.reportcycle
+    FROM batchupload bu
+    WHERE bu.activeflag = TRUE
+      AND bu.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+      AND bu.reportyear is not null 
+      AND filename not in ('N/A')
+      AND bu.grfprocesstype is null    
+     <if test="userStates != null">
+       and bu.stateid in 
+      <foreach collection="userStates" item="stateId" separator="," open="(" close=")">
+	   #{stateId,jdbcType=BIGINT}
+	</foreach> 
+	</if>
+    <if test="orderByColumn != null">
+      ORDER BY
+      <choose>  
+        <when test="orderByColumn == 'state'">
+          stateName
+        </when>
+        <when test="orderByColumn == 'assessmentprogramname'">
+          bu.assessmentprogramname
+        </when>
+        <when test="orderByColumn == 'uploadtype'">
+          bu.uploadtype
+        </when>
+        <when test="orderByColumn == 'filename'">
+          bu.filename
+        </when>
+        <when test="orderByColumn == 'createduserdisplayname'">
+          bu.createduserdisplayname
+        </when>
+        <when test="orderByColumn == 'submissiondate'">
+          bu.submissiondate
+        </when>
+        <when test="orderByColumn == 'status'">
+          bu.status
+        </when>
+        <when test="orderByColumn == 'successcount'">
+          bu.successcount
+        </when>
+        <when test="orderByColumn == 'failedcount'">
+          bu.failedcount
+        </when>
+        <when test="orderByColumn == 'reportyear'">
+          bu.reportyear
+        </when>        
+        <otherwise>
+          bu.schoolyear
+        </otherwise>
+      </choose>
+      <choose>
+        <when test="order != null and (order == 'desc' or order == 'DESC')">
+          DESC
+        </when>
+        <otherwise>
+          ASC
+        </otherwise>
+      </choose>
+    </if>
+    <if test="limit != null">
+      LIMIT #{limit,jdbcType=INTEGER}
+    </if>
+    <if test="offset != null">
+      OFFSET #{offset,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+ <select id="checkForInProgressUpload" resultType="int">
+    SELECT COUNT(id)
+    FROM batchupload
+    WHERE activeflag = TRUE
+    AND assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+    AND stateid = #{stateId, jdbcType=BIGINT}
+    AND uploadtypeid = #{fileTypeId, jdbcType=BIGINT}
+    AND reportYear = #{reportYear,jdbcType=INTEGER}
+    <if test="contentAreaId != null">
+    AND contentareaid = #{contentAreaId, jdbcType=BIGINT}
+    </if>
+    <if test="testingProgramId != null">
+    AND testingprogramid = #{testingProgramId, jdbcType=BIGINT}
+    </if>
+    <if test="reportCycle != null">
+          and reportcycle = #{reportCycle, jdbcType=VARCHAR}
+    </if>  
+    
+    AND STATUS in ('IN-PROGRESS', 'Pending');
+  </select>
+  
+      <select id="selectGRFProcessStatusBYStateId" parameterType="map" resultMap="DetailedResultMap">   
+      select count(*) OVER() AS totalrecords,* from (SELECT distinct on(grfprocesstype)  bu.id, bu.filename, bu.assessmentprogramid, bu.contentareaid, bu.status, bu.successcount,bu.alertcount,
+      bu.failedcount, bu.resultjson, bu.submissiondate, bu.reportyear,
+      bu.assessmentprogramname, bu.uploadtype,bu.grfprocesstype,
+      bu.createduserdisplayname,bu.filepath
+    FROM batchupload bu
+     WHERE  bu.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+      AND bu.reportyear  = #{reportYear,jdbcType=BIGINT} 
+      AND bu.grfprocesstype is not null    
+      and bu.stateid =  #{stateId,jdbcType=BIGINT}
+      
+      <if test="grfProcessTypes != null and grfProcessTypes.size &gt; 0">
+       and bu.grfProcessType in 
+      <foreach collection="grfProcessTypes" item="grfProcessType" separator="," open="(" close=")">
+	   #{grfProcessType,jdbcType=VARCHAR}
+	</foreach> 
+	</if>
+      
+      
+      
+      order by grfprocesstype, id desc) grfprocess      
+    <if test="orderByColumn != null">
+      ORDER BY
+      <choose>  
+        <when test="orderByColumn == 'grfprocesstype'">
+          grfprocesstype
+        </when>
+        <when test="orderByColumn == 'filename'">
+          filename
+        </when>
+        <when test="orderByColumn == 'createduserdisplayname'">
+          createduserdisplayname
+        </when>
+        <when test="orderByColumn == 'submissiondate'">
+          submissiondate
+        </when>
+        <when test="orderByColumn == 'status'">
+          status
+        </when>
+        <when test="orderByColumn == 'successcount'">
+          successcount
+        </when>
+        <when test="orderByColumn == 'failedcount'">
+          failedcount
+        </when>
+        <when test="orderByColumn == 'filePath'">
+          filePath
+        </when>  
+        <when test="orderByColumn == 'reportyear'">
+          reportyear
+        </when>  
+        <otherwise>
+         schoolyear
+        </otherwise>
+      </choose>
+      <choose>
+        <when test="order != null and (order == 'desc' or order == 'DESC')">
+          DESC
+        </when>
+        <otherwise>
+          ASC
+        </otherwise>
+      </choose>
+    </if>
+    <if test="limit != null">
+      LIMIT #{limit,jdbcType=INTEGER}
+    </if>
+    <if test="offset != null">
+      OFFSET #{offset,jdbcType=INTEGER}
+    </if>
+  </select>
+    
+ <select id="checkForInProgressGrfUploadOrReport" resultType="int">
+    SELECT COUNT(id)
+    FROM batchupload
+    WHERE activeflag = TRUE
+    AND assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+    AND stateid = #{stateId, jdbcType=BIGINT}
+    AND reportYear = #{reportYear,jdbcType=INTEGER}    
+  	AND grfprocesstype is not null
+  	AND STATUS in ('IN-PROGRESS', 'Pending', 'STARTED');
+  </select>
+  
+  <select id="latestGrfBatchUpload" resultMap="BaseResultMap">
+  select * from batchupload
+  where stateid = #{stateId, jdbcType=BIGINT}
+  and grfprocesstype = #{grfProcessType, jdbcType=VARCHAR}
+  and activeflag is true
+  order by id desc limit 1
+  </select>
+  
+  <select id="checkForInProgressInSpecialCircumstanceAndExitedStudents" resultType="int">
+    SELECT COUNT(id)
+    FROM batchupload
+    WHERE activeflag = TRUE
+    AND assessmentprogramid = #{assessmentProgramId, jdbcType=BIGINT}
+    AND stateid = #{stateId, jdbcType=BIGINT}
+    AND reportYear = #{reportYear,jdbcType=INTEGER}
+    AND grfProcessType = #{grfProcessType, jdbcType=VARCHAR}
+    AND STATUS in ('IN-PROGRESS', 'INPROGESS', 'Pending', 'STARTED');
+  </select>
+  
+</mapper>
+

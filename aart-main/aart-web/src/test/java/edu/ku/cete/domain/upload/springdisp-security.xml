@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- Allows security annotations to be read. -->
+	<!-- <global-method-security pre-post-annotations="enabled"/> -->
+	<global-method-security pre-post-annotations="enabled" />
+	<beans:bean id="nullRequestCacheAwareFilter"
+		class="org.springframework.security.web.savedrequest.NullRequestCache" />
+
+	<http use-expressions="true" auto-config="false"
+		access-decision-manager-ref="unanimousBased">
+		<request-cache ref="nullRequestCacheAwareFilter" />
+
+
+		<intercept-url pattern="/favicon.ico" access="permitAll" />
+		<intercept-url pattern="/index.jsp" access="permitAll" />
+		<intercept-url pattern="/logIn.htm*" access="permitAll" />
+		<intercept-url pattern="/images/**" access="permitAll" />
+		<intercept-url pattern="/js/**" access="permitAll" />
+		<intercept-url pattern="/css/**" access="permitAll" />
+		<intercept-url pattern="/j_spring_security_logout"
+			access="isAuthenticated()" />
+		<intercept-url pattern="/activateUser.htm*" access="permitAll" />
+		<intercept-url pattern="/activate.htm*" access="permitAll" />
+		<intercept-url pattern="/generalError.htm" access="permitAll" />
+		<intercept-url pattern="/management.htm" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/user/getByUserName"
+			access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/user/setEnabled" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/userTest/findByUser"
+			access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/JSON/userTest/setActive"
+			access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/manageOrgAssessmentPrograms.htm"
+			access="hasRole('CETE_SYS_ADMIN')" />
+		<intercept-url pattern="/syncStudents.htm" access="hasRole('CETE_SYS_ADMIN')" />
+		<intercept-url pattern="/forgotPassword/forgotPassword.htm"
+			access="permitAll" />
+		<intercept-url pattern="/forgotPassword/sendResetEmail.htm"
+			access="permitAll" />
+		<intercept-url pattern="/forgotPassword/resetPassword.htm"
+			access="permitAll" />
+		<intercept-url pattern="/forgotPassword/changePassword.htm"
+			access="permitAll" />
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+
+		<custom-filter position="LOGOUT_FILTER" ref="customLogoutFilter" />
+		<session-management invalid-session-url="/logIn.htm">
+			<concurrency-control expired-url="/login.htm"
+				max-sessions="1" />
+		</session-management>
+		<access-denied-handler error-page="/permissionDenied.htm" />
+		<form-login login-page="/logIn.htm" default-target-url="/logIn.htm"
+			authentication-failure-url="/logIn.htm?error=true" />
+	</http>
+
+	<!-- The AuthenticationManager is the entry point into authentication portion 
+		of the security model -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="authenticationProvider" />
+		<!-- <authentication-provider user-service-ref="userDetailsService" > -->
+		<!-- </authentication-provider> -->
+	</authentication-manager>
+
+	<!-- The UnanimousBased is the accessDecisionManager used for the authorization -->
+	<beans:bean id="unanimousBased"
+		class="org.springframework.security.access.vote.UnanimousBased">
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:ref bean="webExpressionVoter" />
+				<beans:ref bean="roleVoter" />
+				<beans:ref bean="authenticatedVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<!-- The WebExpressionVoter makes sure that the user has the correct permissions. -->
+	<beans:bean id="webExpressionVoter"
+		class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+
+	<!-- The RoleVoter makes sure that the user has the correct permissions. -->
+	<beans:bean id="roleVoter"
+		class="org.springframework.security.access.vote.RoleVoter">
+	</beans:bean>
+
+	<!-- The AuthenticatedVoter makes sure that the user is authenticated. -->
+	<beans:bean id="authenticatedVoter"
+		class="org.springframework.security.access.vote.AuthenticatedVoter" />
+
+	<beans:bean id="customLogoutFilter" class="edu.ku.cete.security.LogoutFilterWrapper">
+		<beans:property name="logoutSuccessfulUrl" value="/logIn.htm" />
+	</beans:bean>
+
+	<beans:bean id="shaPasswordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<beans:constructor-arg value="512" />
+	</beans:bean>
+
+	<beans:bean
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource"
+		id="saltSource">
+		<beans:property name="userPropertyToUse" value="salt" />
+	</beans:bean>
+
+	<beans:bean id="userDetailsService"
+		class="edu.ku.cete.service.impl.UserDetailsServiceImpl" />
+
+	<beans:bean id="authenticationProvider"
+		class="edu.ku.cete.service.impl.AuthenticationProviderImpl">
+		<beans:property ref="userDetailsService" name="userDetailsService" />
+		<beans:property ref="shaPasswordEncoder" name="passwordEncoder" />
+		<beans:property ref="saltSource" name="saltSource" />
+	</beans:bean>
+
+	<beans:bean class="edu.ku.cete.security.DatabasePasswordSecurerBean"
+		init-method="secureDatabase" depends-on="dataSource">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+
+</beans:beans>

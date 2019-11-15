@@ -1,0 +1,91 @@
+<div class="top_info">
+	<!-- <div class="head"><h1>Roster Report</h1><h2>Student Score Report</h2></div> -->
+</div>
+<div id="reportViewport1">
+	<div class="reportGeneral">
+		<div class="reportHeader">
+			<div class="reportHeaderText">
+				<div class ="reportHeaderTitle">
+				<% if($("#assessmentProgram option:selected").text() == 'Career Pathways Collaborative') { %> 
+					Career Pathways Assessment System 
+				<% } else { %>
+					Kansas Assessment Program
+				<% } %>
+				</div>			
+				<div>
+					<label class="reportHeaderBody">Assessment Title:</label>   <label class="reportHeaderVariables"> General Assessment </label>  <br/> 
+					<label class="reportHeaderBody">Report Title:</label>   <label class="reportHeaderVariables"> <%== $("#reportCategory option:selected").text() %> </label> <br/> 
+					<label class="reportHeaderBody">School Year:</label>   <label class="reportHeaderVariables"> 2013 - 2014 </label><br/> 
+					<label class="reportHeaderBody">Assessment Date(s):</label>   <label class="reportHeaderVariables"> 09-01-2013 - 10-01-2013</label>
+				</div>
+			</div>
+			<div class="reportHeaderLogo">
+			<% if($("#assessmentProgram option:selected").text() == 'Career Pathways Collaborative') { %> 
+				<img src="images/cPass_logo.jpg"/>
+			<% } else { %>
+				<img src="images/kap_blue.jpg"/> 
+			<% } %>
+			</div>
+		</div>
+		
+		<hr class="reportHeaderLine" /> <%== "<fmt:message key='newreport.no.school'/>" %>
+	</div>
+	
+	<!--
+	<div class="">
+		<div class="top_info">
+			<div class="head"><h2>Test Name: <%==reportData.testName%></h2><br/><h2>Subject: <%==reportData.subject%></h2></div>
+			<div class="head"><h2>Date: <%==reportData.date%></h2><br/><h2>Grade: <%==reportData.grade%></h2></div>
+		</div>
+	</div>
+	-->
+		
+	<div id="graph" class="graphContainer"></div><br/>
+	<div id="gridData" class="kite-table gridContainer">
+		<div class="ui-jqgrid ui-widget ui-widget-content ui-corner-all">
+			<div class="ui-jqgrid-view">
+			 	<% if(reportData.studentScores != null) { %>
+					<table class="ui-jqgrid-htable" role="presentation">
+						<thead>
+							<tr class="ui-jqgrid-labels">
+								<th width="40%" class="ui-th-column ui-th-ltr"><div>Student Name</div></th>
+								<th width="20%" class="ui-th-column ui-th-ltr"><div>Local Student ID</div></th>
+								<th width="15%" class="ui-th-column ui-th-ltr"><div>Raw Score</div></th>
+								<th width="15%" class="ui-th-column ui-th-ltr"><div>% Correct</div></th>
+							</tr>
+						</thead>
+						<tbody>
+						<% for(var i=0; i<reportData.studentScores.length; i++) {%>
+							<tr>
+								<td><%==reportData.studentScores[i].student.legalLastName%>, <%==reportData.studentScores[i].student.legalFirstName%></td>
+								<td style="text-align: center;"><%==reportData.studentScores[i].localStudentIdentifier%></td>
+								<td style="text-align: center;"><%==reportData.studentScores[i].numCorrect%> / <%==reportData.studentScores[i].numQuestions%></td>
+								<td style="text-align: center;"><%==Math.round((reportData.studentScores[i].numCorrect/reportData.studentScores[i].numQuestions) * 100)%> %</td>
+							</tr>
+						<% 	}%>
+						</tbody>
+					</table>
+				<% } %>
+			</div>
+		</div>
+	</div>
+	
+	<br />
+	<hr class="reportHeaderLine" />
+	
+	<div class="reportFooter">
+		<% var dt = new Date(); var tZoneAbbrParts = dt.toString().replace(/^.*GMT.*\(/, "").replace(/\)$/, "").split(" "); var tZoneAbbr = ""; for(i = 0; i < tZoneAbbrParts.length; i++) { tZoneAbbr += tZoneAbbrParts[i].charAt(0);} %>
+		Page 1 of 1 <br />
+		Copyright © <%== dt.getFullYear();%> by The Center for Educational Testing and Evaluation, The University of Kansas. For more <br />
+		information on what is covered by this assessment, see
+		<% if($("#assessmentProgram option:selected").text() == 'Career Pathways Collaborative') { %> 
+			<%== "<a href='http://www.careerpathways.us' target='_blank'>www.careerpathways.us</a>" %>.
+		<% } else { %>
+			<%== "<a href='http://www.ksassessments.org' target='_blank'>www.ksassessments.org</a>" %>. 
+		<% } %>
+		This report may contain Personally <br />
+		Identifiable Information. Please see our Privacy Policy  <br/>
+		<%== "<a href='https://documents.ku.edu/policies/provost/PrivacyPolicyGeneral.htm' target='_blank'>https://documents.ku.edu/policies/provost/PrivacyPolicyGeneral.htm</a>" %>.
+		Report Generated: <%== ($.datepicker.formatDate("mm-dd-yy", dt)) + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds() + " " + tZoneAbbr; %>.
+	<div>
+</div>

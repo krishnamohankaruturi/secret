@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.report.model.BatchRegisteredScoringAssignmentsMapper" >
+  <resultMap id="BaseResultMap" type="edu.ku.cete.report.domain.BatchRegisteredScoringAssignments" >
+    <result column="batchregistrationid" property="batchRegistrationId" jdbcType="BIGINT" />
+    <result column="scoringassignmentid" property="scoringAssignmentId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    batchregistrationid, scoringassignmentid
+  </sql>
+   
+  <insert id="insert" parameterType="java.util.List" >
+    insert into batchregisteredscoringassignments (batchregistrationid, scoringassignmentid)
+    values     
+    <foreach collection="list" item="element" index="index" separator="," >
+	   (#{element.batchRegistrationId,jdbcType=BIGINT}, #{element.scoringAssignmentId,jdbcType=BIGINT})
+	</foreach> 
+  </insert>
+  
+</mapper>

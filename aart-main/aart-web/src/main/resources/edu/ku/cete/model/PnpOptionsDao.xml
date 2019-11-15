@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.PnpOptionsDao">
+	<select id="getPnpAccomodations" resultType="edu.ku.cete.domain.common.PnpAccomodation">
+		SELECT pnpa.id as "id", pnpa.parentid as "parentId",
+		pnpa.pianacid as "pianacid",pnpa.accomodation as "accomodation",pnpa.categoryid as "categoryId",
+		piac.id as "attributeContainerId",piac.attributecontainer as "attributeContainerName",
+		case when pianacvo.viewoption is not null then pianacvo.viewoption else 'enable' end as "viewOption",
+		ap.abbreviatedname as "assessmentProgram", c.categoryname as "categoryName",
+		pnpa.sortorder as sortOrder
+		FROM
+		pnpaccomodations pnpa
+		INNER JOIN profileItemAttributenameAttributeContainer pianc 
+			ON pnpa.pianacid = pianc.id and pnpa.activeflag is true and pianc.activeflag is true
+		INNER JOIN profileitemattributecontainer piac ON pianc.attributecontainerid = piac.id and piac.activeflag is true
+		INNER JOIN category c ON pnpa.categoryid = c.id and c.activeflag is true
+		LEFT OUTER JOIN profileitemattrnameattrcontainerviewoptions pianacvo ON pianacvo.pianacid = pianc.id
+			and pianacvo.activeflag is true
+		LEFT OUTER JOIN assessmentprogram ap on pianacvo.assessmentprogramid = ap.id and ap.activeflag is true
+		order by pnpa.sortorder asc
+	</select>
+
+	<update id="updatePnpOptionSettings">
+		update profileitemattrnameattrcontainerviewoptions set viewoption = #{viewOption},
+		modifieddate = now(),
+		modifieduser = #{userId}
+		where pianacid =
+		(SELECT pianc.id
+		FROM profileitemattribute pia
+		inner join profileItemAttributenameAttributeContainer pianc ON pia.id = pianc.attributenameid
+		inner join profileitemattributecontainer piac ON pianc.attributecontainerid = piac.id
+		inner join pnpaccomodations pnpa on pnpa.pianacid = pianc.id
+		where pnpa.pianacid=#{pianacId} and pnpa.categoryid = #{categoryId}) and
+		assessmentprogramid = (select id from assessmentprogram where abbreviatedname=#{assessmentProgram})
+		and activeflag is true;
+	</update>
+	<insert id="insertPnpOptionSettings">
+		insert into profileitemattrnameattrcontainerviewoptions
+		(pianacid, assessmentprogramid, viewoption, createddate, createduser, modifieddate, modifieduser)
+		values (#{pianacId}, (select id
+		from assessmentprogram where abbreviatedname=#{assessmentProgram}), #{viewOption},
+		now(), #{userId}, now(), #{userId})
+	</insert>
+	<select id="getPnpStateSettings" resultType="edu.ku.cete.domain.common.PnpStateSettings" >
+		select distinct ap.abbreviatedname as "assessmentProgram", o.id as "stateId"
+		from orgassessmentprogram orgass
+		INNER JOIN organization o ON orgass.organizationid = o.id and orgass.activeflag is true and o.activeflag is true
+		INNER JOIN organizationtype ot ON o.organizationtypeid = ot.id and ot.activeflag is true
+		INNER JOIN assessmentprogram ap ON orgass.assessmentprogramid = ap.id and ap.activeflag is true
+		where ot.typecode ='ST' and ap.abbreviatedname in ('CPASS','KELPA2','DLM','KAP','I-SMART','I-SMART2','PLTW') and orgass.activeflag is true
+		order by ap.abbreviatedname
+	</select>
+	<insert id="insert" parameterType="edu.ku.cete.domain.common.PnpStateSettings" useGeneratedKeys="true"
+		keyColumn="id" keyProperty="id">
+		insert into pnpstatesettings (stateid, pinacid,viewoption, assessmentprogramid)
+		values (#{stateId,jdbcType=BIGINT}, #{pianacId,jdbcType=BIGINT},
+		#{viewOption,jdbcType=VARCHAR}, #{assessmentProgramid, jdbcType=BIGINT})
+	</insert>
+	<select id="getPnpStateSettingsData" resultType="edu.ku.cete.domain.common.PnpStateSettings">
+	select distinct o.id as "stateId", o.organizationname as "stateName",#{pianacId} as pianacId,
+		ap.id as "assessmentProgramId", 
+		case when pss.viewoption is not null then pss.viewoption 
+		when (select viewoption from profileitemattrnameattrcontainerviewoptions 
+			where pianacid = #{pianacId} and activeflag is true and assessmentprogramid = 
+				(select id from assessmentprogram where abbreviatedname = #{assessmentProgram})) is not null then 
+				(select viewoption from profileitemattrnameattrcontainerviewoptions 
+				where pianacid = #{pianacId} and activeflag is true and assessmentprogramid = 
+				(select id from assessmentprogram where abbreviatedname = #{assessmentProgram}))
+		else 'enable' end as "viewOption",
+		ap.abbreviatedname as "assessmentProgram"
+		from orgassessmentprogram orgass
+		INNER JOIN organization o ON orgass.organizationid = o.id and orgass.activeflag is true and o.activeflag is true
+		INNER JOIN organizationtype ot ON o.organizationtypeid = ot.id and ot.activeflag is true
+		INNER JOIN assessmentprogram ap ON orgass.assessmentprogramid = ap.id and ap.activeflag is true
+		left outer join pnpstatesettings pss on pss.stateid = o.id and ap.id = pss.assessmentprogramid and pss.activeflag is true and pss.pinacid=#{pianacId}
+		left outer join profileitemattrnameattrcontainerviewoptions piancvo on pss.pinacid = piancvo.pianacid and piancvo.activeflag is true and pss.assessmentprogramid = piancvo.assessmentprogramid
+		where ot.typecode ='ST' and ap.abbreviatedname = #{assessmentProgram} and orgass.activeflag is true
+		order by o.organizationname
+	</select>
+	<update id="updateStatePnpOptionSettings">
+		update pnpstatesettings set viewoption = #{viewOption},
+		modifieddate = now(),
+		modifieduser = #{userId}
+		where stateid= #{stateId} and pinacid = #{pianacId} and 
+		assessmentprogramid = (select id from assessmentprogram where abbreviatedname = #{assessmentProgram})
+		and activeflag is true;
+		
+		<!-- disable if any child accomodations and the parent is is disabled.  -->
+		update pnpstatesettings set viewoption = #{viewOption},
+		modifieddate = now(),
+		modifieduser = #{userId}
+		where stateid= #{stateId} and pinacid in (
+		select pianacid from pnpaccomodations where parentid  in (select id from pnpaccomodations where pianacid = #{pianacId})
+		) and assessmentprogramid = (select id from assessmentprogram where abbreviatedname =  #{assessmentProgram})
+		and activeflag is true and #{viewOption} = 'disable'
+	</update>
+	<insert id="insertStatePnpOptionSettings">
+		insert into pnpstatesettings (stateid, pinacid, viewoption, assessmentprogramid, createddate, createduser,modifieddate, modifieduser)
+		values(#{stateId},#{pianacId},#{viewOption},(select id from assessmentprogram where abbreviatedname= #{assessmentProgram}),
+		now(),#{userId},now(),#{userId})
+	</insert>
+	<update id="clearStatePnpOptionSettings">
+		update pnpstatesettings set activeflag = false,
+		modifieddate = now(),
+		modifieduser = #{userId}
+		where pinacid = #{pianacId} and 
+		assessmentprogramid = (select id from assessmentprogram where abbreviatedname = #{assessmentProgram})
+		and activeflag is true;
+
+		update pnpstatesettings set activeflag = false,
+		modifieddate = now(),
+		modifieduser = #{userId}
+		where pinacid in (select pianacid from pnpaccomodations where parentid  in (select id from pnpaccomodations where pianacid = #{pianacId})) and 
+		assessmentprogramid = (select id from assessmentprogram where abbreviatedname = #{assessmentProgram})
+		and activeflag is true;
+	</update>
+	<select id="getChildPnpSettingIds" resultType="java.lang.Long" >
+		select pianacid from pnpaccomodations 
+		where parentid = (select id from pnpaccomodations where pianacid  = #{pianacId}) and activeflag is true
+		order by sortorder
+	</select>
+	
+	<select id="getPnpStateSettingsByState" resultType="edu.ku.cete.domain.common.PnpStateSettings">
+	select distinct o.id as "stateId", o.organizationname as "stateName",#{pianacId} as pianacId,
+		ap.id as "assessmentProgramId", 
+		case when pss.viewoption is not null then pss.viewoption 
+		when (select viewoption from profileitemattrnameattrcontainerviewoptions 
+			where pianacid = #{pianacId} and activeflag is true and assessmentprogramid = 
+				(select id from assessmentprogram where abbreviatedname = #{assessmentProgram})) is not null then 
+				(select viewoption from profileitemattrnameattrcontainerviewoptions 
+				where pianacid = #{pianacId} and activeflag is true and assessmentprogramid = 
+				(select id from assessmentprogram where abbreviatedname = #{assessmentProgram}))
+		else 'enable' end as "viewOption",
+		ap.abbreviatedname as "assessmentProgram"
+		from orgassessmentprogram orgass
+		INNER JOIN organization o ON orgass.organizationid = o.id and orgass.activeflag is true and o.activeflag is true
+		INNER JOIN organizationtype ot ON o.organizationtypeid = ot.id and ot.activeflag is true
+		INNER JOIN assessmentprogram ap ON orgass.assessmentprogramid = ap.id and ap.activeflag is true
+		left outer join pnpstatesettings pss on pss.stateid = o.id and ap.id = pss.assessmentprogramid and pss.activeflag is true and pss.pinacid=#{pianacId}
+		left outer join profileitemattrnameattrcontainerviewoptions piancvo on pss.pinacid = piancvo.pianacid and piancvo.activeflag is true and pss.assessmentprogramid = piancvo.assessmentprogramid
+		where ot.typecode ='ST' and ap.abbreviatedname = #{assessmentProgram} 
+		and o.id=#{stateId}
+		order by o.organizationname limit 1
+	</select>
+	
+	<select id="getProfileItemAttributenameAttributeContainerId" resultType="java.lang.Long">
+		select id from profileitemattributenameattributecontainer 
+		where attributenameid = (select id from profileitemattribute  where attributename  = #{attributeName} )
+		and activeflag is true
+	</select>
+</mapper>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.OrgAssessmentProgramDao">
+    
+    <sql id="select">
+        SELECT id, organizationid, assessmentprogramid, isdefault
+    </sql>
+    
+    <sql id="selectRel">
+        SELECT oap.id, oap.organizationid, oap.assessmentprogramid, org.id as "org.id",
+         org.organizationname as "org.organizationName", org.displayidentifier as "org.displayIdentifier",
+          org.organizationtypeid as "org.organizationTypeId", org.welcomemessage as "org.welcomeMessage",
+           ap.id as "assessmentProgram.id", ap.programname as "assessmentProgram.programName", ap.abbreviatedname as  "assessmentProgram.abbreviatedname"
+    </sql>
+    
+    <select id="getAll" resultType="OrgAssessmentProgram">
+        <include refid="select"/>
+        FROM orgassessmentprogram where activeflag is true
+    </select>
+    
+    <select id="findById" resultType="OrgAssessmentProgram" parameterType="long">
+        <include refid="select"/>
+        FROM orgassessmentprogram
+        WHERE id = #{orgAssessmentProgramId}
+    </select>
+    
+    <select id="findByAssessmentProgramId" resultType="OrgAssessmentProgram" parameterType="long">
+        <include refid="select"/>
+        FROM orgassessmentprogram
+        WHERE assessmentprogramid = #{assessmentProgramId}
+        and activeflag is true
+    </select>
+    
+    <select id="findByOrganizationId" resultMap="getAllAssociationsMap" parameterType="long">
+		Select ap.id as "assessmentProgram.id",
+		 ap.programname as "assessmentProgram.programName", ap.abbreviatedname as  "assessmentProgram.abbreviatedname"
+		FROM assessmentprogram as ap
+        WHERE ap.id in (
+        select oap.assessmentprogramid
+         from orgassessmentprogram as oap, organization as org
+        where
+        oap.organizationid = org.id
+        and oap.activeflag is true
+        AND
+        ( oap.organizationid = #{organizationId} or
+          oap.organizationid in (Select id from organization_parent_tree(#{organizationId}, 7 ) where organizationtypeid=2) 
+          )
+        ) and activeflag is true
+        ORDER BY ap.programname
+    </select>
+    
+    <select id="findByOrganizationIds" resultMap="getAllAssociationsMap" parameterType="long">
+		Select ap.id as "assessmentProgram.id",
+		 ap.programname as "assessmentProgram.programName", ap.abbreviatedname as  "assessmentProgram.abbreviatedname"
+		FROM assessmentprogram as ap
+        WHERE ap.id in (
+        select oap.assessmentprogramid
+         from orgassessmentprogram as oap, organization as org
+        where
+        oap.organizationid = org.id
+        AND 
+        oap.activeflag is true
+        AND
+        (oap.organizationid in 
+	        <foreach collection="organizationIds" item ="organizationIds" open="(" close=")" separator=",">
+	        #{organizationIds} 
+	        </foreach>
+         	and organizationtypeid=2 
+          )
+        )
+        ORDER BY ap.programname
+    </select>
+    
+    <select id="findByUserIdAndOrganizationId" resultMap="getAllAssociationsMap" parameterType="long">
+    	Select distinct ass.id as "assessmentProgram.id",
+		 ass.programname as "assessmentProgram.programName", ass.abbreviatedname as  "assessmentProgram.abbreviatedname",
+		 case when uas.isdefault is null then orgasp.isdefault 
+		 	when uas.isdefault is true then uas.isdefault 
+		 	when uas.isdefault is false then orgasp.isdefault and uas.isdefault else false end as isDefault
+		from assessmentprogram ass 
+		inner join userassessmentprogram uas on ass.id = uas.assessmentprogramid
+		inner join orgassessmentprogram orgasp on orgasp.assessmentprogramid= ass.id and orgasp.organizationid=#{organizationId}
+		inner join usersorganizations uo on uo.aartuserid = uas.aartuserid and uo.activeflag is true and uo.organizationid = #{currentOrganizationId}
+		inner join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.id = uas.userorganizationsgroupsid
+			where uas.aartuserid = #{aartUserId} 
+			<if test="currentGroupId != 0">
+				and uog.groupid = #{currentGroupId} 
+			</if>
+			and ass.activeflag=true and uas.activeflag=true and orgasp.activeflag=true
+			order by ass.programname
+    </select>
+    
+    <select id="findByContractingOrganizationId" resultMap="getAllAssociationsMap" parameterType="long">
+		Select ap.id as "assessmentProgram.id",
+		 ap.programname as "assessmentProgram.programName", ap.abbreviatedname as  "assessmentProgram.abbreviatedname"
+		FROM assessmentprogram as ap
+        WHERE ap.id in (
+        select oap.assessmentprogramid
+         from orgassessmentprogram as oap, organization as org
+        where oap.organizationid = org.id and org.contractingorganization is TRUE
+        AND oap.activeflag is true
+        AND
+        ( oap.organizationid = #{userOrganizationId} or
+          oap.organizationid in ( Select id from organization_parent(#{userOrganizationId})) 
+          )
+        )
+        ORDER BY ap.programname
+    </select>
+    
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM orgassessmentprogram WHERE id = #{id}
+    </delete>
+    
+    <insert id="insert" parameterType="OrgAssessmentProgram" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO orgassessmentprogram (organizationid, assessmentprogramid, createddate, createduser, activeflag, modifieddate, modifieduser) 
+        VALUES (#{organizationId}, #{assessmentProgramId}, #{createdDate}, #{createdUser}, #{activeFlag},#{modifiedDate},#{modifiedUser})
+    </insert>
+    
+    <resultMap type="OrgAssessmentProgram" id="getAllAssociationsMap">
+        <id column="id" property="id" javaType="long"/>
+        <result column="organizationid" property="organizationId"/>
+        <result column="assessmentprogramid" property="assessmentProgramId"/>
+        <result column="isDefault" property="isDefault" />
+        <association property="organization" javaType="Organization">
+            <id column="organization.id" property="id" javaType="long"/>
+            <result column="organization.organizationname" property="organizationName"/>
+        </association>
+        <association property="assessmentProgram" javaType="AssessmentProgram">
+            <id column="assessmentProgram.id" property="id"/>
+            <result column="assessmentProgram.programName" property="programName"/>
+            <result column="assessmentProgram.abbreviatedname" property="abbreviatedname"/>
+        </association>
+    </resultMap>
+    
+    <select id="findStatesByAssessmentProgramId" resultType="OrgAssessmentProgram" parameterType="map">
+	     select org.id as "organization.id",org.organizationname as "organization.organizationName" 
+	     from orgassessmentprogram as oap, organization as org
+	     where oap.organizationid = org.id AND (oap.assessmentprogramid = #{assessmentProgramId}) 
+	     AND oap.activeflag is true
+	     ORDER BY org.organizationname 
+     </select>
+     
+    <select id="getAllWithAssociations" resultMap="getAllAssociationsMap">
+        select org.id as "organization.id", org.organizationname as "organization.organizationName", oap.id,
+        oap.organizationid, oap.assessmentprogramid, ap.id as "assessmentProgram.id", ap.programname as "assessmentProgram.programName", ap.abbreviatedname as  "assessmentProgram.abbreviatedname"
+        from organization org, orgassessmentprogram oap, assessmentprogram ap
+        where org.id = oap.organizationid
+        and oap.assessmentprogramid = ap.id
+        and oap.activeflag is true
+    </select>
+    
+    <select id="findByOrganizationAndAssessmentProgram" resultType="OrgAssessmentProgram" parameterType="map">
+        <include refid="select"/>
+        from orgassessmentprogram
+        where organizationid = #{organizationId} and assessmentprogramid = #{assessmentProgramId} and activeflag is true
+    </select>
+
+    <select id="lastid" resultType="java.lang.Long">
+      SELECT lastval() AS id
+  </select>
+  
+  <!--
+  	Biyatpragyan Mohanty : bmohanty_sta@ku.edu : US15083 : Test Management Add Test Session page - misc UI changes
+  	As part of this story found out that it was showing incorrect number of (more that it should) assessment programs 
+  	in the dropdown, it was not considering the contracting organization condition, because only contracting organizations
+  	can contain assessment programs (previously any organization conlud contain the same hence old data issue). This functionality 
+  	is also used in findByOrganizationId of AssessmentProgramDAO (same result with different queries probably)
+   -->
+   <select id="selectAllAssessmentPrograms" resultMap="getAllAssociationsMap" parameterType="long">
+		SELECT DISTINCT ap.id as "assessmentProgram.id",
+			ap.programname as "assessmentProgram.programName", ap.abbreviatedname as  "assessmentProgram.abbreviatedname" 
+		FROM assessmentprogram as ap
+        WHERE ap.id in (
+        			select assessmentprogramid from userassessmentprogram where aartuserid= #{aartUserId} and activeflag=true
+        		)
+    </select>
+    
+    <select id="getByUserId" resultMap="getAllAssociationsMap" parameterType="long">
+    	select uo.organizationid as  "organizationId", uas.assessmentprogramid as "assessmentProgramId", uas.isdefault as isDefault,
+    	ap.programname as "assessmentProgram.programName",ap.abbreviatedname as "assessmentProgram.abbreviatedname"
+		from userassessmentprogram uas 
+		inner join userorganizationsgroups uog on uog.id = uas.userorganizationsgroupsid and uog.activeflag is true
+		inner join usersorganizations uo on uo.id = uog.userorganizationid and uo.activeflag is true
+		inner join assessmentprogram ap on ap.id = uas.assessmentprogramid and ap.activeflag is true
+        where uas.aartuserid = #{aartUserId}
+    </select>
+    
+    <select id="getExtractReportAssessmentPrograms" resultMap="getAllAssociationsMap" >
+    	Select distinct ass.id as "assessmentProgram.id",
+		 ass.programname as "assessmentProgram.programName", ass.abbreviatedname as  "assessmentProgram.abbreviatedname",
+		 case when uas.isdefault is null then orgasp.isdefault 
+		 	when uas.isdefault is true then uas.isdefault 
+		 	when uas.isdefault is false then orgasp.isdefault and uas.isdefault else false end as isDefault
+		from assessmentprogram ass 
+		inner join userassessmentprogram uas on ass.id = uas.assessmentprogramid
+		inner join orgassessmentprogram orgasp on orgasp.assessmentprogramid= ass.id and orgasp.organizationid=#{contractOrgId} and orgasp.activeflag is true
+		inner join usersorganizations uo on uo.aartuserid = uas.aartuserid and uo.activeflag is true and uo.organizationid = #{currentOrganizationId}
+		inner join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.id = uas.userorganizationsgroupsid
+		inner join groupauthorities ga on ga.assessmentprogramid = ass.id and ga.activeflag is true
+		and ga.groupid = #{currentGroupsId} and ga.organizationid = #{stateId}
+		inner join authorities a on ga.authorityid = a.id and a.activeflag is true and a.authority = #{permissionCode}
+			where uas.aartuserid = #{userId} and ass.activeflag=true and uas.activeflag=true and orgasp.activeflag=true
+			order by ass.programname
+    </select>
+    
+    <update id="updateIfExist" >
+    	update orgassessmentprogram 
+	  <set>
+	      <if test="activeFlag != null" >
+		     activeflag = #{activeFlag,jdbcType=TIMESTAMP},
+		  </if>
+	      <if test="modifiedDate != null">
+	        modifieddate = now(),
+	      </if>
+	      <if test="modifiedUser != null">
+	        modifieduser = #{modifiedUser,jdbcType=BIGINT},
+	      </if>   
+      </set>	  
+	    WHERE  organizationid= #{organizationId,jdbcType=BIGINT}
+	    AND assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT}
+    </update>
+</mapper>

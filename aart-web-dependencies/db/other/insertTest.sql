@@ -1,0 +1,15 @@
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - Math'), (select id from category where categorycode = 'GRADE_0'), 'Math )0 Test', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - Math'), (select id from category where categorycode = 'GRADE_2'), 'Math Test @2', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - Math'), (select id from category where categorycode = 'GRADE_4'), 'Math $4 Test', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - Math'), (select id from category where categorycode = 'GRADE_6'), 'Math ^6 Test', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - Math'), (select id from category where categorycode = 'GRADE_8'), 'Math Test *8', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - Math'), (select id from category where categorycode = 'GRADE_10'), 'Math (10) Test', 10);
+
+
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - ELA'), (select id from category where categorycode = 'GRADE_1'), 'ELA !1 Test', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - ELA'), (select id from category where categorycode = 'GRADE_3'), 'ELA #3 Test', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - ELA'), (select id from category where categorycode = 'GRADE_5'), 'ELA %5 Test ', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - ELA'), (select id from category where categorycode = 'GRADE_7'), 'ELA &7 Test', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - ELA'), (select id from category where categorycode = 'GRADE_9'), 'ELA (9 Test', 10);
+INSERT INTO test (assessmentid, subjectid, gradeid, testname, numitems) values (currval('assessment_id_seq'), (select id from category where categorycode = 'CCSS - ELA'), (select id from category where categorycode = 'GRADE_11'), 'ELA +11+ Test', 10);
+    

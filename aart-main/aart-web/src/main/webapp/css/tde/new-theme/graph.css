@@ -1,0 +1,664 @@
+/*
+ * LaTeX Math in pure HTML and CSS -- No images whatsoever
+ * v0.xa
+ * by Jay and Han
+ * Lesser GPL Licensed: http: //www.gnu.org/licenses/lgpl.html
+ * 
+ * This file is automatically included by mathquill.js
+ * 
+ */
+
+@font-face {
+  font-family: Symbola;
+  src: url(/images/tools/graphingCalculator/font/Symbola.eot);
+  src: local("Symbola Regular"), local("Symbola"),
+    url(/images/tools/graphingCalculator/font/Symbola.ttf) format("truetype"),
+    url(/images/tools/graphingCalculator/font/Symbola.otf) format("opentype"),
+    url(/images/tools/graphingCalculator/font/Symbola.svg#webfont7MzkO3xs) format("svg");
+}
+
+.mathquill-editable, .mathquill-embedded-latex .mathquill-editable {
+  display: -moz-inline-box;
+  display: inline-block;
+  border: 1px solid gray;
+  padding: 2px;
+}
+.mathquill-embedded-latex .mathquill-editable {
+  margin: 1px;
+}
+.mathquill-textbox {
+  overflow-x: auto;
+  overflow-y: hidden; /*so IE8 won't show a vertical scrollbar*/
+}
+.mathquill-editable.empty, .mathquill-editable * {
+  cursor: text;
+}
+
+.mathquill-editable .textarea {
+  position: relative;
+  display: inline; /*so Firefox 3.6 (Gecko 1.9.2) won't wrap the box to 2 lines*/
+}
+.mathquill-editable .textarea textarea {
+  position: absolute;
+  z-index: -1;
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+  border: none;
+  outline: none;
+}
+
+.mathquill-editable .cursor {
+  border-left: 1px solid black;
+  margin-right: -1px;
+  display: inline;
+  position: relative;
+  z-index: 1;
+}
+.mathquill-editable .cursor.blink {
+  visibility: hidden;
+}
+.mathquill-editable.empty:after, .mathquill-textbox:after, .mathquill-rendered-math .empty:after {
+  visibility: hidden;
+  content: 'c';
+}
+/*separated from above because unrecognized pseudoclasses invalidate the entire selector*/
+.mathquill-editable .cursor:only-child:after,
+.mathquill-editable .textarea+.cursor:last-child:after {
+  visibility: hidden;
+  content: 'c';
+}
+
+.mathquill-editable .selection,
+.mathquill-editable .selection .mathquill-rendered-math,
+.mathquill-editable .selection sup, .mathquill-editable .selection sub {
+  background: #B4D5FE;
+  background: Highlight;
+  color: HighlightText;
+  border-color: HighlightText;
+}
+.mathquill-editable .selection.blur,
+.mathquill-editable .selection.blur .mathquill-rendered-math,
+.mathquill-editable .selection.blur sup,.mathquill-editable .selection.blur sub {
+  background: #CCC;
+  background: rgba(0, 0, 0, .2);
+  color: black;
+  border-color: black;
+}
+.mathquill-editable .selection .selection.blur,
+.mathquill-editable .selection .selection.blur sup,
+.mathquill-editable .selection .selection.blur sub {
+  background: #ABF;
+}
+.mathquill-editable .selection.blur .selection.blur,
+.mathquill-editable .selection.blur .selection.blur sup,
+.mathquill-editable .selection.blur .selection.blur sub {
+  background: #AAA;
+  background: rgba(0, 0, 0, .2);
+}
+
+.mathquill-textbox, .mathquill-rendered-math {
+  white-space: pre-wrap;
+  font-family: Symbola, "Times New Roman", serif;
+}
+.mathquill-rendered-math {
+  font-variant: normal;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 115%;
+  line-height: 1;
+  display: -moz-inline-box;
+  display: inline-block;
+  -moz-user-select: none;
+}
+.mathquill-rendered-math var, .mathquill-rendered-math .nonSymbola {
+  font-family: "Times New Roman", serif;
+}
+.mathquill-rendered-math * {
+  font-size: inherit;
+  line-height: inherit;
+  display: -moz-inline-box;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  border-color: black;
+}
+.mathquill-editable.hasCursor,
+.mathquill-rendered-math .latex-command-input.hasCursor {
+  border-color: ActiveBorder;
+}
+.mathquill-editable.hasCursor, .mathquill-editable .hasCursor {
+  -webkit-box-shadow: #68B4DF 0 0 3px 2px;
+  -moz-box-shadow: #68B4DF 0 0 3px 2px;
+  box-shadow: #68B4DF 0 0 3px 2px;
+}
+
+.mathquill-rendered-math .empty {
+  background: #ccc;
+}
+.mathquill-rendered-math.empty {
+  background: transparent;
+}
+
+.mathquill-rendered-math .text {
+  display: inline;
+  font-size: 87%;
+}
+
+.mathquill-rendered-math var { /* variables, in case the user does something weird to their <var>'s */
+  font-style: italic;
+  font-weight: normal;
+}
+.mathquill-rendered-math var.florin { /* florin looks so much better than italic f */
+  margin: 0 -.1em;
+}
+
+.mathquill-rendered-math big {
+  font-size: 125%;
+}
+
+.mathquill-rendered-math sup, .mathquill-rendered-math sub {
+  position: relative;
+  font-size: 90%;
+}
+.mathquill-rendered-math sup {
+  vertical-align: .5em;
+}
+.mathquill-rendered-math sub {
+  vertical-align: -.4em;
+}
+.mathquill-rendered-math sup.nthroot {
+  margin-right: -.7em;
+}
+.mathquill-rendered-math sup.limit, .mathquill-rendered-math sub.limit,
+.mathquill-rendered-math sup.nthroot {
+  font-size: 80%;
+}
+.mathquill-rendered-math sup.limit, .mathquill-rendered-math sup.nthroot {
+  vertical-align: .8em;
+}
+.mathquill-rendered-math sub.limit {
+  vertical-align: -.6em;
+}
+
+.mathquill-rendered-math .binary-operator {
+  padding: 0 .2em;
+}
+.mathquill-rendered-math .unary-operator {
+  padding-left: .2em;
+}
+.mathquill-rendered-math sup .binary-operator,
+.mathquill-rendered-math sub .binary-operator {
+  padding: 0 .1em;
+}
+.mathquill-rendered-math sup .unary-operator,
+.mathquill-rendered-math sub .unary-operator {
+  padding-left: .1em;
+}
+
+.mathquill-rendered-math .fraction {
+  font-size: 90%;
+  text-align: center;
+  vertical-align: -.5em;
+  padding: 0 .1em;
+}
+.mathquill-rendered-math .fraction, x:-moz-any-link { /* Firefox 2 (and older?) only */
+  display: -moz-groupbox; /* because display:inline-block is FUBAR in Gecko < 1.9.0 */
+}
+.mathquill-rendered-math .fraction, x:-moz-any-link, x:default { /* Firefox 3+ (Gecko 1.9.0+) */
+  display: inline-block;
+}
+.mathquill-rendered-math .numerator, .mathquill-rendered-math .denominator {
+  display: block;
+}
+.mathquill-rendered-math .numerator {
+  border-bottom: 1px solid; /* black is too black, contrasts with antialised text */
+  padding: 0 .1em;
+}
+.mathquill-rendered-math .denominator {
+  border-top: 1px solid;
+  float: right; /* take out of normal flow to manipulate baseline */
+  width: 100%;
+}
+
+.mathquill-rendered-math sup .fraction, .mathquill-rendered-math sub .fraction {
+  font-size: 70%;
+  vertical-align: -.4em;
+}
+.mathquill-rendered-math sup .numerator, .mathquill-rendered-math sub .numerator {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.mathquill-rendered-math sup .denominator, .mathquill-rendered-math sub .denominator {
+  padding-top: 0;
+}
+
+.mathquill-rendered-math .latex-command-input {
+  color: inherit;
+  font-family: "Courier New", monospace;
+  border: 1px solid gray;
+  padding-right: 1px;
+  margin-right: 1px;
+  margin-left: 2px;
+}
+.mathquill-rendered-math .latex-command-input:before {
+  content: '\\';
+}
+.mathquill-rendered-math .latex-command-input.empty {
+  background: transparent;
+}
+
+.mathquill-rendered-math .sqrt-prefix {
+  vertical-align: top;
+  position: relative;
+  top: 2px;
+}
+.mathquill-rendered-math .sqrt-stem {
+  border-top: 1px solid;
+  margin-top: 1px;
+  padding-left: 2px;
+  padding-right: .2em;
+  margin-right: .1em;
+}
+
+.mathquill-rendered-math .paren {
+  vertical-align: bottom;
+  position: relative;
+}
+
+.mathquill-rendered-math .array {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.mathquill-rendered-math .array > span {
+  display: block;
+}
+
+.mathquill-rendered-math .non-italicized-function {
+  padding-right: .2em;
+}
+
+
+#gCalc .overlay{
+    position:relative;/*dlm change - fixed*/
+    -webkit-box-shadow:0px 0px 5px black;
+    -moz-box-shadow:0px 0px 5px black;
+    -o-box-shadow:0px 0px 5px black;
+    box-shadow:0px 0px 5px black;
+    box-shadow:0px 0px 5px black;
+    
+    z-Index:80000;
+    color:black;
+    opacity:0.8;
+    padding:4px;
+    background:#eee;
+}
+#gCalc li:hover .delete{visibility:visible}
+#gCalc .delete{
+    background:url(/images/tools/graphingCalculator/buttons.png) no-repeat;
+	width:20px;
+	visibility:hidden;
+	height:21px;
+	background-position:-30px -21px;
+	display: inline-block;
+	position:absolute;
+	right:0;
+	top:0;
+	opacity:0.5;
+	margin:8px;
+    cursor:pointer;
+    z-index:2;
+}
+#gCalc .delete:hover{
+    opacity:1.0;
+}
+#gCalc #con{
+    top:0;
+    left:0;
+    background:white;
+    font-size:small;
+    padding:8px;
+    border:8px solid #eee;
+    opacity:0.97;
+}
+#gCalc input[type=button]:hover,#gCalc a.help_button:hover{
+	opacity:1.0;
+}
+#gCalc input[type=button]{
+	background:url(/images/tools/graphingCalculator/buttons.png);
+	border:none;
+	opacity:0.7;
+	width:30px;
+	height:21px;
+	color:rgba(0,0,0,0.0);
+	margin-left:4px;
+	margin-top:3px;
+	margin-bottom:4px;
+}
+#gCalc h3{text-align:center;padding-top:1em}
+#gCalc .buttons{
+    position:relative;
+	border-top:1px solid #ececec;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0, rgba(194,194,194,0.8)),
+	    color-stop(1, rgba(239,239,239,0.8))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgba(194,194,194,0.8) 0%,
+	    rgba(239,239,239,0.8) 100%
+	);
+	background-color: #e8e8e8;
+	
+}
+#gCalc .buttons a{
+    text-decoration:none;
+    display:block;
+    width:50px;
+    position:absolute;
+    top:0;
+    right:0;
+}
+#gCalc a.help_button{
+	background:url(/images/tools/graphingCalculator/buttons.png);
+	border:none;
+	opacity:0.7;
+	width:30px;
+	height:21px;
+	color:rgba(0,0,0,0.0);
+	margin-left:4px;
+	margin-top:3px;
+	margin-bottom:4px;
+	background-position:0px 42px;
+	margin-right:6px;
+}
+
+/* GRAPHING CALC */
+
+/*#gCalc { position: relative; width: 280px; height: 479px; background-image: url('/images/tools/graph-calc-bg.svg'); background-size: 280px 479px; background-repeat: no-repeat; z-index: 9999; } 
+*/
+input[value=".png"]{
+	background-position:30px 0px;
+}
+input[value=">_"]{
+	background-position:60px 0px;
+}
+input[value="reload"]{
+	background-position:0px 21px;
+}
+input[value="config"]{
+	background-position:-30px 21px;
+}
+#funcs {
+    left:267px;
+	opacity:1.0;
+    background:rgba(255,255,255,1);
+    padding:0;
+    top:7px;
+    height:440px;
+    width: 250px;
+    overflow:auto;
+}
+.overlay-gc {
+    position:absolute;/*dlm change - fixed*/
+    -webkit-box-shadow:0px 0px 5px black;
+    -moz-box-shadow:0px 0px 5px black;
+    -o-box-shadow:0px 0px 5px black;
+    box-shadow:0px 0px 5px black;
+    box-shadow:0px 0px 5px black;
+    z-index:80000;
+    color:black;
+    opacity:0.8;
+    padding:4px;
+    background:#eee;
+}
+
+#iptxt { padding: 10px; }
+	#iptxt input { padding: 4px; border-radius: 4px; -moz-border-radius: 4px; border: 1px solid #ccc; margin-bottom: 10px; }
+
+#funcs ul{
+    list-style: none;
+    margin: 0; padding: 0;
+}
+#funcs ul li:last-child .b{
+	border-bottom:none;
+}
+#funcs ul li:only-child .delete{
+    display:none;
+}
+
+#funcs ul aside{
+    position:absolute;
+    bottom:0;
+    right:0;
+    font-size:small;
+    padding-bottom:2px;
+    color:#888;
+    padding-right:4px;
+}
+#funcs ul aside:before{
+    background:url('/images/tools/buttons.png') -62px -21px no-repeat;
+    display:block;
+    width:20px;
+    float:left;
+    color:rgba(0,0,0,0.0);
+    content:"!";
+}
+#funcs ul .b{
+	text-align:center;
+	width:34px;
+	position:absolute;
+	top:0;
+	bottom:0;
+	padding-top:8px;
+	border-top:1px solid rgba(255,255,255,0.7);
+	border-left:1px solid rgba(255,255,255,0.4);
+	border-right:1px solid rgba(0,0,0,0.7);
+	border-bottom:1px solid rgba(0,0,0,0.85);
+	margin-right:3px;
+	border-radius: 5px 0px 0px 5px;
+	
+}
+
+#funcs ul li{
+	vertical-align:center;
+	min-height:35px;
+	position:relative;
+	padding: 3px 0;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px;
+	margin: 2px;
+}
+#funcs ul li .matheditor{
+	margin-top:5px;
+	margin-left:38px;
+	margin-bottom:4px;
+}
+
+#graphs textarea { border-radius: 4px; border: 1px solid #ccc; padding: 4px; }
+
+#ptd{
+    position:fixed;
+    z-Index:80000;
+    color:black;
+    opacity:0.6;
+    left:8px;
+    bottom:8px;
+    background:white;
+    -webkit-transition:opacity 0.5s ease-in-out;
+    -moz-transition:opacity 0.5s ease-in-out;
+    -o-transition:opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+    font-size:10pt;
+
+}
+
+#conin{
+    background:url('/images/tools/buttons.png') -83px -21px no-repeat;
+    border:none;
+    padding:0;
+    outline:none;
+    width:100%;
+    padding-left:10px
+}
+.monospace{
+    font-family:'Menlo','Andale Mono', Consolas, 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Monaco, monofur, monospace;
+}
+
+
+#logt{
+    background:white;
+    width:300px;
+    padding:2px;
+    -webkit-user-select:text;
+    -moz-user-select:text;
+    -o-user-select:text;
+    user-select:text;
+    font-size:90%;
+    max-height:500px;
+    overflow:auto;
+}
+#logt .warn{
+    background:url('/images/tools/buttons.png') -62px -21px no-repeat;
+    width:20px;
+    height:20px;
+    float:left;
+}
+
+
+ul.json li.end b:before{
+    color:transparent;
+}
+ul.json li b:before{
+    content:'▶';
+    font-size:x-small;
+    padding-right:2px;
+    color:#555;
+}
+ul.json li.show b:before{
+    content:'▼';
+}
+ul.json li.hide b:before{
+    content:'▶';
+}
+ul.json span{
+    color: #1C00CF;
+}
+ul.json b{
+    color:#881391;
+    font-weight:normal;
+}
+
+ul.json strong{
+    font-weight:normal;
+    color:#C41A16;
+}
+ul.json i{
+    color:#aaa;
+    font-style: normal;
+}
+ul.json .child{
+    padding-left:16px;
+}
+ul.json li.hide .child{
+    display:none;
+}
+ul.json{
+    list-style:none;
+    font-family:Menlo, Monaco, monospace;
+    font-size:11px;
+}
+
+
+
+/*Mathquill overrides*/
+.mathquill-editable{ border:none !important; }
+
+
+.mathquill-editable .selection.blur, .mathquill-editable .selection.blur .mathquill-rendered-math, .mathquill-editable .selection.blur sup, .mathquill-editable .selection.blur sub{
+	background:none !important;
+}
+
+/*dlm added*/
+#graphCalculator { position: absolute; display: none; left:20px; z-index:999999; top:20px }
+
+#graphCal { width: 700px; height: 540px; background: white; border: 1px solid black; position: absolute; left:10px; z-index:900000; top:10px }
+#main_graph	{ width: 240px; height: 146px; background: white; cursor: fixed; position: relative; left: 7px; top: 7px; box-shadow:inset 0 0 8px rgba(0,0,0,.4); -moz-box-shadow:inset 0 0 8px rgba(0,0,0,.4);}
+
+.pd-lft {padding-left: 8px;}
+
+#gcalculator { width: 240px; height: 400px; position: absolute; z-index:999999; left:10px }
+	 				  				
+#gcalculator a { text-decoration:none; font-size:18px; font-weight:bold}
+
+#gcalculator #display { border: none; float: left; text-align: right; font: 26px "Arial Black", Arial, Sans-Serif; margin: 15px 0 12px; width: inherit; }
+
+@media only screen and (device-width : 768px) {
+	#gcalculator #display { width : 216px; }
+}
+	
+#gcalculator .function-button, #gcalculator .plusminus, #gcalculator .num-button, #gcalculator .equals-button, #gcalculator .calc-back, #gcalculator .xfunction-button, #gcalculator .clear-button { background-image: url('/images/tools/graph-calc-btns.png'); background-size: 270px 272px; background-repeat: no-repeat; }
+
+#gcalculator .back-plusminus-function-clear, #gcalculator .num-button, #gcalculator .clear-button, #gcalculator .equals-button, #gcalculator .plusminus { 
+						width: 48px;
+						height: 33px;
+						line-height:33px;
+						text-align: center; 
+	 			    	display: block;
+					  	float: left;
+					  	text-indent: -9999px;
+					   }
+					   
+#gcalculator .function-button:active,
+#gcalculator .pendingFunction  { background-position: bottom left; }
+					
+	 #gcalculator .e-button { background-position: 0 0; }
+	 #gcalculator .ln-button { background-position: -56px 0; }
+	 #gcalculator .log-button { background-position: -112px 0; }
+	 #gcalculator .abs-button {  background-position: -169px 0;}
+	 #gcalculator .pi-button { background-position: -225px 0; }
+
+	 #gcalculator .sin-button { background-position: 0px -41px; }
+	 #gcalculator .cos-button { background-position: -56px -41px; }
+	 #gcalculator .tan-button { background-position: -112px -41px; }
+	 #gcalculator .cube-button { background-position: -169px -41px; }
+	 #gcalculator .sqrt-button { background-position: -225px -41px; }
+	 
+	 #gcalculator .y-button { background-position: 0px -82px; }
+	 #gcalculator .x-button { background-position: -56px -82px; }
+	 #gcalculator .square-button {background-position: -112px -82px;  }
+	 #gcalculator .exponent-button {  background-position: -169px -82px;}
+	 #gcalculator .calc-back { background-position: -225px -82px; }
+	 	 
+	 #gcalculator .seven { background-position: 0px -120px; }
+	 #gcalculator .eight { background-position: -56px -120px; }
+	 #gcalculator .nine { background-position: -112px -120px; }
+	 #gcalculator .leftparenthetical-button { background-position: -169px -120px; }
+	 #gcalculator .rightparenthetical-button { background-position: -225px -120px; }
+	 
+	 #gcalculator .four { background-position: 0px -161px; }
+	 #gcalculator .five { background-position: -56px -161px; }
+	 #gcalculator .six { background-position: -112px -161px; }
+	 #gcalculator .multiply { background-position:-169px -161px; }
+	 #gcalculator .divide { background-position: -225px -161px; }
+
+	 #gcalculator .one { background-position: 0px -201px; }
+	 #gcalculator .two { background-position: -56px -201px; }
+	 #gcalculator .three {  background-position: -112px -201px;}
+	 #gcalculator .add { background-position: -169px -201px; }
+	 #gcalculator .subtract { background-position: -225px -201px; }
+
+	 #gcalculator .zero { background-position: 0px -242px; }
+	 #gcalculator .dot{ background-position: -56px -242px; }
+	 #gcalculator .plusminus { background-position: -112px -242px; }
+	 #gcalculator .clear-button { background-position:-169px -242px; 
+					  	           text-indent: -9999px; }
+     #gcalculator .equals-button { background-position: -225px -242px; 
+					  	           text-indent: -9999px; }
+
+#gcalculator #closer { position: absolute; top: -8px; left: -9px; }
+/*.num-button, .function-button, .calc-back, .plusminus, .bClearButton, .xfunction-button { display:block; width: 79px; height: 53px; background: url('/images/tools/calc/calc-btns.svg') no-repeat; float:left; text-indent: -9999px; }*/

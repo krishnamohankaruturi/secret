@@ -1,0 +1,48 @@
+<!-- start calc -->
+	<% if(type == 'calculator') { %>
+	<div id="calc">
+	<% } else if(type == 'talkingCalculator') { %>
+	<div id="talkingcalc">
+	<% } %>
+		<div class="tool-hdr">
+			<a href="#" class="ind-tool-close tool-close">X</a>
+		</div>
+
+		<% if(type == 'calculator') { %>
+		<div id="calculator">
+		<% } else if(type == 'talkingCalculator') { %>
+		<div id="talkingCalculator">
+		<% } %>
+		    <input type="text" id="display" class="calcDisplay" readonly="true">
+		    <div class="calcHistory"></div>
+	
+		    <a class="num-button seven" href="#">7</a>
+		    <a class="num-button eight" href="#">8</a>
+		    <a class="num-button nine" href="#">9</a>
+			<a class="function-button add" href="#">+</a>
+	
+		    <a class="num-button four" href="#">4</a>
+		    <a class="num-button five" href="#">5</a>
+		    <a class="num-button six" href="#">6</a>
+			<a class="function-button subtract" href="#">-</a>
+	
+		    <a class="num-button one" href="#">1</a>
+		    <a class="num-button two" href="#">2</a>
+		    <a class="num-button three" href="#">3</a>
+			 <a class="function-button multiply" href="#">x</a>
+	
+		    <a class="num-button zero" href="#">0</a>
+		    <a class="num-button dot" href="#">.</a>
+		    <a class="num-button clearButton clear-button" href="#">C</a>
+			<a class="function-button divide" href="#">/</a>
+	
+		    <a class="equals-button" href="#">=</a>
+		    <a class="plusminus" href="#">+/-</a>
+		    <a class="calc-back" href="#">&lt;--</a>
+		    <a class="bClearButton" href="#">CLEAR</a>
+		</div>
+		<% if(type == 'talkingCalculator') { %>
+		<div id="calculatorAudio" class="jp-jplayer" style="display:none;"></div>
+		<% } %>
+	</div>
+<!-- /calc -->

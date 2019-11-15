@@ -1,0 +1,107 @@
+<div class="container-fluid interim_test">
+	<span class="pull-left" style="margin-top:24px;">
+		<a href="interim.htm" title="Back to Interim Home">
+			<i class="fa fa-arrow-circle-o-left  fa-lg"></i>Back to Interim Home &gt; </a>
+	</span>
+	<span class="myTestLabel">&nbsp;&nbsp;My Tests</span>
+	<div class="table-responsive kite-table">
+
+		<table class="tBody" id="list">
+			<tr>
+				<td />
+			</tr>
+		</table>
+		<div id="pager"></div>
+
+		<div class="conform_delete_message" style="position: fixed; top: 100px; left: 400px; display: none;">
+			<input type="hidden" id="cancelmessageIdInterimTest" />
+			<h2>Delete Confirmation</h2>
+			<p>Are you sure you want to delete this test?</p>
+			<button type="button" onclick="deleteConformMsg()" class="btn_blue" style="margin-left: 60%; margin-top: 10px; height: 35px;">Yes</button>
+			<button role="button" type="button" onclick="closedeletepopup()" class="btn_blue" style="margin-left: 3%; margin-top: 10px; height: 35px;">No</button>
+		</div>
+
+		<div id="suspendMsgDailog" style="display: none;"></div>
+	</div>
+</div>
+<div id="full-group-description">
+	<div style="margin-top:5%;">
+		<h4 id="js-fulldescription"></h4>
+		<div></div>
+		<style>
+			.iconColor {
+				color: #0e76bc
+			}
+
+			.tableBorder {
+				border: 1px solid black;
+				border-collapse: collapse;
+				padding: 5px;
+				text-align: left;
+			}
+		</style>
+
+		<div id="iconDetailsDailog" style="display: none;">
+			<form method="post" name="iconDetails" id="iconDetails">
+				<fieldset>
+					<table class="tableBorder" role="presentation">
+						<tbody>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-user fa-lg iconColor"></i>
+								</td>
+								<td class="tableBorder">Assign test</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-trash-o fa-lg iconColor"></i>
+								</td>
+								<td class="tableBorder">Delete test</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-eye fa-lg iconColor"></i>
+								</td>
+								<td class="tableBorder">Preview test</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-commenting-o iconColor"></i>
+								</td>
+								<td class="tableBorder">View/Edit feedback</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-retweet fa-lg iconColor"></i>
+								</td>
+								<td class="tableBorder">Reuse this test with other students</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-file-pdf-o fa-lg" style="color:red" aria-hidden="true"></i>
+								</td>
+								<td class="tableBorder">Student usernames and passwords</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-play-circle-o fa-lg iconColor"></i>
+								</td>
+								<td class="tableBorder">Start accepting responses</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa fa-pause-circle fa-lg iconColor"></i>
+								</td>
+								<td class="tableBorder">Stop accepting responses</td>
+							</tr>
+							<tr class="tableBorder">
+								<td class="tableBorder">
+									<i class="fa monitor-icon iconColor"></i>
+								</td>
+								<td class="tableBorder">Monitor test session</td>
+							</tr>
+						</tbody>
+					</table>
+				</fieldset>
+			</form>
+		</div>

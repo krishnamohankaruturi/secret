@@ -1,0 +1,68 @@
+<!--  Auditory Calming -->
+<div id="auditoryCalming" class="tool tool-container">
+		<div class="tool-hdr">
+
+			<a href="#" class="ind-tool-close tool-close">X</a>
+			
+			<div class="player-hdr">
+				<span><%= tool_names.auditoryCalming.nowplaying %></span>
+				<a class="change-title btn" href="#"><img src="/images/list-btn.svg"alt="List"/> <%= tool_names.auditoryCalming.change %></a>
+				<h2 class="player-title h2-font">Airport Lounge</h2>
+				<div id="auditoryCalmingPlayer" class="jp-jplayer"></div>
+				
+				<div id="auditoryCalmingPlayer_container" class="jp-audio">
+		    		<div class="jp-type-playlist">
+		      			<div class="jp-playlist">
+		        			<ul>
+		          				<li></li>
+		        			</ul>
+		      			</div>
+		      			<div class="jp-gui jp-interface">
+		        			<ul class="jp-controls">
+		        				<div style="width: 12%; display: inline-block; margin-left: 5px; height: 45px;">
+		        					<li><a href="javascript:;" class="jp-play" tabindex="1"><%= messages.testPage.play %></a></li>
+		          					<li><a href="javascript:;" class="jp-pause" tabindex="1"><%= messages.testPage.pause %></a></li>
+		          				</div>
+		          				
+		          				<div style="width: 48%; display: inline-block; margin-top:12px; margin-left: 5px;">
+		          					<div class="jp-time-holder">
+		         						<div class="jp-current-time"></div>
+		         						<div class="jp-duration"></div>
+		        					</div>
+		          					<div class="jp-progress">
+		          						<div class="jp-seek-bar">
+		            						<div class="jp-play-bar"></div>
+		          						</div>
+		        					</div>
+		        				</div>
+		          				
+		          				<div style="display: inline-block; width: 8.5%; margin-left: 10px; clear:none; height:40px;">
+		          					<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute"><%= messages.testPage.mute %></a></li>
+		          					<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute"><%= messages.testPage.unmute %></a></li>
+		          				</div>
+		          				
+		          				<div class="vol" style="width: 20%;">
+		          					<label><%= tool_names.auditoryCalming.volume %></label>
+		          					<div class="jp-volume-bar">
+		          						<div class="jp-volume-bar-value"></div>
+		        					</div>
+		        				</div>
+		        				
+		        				
+		        				
+		          			</ul>
+		          			
+		        			
+		        			
+		        		</div>
+		      			
+		      			<div class="jp-no-solution">
+		        			<span><%= tool_names.auditoryCalming.update_required %></span>
+		        			<%= tool_names.auditoryCalming.update_message %>
+		      			</div>
+		      		</div>
+		      	</div>
+		      </div>
+		 </div>
+</div>
+<!-- /Auditory Calming -->

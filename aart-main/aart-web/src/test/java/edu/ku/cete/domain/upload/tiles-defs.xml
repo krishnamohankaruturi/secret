@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+       
+<!-- This file contains the configuration for Apache Tiles. -->
+       
+<tiles-definitions>
+    <definition name=".mainTemplate" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/header.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/navigation.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/templates/blank.jsp"></put-attribute>
+    </definition>
+    <definition name="previewTest" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/test/previewTest.jsp"></put-attribute> 
+    </definition>
+    <definition name="previewNodes" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/test/previewNodes.jsp"></put-attribute> 
+    </definition>
+    <definition name="sessionTimedOut" template="/jsp/templates/popup.jsp"> 
+        <put-attribute name="content" value="/jsp/sessionTimedOut.jsp"></put-attribute> 
+    </definition>
+    <definition name="logIn" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/loginHeader.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/logIn.jsp"></put-attribute>
+    </definition>
+    <definition name="forgotPassword" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/loginHeader.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/forgotPassword.jsp"></put-attribute>
+    </definition>
+    <definition name="resetPassword" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/loginHeader.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/footer.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/resetPassword.jsp"></put-attribute>
+    </definition>
+     <definition name="activateUser" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/user/activateUser.jsp"></put-attribute> 
+    </definition>
+     <definition name="activateSuccess" template="/jsp/templates/main.jsp">
+        <put-attribute name="header" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="navigation" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="footer" value="/jsp/templates/blank.jsp"></put-attribute>
+        <put-attribute name="content" value="/jsp/user/activateSuccess.jsp"></put-attribute> 
+    </definition>
+</tiles-definitions>

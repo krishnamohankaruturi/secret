@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.ku.cete.model.OrganizationSnapshotMapper" >	
+ 	
+  <select id="insert" resultType="Long" >
+	 INSERT INTO organizationsnapshot ( organizationid, organizationname, displayidentifier, organizationtypeid, parentsnapshotid ,
+								  parentorganiationid, parentorganizationtypeid, parentdisplayidentifier, assessemntprograms ,    
+								  testingmodel, schoolstartdate, schoolenddate, contractingorganization, schoolyear ,
+								  snapshotcreateddate, snapshotcreateduser, activeflag) 
+			(select org.id as organizationid, org.organizationname, org.displayidentifier, org.organizationtypeid, null as parentsnapshotid,
+		            parent.id as parentorganiationid, parent.organizationtypeid, parent.displayidentifier as parentdisplayidentifier, array_to_string(ARRAY(select distinct abbreviatedname 
+		            from orgassessmentprogram oap 
+		            inner join assessmentprogram ap on ap.id = oap.assessmentprogramid
+					where oap.organizationid = org.id and oap.activeflag is true ),', ') as assessmentprograms,
+			        org.testingmodel, org.schoolstartdate, org.schoolenddate, org.contractingorganization, EXTRACT (YEAR FROM org.schoolenddate) as schoolyear,
+			        now() as snapshotcreateddate, #{userId} as snapshotcreateduser, org.activeflag
+			
+		            from organization org  
+		            LEFT OUTER JOIN organizationrelation orgrel ON org.id = orgrel.organizationid 
+			        LEFT OUTER JOIN organization parent ON orgrel.parentorganizationid = parent.id
+		            where org.id in (WITH RECURSIVE subordinates AS (
+		            SELECT organizationid FROM organizationrelation WHERE organizationid =  #{orgId}
+		 UNION
+		            SELECT e.organizationid FROM organizationrelation e
+		            INNER JOIN subordinates s ON s.organizationid = e.parentorganizationid) 
+		            
+		            SELECT * FROM subordinates)
+		            and org.activeflag is true order by org.organizationtypeid ,org.id) returning id		 
+  </select>
+
+	<update id="updateParentSnapshot" parameterType="list">
+	 	update organizationsnapshot orgn set parentsnapshotid = (select id from organizationsnapshot where organizationid = orgn.parentorganiationid order by id desc limit 1) 
+         where id in
+          <foreach collection="ids" item="id" open="(" close=")" separator="," >
+				   #{id,jdbcType=BIGINT}
+	      </foreach>
+	</update>
+</mapper>

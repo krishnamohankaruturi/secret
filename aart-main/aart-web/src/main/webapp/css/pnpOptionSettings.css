@@ -1,0 +1,304 @@
+#pnpOptionsControlDiv .pnp_left {
+	width: 80%;
+	display: inline-block;
+}
+
+#pnpOptionsControlDiv .pnp_tab>span {
+	border-color: rgb(204, 204, 204) rgb(204, 204, 204) white !important;
+    z-index: 10;
+    font-weight: bold;
+    color: rgb(91, 157, 207);
+    border-width: 1px;
+    border-style: solid;
+    border-image: initial;
+    padding: 13px 100px;
+    margin: 11px;
+}
+
+.pnp_description {	
+	padding: 10px;
+	margin: 11px;
+}
+
+#pnpOptionsControlDiv .tabs {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: table; /* [1] */
+	table-layout: fixed; /* [2] */
+	width: 100%; /* [3] */
+}
+
+#pnpOptionsControlDiv .tabs__item {
+	margin-bottom:-4px;
+	display: table-cell; /* [4] */
+	/*border: 1px solid #ccc;*/
+}
+
+#pnpOptionsControlDiv .tabs__link {
+	display: block; /* [5] */
+}
+
+#pnpOptionsControlDiv .primary-nav {
+	text-align: center;
+	border-radius: 4px;
+	overflow: hidden; /* [1] */
+}
+
+#pnpOptionsControlDiv .primary-nav a {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#pnpOptionsControlDiv .primary-nav a:hover, #pnpOptionsControlDiv .primary-nav a:focus
+{
+	color: #000;
+}
+/* table css */
+#pnpOptionsControlDiv table, #pnpStatesDialog table {
+	margin-top: 10px;
+	width: 100%;
+	border-collapse: collapse;
+}
+/* Zebra striping */
+#pnpOptionsControlDiv tr:nth-of-type(odd), #pnpStatesDialog  tr:nth-of-type(odd)
+	{
+	background: #f9f9f9;
+}
+
+#pnpOptionsControlDiv th, #pnpStatesDialog th {
+	background-color: #ddd;
+	color: #5B9DCF;
+	font-weight: bold;
+}
+
+#pnpOptionsControlDiv .fixed {
+	max-width: 300px;
+	min-width: 300px;
+	font-weight: bold;
+}
+
+#pnpOptionsControlDiv .fluid {
+	width: 19%;
+	font-weight: bold;
+}
+
+#pnpOptionsControlDiv td, #pnpOptionsControlDiv th, #pnpStatesDialog td,
+	#pnpStatesDialog th {
+	padding: 6px;
+	border: 4px solid #000;
+	text-align: center;
+}
+
+/*on-Off switch*/
+.onoffswitch {
+	position: relative;
+	width: 84px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	margin: 5px auto;
+}
+
+.myonoffswitch {
+	display: none;
+}
+
+.onoffswitch-label {
+	display: block;
+	overflow: hidden;
+	cursor: pointer;
+	border: 2px solid #FFFFFF;
+	border-radius: 36px;
+}
+
+.onoffswitch-inner {
+	display: block;
+	width: 200%;
+	margin-left: -100%;
+	transition: margin 0.3s ease-in 0s;
+}
+
+.onoffswitch-inner-other {
+	display: block;
+	width: 200%;
+	margin-left: -100%;
+	transition: margin 0.3s ease-in 0s;
+}
+
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+	display: block;
+	float: left;
+	width: 50%;
+	height: 27px;
+	padding: 0;
+	line-height: 27px;
+	font-size: 13px;
+	color: white;
+	font-family: Trebuchet, Arial, sans-serif;
+	font-weight: bold;
+	box-sizing: border-box;
+}
+
+.onoffswitch-inner-other:before, .onoffswitch-inner-other:after{
+	display: block;
+	float: left;
+	width: 50%;
+	height: 27px;
+	padding: 0;
+	line-height: 27px;
+	font-size: 13px;
+	color: white;
+	font-family: Trebuchet, Arial, sans-serif;
+	font-weight: bold;
+	box-sizing: border-box;	
+}
+
+.onoffswitch-inner:before {
+	content: "Enabled";
+	padding-left: 3px;
+	background-color: #5B9DCF;
+	color: #FFFFFF;
+}
+
+.onoffswitch-inner:after {
+	content: "Disabled";
+	padding-right: 2px;
+	background-color: #BFBFBF;
+	color: #000000;
+	text-align: right;
+}
+
+.onoffswitch-inner-other:before{
+	content: "Show";
+	padding-left: 7px;
+	background-color: #5B9DCF;
+	color: #FFFFFF;
+}
+
+.onoffswitch-inner-other:after{
+	content: "Hide";
+	padding-right: 7px;
+	background-color: #BFBFBF;
+	color: #000000;
+	text-align: right;
+}
+.onoffswitch-switch {
+	display: block;
+	width: 17px;
+	margin: 5px;
+	background: #FFFFFF;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 53px;
+	border: 2px solid #FFFFFF;
+	border-radius: 36px;
+	transition: all 0.3s ease-in 0s;
+}
+
+.myonoffswitch:checked+.onoffswitch-label .onoffswitch-inner {
+	margin-left: -12px;
+}
+
+.myonoffswitch:checked+.onoffswitch-label .onoffswitch-inner-other {
+	margin-left: -12px;
+}
+
+.myonoffswitch:checked+.onoffswitch-label .onoffswitch-switch {
+	right: 0px;
+}
+
+#pnpOptionsControlDiv .pnpStateLink {
+	text-decoration: none;
+	color: #000000;
+	float: left;
+}
+
+#pnpOptionsControlDiv .pnpStateLink>span {
+	padding: 2px 5px;
+	background-color: #ccc;
+	border: 1px solid #ADC1D0;
+}
+
+#pnpOptionsControlDiv .pnp_right {
+	display: inline-block;
+	width: 19%;
+}
+
+#savePnpOptions-top {
+	width: 90px;
+	margin: 10px;
+	float: right;
+	margin-top: -24px
+}
+
+#savePnpOptions-bottom {
+	width: 90px;
+	margin: 7px;
+	float: right;
+	margin-bottom: 10px
+}
+
+#pnpOptionsControlDiv  btn_save:hover {
+	background-color: #297AB5;
+}
+.pnpStateOptionsFirstColumn{
+	text-align: left !important;
+	padding-left: 5% !important;
+}
+.pnpOptionsFirstColumn{
+	text-align: left !important;
+	padding-left: 3% !important;
+}
+
+#pnpOptionsTabs .tabs{
+	border: none;
+    background: white;
+}
+
+.pnp_tab{
+	margin-top: 20px;
+}
+
+
+#pnpOptionsTabs .ui-state-active, #pnpOptionsTabs .ui-state-active:hover{
+	background-color: white;
+    border-color: DimGray DimGray White !important;
+}
+
+#pnpOptionsTabs .ui-widget-header{
+	    background: white;
+}
+
+#pnpOptionsTabs .nav-item{
+	border-radius: .25rem;
+	background-color: white;
+	padding:0.20em 0.15em;
+}
+
+#pnpOptionsTabs .nav-item .nav-link{
+    border-top-left-radius: .25rem !important;
+    border-top-right-radius: .25rem !important;
+} 
+
+#pnpOptionsTabs .ui-state-hover{
+  background-color: WhiteSmoke;
+}
+#pnpOptionsTabs .ui-state-active, #pnpOptionsTabs .ui-state-active a{
+	color: #0e76bc;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10pt !important;
+    font-weight: bold;
+}
+
+#pnpOptionsTabs{
+	border:none;
+}
+
+#pnpOptionsTabs .ui-widget-header{
+	border-top:none !important;
+	border-left:none !important;
+	border-right:none !important;
+}
+   

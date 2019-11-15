@@ -1,0 +1,3 @@
+--ddl/768.sql
+
+ALTER TABLE taskvariant ALTER COLUMN previousid SET DATA TYPE CHARACTER VARYING(50);

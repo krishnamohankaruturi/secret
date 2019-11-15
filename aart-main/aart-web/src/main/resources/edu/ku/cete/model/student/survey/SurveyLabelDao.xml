@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.student.survey.SurveyLabelDao">
+
+	<resultMap id="BaseResultMap" type="edu.ku.cete.domain.student.survey.SurveyLabel">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="sectionId" jdbcType="BIGINT" property="sectionId" />
+		<result column="labelNumber" jdbcType="VARCHAR" property="labelNumber" />
+		<result column="surveyOrder" jdbcType="BIGINT" property="surveyOrder" />
+		<result column="label" jdbcType="VARCHAR" property="label" />
+		<result column="optional" jdbcType="BIT" property="optional" />
+		<result column="globalPageNumber" jdbcType="INTEGER" property="globalPageNumber" />
+		<result column="surveySectionId" jdbcType="BIGINT" property="surveySectionId" />
+		<result column="complexityBand" jdbcType="BIT" property="complexityBand" />
+		<result column="labelType" jdbcType="BIGINT" property="labelType" />
+
+		<result column="createdDate" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="createdUser" property="createdUser" jdbcType="INTEGER" />
+		<result column="activeFlag" property="activeFlag" jdbcType="BIT" />
+		<result column="modifiedDate" property="modifiedDate" jdbcType="TIMESTAMP" />
+		<result column="modifiedUser" property="modifiedUser" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sl.id as id, sl.sectionid as sectionId, sl.labelnumber as labelNumber, sl.surveyorder as surveyOrder,
+		sl.label as label,
+		sl.optional as optional, sl.globalpagenum as globalPageNumber, sl.surveysectionid as
+		surveySectionId,
+		sl.complexityband as complexityBand, sl.labeltype as labelType,
+		sl.createddate as createdDate,
+		sl.createduser as createdUser,
+		sl.activeflag as activeFlag, sl.modifieddate as modifiedDate, sl.modifieduser as
+		modifiedUser
+	</sql>
+	<select id="selectSurveyLabelsByAndCondition" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from surveylabel sl where sl.id in (
+		select
+		distinct surveylabelid from surveylabelprerequisite where
+		prerequisitecondition='and' and activeflag is true)
+		and
+		sl.activeflag is true
+	</select>
+	<select id="getAllDependentPages" resultType="java.lang.Integer">
+		select distinct globalpagenum from surveylabel where surveysectionid in 
+		( select surveysectionid from surveylabel sl where sl.id in (
+				select distinct surveylabelid from surveylabelprerequisite where
+				prerequisitecondition='and' and activeflag is true)
+				and sl.activeflag is true
+		) and activeflag is true
+	</select>
+</mapper>

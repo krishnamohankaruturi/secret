@@ -1,0 +1,3 @@
+
+ALTER TABLE usersorganizations DROP CONSTRAINT uk_user_organization;
+ALTER TABLE userorganizationsgroups DROP CONSTRAINT uk_user_organizations_groups;

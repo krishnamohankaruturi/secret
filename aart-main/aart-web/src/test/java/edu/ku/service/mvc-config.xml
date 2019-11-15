@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- enable auto-wire -->
+	<context:annotation-config />
+	
+	<!-- This bean defines where the Apache Tiles configuration is located. -->
+<!-- 	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"> -->
+<!-- 	   <property name="definitions"> -->
+<!-- 	       <list> -->
+<!-- 	           <value>tiles-defs.xml</value> -->
+<!-- 	       </list> -->
+<!-- 	   </property> -->
+<!-- 	</bean> -->
+
+	<!-- Setup the DynamicTilesView, this will allow us to insert the content of a page dynamically into our tile definitions. -->
+	<bean id="dynamicTilesViewResolver"
+	      class="org.springbyexample.web.servlet.view.tiles2.TilesUrlBasedViewResolver">
+	    <property name="viewClass" value="org.springbyexample.web.servlet.view.tiles2.DynamicTilesView" />
+	    <property name="prefix" value="/jsp/"/>
+	    <property name="suffix" value=".jsp"/>
+	    <property name="tilesDefinitionName" value="mainTemplate" />
+        <property name="tilesBodyAttributeName" value="content" />
+        <property name="tilesDefinitionDelimiter" value="." />
+        <property name="order" value="0"/>
+	</bean>
+
+	<bean id="internalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/standalone/"/>		
+		<property name="suffix" value=".jsp"/>		
+		<property name="order" value="1"/>
+	</bean>
+
+	<!-- Makes messages.properties work for @Size and the like. -->
+	<mvc:annotation-driven />
+
+	<!-- enable transaction demarcation with annotations -->
+	<tx:annotation-driven />
+
+	<!-- define the SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="edu.ku.cete.domain" />
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="edu.ku.cete.model" />
+	</bean>
+	
+<!-- 	<bean -->
+<!--         class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> -->
+<!--         <property name="exceptionMappings"> -->
+<!--             <props> -->
+<!--                 <prop key="java.lang.Exception">error</prop> -->
+<!--             </props> -->
+<!--         </property> -->
+<!--     </bean> -->
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >
+		<property name="messageConverters">
+		  <list>
+		      <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		          <property name="objectMapper" ref="jacksonObjectMapper"/>
+		      </bean>
+		  </list>
+		</property>
+	</bean>
+	<bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+	
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"  >
+        <property name="mediaTypes">
+           <map>
+              <entry key="json" value="application/json" />
+           </map>
+        </property>
+        <property name="defaultViews">
+             <list>
+                <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+             </list>
+        </property>
+    </bean>
+
+    <context:property-placeholder location="classpath*:*.properties"/>
+    
+     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+    
+<!-- Enter only properties that need to get transformaed. -->
+	<bean id="uploadSpecification" class="edu.ku.cete.util.UploadSpecification">
+		<property name="enrollmentColumnAttributeMapStr"  value="${enrollmentColumnAttributeMapStr}" />		 		 		 			
+		<property name="scrsColumnAttributeMapStr"  value="${scrsColumnAttributeMapStr}" />		
+		<property name="testColumnAttributeMapStr"  value="${testColumnAttributeMapStr}" />
+		<property name="userColumnMapStr" value="${userupload.userColumnMapStr}"/>
+		<property name="pDTrainingResultsMapStr" value="${pdTrainingUpload.userColumnMapStr}"/>
+		<property name="csvRecordTypeCode"  value="${csvRecordTypeCode}" />		 		
+		<property name="webServiceRecordTypeCode"  value="${webServiceRecordTypeCode}" />
+		<property name="enrollmentRecordType"  value="${enrollmentRecordType}" />		 		
+		<property name="testRecordType"  value="${testRecordType}" />		 		
+		<property name="scrsRecordType"  value="${scrsRecordType}" />	
+		<property name="kidRecordType"  value="${kidRecordType}" />	
+		<property name="userRecordType" value="${userupload.userRecordType}"/>
+		<property name="pdTrainingUploadType" value="${pdTrainingUpload.userRecordType}"/>
+		<property name="includeExcludeRecordType" value="${includeExcludeRecordType}"/>
+		<property name="includeExcludeRecordMapStr" value="${includeExcludeRecordColumnAttributeMapStr}" />
+<!-- 		<property name="stateSubjectAreaCode"  value="${stateSubjectAreaCode}" /> -->
+<!-- 		<property name="testSubjectCode"  value="${testSubjectCode}" /> -->
+<!-- 		<property name="testTypeCode"  value="${testTypeCode}" /> -->
+		<property name="courseEnrollmentStatusCode"  value="${courseEnrollmentStatusCode}" />	
+<!-- 		<property name="stateCourseCode"  value="${stateCourseCode}" />	 -->
+		<property name="kansasAssessmentTags"  value="${kansasAssessmentTags}" />
+		<property name="kansasWebServiceConfigTypeCode"  value="${kansasWebServiceConfigTypeCode}" />
+<!-- 		<property name="gradeTypeCode"  value="${gradeTypeCode}" /> -->
+		<property name="orgRecordType" value="${orgupload.recordType}"/>
+		<property name="errorMessageFileHeaderStr" value="${errorMessageFileHeaderStr}"/>
+	</bean>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	
+	<aop:aspectj-autoproxy />
+	
+	<bean id="aartAspect" class="edu.ku.cete.aspect.AARTAspect" />
+
+<!-- 	<aop:config> -->
+<!-- 		<aop:advisor pointcut="execution(* *..UserService.*(..))" -->
+<!-- 			advice-ref="txAdvice" /> -->
+<!-- 	</aop:config> -->
+
+<!-- 	<tx:advice id="txAdvice"> -->
+<!-- 		<tx:attributes> -->
+<!-- 			<tx:method name="save*" /> -->
+<!-- 			<tx:method name="insert*" /> -->
+<!-- 			<tx:method name="persist*" /> -->
+<!-- 			<tx:method name="update*" /> -->
+<!-- 			<tx:method name="create*" /> -->
+<!-- 			<tx:method name="delete*" /> -->
+<!-- 			<tx:method name="get*" read-only="true"/> -->
+<!-- 			<tx:method name="select*" read-only="true"/> -->
+<!-- 			<tx:method name="*" read-only="false" /> -->
+<!-- 		</tx:attributes> -->
+<!-- 	</tx:advice> -->
+	
+	<!-- Java Mail Configuration -->
+	<!-- TODO pull the host from a property file -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}"/>
+		<property name="port" value="${mail.port}"/>
+		<property name="username" value="${mail.username}"/>
+		<property name="password" value="${mail.password}"/>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="fmConfig" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+		<property name="templateLoaderPath" value="/templates/"/>
+	</bean>
+	
+	<bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages" />
+    </bean>
+    
+    <!-- Configure the multipart resolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- one of the properties available; the maximum file size in bytes 17*10^6-->
+        <property name="maxUploadSize" value="17000000"/>
+    </bean> 
+    
+    <bean id="kidsSettings" class="edu.ku.cete.ksde.kids.KidsSettingsFactory" factory-method="initialize">
+        <constructor-arg value="${wsConnectionPassword}" type="java.lang.String"/>
+        <constructor-arg value="${wsConnectionUsername}" type="java.lang.String"/>
+    </bean>
+</beans>

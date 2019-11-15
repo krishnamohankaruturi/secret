@@ -1,0 +1,93 @@
+<KIDS_Data><KIDS_Record><Create_Date>10/20/2011 12:35:58 PM</Create_Date>
+<Record_Common_ID>64437476</Record_Common_ID>
+<Record_Type>EXIT</Record_Type>
+<State_Student_Identifier>2222222222</State_Student_Identifier>
+<AYP_QPA_Bldg_No>2222</AYP_QPA_Bldg_No>
+<Residence_Org_No>D0222</Residence_Org_No>
+<Legal_Last_Name>LastName</Legal_Last_Name>
+<Legal_First_Name>Firstname</Legal_First_Name>
+<Legal_Middle_Name>Middle</Legal_Middle_Name>
+<Generation_Code></Generation_Code>
+<Gender>1</Gender>
+<Birth_Date>7/10/2001 12:00:00 AM</Birth_Date>
+<Current_Grade_Level>09</Current_Grade_Level>
+<Local_Student_Identifier>222222</Local_Student_Identifier>
+<Hispanic_Ethnicity>0</Hispanic_Ethnicity>
+<Current_School_Year>2012</Current_School_Year>
+<Funding_Bldg_No>3333</Funding_Bldg_No>
+<Attendance_Bldg_No>3333</Attendance_Bldg_No>
+<School_Entry_Date>8/5/2011 12:00:00 AM</School_Entry_Date>
+<District_Entry_Date>8/28/2008 12:00:00 AM</District_Entry_Date>
+<State_Entry_Date></State_Entry_Date>
+<User_Field_1></User_Field_1>
+<User_Field_2></User_Field_2>
+<User_Field_3></User_Field_3>
+<SID_Supplied_By_User>True</SID_Supplied_By_User>
+<Exit_Withdrawal_Date>10/11/2011 12:00:00 AM</Exit_Withdrawal_Date>
+<Exit_Withdrawal_Type>2</Exit_Withdrawal_Type>
+<Special_Circumstances_Transfer></Special_Circumstances_Transfer>
+<Post_Graduation_Plans></Post_Graduation_Plans>
+<Comprehensive_Race>10000</Comprehensive_Race>
+<National_Lunch_Program>2</National_Lunch_Program>
+<Primary_Exceptionality_Code>LD</Primary_Exceptionality_Code>
+<ESOL_Participation_Code></ESOL_Participation_Code>
+</KIDS_Record><KIDS_Record><Create_Date>1/5/2012 2:32:40 PM</Create_Date>
+<Record_Common_ID>68207433</Record_Common_ID>
+<Record_Type>TEST</Record_Type>
+<State_Student_Identifier>4444444444</State_Student_Identifier>
+<AYP_QPA_Bldg_No>3333</AYP_QPA_Bldg_No>
+<Residence_Org_No>D0501</Residence_Org_No>
+<Legal_Last_Name>LastName</Legal_Last_Name>
+<Legal_First_Name>Firstname</Legal_First_Name>
+<Legal_Middle_Name>Middle</Legal_Middle_Name>
+<Generation_Code></Generation_Code>
+<Gender>1</Gender>
+<Birth_Date>7/10/2001 12:00:00 AM</Birth_Date>
+<Current_Grade_Level>09</Current_Grade_Level>
+<Local_Student_Identifier>888888</Local_Student_Identifier>
+<Hispanic_Ethnicity>0</Hispanic_Ethnicity>
+<Current_School_Year>2012</Current_School_Year>
+<Funding_Bldg_No>3333</Funding_Bldg_No>
+<Attendance_Bldg_No>3333</Attendance_Bldg_No>
+<School_Entry_Date>10/17/2011 12:00:00 AM</School_Entry_Date>
+<District_Entry_Date>10/17/2011 12:00:00 AM</District_Entry_Date>
+<State_Entry_Date>10/17/2011 12:00:00 AM</State_Entry_Date>
+<User_Field_1>0</User_Field_1>
+<User_Field_2>0</User_Field_2>
+<User_Field_3>0</User_Field_3>
+<SID_Supplied_By_User>True</SID_Supplied_By_User>
+<Comprehensive_Race>10000</Comprehensive_Race>
+<National_Lunch_Program>2</National_Lunch_Program>
+<Primary_Exceptionality_Code></Primary_Exceptionality_Code>
+<Secondary_Exceptionality_Code></Secondary_Exceptionality_Code>
+<Migratory_Status></Migratory_Status>
+<USA_Entry_Date></USA_Entry_Date>
+<First_Language></First_Language>
+<ESOL_Participation_Code></ESOL_Participation_Code>
+<ESOL_Program_Ending_Date></ESOL_Program_Ending_Date>
+<SPED_Program_End_Date></SPED_Program_End_Date>
+<ESOL_Program_Entry_Date></ESOL_Program_Entry_Date>
+<Grouping_Math_1></Grouping_Math_1>
+<Grouping_Math_2>No current math course</Grouping_Math_2>
+<Grouping_Reading_1></Grouping_Reading_1>
+<Grouping_Reading_2>No current LA course</Grouping_Reading_2>
+<Grouping_Science_1></Grouping_Science_1>
+<Grouping_Science_2></Grouping_Science_2>
+<Grouping_History_1></Grouping_History_1>
+<Grouping_History_2></Grouping_History_2>
+<Grouping_Writing_1></Grouping_Writing_1>
+<Grouping_Writing_2></Grouping_Writing_2>
+<State_Math_Assess>2</State_Math_Assess>
+<State_Reading_Assess>2</State_Reading_Assess>
+<K8_State_Sci_Assess>2</K8_State_Sci_Assess>
+<HS_State_Life_Sci_Assess></HS_State_Life_Sci_Assess>
+<HS_State_Phys_Sci_Assess></HS_State_Phys_Sci_Assess>
+<K8_State_Hist_Gov_Assess></K8_State_Hist_Gov_Assess>
+<HS_State_Hist_Gov_World></HS_State_Hist_Gov_World>
+<HS_State_Hist_Gov_State></HS_State_Hist_Gov_State>
+<State_Writing_Assess></State_Writing_Assess>
+<KELPA></KELPA>
+<Grouping_KELPA_1></Grouping_KELPA_1>
+<Grouping_KELPA_2></Grouping_KELPA_2>
+</KIDS_Record>
+</KIDS_Data>

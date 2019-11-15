@@ -1,0 +1,147 @@
+<%
+ var studentName = reportData.studentReportData.studentFirstName;
+ var schoolName = reportData.studentReportData.schoolName;
+ var districtName = reportData.studentReportData.districtName;
+ var stateName = reportData.studentReportData.stateName;
+ var contentAreaName = reportData.studentReportData.contentAreaName;
+ var stateStudentIdentifier = reportData.studentReportData.stateStudentIdentifier;
+ var gradeName = reportData.studentReportData.gradeName;
+ var schoolId = reportData.studentReportData.schoolId;
+ var studentId = reportData.studentReportData.studentId;	
+ var subjectId = reportData.studentReportData.subjectId;
+ var windowCycle = reportData.testCycleID;
+ 
+ var studentReportUrl = "getDLMStudentReportPDF.htm?stateStudentIdentifier=" + stateStudentIdentifier +
+  "&studentId="+  studentId + "&studentName="+  encodeURIComponent(studentName) + "&schoolName=" +  encodeURIComponent(schoolName)+ "&districtName=" + encodeURIComponent(districtName) 
+  + "&stateName=" + stateName + "&subjectId="+subjectId+"&subjectName=" + contentAreaName + "&gradeName=" + gradeName + "&schoolId=" + schoolId;
+  
+  if(windowCycle !=null){
+  	studentReportUrl= studentReportUrl + "&testCycleID="+windowCycle
+  }
+ 
+%>
+
+<div class="studentreport">
+	<div class="main">
+		<div class="heading">
+			 <div class="headrow1">
+			   <div id="dateDiv">
+			   		<%=reportData.studentReportData.reportDate%>
+			   </div>
+	           <div id="printdiv">
+	           		<a id="printStudentReport" class="panel_btn" href="<%=studentReportUrl%>">Save</a>
+	           </div>
+			 </div>
+			 <div class="headrow2">
+	            Individual Student Progress Report for <%=studentName%> 
+	         </div>
+	         <div class="headrow3">
+	            <%=schoolName%>, <%=districtName%>, <%=stateName%>
+	         </div>  
+	 		 <div class="headrow4">
+	            <%=gradeName%>, <%=contentAreaName%>
+	         </div>   
+	     </div>
+	     
+		 <% 
+	 if(reportData.studentReportData.claimsConceptualData != null && reportData.studentReportData.claimsConceptualData.length > 0)
+	 {
+		 for(var i=0; i<reportData.studentReportData.claimsConceptualData.length; i++) 
+		 {
+		 %>
+		    <br/>
+		 	<table border="1" cellspacing="0" class="strTable">
+			 	<caption>
+					<div class="strclaimHeading">
+						<span class="tab_claim">Claim: <%=reportData.studentReportData.claimsConceptualData[i].claim%></span>
+						<span class="tab_conceptual">Conceptual Area: <%=reportData.studentReportData.claimsConceptualData[i].conceptualArea%></span>
+		 			</div>
+				</caption>
+				<% if(contentAreaName.toUpperCase() === 'SCIENCE') { %>
+			 		<tr><th>Grade Level Expectation</th><th>Level 1</th><th>Level 2</th><th style="vertical-align: middle">Level 3 <img class="reporticon" src='images/targeticon.png' width="20%" height="20%" alt="Target Icon" /></th></tr>
+			 	<% } else { %>
+			 		<tr><th>Grade Level Expectation</th><th>Level 1</th><th>Level 2</th><th>Level 3</th><th style="vertical-align: middle">Level 4 <img class="reporticon" src='images/targeticon.png' width="20%" height="20%" alt="Target Icon" /></th><th>Level 5</th></tr>
+			 	<% } %>
+			 	<% 
+			 		for(var j=0; j<reportData.studentReportData.claimsConceptualData[i].eEList.length; j++) {
+			 			var eeRow = reportData.studentReportData.claimsConceptualData[i].eEList[j];
+			 	%>
+			 			<tr>
+			 		    	<td><%=eeRow.eeCode%><br><%=eeRow.eeDesc%></td>
+			    		<%
+				    	for(var k=0; k<reportData.studentReportData.claimsConceptualData[i].eEList[j].levelDetails.length; k++) {
+				    		var eeLLRow = reportData.studentReportData.claimsConceptualData[i].eEList[j].levelDetails[k];
+				    		var legendLabel = ""; 
+				    		
+				    	%>
+				    	<% 
+				    	
+				    	if(eeLLRow.testStatus != null && eeLLRow.testStatus=='Complete')
+				    	{
+					    	if(eeLLRow.writingType){
+					    	   	    legendLabel = "Assessed: "+ eeLLRow.administered; 
+					    	   	    
+					    	%> 
+					    		    <td class="assessedLevel"><div>
+				 			<% 
+				 			} 
+				 			else if(eeLLRow.percentCorrectScoreOfScoreableItems >= 80){ 
+				 					legendLabel = "Mastered: "+ eeLLRow.administered; 
+					    	%>
+				 					<td class="masteredLevel"><div>
+				 			<% 
+				 			} 
+				 			else if(eeLLRow.percentCorrectScoreOfScoreableItems < 80){ 
+				 					legendLabel = "Attempted: "+ eeLLRow.administered; 
+					    	%>
+				 					<td class="attemptedLevel"><div>
+				 			<% 
+				 			} 
+				 		}
+				 		else if(eeLLRow.sessionLevel == 'yes' && eeLLRow.administered.length == 0){ 
+				 					legendLabel = "Planned"; 
+				    	%>
+			 					<td class="plannedLevel"><div>
+			 			<% 
+			 			} 
+			 			else 
+			 			{ 
+			 			%>
+						  		<td class="levelwhite"><div >
+			 			<% 
+			 			}
+			 			%>
+				    	
+			 			<%=eeLLRow.desc%>
+			 				    <div class="masteryLeveldiv"><%=legendLabel%></div>
+							</div>
+			 			</td>
+			 		<% } %> 
+			 		</tr>
+			 	<% }%>
+		 	</table>
+		 <% }
+		}
+		else
+		{
+		%>
+		 	<div class="noDisplayDLMStudentReport">
+		 		No instructional plans exist in Educator Portal for this student and subject
+		 	</div>
+		<% 
+		} 
+		%>
+			<br/>
+	            <div class="legend">
+	                <img class="reporticon" src='images/targeticon.png' width="3%" height="3%" alt="Target Icon" /> = Target
+	                <span class="masteredBox"></span>&nbsp;=&nbsp;Mastered
+	                <span class="attemptedBox"></span>&nbsp;=&nbsp;Attempted
+	                <span class="assessedBox"></span>&nbsp;=&nbsp;Assessed, results not available
+	                <span class="plannedBox"></span>&nbsp;=&nbsp;Planned&nbsp;
+	            </div>
+	            <br/>
+	            <div class="disclaimer">This report provides student results so far for this school year. These results do not guarantee the student’s overall
+performance at the end of the year. <br>For more information, including resources, please visit dynamiclearningmaps.org/states.</div>
+		   <br/>
+	</div>
+</div>

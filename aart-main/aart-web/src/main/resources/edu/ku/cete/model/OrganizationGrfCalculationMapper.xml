@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.model.OrganizationGrfCalculationMapper">
+  
+   <resultMap id="calculationResultMap" type="edu.ku.cete.domain.report.OrganizationGrfCalculation">  
+     <result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramId" />
+   	 <result column="batchuploadprocessid" jdbcType="BIGINT" property="batchUploadProcessId" />
+   	 <result column="stateid" jdbcType="BIGINT" property="stateId" />
+   	 <result column="statename" jdbcType="VARCHAR" property="stateName" />
+     <result column="districtid" jdbcType="BIGINT" property="districtId" />
+     <result column="districtname" jdbcType="VARCHAR" property="districtName" />
+     <result column="districtshortname" jdbcType="VARCHAR" property="districtShortName" />
+     <result column="districtcode" jdbcType="VARCHAR" property="districtCode" />    
+     <result column="reportyear" jdbcType="BIGINT" property="reportYear" />       
+     <collection  property="orgSummaryGradeLists" ofType="edu.ku.cete.domain.report.DLMOrganizationSummaryGrade" javaType="ArrayList"  >
+        <result column="gradelevel" jdbcType="VARCHAR" property="gradeLevel" />
+        <collection  property="orgSummarySubjectLists" ofType="edu.ku.cete.domain.report.DLMOrganizationSummarySubject" javaType="ArrayList"  >
+	        <result column="gradeid" jdbcType="BIGINT" property="gradeId" /> 
+        	<result column="subjectid" jdbcType="BIGINT" property="subjectId" /> 
+        	<result column="contentareaname" jdbcType="VARCHAR" property="subjectName" />    
+        	<result column="noofstudentstested" jdbcType="BIGINT" property="noOfStudentsTested" />
+	    	<result column="numberofemerging" jdbcType="BIGINT" property="numberOfEmerging" />
+	    	<result column="numberofapproachingtarget" jdbcType="BIGINT" property="numberOfApproachingTarget" />
+	    	<result column="numberofattarget" jdbcType="BIGINT" property="numberOfAtTarget" />
+	    	<result column="numberofadvanced" jdbcType="BIGINT" property="numberOfAdvanced" />
+	    	<result column="percentageattargetadvanced" jdbcType="INTEGER" property="percentageAtTargetAdvanced" />
+     </collection>   
+     </collection>   
+   </resultMap>
+  
+  <sql id="Base_Column_List">
+  			id, assessmentprogramid, batchuploadprocessid, stateid, statename, districtid,
+  			districtname, districtcode, reportyear, subjectid, subjectname, gradeid, gradelevel, 
+  			activeflag, noofstudentstested, numberofemerging, numberofapproachingtarget, numberofattarget, 
+            numberofadvanced, percentageattargetadvanced
+  </sql>
+  
+   <select id="getOrganizationGrfCalculationByOrgId" resultMap="calculationResultMap" >	    
+    select orggrf.* ,ca.name as contentareaname,
+	CASE 
+		WHEN grfdt.shortdistrictname is null then districtorg.organizationname
+		WHEN grfdt.shortdistrictname is not null then grfdt.shortdistrictname
+	END as districtshortname,
+	stateorg.organizationname as statename
+	from organizationgrfcalculation orggrf
+	left join organization stateorg on stateorg.id = orggrf.stateid
+	left join organization districtorg on districtorg.id = orggrf.districtid
+	left join contentarea ca on ca.id =  orggrf.subjectid
+	left join grfreportdistrictshortname grfdt on grfdt.districtcode = orggrf.districtcode 
+	and grfdt.organizationid = orggrf.districtid and grfdt.activeflag is true 
+	where (orggrf.stateid = #{organizationId,jdbcType=BIGINT} or orggrf.districtid = #{organizationId,jdbcType=BIGINT}) 
+	and orggrf.stateid = #{stateId,jdbcType=BIGINT}
+	<if test="orgTypeCode !=null and orgTypeCode =='ST' ">
+      and orggrf.districtid IS NULL
+    </if>  	
+	and orggrf.activeflag is true 
+	and orggrf.reportyear = #{reportYear,jdbcType=BIGINT} 
+	and orggrf.assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+	order by (substring(orggrf.gradelevel, '^[0-9]+'))::int,substring(orggrf.gradelevel, '[^0-9_].*$'),orggrf.subjectname
+  </select> 
+  
+  <select id="getDistinctOrgIdsFromOrgGrfCalculation" resultType="java.lang.Long" >	
+	select  #{stateId,jdbcType=BIGINT} as orgids union
+	select distinct(districtid) from organizationgrfcalculation  
+	where stateid = #{stateId,jdbcType=BIGINT}	and districtid is not null
+	and activeflag is true and reportyear = #{reportYear,jdbcType=BIGINT} 
+	and assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+	order by orgids 
+	<if test="pageSize != null">
+		   LIMIT #{pageSize} 
+	</if>
+	<if test="offset != null">
+		   OFFSET #{offset}
+	</if>
+  </select> 
+  
+  <insert id="insert" parameterType="edu.ku.cete.domain.report.OrganizationGrfCalculation">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT nextval('organizationgrfcalculation_id_seq')
+    </selectKey>    
+    insert into organizationgrfcalculation (id, batchuploadprocessid, stateid, statename, districtid, districtname, statecode, districtcode, reportyear, 
+            assessmentprogramid, subjectid, subjectname, gradeid, gradelevel, noofstudentstested, 
+            numberofemerging, numberofapproachingtarget, numberattarget, 
+            numberadvanced, percentageattargetadvanced,activeflag,createduser,modifieduser)
+    		values (#{id,jdbcType=BIGINT}, #{batchUploadProcessId,jdbcType=BIGINT}, #{stateId,jdbcType=BIGINT}, #{stateName,jdbcType=VARCHAR}, #{districtId,jdbcType=BIGINT}, 
+    		#{districtName,jdbcType=VARCHAR},#{districtCode,jdbcType=VARCHAR}, #{reportYear,jdbcType=NUMERIC},
+    		#{assessmentProgramId,jdbcType=BIGINT}, #{subjectId,jdbcType=BIGINT}, #{subjectName,jdbcType=VARCHAR}, #{gradeId,jdbcType=BIGINT}, #{gradeLevel,jdbcType=VARCHAR},
+    		#{noOfStudentsTested,jdbcType=BIGINT},#{numberOfEmerging,jdbcType=BIGINT},#{numberOfApproachingTarget,jdbcType=BIGINT},
+    		#{numberOfAtTarget,jdbcType=BIGINT},#{numberOfAdvanced,jdbcType=BIGINT},#{percentageAtTargetAdvanced,jdbcType=INTEGER},
+    		#{activeFlag,jdbcType=BIT}, #{createdUser,jdbcType=BIGINT}, #{modifiedUser,jdbcType=BIGINT}
+    		)
+  </insert>
+  <insert id="insertSelective" parameterType="edu.ku.cete.domain.report.OrganizationGrfCalculation">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT nextval('organizationgrfcalculation_id_seq')
+    </selectKey>    
+    insert into organizationgrfcalculation
+    <trim prefix="(" suffix=")" suffixOverrides=",">   	 
+	       id,	 
+	     <if test="batchUploadProcessId != null">
+	       batchuploadprocessid,
+	     </if>
+	     <if test="stateId != null">
+	       stateid,
+	     </if>
+	     <if test="stateName != null">
+	       statename,
+	     </if>
+	     <if test="districtId != null">
+	       districtid,
+	     </if>	    
+	     <if test="districtCode != null">
+	       districtcode,
+	     </if>
+	     <if test="districtName != null">
+	       districtname,
+	     </if>
+	     <if test="reportYear != null">
+	       reportyear,
+	     </if>
+	     <if test="assessmentProgramId != null">
+	       assessmentprogramid,
+	     </if>
+	     <if test="subjectId != null">
+	       subjectid,
+	     </if>	     
+	     <if test="subjectName != null">
+	       subjectname,
+	     </if>
+	     <if test="gradeId != null">
+	       gradeid,
+	     </if>
+	     <if test="gradeLevel != null">
+	       gradelevel,
+	     </if> 
+	     <if test="noOfStudentsTested != null">
+	       noofstudentstested,
+	     </if>
+	     <if test="numberOfEmerging != null">
+	       numberofemerging,
+	     </if>
+	     <if test="numberOfApproachingTarget != null">
+	       numberofapproachingtarget,
+	     </if>
+	     <if test="numberOfAtTarget != null">
+	       numberofattarget,
+	     </if>
+	     <if test="numberOfAdvanced != null">
+	       numberofadvanced,
+	     </if>
+	     <if test="percentageAtTargetAdvanced != null">
+	       percentageattargetadvanced,
+	     </if>		    
+	     <if test="activeFlag != null">
+	       activeflag,
+	     </if>
+	     <if test="createdUser != null">
+	       createduser,
+	     </if>	
+	     <if test="modifiedUser != null">
+	       modifieduser
+	     </if>    
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=","> 
+	    #{id,jdbcType=BIGINT},
+	  <if test="batchUploadProcessId != null">
+	    #{batchUploadProcessId,jdbcType=BIGINT},
+	  </if>   
+      <if test="stateId != null">
+        #{stateId,jdbcType=BIGINT},
+      </if>
+      <if test="stateName != null">
+	     #{stateName,jdbcType=VARCHAR},
+	  </if>
+      <if test="districtId != null">
+        #{districtId,jdbcType=BIGINT},
+      </if>     
+      <if test="districtCode != null">
+        #{districtCode,jdbcType=VARCHAR},
+      </if>
+      <if test="districtName != null">
+	    #{districtName,jdbcType=VARCHAR},
+	  </if>
+      <if test="reportYear != null">
+        #{reportYear,jdbcType=NUMERIC},
+      </if>
+      <if test="assessmentProgramId != null">
+        #{assessmentProgramId,jdbcType=BIGINT},
+      </if>
+      <if test="subjectId != null">
+	      #{subjectId,jdbcType=BIGINT},
+	  </if>
+      <if test="subjectName != null">
+        #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeId != null">
+	    #{gradeId,jdbcType=BIGINT},
+	  </if>
+      <if test="gradeLevel != null">
+        #{gradeLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="noOfStudentsTested != null">
+        #{noOfStudentsTested,jdbcType=BIGINT},
+      </if>
+      <if test="numberOfEmerging != null">
+        #{numberOfEmerging,jdbcType=BIGINT},
+      </if>
+      <if test="numberOfApproachingTarget != null">
+        #{numberOfApproachingTarget,jdbcType=BIGINT},
+      </if>
+      <if test="numberOfAtTarget != null">
+        #{numberOfAtTarget,jdbcType=BIGINT},
+      </if>
+      <if test="numberOfAdvanced != null">
+        #{numberOfAdvanced,jdbcType=BIGINT},
+      </if>
+      <if test="percentageAtTargetAdvanced != null">
+        #{percentageAtTargetAdvanced,jdbcType=INTEGER},
+      </if>
+      <if test="activeFlag != null">
+        #{activeFlag,jdbcType=BIT},
+      </if>
+      <if test="createdUser != null">
+	    #{createdUser,jdbcType=BIGINT},
+	  </if>
+	  <if test="modifiedUser != null">
+	    #{modifiedUser,jdbcType=BIGINT}
+	  </if>    
+    </trim>
+  </insert>  
+    
+  <delete id="deleteOrganizationGrfCalculation"  >
+ 	 delete from organizationgrfcalculation	where stateid = #{stateId,jdbcType=BIGINT}	
+ 	 and reportyear = #{reportYear,jdbcType=BIGINT} and assessmentprogramid = #{assessmentProgramId,jdbcType=BIGINT} 
+  </delete>
+  
+</mapper>

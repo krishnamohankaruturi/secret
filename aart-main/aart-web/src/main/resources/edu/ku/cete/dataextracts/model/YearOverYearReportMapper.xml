@@ -1,0 +1,1038 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.ku.cete.dataextracts.model.YearOverYearReportMapper">
+  <resultMap id="BaseResultMap" type="edu.ku.cete.domain.report.StudentReport">   
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="studentid" jdbcType="BIGINT" property="studentId" />
+    <result column="enrollmentid" jdbcType="BIGINT" property="enrollmentId" />
+    <result column="gradeid" jdbcType="BIGINT" property="gradeId" />
+    <result column="contentareaid" jdbcType="BIGINT" property="contentAreaId" />
+    <result column="attendanceschoolid" jdbcType="BIGINT" property="attendanceSchoolId" />
+    <result column="districtid" jdbcType="BIGINT" property="districtId" />
+    <result column="stateid" jdbcType="BIGINT" property="stateId" />
+    <result column="studenttest1id" jdbcType="BIGINT" property="studentTest1Id" />
+    <result column="studenttest2id" jdbcType="BIGINT" property="studentTest2Id" />
+    <result column="externaltest1id" jdbcType="BIGINT" property="externalTest1Id" />
+    <result column="externaltest2id" jdbcType="BIGINT" property="externalTest2Id" />
+    <result column="levelid" jdbcType="BIGINT" property="levelId" />
+    <result column="rawscore" jdbcType="NUMERIC" property="rawScore" />
+    <result column="subscore" jdbcType="NUMERIC" property="subScore" />
+    <result column="batchreportprocessid" jdbcType="BIGINT" property="batchReportProcessId" />
+    <result column="assessmentprogramid" jdbcType="BIGINT" property="assessmentProgramId" />
+    <result column="standarderror" jdbcType="NUMERIC" property="standardError" />
+    <result column="scalescore" jdbcType="BIGINT" property="scaleScore" />
+    <result column="schoolyear" jdbcType="BIGINT" property="schoolYear" />
+    <result column="filepath" jdbcType="VARCHAR" property="filePath" />
+    <result column="aggregates" jdbcType="BIT" property="aggregates" />
+    <result column="exitstatus" jdbcType="BIT" property="exitStatus" />
+    <result column="incompletestatus" jdbcType="BIT" property="incompleteStatus" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="level" jdbcType="BIGINT" property="level" />
+    <result column="previousyearlevelid" jdbcType="BIGINT" property="previousYearLevelId" />
+    <result column="studenttest3id" jdbcType="BIGINT" property="studentTest3Id" />
+    <result column="studenttest4id" jdbcType="BIGINT" property="studentTest4Id" />
+    <result column="externaltest3id" jdbcType="BIGINT" property="externalTest3Id" />
+    <result column="externaltest4id" jdbcType="BIGINT" property="externalTest4Id" />
+    <result column="studentperformancetestid" jdbcType="BIGINT" property="studentPerformanceTestId" />
+    <result column="performancetestexternalid" jdbcType="BIGINT" property="performanceTestExternalId" />
+    <result column="mdptscore" jdbcType="NUMERIC" property="mdptScore" />
+    <result column="mdptscorableflag" jdbcType="BIT" property="mdptScorableFlag" />
+    <result column="combinedlevel" jdbcType="NUMERIC" property="combinedLevel" />
+    <result column="mdptLevelId" jdbcType="BIGINT" property="mdptLevelId" />
+    <result column="combinedlevelid" jdbcType="BIGINT" property="combinedLevelId" />
+    <result column="transferred" jdbcType="BIT" property="transferred" />
+    <result column="aggregatetoschool" jdbcType="BIT" property="aggregateToSchool" />
+    <result column="aggregatetodistrict" jdbcType="BIT" property="aggregateToDistrict" />
+    <result column="suppressmdptscore" jdbcType="BIT" property="suppressMdptScore" />
+    <result column="suppressmainscalescoreprfrmlevel" jdbcType="BIT" property="suppressMainScalescorePrfrmLevel" />
+    <result column="suppresscombinedscore" jdbcType="BIT" property="suppressCombinedScore" />
+    <result column="aggregatemdptscore" jdbcType="BIT" property="aggregateMdptScore" />
+    <result column="aggregatemainscalescoreprfrmlevel" jdbcType="BIT" property="aggregateMainScalescorePrfrmLevel" />
+    <result column="aggregatecombinedlevel" jdbcType="BIT" property="aggregateCombinedLevel" />
+    <result column="aggregatesubscore" jdbcType="BIT" property="aggregateSubscore" />
+  </resultMap>
+  
+  <resultMap type="edu.ku.cete.web.KAPStudentScoreDTO" id="kapStudentScoreMap">
+  	<result column="studentid" property="studentId"/>
+  	<result column="statestudentidentifier" property="stateStudentIdentifier"/>
+  	<result column="legallastname" property="studentLegalLastName"/>
+  	<result column="legalfirstname" property="studentLegalFirstName"/>
+  	<result column="legalmiddleName" property="studentLegalMiddleName"/>
+  	<result column="subjectcode" property="subjectCode"/>
+  	<result column="reportsubject" property="subject"/>
+  	<result column="districtdisplayidentifier" property="currentEnrolledDistrictIdentifier"/>
+  	<result column="districtname" property="currentEnrolledDistrictName"/>
+  	<result column="aypSchoolIdentifier" property="currentEnrolledAypSchoolIdentifier"/>
+  	<result column="aypschoolname" property="currentEnrolledAypSchoolName"/>
+  	<result column="attendanceschoolidentifier" property="currentEnrolledATTSchoolIdentifier"/>
+  	<result column="attendanceschoolname" property="currentEnrolledATTSchoolName"/>
+  	<result column="currentenrolledgrade" property="currentEnrolledGradeLevel"/>
+  	
+  	<association property="studentScores" javaType="edu.ku.cete.web.StudentScoreDTO">
+  		<result column="studentid" property="studentId"/>
+  		<result column="studentreportid" property="studentReportId"/>
+  		<result column="subjectcode" property="subjectCode"/>
+  		<result column="reportsubject" property="subject"/>
+  		<result column="reportschoolyear" property="reportYear"/>
+  		<result column="reportschoolidentifier" property="reportSchoolIdentifier"/>
+  		<result column="reportschoolname" property="reportSchoolName"/>
+  		<result column="reportdistrictidentifier" property="reportDistrictIdentifier"/>
+  		<result column="reportdistrictname" property="reportDistrictName"/>
+  		<result column="reportgrade" property="gradeLevel"/>
+  		<result column="scalescore" property="scaleScore"/>
+  		<result column="exitstatus" property="exitStatus"/>
+  		<result column="incompletestatus" property="incompleteStatus"/>
+  		<result column="transferred" property="transferred"/>
+  		<result column="performancelevel" property="performanceLevel"/>
+  		<result column="performancelevelname" property="performanceLevelName"/>
+  		<result column="suppressmainscalescoreprfrmlevel" property="suppressMainScalescorePrfrmLevel"/>
+  		<association property="subscores" javaType="edu.ku.cete.domain.report.ReportSubscores">
+  			<result column="studentreportid" property="studentReportId"/>
+  			<result column="rating" jdbcType="INTEGER" property="rating" />
+  			<result column="subscorereportdisplayname" jdbcType="VARCHAR" property="subScoreReportDisplayName" />
+     		<result column="subscorereportdescription" jdbcType="VARCHAR" property="subScoreReportDescription" />
+     		<result column="subscoredisplaysequence" jdbcType="BIGINT" property="subScoreDisplaySequence" />
+  		</association>
+  	</association> 	
+  </resultMap>
+  
+   <resultMap extends="BaseResultMap" id="StudentReportDTOMap" type="edu.ku.cete.web.StudentReportDTO">
+     <result column="legalfirstname" jdbcType="VARCHAR" property="legalFirstName" />
+     <result column="legalmiddlename" jdbcType="VARCHAR" property="legalMiddleName" />
+     <result column="legallastname" jdbcType="VARCHAR" property="legalLastName" />
+     <result column="statestudentidentifier" jdbcType="VARCHAR" property="stateStudentIdentifier" />
+     <result column="schoolname" jdbcType="VARCHAR" property="schoolName" />
+     <result column="schoolidentifier" jdbcType="VARCHAR" property="schoolIdentifier" />
+     <result column="districtname" jdbcType="VARCHAR" property="districtName" />
+     <result column="statename" jdbcType="VARCHAR" property="stateName" />
+     <result column="gradename" jdbcType="VARCHAR" property="gradeName" />
+     <result column="mdptresponse" jdbcType="VARCHAR" property="mdptResponse" />
+   </resultMap>  
+  
+    <resultMap id="ExternalStudenReportsMap" type="edu.ku.cete.domain.Externalstudentreports" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="studentid" property="studentId" jdbcType="BIGINT" />
+    <result column="gradeid" property="gradeId" jdbcType="BIGINT" />
+    <result column="subjectid" property="subjectId" jdbcType="BIGINT" />
+    <result column="stateid" property="stateId" jdbcType="BIGINT" />
+    <result column="assessmentprogramid" property="assessmentProgramid" jdbcType="BIGINT" />
+    <result column="districtid" property="districtId" jdbcType="BIGINT" />
+    <result column="schoolid" property="schoolId" jdbcType="BIGINT" />
+    <result column="level1_text" property="level1_text" jdbcType="VARCHAR" />
+    <result column="level2_text" property="level2_text" jdbcType="VARCHAR" />
+    <result column="filepath" property="filePath" jdbcType="VARCHAR" />
+    <result column="createddate" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="createduser" property="createdUser" jdbcType="BIGINT" />
+    <result column="modifieduser" property="modifiedUser" jdbcType="BIGINT" />
+    <result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+    <result column="activeflag" property="activeFlag" jdbcType="BIT" />
+    <result column="schoolyear" property="schoolYear" jdbcType="BIGINT" />
+  </resultMap>
+  
+  
+  
+  <select id="generateKAPStudentScoreExtract" resultMap="kapStudentScoreMap">    
+		WITH schoolids as (
+		  <if test="orgType != null and orgType == 'DT'">
+		    select distinct schoolid
+		    from organizationtreedetail
+		    where districtid = #{organizationId}
+		    and statedisplayidentifier = 'KS'
+		  </if>
+		  <if test="orgType != null and orgType == 'SCH'">
+		    select #{organizationId} as schoolid
+		  </if>
+		  <if test="orgType == null">
+		    select distinct schoolid
+		    from organizationtreedetail
+		    where statedisplayidentifier = 'KS'
+		  </if>
+		)
+		select distinct st.id as studentid, st.statestudentidentifier, st.legallastname, st.legalfirstname, st.legalmiddlename, 
+			sr.id as studentreportid,
+			sr.schoolyear as reportschoolyear,
+			sr.scalescore,
+			sr.exitstatus,
+			sr.incompletestatus,
+			sr.transferred,
+			sr.suppressmainscalescoreprfrmlevel,
+			ld.level as performancelevel,
+			ld.levelname as performancelevelname,
+			ca.abbreviatedname as subjectcode,
+			ca.name as reportsubject,
+			orgdetayp.districtdisplayidentifier, 
+			orgdetayp.districtname, 
+			orgdetayp.schooldisplayidentifier as aypschoolidentifier, 
+			orgdetayp.schoolname as aypschoolname,
+			orgdetatt.schooldisplayidentifier as attendanceschoolidentifier, 
+			orgdetatt.schoolname as attendanceschoolname,
+			gc.abbreviatedname as reportgrade,
+			currgrade.abbreviatedname as currentenrolledgrade,
+			rptorgdet.districtdisplayidentifier as reportdistrictidentifier,
+			rptorgdet.districtname as reportdistrictname,
+			rptorgdet.schooldisplayidentifier as reportschoolidentifier,
+			rptorgdet.schoolname as reportschoolname,
+			scd.subscorereportdisplayname,
+			rss.rating as rating,
+			scd.subscoredisplaysequence
+			
+			from student st join studentreport sr on st.id = sr.studentid and sr.status is true
+			left join enrollment en on en.studentid = st.id
+			left join enrollment curren on curren.studentid = st.id and curren.currentschoolyear = #{currentSchoolYear} and curren.activeflag is true
+			join assessmentprogram ap ON ap.id = sr.assessmentprogramid and ap.abbreviatedname='KAP' 
+			left join contentarea ca on ca.id = sr.contentareaid
+			left join gradecourse gc on sr.gradeid = gc.id
+			left join gradecourse currgrade on curren.currentgradelevel = currgrade.id
+			left join organizationtreedetail orgdetayp on curren.aypschoolid = orgdetayp.schoolid and orgdetayp.statedisplayidentifier = 'KS'
+			left join organizationtreedetail orgdetatt on curren.attendanceschoolid = orgdetatt.schoolid and orgdetatt.statedisplayidentifier = 'KS'
+			left join organizationtreedetail rptorgdet on sr.attendanceschoolid = rptorgdet.schoolid
+			left join leveldescription ld on sr.levelid = ld.id
+			left join reportsubscores rss on sr.id = rss.studentreportid
+			left join subscoresdescription scd on scd.schoolyear = sr.schoolyear and scd.assessmentprogramid = sr.assessmentprogramid 
+					and scd.subjectid = sr.contentareaid and scd.subscoredefinitionname = rss.subscoredefinitionname and scd.report='Student'
+			where 
+			 sr.attendanceschoolid in (select schoolid from schoolids)
+			  <if test="contentAreaId != null and contentAreaId.size > 0">
+				and sr.contentareaid = ANY(ARRAY
+			      <foreach collection="contentAreaId" item="id" open="[" close="]" separator=",">
+			        #{id,jdbcType=BIGINT}
+			      </foreach>
+			      )
+		      </if>
+		      <!-- <if test="orgType != null and orgType == 'DT'">
+		      	and (en.attendanceschoolid in(select schoolid from organizationtreedetail where districtid = #{organizationId} and statedisplayidentifier = 'KS') 
+		                             OR en.aypschoolid in(select schoolid from organizationtreedetail where districtid = #{organizationId} and statedisplayidentifier = 'KS'))
+		      </if> -->
+		      
+		      <!-- <if test="orgType != null and orgType == 'SCH'">
+		      	and (en.aypschoolid = #{organizationId} or en.attendanceschoolid = #{organizationid})
+		      </if> -->
+	         <if test="stateStudentIdentifier != null">
+	            and st.statestudentidentifier = #{stateStudentIdentifier}
+	         </if>
+			 <if test="schoolYears != null and schoolYears.size > 0">
+	     		and sr.schoolyear = ANY(ARRAY
+		      <foreach collection="schoolYears" item="id" open="[" close="]" separator=",">
+		        #{id,jdbcType=BIGINT}
+		      </foreach>
+		       )
+	     	 </if>
+			 <if test="gradeIds != null and gradeIds.size > 0">
+				and en.currentschoolyear = #{currentSchoolYear}
+				and curren.attendanceschoolid in (select schoolid from schoolids)
+	     		and currgrade.abbreviatedname = ANY(ARRAY
+		      <foreach collection="gradeIds" item="id" open="[" close="]" separator=",">
+		        #{id,jdbcType=VARCHAR}
+		      </foreach>
+		       )
+	     	 </if>
+			order by statestudentidentifier, reportsubject, subscoredisplaysequence	
+			 
+			
+  </select>
+  
+  <select id="selectStudentReportsByStudentIdSubjSchYrGrade" resultMap="BaseResultMap">
+	SELECT DISTINCT sr.* from studentreport sr
+		JOIN student st ON st.id = sr.studentid
+		JOIN organization org ON st.stateid = org.id AND org.displayidentifier = 'KS'
+		JOIN contentarea ca ON ca.id = sr.contentareaid
+		JOIN assessmentprogram ap ON ap.id = sr.assessmentprogramid AND ap.abbreviatedname='KAP'
+		WHERE st.statestudentidentifier = #{stateStudentIdentifier}
+		 <if test="contentAreaId != null and contentAreaId.size > 0">
+			AND sr.contentareaid = ANY(ARRAY
+		      <foreach collection="contentAreaId" item="id" open="[" close="]" separator=",">
+		        #{id,jdbcType=BIGINT}
+		      </foreach>
+		      )
+	      </if>
+	     <if test="schoolYears != null and schoolYears.size > 0">
+	     	AND sr.schoolyear = ANY(ARRAY
+	      <foreach collection="schoolYears" item="id" open="[" close="]" separator=",">
+	        #{id,jdbcType=BIGINT}
+	      </foreach>
+	      )
+	     </if>
+	      
+  </select>  
+  <select id="getStudentReportCountByStudentIdSubject" resultType="java.lang.Integer">
+	SELECT count(*) from studentreport sr
+		JOIN student st ON st.id = sr.studentid
+		<!-- JOIN enrollment en ON en.studentid = st.id -->
+		JOIN organization org ON st.stateid = org.id AND org.displayidentifier = 'KS'
+		JOIN contentarea ca ON ca.id = sr.contentareaid
+		JOIN assessmentprogram ap ON ap.id = sr.assessmentprogramid AND ap.abbreviatedname='KAP'
+		WHERE st.statestudentidentifier = #{stateStudentIdentifier}
+		 <if test="contentAreaId != null and contentAreaId.size > 0">
+			AND sr.contentareaid = ANY(ARRAY
+		      <foreach collection="contentAreaId" item="id" open="[" close="]" separator=",">
+		        #{id,jdbcType=BIGINT}
+		      </foreach>
+		      )
+	     </if> 
+  </select>
+  
+  <select id="getStudentReportCountByStudentIdSubjectUserOrg" resultType="java.lang.Integer">
+	SELECT count(*) from studentreport sr
+		JOIN student st ON st.id = sr.studentid
+		JOIN enrollment en ON en.studentid = st.id
+		JOIN organization org ON st.stateid = org.id AND org.displayidentifier = 'KS'
+		JOIN contentarea ca ON ca.id = sr.contentareaid
+		JOIN assessmentprogram ap ON ap.id = sr.assessmentprogramid AND ap.abbreviatedname='KAP'
+		WHERE st.statestudentidentifier = #{stateStudentIdentifier}
+		 <if test="contentAreaId != null and contentAreaId.size > 0">
+			AND sr.contentareaid = ANY(ARRAY
+		      <foreach collection="contentAreaId" item="id" open="[" close="]" separator=",">
+		        #{id,jdbcType=BIGINT}
+		      </foreach>
+		      )
+	     </if> 
+	      
+	    <if test="orgType != null and orgType == 'DT'">
+		      	AND sr.attendanceschoolid in(select schoolid from organizationtreedetail where districtid = #{organizationId} and statedisplayidentifier = 'KS') 		      	
+        </if>
+      
+        <if test="orgType != null and orgType == 'SCH'">
+      	  	AND sr.attendanceschoolid = #{organizationId}
+        </if>
+  </select>
+  
+  <resultMap id="GradeResultMap" type="edu.ku.cete.domain.content.GradeCourse">   
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="externalid" jdbcType="BIGINT" property="externalId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="abbreviatedname" jdbcType="VARCHAR" property="abbreviatedName" />
+    <result column="ordinality" jdbcType="BIGINT" property="ordinality" />
+    <result column="gradelevel" jdbcType="INTEGER" property="gradeLevel" />
+    <result column="shortdescription" jdbcType="VARCHAR" property="shortDescription" />
+    <result column="longdescription" jdbcType="VARCHAR" property="longDescription" />
+    <result column="createdate" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="modifieddate" jdbcType="TIMESTAMP" property="modifiedDate" />
+    <result column="originationcode" jdbcType="VARCHAR" property="originationCode" />
+    <result column="assessmentprogramgradesid" jdbcType="BIGINT" property="assessmentProgramGradesId" />
+    <result column="contentareaid" jdbcType="BIGINT" property="contentAreaId" />
+  </resultMap>
+  
+  <select id="findGradesByOrgIdForStudentScoreExtract" resultMap="GradeResultMap">
+	SELECT DISTINCT gc.name, gc.abbreviatedname,(substring(gc.name, '[0-9]+'))::int 
+	FROM enrollment en JOIN gradecourse gc ON en.currentgradelevel = gc.id 
+		JOIN student st ON en.studentid = st.id
+		JOIN organization org ON org.id = st.stateid AND org.displayidentifier = 'KS'
+	WHERE 1=1
+	<if test="orgType == 'DT'">
+		and en.aypschoolid in(SELECT id FROM organization_children(#{organizationId,jdbcType=BIGINT}))
+	</if>
+	<if test="orgType == 'SCH'">
+		and en.aypschoolid = #{organizationId,jdbcType=BIGINT}
+	</if>	
+	AND gc.activeflag is true
+	AND en.activeflag is true
+	AND en.currentschoolyear = #{schoolYear,jdbcType=INTEGER}
+	AND (substring(gc.name, '[0-9]+')) !=''
+	ORDER BY (substring(gc.name, '[0-9]+'))::int  
+  </select>
+  
+  <resultMap id="ContentAreaMap" type="edu.ku.cete.domain.content.ContentArea" >   
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="externalid" property="externalId" jdbcType="BIGINT" />
+    <result column="sortorder" property="sortOrder" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="abbreviatedname" property="abbreviatedName" jdbcType="VARCHAR" />
+    <result column="createdate" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modifieddate" property="modifiedDate" jdbcType="TIMESTAMP" />
+    <result column="originationcode" property="originationCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  
+  <select id="getBySsidAndUserOrgId" resultType="java.lang.Integer">
+	  SELECT count(*) from enrollment en
+			JOIN student st ON en.studentid = st.id
+			WHERE st.statestudentidentifier = #{stateStudentIdentifier}
+			and en.currentschoolyear = #{currentSchoolYear}
+			and en.activeflag is true
+			<if test="orgType != null and orgType == 'DT'">
+		      	AND (en.aypschoolid in(select schoolid from organizationtreedetail where districtid = #{organizationId} and statedisplayidentifier = 'KS') 
+		      	OR en.attendanceschoolid IN(select schoolid from organizationtreedetail where districtid = #{organizationId} and statedisplayidentifier = 'KS') )
+	        </if>
+	      
+	        <if test="orgType != null and orgType == 'SCH'">
+	      	  	AND (en.aypschoolid = #{organizationId} OR en.attendanceschoolid = #{organizationid})
+	        </if>
+		
+	</select>
+
+  <sql id="KAPSearchByStudentLastNameForPreviousReportYears">
+		select distinct s.statestudentidentifier, s.legallastname, s.legalfirstname, s.legalmiddlename, sr.studentid   
+		from student s
+		join studentreport sr on s.id = sr.studentid and 
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			CASE
+				WHEN  NOT (#{orgId} in (select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear} 
+						union select aypschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear})) 
+					THEN sr.attendanceschoolid = #{orgId}
+				ELSE true
+			END			
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where districtid =  #{orgId}) 
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear}  union select 0)) 
+					THEN sr.districtid = #{orgId}
+				ELSE true
+			END	
+		</if>	
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where stateid = #{orgId})
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear}  union select 0)) 
+					THEN sr.stateid = #{orgId}
+				ELSE true
+			END				
+		</if>		
+		join aartuser au on au.id =#{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id		
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname = 'KAP'
+		where lower(s.legallastname) like lower('%' || #{studentLastName} || '%')
+		and sr.schoolyear != #{reportYear} 
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+  		</if>
+  		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+  			and s.stateid = #{orgId}
+  		</if>
+  </sql>
+   
+  <sql id="KAPSearchByStudentLastNameForCurrentReportYear">
+		select distinct s.statestudentidentifier, s.legallastname, s.legalfirstname, s.legalmiddlename, sr.studentid   
+		from student s
+		join studentreport sr on s.id = sr.studentid and
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			CASE
+				WHEN  NOT (#{orgId} in (select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear} 
+						union select aypschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear})) 
+					THEN sr.attendanceschoolid = #{orgId}
+				ELSE true
+			END			
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where districtid =  #{orgId}) 
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear}  union select 0)) 
+					THEN sr.districtid = #{orgId}
+				ELSE true
+			END	
+		</if>	
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where stateid = #{orgId})
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear}  union select 0)) 
+					THEN sr.stateid = #{orgId}
+				ELSE true
+			END				
+		</if>	 
+		join aartuser au on au.id =#{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id	
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname = 'KAP'
+		join reportassessmentprogram rap on rap.subjectid = sr.contentareaid and rap.activeflag is true 
+			and ap.id = rap.assessmentprogramid and rap.authorityid = #{authorityId}
+		join reportassessmentprogramgroup rapg on rapg.reportassessmentprogramid = rap.id and rapg.activeflag is true		
+		where lower(s.legallastname) like lower('%' || #{studentLastName} || '%')
+		and rapg.groupid = #{groupId} and rap.readytoview is true
+		and sr.schoolyear = #{reportYear}
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and rap.stateid = (select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			and rap.stateid = (select distinct stateid from organizationtreedetail where districtid= #{orgId})	
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId}) 
+  		</if>
+  		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+  			and rap.stateid = #{orgId}
+  			and s.stateid = #{orgId}
+  		</if>
+  </sql>   
+
+  <sql id="DLMOrCPASSSearchByStudentLastNameForPreviousReportYears">
+		select distinct s.statestudentidentifier, s.legallastname, s.legalfirstname, s.legalmiddlename, sr.studentid
+		from student s 
+		join externalstudentreports sr on s.id = sr.studentid and sr.activeflag is true and		
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH' and groupCode != null and groupCode == 'TEA'">
+			CASE
+				WHEN  (select (count(*) > 0) from roster r
+						join enrollmentsrosters er on r.id=er.rosterid and r.activeflag is true and er.activeflag is true
+						join enrollment e on e.id=er.enrollmentid and e.activeflag is true and e.studentid=sr.studentid and e.currentschoolyear = #{currentSchoolYear}
+						where r.teacherid=#{userId}) 
+					THEN true
+				ELSE false
+			END
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'and groupCode != null and groupCode != 'TEA'">
+			CASE
+				WHEN  NOT (#{orgId} in (select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear} 
+						union select aypschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear})) 
+					THEN sr.schoolid = #{orgId}
+				ELSE true
+			END			
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where districtid =  #{orgId}) 
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear}  union select 0)) 
+					THEN sr.districtid = #{orgId}
+				ELSE true
+			END	
+		</if>	
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where stateid = #{orgId})
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear} union select 0)) 
+					THEN sr.stateid = #{orgId}
+				ELSE true
+			END				
+		</if>
+		join aartuser au on au.id =#{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id	
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname in ('DLM','CPASS')		
+		where lower(s.legallastname) like lower('%' || #{studentLastName} || '%') 
+		and sr.schoolyear != #{reportYear} 
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+  		</if>
+  		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+  			and s.stateid = #{orgId}
+  		</if>
+  </sql>  
+  
+  <sql id="DLMOrCPASSSearchByStudentLastNameForCurrentReportYear">
+		select distinct s.statestudentidentifier, s.legallastname, s.legalfirstname, s.legalmiddlename, sr.studentid
+		from student s 
+		join externalstudentreports sr on s.id = sr.studentid and sr.activeflag is true and	
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH' and groupCode != null and groupCode == 'TEA'">
+			CASE
+				WHEN  (select (count(*) > 0) from roster r
+						join enrollmentsrosters er on r.id=er.rosterid and r.activeflag is true and er.activeflag is true
+						join enrollment e on e.id=er.enrollmentid and e.activeflag is true and e.studentid=sr.studentid and e.currentschoolyear = #{currentSchoolYear} 
+						where r.teacherid=#{userId}) 
+					THEN true
+				ELSE false
+			END
+		</if>			
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH' and groupCode != null and groupCode != 'TEA'">
+			CASE
+				WHEN  NOT (#{orgId} in (select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear} 
+						union select aypschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear})) 
+					THEN sr.schoolid = #{orgId}
+				ELSE true
+			END			
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where districtid =  #{orgId}) 
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear}  union select 0)) 
+					THEN sr.districtid = #{orgId}
+				ELSE true
+			END	
+		</if>	
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			CASE
+				WHEN  NOT (array(select distinct schoolid from organizationtreedetail where stateid = #{orgId})
+					@> array(select attendanceschoolid from enrollment enrl where enrl.studentid = s.id and enrl.currentschoolyear = #{currentSchoolYear} union select 0)) 
+					THEN sr.stateid = #{orgId}
+				ELSE true
+			END				
+		</if>		
+		join aartuser au on au.id =#{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id	
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname in ('DLM','CPASS')
+		join reportassessmentprogram rap on (rap.subjectid=sr.subjectid or (rap.subjectid is null and sr.subjectid is null)) and rap.activeflag is true 
+			and ap.id = rap.assessmentprogramid and rap.authorityid = #{authorityId}
+		join reportassessmentprogramgroup rapg on rapg.reportassessmentprogramid = rap.id and rapg.activeflag is true
+		where lower(s.legallastname) like lower('%' || #{studentLastName} || '%') 
+		and rapg.groupid = #{groupId} and rap.readytoview is true
+		and sr.schoolyear = #{reportYear}
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and rap.stateid = (select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			and rap.stateid = (select distinct stateid from organizationtreedetail where districtid= #{orgId})	
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+ 		</if>
+  		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+  			and rap.stateid = #{orgId}
+  			and s.stateid = #{orgId}
+  		</if>		  
+  </sql>     
+
+  <sql id="searchByStateStudentIdForKAPForCurrentReportYear">
+  		select distinct sr.schoolyear, sr.attendanceschoolid, sr.schoolname, sr.contentareaid, 
+  			ca.name as contentareaname, sr.gradeid, reportgrd.abbreviatedname as gradename,
+			(CASE
+				WHEN (sr.schoolyear &lt; 2017 AND sr.suppressmainscalescoreprfrmlevel is true) THEN -10000 
+				WHEN (sr.schoolyear &gt;= 2017 AND sr.status is false) THEN -10000 
+				ELSE sr.scalescore 
+			END) as scalescore,
+			(CASE
+				WHEN (sr.schoolyear &lt; 2017 AND sr.suppressmainscalescoreprfrmlevel is true) THEN -10000 
+				WHEN (sr.schoolyear &gt;= 2017 AND sr.status is false) THEN -10000 
+				ELSE ld.level 
+			END) as level,
+  			sr.id, sr.generated  
+		from student s
+		join studentreport sr on s.id = sr.studentid
+		<if test="isEnrolledInUserOrg == false">
+			<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+				and sr.attendanceschoolid = #{orgId}
+			</if>
+			<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+				and sr.districtid = #{orgId}	
+			</if>	
+			<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+				and sr.stateid = #{orgId}				
+			</if>	
+		</if>			
+		left join gradecourse reportgrd on sr.gradeid = reportgrd.id and reportgrd.activeflag is true 
+		left join organization reportsch on sr.attendanceschoolid = reportsch.id
+		left join contentarea ca on ca.id = sr.contentareaid and ca.activeflag is true
+		left join leveldescription ld on ld.id = sr.levelid
+		join aartuser au on au.id = #{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id			
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname = 'KAP'
+		join reportassessmentprogram rap on rap.subjectid = sr.contentareaid and rap.activeflag is true 
+			and ap.id = rap.assessmentprogramid and rap.authorityid = #{authorityId}
+		join reportassessmentprogramgroup rapg on rapg.reportassessmentprogramid = rap.id and rapg.activeflag is true
+		where s.statestudentidentifier = #{stateStudentIdentifier}
+		and uap.assessmentprogramid = sr.assessmentprogramid
+		and rapg.groupid = #{groupId} and rap.readytoview is true
+		and sr.schoolyear = #{reportYear}  
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and rap.stateid = (select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">
+			and rap.stateid = (select distinct stateid from organizationtreedetail where districtid= #{orgId})
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			and rap.stateid = #{orgId}
+			and s.stateid = #{orgId}
+		</if>  
+  </sql>
+  
+  <sql id="searchByStateStudentIdForKAPForPreviousReportYears">
+  		select distinct sr.schoolyear, sr.attendanceschoolid, sr.schoolname, sr.contentareaid, 
+  			ca.name as contentareaname, sr.gradeid, reportgrd.abbreviatedname as gradename, 
+			(CASE
+				WHEN (sr.schoolyear &lt; 2017 AND sr.suppressmainscalescoreprfrmlevel is true) THEN -10000 
+				WHEN (sr.schoolyear &gt;= 2017 AND sr.status is false) THEN -10000 
+				ELSE sr.scalescore 
+			END) as scalescore,
+			(CASE
+				WHEN (sr.schoolyear &lt; 2017 AND sr.suppressmainscalescoreprfrmlevel is true) THEN -10000 
+				WHEN (sr.schoolyear &gt;= 2017 AND sr.status is false) THEN -10000 
+				ELSE ld.level 
+			END) as level,
+  			sr.id, sr.generated 
+		from student s	
+		join studentreport sr on s.id = sr.studentid
+		<if test="isEnrolledInUserOrg == false">
+			<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+				and sr.attendanceschoolid = #{orgId}
+			</if>
+			<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+				and sr.districtid = #{orgId}	
+			</if>	
+			<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+				and sr.stateid = #{orgId}				
+			</if>	
+		</if>			
+		left join gradecourse reportgrd on sr.gradeid = reportgrd.id and reportgrd.activeflag is true		
+		left join organization reportsch on sr.attendanceschoolid = reportsch.id 
+		left join contentarea ca on ca.id = sr.contentareaid and ca.activeflag is true		 
+		left join leveldescription ld on ld.id = sr.levelid
+		join aartuser au on au.id = #{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id	
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname = 'KAP'
+		where s.statestudentidentifier = #{stateStudentIdentifier}
+		and uap.assessmentprogramid = sr.assessmentprogramid
+		and sr.schoolyear != #{reportYear}
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if> 
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			and s.stateid = #{orgId}
+		</if>
+  </sql>
+  
+  <sql id="searchByStateStudentIdForDLMOrCPASSForCurrentReportYear">
+		select distinct sr.schoolyear, sr.schoolid, 			
+			(CASE
+				WHEN (sr.reporttype='StudentSummary') THEN sr.schoolname
+				ELSE sr.schoolname 
+			END) as schoolname, 
+			sr.subjectid, 
+			
+			(CASE WHEN ca.name IS NULL THEN 
+  			(CASE 
+	  			WHEN (sr.level1_text IS NULL and sr.level2_text IS NULL) THEN ca.name 
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NULL) THEN concat(ca.name, ' ', sr.level1_text)
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' ', sr.level1_text, ' ', sr.level2_text)
+				WHEN (sr.level1_text IS NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' ', sr.level2_text)
+			END)
+			ELSE
+			(CASE 
+				WHEN (sr.level1_text IS NULL and sr.level2_text IS NULL) THEN ca.name 
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NULL) THEN concat(ca.name, ' - ', sr.level1_text)
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' - ', sr.level1_text, ' ', sr.level2_text)
+				WHEN (sr.level1_text IS NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' - ', sr.level2_text)
+				END )END) as contentareaname,  
+  			sr.gradeid, reportgrd.abbreviatedname as gradename, 0 as scalscore, 0 as level, sr.id, true as status 
+		from student s 
+		join externalstudentreports sr on s.id = sr.studentid and sr.activeflag is true
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH' and groupCode != null and groupCode == 'TEA'">
+		 	and CASE
+					WHEN  (select (count(*) > 0) from roster r
+							join enrollmentsrosters er on r.id=er.rosterid and r.activeflag is true and er.activeflag is true
+							join enrollment e on e.id=er.enrollmentid and e.activeflag is true and e.studentid=sr.studentid and e.currentschoolyear = #{currentSchoolYear} 
+							where r.teacherid=#{userId}) 
+						THEN true
+					ELSE false
+				END
+		</if>
+		<if test="isEnrolledInUserOrg == false">		
+			<if test="currentUserLevel != null and currentUserLevel == 'SCH' and groupCode != null and groupCode != 'TEA'">
+				and sr.schoolid = #{orgId}
+			</if>
+			<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+				and sr.districtid = #{orgId}	
+			</if>	
+			<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+				and sr.stateid = #{orgId}				
+			</if>
+		</if>			
+		left join gradecourse reportgrd on sr.gradeid = reportgrd.id and reportgrd.activeflag is true
+		left join organization reportsch on sr.schoolid = reportsch.id
+		left join contentarea ca on ca.id = sr.subjectid and ca.activeflag is true
+		join aartuser au on au.id = #{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id		
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname  = ANY(ARRAY
+																													     <foreach collection="apAbbrNames" item="name" open="[" close="]" separator=",">
+																													       #{name}
+																													     </foreach>
+																													   ) 
+		join reportassessmentprogram rap on (rap.subjectid=sr.subjectid or (rap.subjectid is null and sr.subjectid is null)) and rap.activeflag is true 
+			and ap.id = rap.assessmentprogramid and rap.authorityid = #{authorityId}
+		join reportassessmentprogramgroup rapg on rapg.reportassessmentprogramid = rap.id and rapg.activeflag is true
+		where s.statestudentidentifier = #{stateStudentIdentifier}
+		and uap.assessmentprogramid = sr.assessmentprogramid
+		and rapg.groupid = #{groupId} and rap.readytoview is true
+		and sr.schoolyear = #{reportYear}
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and rap.stateid = (select distinct stateid from organizationtreedetail where schoolid=#{orgId})
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">
+			and rap.stateid = (select distinct stateid from organizationtreedetail where districtid=#{orgId})
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+		</if> 
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			and rap.stateid = #{orgId}
+			and s.stateid = #{orgId}
+		</if>   
+  </sql>
+  
+  <sql id="searchByStateStudentIdForDLMOrCPASSForPreviousReportYears">
+		select distinct sr.schoolyear, sr.schoolid, 			
+			(CASE
+				WHEN (sr.reporttype='StudentSummary') THEN sr.schoolname
+				ELSE sr.schoolname 
+			END) as schoolname,
+			sr.subjectid, 
+ 			(CASE WHEN ca.name IS NULL THEN 
+  			(CASE 
+	  			WHEN (sr.level1_text IS NULL and sr.level2_text IS NULL) THEN ca.name 
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NULL) THEN concat(ca.name, ' ', sr.level1_text)
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' ', sr.level1_text, ' ', sr.level2_text)
+				WHEN (sr.level1_text IS NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' ', sr.level2_text)
+			END)
+			ELSE
+			(CASE 
+				WHEN (sr.level1_text IS NULL and sr.level2_text IS NULL) THEN ca.name 
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NULL) THEN concat(ca.name, ' - ', sr.level1_text)
+				WHEN (sr.level1_text IS NOT NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' - ', sr.level1_text, ' ', sr.level2_text)
+				WHEN (sr.level1_text IS NULL and sr.level2_text IS NOT NULL) THEN concat(ca.name, ' - ', sr.level2_text)
+				END )END) as contentareaname,  
+  			sr.gradeid, reportgrd.abbreviatedname as gradename, 0 as scalscore, 0 as level, sr.id, true as status
+		from student s 
+		join externalstudentreports sr on s.id = sr.studentid and sr.activeflag is true
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH' and groupCode != null and groupCode == 'TEA'">
+			and CASE
+					WHEN  (select (count(*) > 0) from roster r
+							join enrollmentsrosters er on r.id=er.rosterid and r.activeflag is true and er.activeflag is true
+							join enrollment e on e.id=er.enrollmentid and e.activeflag is true and e.studentid=sr.studentid and e.currentschoolyear = #{currentSchoolYear} 
+							where r.teacherid=#{userId}) 
+						THEN true
+					ELSE false
+				END
+		</if>
+		<if test="isEnrolledInUserOrg == false">		
+			<if test="currentUserLevel != null and currentUserLevel == 'SCH' and groupCode != null and groupCode != 'TEA'">
+				and sr.schoolid = #{orgId}
+			</if>
+			<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+				and sr.districtid = #{orgId}	
+			</if>	
+			<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+				and sr.stateid = #{orgId}				
+			</if>
+		</if>		
+		left join gradecourse reportgrd on sr.gradeid = reportgrd.id and reportgrd.activeflag is true
+		left join organization reportsch on sr.schoolid = reportsch.id
+		left join contentarea ca on ca.id = sr.subjectid and ca.activeflag is true
+		join aartuser au on au.id = #{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.assessmentprogramid = sr.assessmentprogramid and uap.userorganizationsgroupsid=uog.id		
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname = ANY(ARRAY
+																													     <foreach collection="apAbbrNames" item="name" open="[" close="]" separator=",">
+																													       #{name}
+																													     </foreach>
+																													   ) 
+		where s.statestudentidentifier = #{stateStudentIdentifier}
+		and uap.assessmentprogramid = sr.assessmentprogramid
+		and sr.schoolyear != #{reportYear}
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			and s.stateid = #{orgId}
+		</if>
+  </sql>
+  
+  <select id="searchByStudentLastName" resultMap="StudentReportDTOMap">
+	with studentreportdata as  
+	(
+		<include refid="KAPSearchByStudentLastNameForPreviousReportYears"/>
+		
+		union
+		
+		<include refid="KAPSearchByStudentLastNameForCurrentReportYear"/>
+		
+		union
+
+		<include refid="DLMOrCPASSSearchByStudentLastNameForPreviousReportYears"/>
+		
+		union
+		
+		<include refid="DLMOrCPASSSearchByStudentLastNameForCurrentReportYear"/>		
+	) 
+	select distinct count(*) OVER() AS totalrecords, srd.statestudentidentifier, srd.legallastname, srd.legalfirstname, srd.legalmiddlename, srd.studentid, 
+		lower(srd.legallastname) ln, lower(srd.legalfirstname) fn, lower(srd.legalmiddlename) mn,
+	(CASE
+    	WHEN     (select count(schoolid)=1 as showschoolname from organizationtreedetail otd where (stateid=#{orgId} or districtid=#{orgId} or schoolid=#{orgId}) and schoolid=enrl.attendanceschoolid limit 1) THEN 
+    			gc.abbreviatedname  
+        ELSE 	''  
+    END) as gradename,
+    (CASE
+    	WHEN     (select count(schoolid)=1 as showschoolname from organizationtreedetail otd where (stateid=#{orgId} or districtid=#{orgId} or schoolid=#{orgId}) and schoolid=enrl.attendanceschoolid limit 1) THEN 
+    			o.organizationname 
+        ELSE  	'' 
+    END) as schoolname 
+	from studentreportdata srd
+	left join enrollment enrl on srd.studentid=enrl.studentid and enrl.currentschoolyear = #{currentSchoolYear} and enrl.activeflag is true
+	left join gradecourse gc on enrl.currentgradelevel = gc.id and gc.activeflag is true
+	left join organization o on enrl.attendanceschoolid = o.id and o.activeflag is true
+	order by lower(srd.legallastname), lower(srd.legalfirstname), lower(srd.legalmiddlename), srd.statestudentidentifier
+	<if test="limitCount != null">
+    	LIMIT #{limitCount,jdbcType=INTEGER}
+    </if>			
+    <if test="offset != null">
+    	OFFSET #{offset,jdbcType=INTEGER}
+    </if>	
+
+  </select> 
+  
+  <select id="searchByStateStudentIdForKAP" resultMap="StudentReportDTOMap">
+		<include refid="searchByStateStudentIdForKAPForCurrentReportYear"/>
+				
+		union
+		
+		<include refid="searchByStateStudentIdForKAPForPreviousReportYears"/>
+  </select>
+   
+  <select id="searchByStateStudentIdForDLMOrCPASS" resultMap="StudentReportDTOMap">
+		<include refid="searchByStateStudentIdForDLMOrCPASSForCurrentReportYear"/>
+		
+		union
+		
+		<include refid="searchByStateStudentIdForDLMOrCPASSForPreviousReportYears"/>
+  </select>
+   
+  <select id="countReportsForStudent" resultType="java.lang.Integer">
+		select count(*) from 
+		(
+			<include refid="searchByStateStudentIdForKAPForCurrentReportYear"/>
+					
+			union
+			
+			<include refid="searchByStateStudentIdForKAPForPreviousReportYears"/>
+		
+			union
+			
+			<include refid="searchByStateStudentIdForDLMOrCPASSForCurrentReportYear"/>
+			
+			union
+			
+			<include refid="searchByStateStudentIdForDLMOrCPASSForPreviousReportYears"/>
+		) a  
+  </select>   
+   
+  <select id="getStudentInfoForAllStudentsReports" resultMap="StudentReportDTOMap">
+  		select distinct s.statestudentidentifier, s.legallastname, s.legalfirstname
+		from student s
+		left join enrollment e on e.studentid = s.id and e.activeflag is true and e.currentschoolyear = #{currentSchoolYear}
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and (e.attendanceschoolid = #{orgId} or e.aypschoolid = #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			and (e.aypschoolid in (select distinct schoolid from organizationtreedetail where districtid= #{orgId}) OR e.attendanceschoolid in (select distinct schoolid from organizationtreedetail where districtid= #{orgId}))	
+		</if>	
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			and (e.aypschoolid in (select distinct schoolid from organizationtreedetail where stateid= #{orgId}) OR e.attendanceschoolid in (select distinct schoolid from organizationtreedetail where stateid= #{orgId}))				
+		</if>		
+		join aartuser au on au.id = #{userId} and au.activeflag is true
+		join usersorganizations uo on uo.aartuserid=au.id and uo.activeflag is true and uo.organizationid = #{orgId}
+		join userorganizationsgroups uog on uog.userorganizationid = uo.id and uog.activeflag is true and uog.groupid = #{groupId}
+		join userassessmentprogram uap on uap.aartuserid=au.id and uap.activeflag is true and uap.userorganizationsgroupsid=uog.id	
+		join assessmentprogram ap on ap.id = uap.assessmentprogramid and ap.activeflag is true and ap.abbreviatedname in ('KAP', 'DLM', 'CPASS')
+		where s.statestudentidentifier = #{stateStudentIdentifier}
+		LIMIT 1
+  </select>
+  
+  <select id="isStudentCurrentlyEnrolledInUserOrgHierarchy" resultType="Boolean">
+	  	select (count(*) > 0) 
+		from student s 
+		join enrollment e on e.studentid = s.id and e.activeflag is true and s.activeflag is true and e.currentschoolyear = #{currentSchoolYear} 
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and (e.attendanceschoolid = #{orgId} or e.aypschoolid = #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			and (e.aypschoolid in (select distinct schoolid from organizationtreedetail where districtid= #{orgId}) OR e.attendanceschoolid in (select distinct schoolid from organizationtreedetail where districtid= #{orgId}))	
+		</if>	
+		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+			and (e.aypschoolid in (select distinct schoolid from organizationtreedetail where stateid= #{orgId}) OR e.attendanceschoolid in (select distinct schoolid from organizationtreedetail where stateid= #{orgId}))				
+		</if>		
+		where s.statestudentidentifier = #{stateStudentIdentifier}
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and s.stateid=(select distinct stateid from organizationtreedetail where schoolid= #{orgId})
+		</if>
+		<if test="currentUserLevel != null and currentUserLevel == 'DT'">	
+			and s.stateid = (select distinct stateid from organizationtreedetail where districtid=  #{orgId})
+  		</if>
+  		<if test="currentUserLevel != null and currentUserLevel == 'ST'">
+  			and s.stateid = #{orgId}
+  		</if>
+  </select>
+  
+    <select id="doesSSIDExist" resultType="Boolean">
+  		select (count(s.statestudentidentifier) > 0)
+		from student s	
+        left outer join studentreport sr on s.id=sr.studentid
+        left outer join externalstudentreports esr on s.id=esr.studentid
+		where s.statestudentidentifier = #{stateStudentIdentifier} and (esr.schoolid in (select distinct schoolid from organizationtreedetail where stateid=  #{stateId}) 
+                 OR sr.attendanceschoolid in (select distinct schoolid from organizationtreedetail where stateid=  #{stateId}))
+  </select>
+  
+  <select id="selectStudentReportByPrimaryKeyAndUserOrgForAllStudentReports" parameterType="map" resultMap="BaseResultMap">
+    SELECT sr.*
+    FROM studentreport sr
+    WHERE sr.id = #{id,jdbcType=BIGINT}    
+    <if test="isStudentInUserOrgHierarchy == false">
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and sr.attendanceschoolid = #{orgId}
+			and sr.schoolyear in (select distinct sr.schoolyear 
+									from studentreport sr 
+									join student st on st.id = sr.studentid 
+									where sr.attendanceschoolid=#{orgId} and st.statestudentidentifier = s.statestudentidentifier)
+		</if>
+		<if test="currentUserLevel != null and (currentUserLevel == 'DT' or currentUserLevel == 'ST')">	
+			and sr.attendanceschoolid in (select * from organization_children_active_or_inactive(#{orgId}))	
+			and sr.schoolyear in (select distinct sr.schoolyear 
+									from studentreport sr 
+									join student st on st.id = sr.studentid 
+									where sr.attendanceschoolid in (select * from organization_children_active_or_inactive(#{orgId}))	 
+										and st.statestudentidentifier = s.statestudentidentifier) 	
+			
+		</if>	
+	</if>
+  </select>  
+  
+  <select id="selectExternalStudentReportByPrimaryKeyAndUserOrgForAllStudentReports" parameterType="map" resultMap="ExternalStudenReportsMap">
+    SELECT sr.*
+    FROM externalstudentreports sr
+    WHERE sr.id = #{id,jdbcType=BIGINT}
+    <if test="isStudentInUserOrgHierarchy == false">
+		<if test="currentUserLevel != null and currentUserLevel == 'SCH'">
+			and sr.schoolid = #{orgId}
+			and sr.schoolyear in (select distinct sr.schoolyear 
+									from externalstudentreports sr 
+									join student st on st.id = sr.studentid 
+									where sr.schoolid=#{orgId} and st.statestudentidentifier = s.statestudentidentifier) 
+		</if>
+		<if test="currentUserLevel != null and (currentUserLevel == 'DT' or currentUserLevel == 'ST')">	
+			and sr.schoolid in (select * from organization_children_active_or_inactive(#{orgId}))	
+			and sr.schoolyear in (select distinct sr.schoolyear 
+									from externalstudentreports sr 
+									join student st on st.id = sr.studentid 
+									where sr.schoolid in (select * from organization_children_active_or_inactive(#{orgId}))	
+									and st.statestudentidentifier = s.statestudentidentifier) 			
+		</if>	
+	</if>    
+  </select>
+  
+  <select id="getOrganizationDetailByStudentId" resultType="edu.ku.cete.domain.common.OrganizationTreeDetail">
+	  select otd.schooldisplayidentifier, otd.schoolname, otd.districtdisplayidentifier, otd.districtname 
+		from organizationtreedetail otd 
+		join studentreport sr on sr.attendanceschoolid = otd.schoolid and sr.districtid = otd.districtid
+		join contentarea ca on ca.id = sr.contentareaid
+		where otd.statedisplayidentifier = 'KS'
+		and sr.studentid = #{studentId}
+		and sr.schoolyear = #{schoolYear}
+		and sr.contentareaid = ca.id
+		and ca.abbreviatedname = #{subjectCode}
+		<if test="transferred != null and transferred == true">
+			and sr.transferred is true
+		</if>
+  </select>
+  
+  
+ 
+  
+</mapper>

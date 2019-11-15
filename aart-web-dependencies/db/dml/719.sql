@@ -1,0 +1,2 @@
+--ddl/719.sql
+update fieldspecification set rejectifempty = false where id = (select id from fieldspecification where formatregex is null and  fieldname = 'attendanceSchoolProgramIdentifier' and rejectifempty is true);

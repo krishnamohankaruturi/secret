@@ -1,0 +1,146 @@
+<div class="container-fluid" id = "assembleScreen">
+    <span class="pull-left" style="margin-top:10px;">
+        <a href="interim.htm" title="Back to Interim Home"><i class="fa fa-arrow-circle-o-left  fa-lg"></i>Back to Interim Home &gt; </a>
+    </span>
+    <h4>&#x20; &#x20;Build or Select a Test</h4>
+    <div>
+        <form>
+            <div class="row">
+                <div class="form-group col-sm-3">
+                    <label>ACTION<span class="text_red">*</span></label>
+                    <select id="radio-class" class="form-control" title="Interim Action" >
+                        <option value="false">Select</option>
+                        <option value="false">Build test using existing tests</option>
+                        <option value="true">Copy existing Interim Test</option>
+                    </select>
+                </div> 
+                <div class="form-group col-sm-3">
+                	<%if (currentAssessmentProgramName == 'PLTW'){%>
+                	<label>COURSE <span class="text_red">*</span></label>
+                  	<%}%>
+                  	<%if (currentAssessmentProgramName != 'PLTW'){%>
+                	<label>SUBJECT <span class="text_red">*</span></label>
+                  	<%}%>
+                    <select id="interimTestSubject" class="form-control" title="Interim Test Subject" >
+                        <option>Select</option>
+                    </select>
+                </div>
+                 <%if (currentAssessmentProgramName != 'PLTW'){%>
+                <div class="form-group col-sm-3">
+                    <label>GRADE <span class="text_red">*</span></label>
+                    <select id="interimTestGrade" class="form-control" title="Interim Test Grade" >
+                    </select>
+                </div>
+                  <%}%>
+                <div class="form-group col-sm-3" style="display: none;">
+                    <label>ALIGNMENT</label>
+                    <a id="alignmentHelp"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                    <select id="interimTestalignment" class="form-control" title="Interim Test Alignment" >
+                    </select>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="searchButton" class="transparent">Search</label>
+                    <button name="searchButton" id="searchButton" type="button" disabled="disabled" 
+                        class="btn_blue ui-state-disabled" style="display: block;" title="Search">Search</button>
+                </div>
+                <div id="alignment-help-creation" style="display:none;">
+                        <p>The Alignment dropdown menu allows you to select a content code to find tests with items aligned to specific skills or concepts.<br/><br/>
+                        If you do not make a selection from the Alignment menu, you will see all available tests for the grade and subject. <br/>
+                        If you select a content code from the Alignment menu, only tests with at least one item aligned to that content 
+                        code will be displayed in your search results.<br/><br/>
+                        The content code shows an item's alignment to Kansas College and Career Ready Standards (KCCRS) 
+                        (available at  <a target="_blank" href="http://www.ksde.org"> www.ksde.org</a>) or the summative assessment framework
+                        (available at <a target="_blank" href="http://www.ksassessments.org">www.ksassessments.org</a>), which is derived from the KCCRS.<br/><br/>
+                        Currently, items in the Interim system will display either the KCCRS or the summative assessment framework content code.
+                        </p>
+                        <button type="button" class="btn_blue" style="margin-left: 60%; margin-top: 10px; height: 35px;">Okay</button>
+                </div>
+            </div>
+            <div class="row hide interim-select">
+                <div class="form-group col-sm-3">
+                    <label for="searchbycreater">CREATED BY</label>
+                    <input type="text" id="searchbycreater" class="form-control"/>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="searchbytestname">TEST NAME</label>
+                    <input type="text" id="searchbytestname" class="form-control"/>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label  for="interimTestSchool">BY SCHOOL</label>
+                    <select id="interimTestSchool" class="form-control" title="School">
+                    <option>Select</option>
+                    	<%if (school && school.length > 0){%>
+	                        <%for(var i=0;i <school.length; i++) {%>
+	                            <option value="<%=school[i]%>"><%=school[i]%></option>
+	                        <%}%>
+	                    <%}%>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div id = "loadingMsgPop" style="display:none;">
+            <div class="loader"></div>
+        </div>
+        <div class="col-sm-8 assemble_box">
+            <%if (tests && tests.length > 0){%>
+                <div class="row">
+                    <%for(var i=1;i <= tests.length; i++) {%>           
+                        <div class="col-sm-4">
+                            <div>
+                                <h5><%=tests[i-1].testName%></h5>
+                                <span class="pull-right">
+                                    <a href="" data-id="<%=tests[i-1].id%>" data-name="<%=tests[i-1].testName%>"
+                                        data-description="<%=tests[i-1].testDescription%>" title="Add Test Icon" >
+                                        <i class="fa fa-plus-circle fa-2x text_green" style="color: #80A444; zoom: 1.3;"></i>
+                                    </a>
+                                    <a href="" data-id="<%=tests[i-1].id%>" data-name="<%=tests[i-1].testName%>" 
+                                        data-collectionid="<%=tests[i-1].testCollectionId%>" title="View test Icon" >
+                                        <i class="fa fa-eye fa-2x text_blue" style="color: #3097D1;"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    <%}%>
+                </div>
+            <%}else{%>
+                <h3 style="margin-left:10px;">Select search filters to get available tests.</h3>
+            <%}%>
+        </div>
+       
+        <div class="col-sm-4 assemble_form">
+            <div class="row">
+                <div>
+                    <h4>Selected Tests</h4>
+                    <p id="ptag" class="sortable-shift js-shift-sortable">
+                    </p>
+                </div>
+                <form onSubmit="return false;">
+                    <div class="form-group">
+                        <label for="interimTestName" class="control-label">Name <span class="text_red">*</span></label>
+                        <input type="text" class="form-control" name="interimTestName" 
+                            oninput="if(value.length>62)value=value.slice(0,62)" id="interimTestName" 
+                            title="Interim Test Name" />
+                        <span class="testname-error hide" style="color:red;">Test name is required</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Description</label>
+                        <textarea rows="4" class="col-sm-12 form-control" name="description" id="description" title="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                    	<label class="transparent">Create Test</label>
+                        <button type="button" id="createTest" disabled="disabled" class="form-control btn_blue">Save</button>
+                    </div>
+                    <span id="create_interim_test_error" class="error_message ui-state-error" 
+                        style="float:left;display:none;" >Error occurred while trying to create test.</span>
+                    <span id="update_interim_test_error" class="error_message ui-state-error" 
+                        style="float:left;display:none;" >Error occurred while trying to update test.</span>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" class="btn btn-green btn-block btn-lg" id="assignNow"/>
+<div id="full-group-description" class="">
+    <p id="js-fulldescription"></p>
+</div>

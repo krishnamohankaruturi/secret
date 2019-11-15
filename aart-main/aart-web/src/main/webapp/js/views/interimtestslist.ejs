@@ -1,0 +1,29 @@
+<%if(tests.length >0){%> 
+            <%for(var i=1;i <= tests.length; i++) {%>           
+                <div class="col-sm-4">
+                    <div class="interim_tests">
+                        <h5><%=tests[i-1].testName%></h5>
+                        <%if(tests[i-1].createdBy){%>
+                        <h6>Created By <b style="color:#1a77ba"><%=tests[i-1].createdBy%></b></h6>
+                        <%}%>
+                        <%if (tests[i-1].shortDec){%>
+                        <h6><%=tests[i-1].shortDec%>...<a class="js-moredec" data-dec="<%=tests[i-1].testDescription%>" title="Test Description" >More</a></h6>
+                        <%}else{%>
+                        <h6><%=tests[i-1].testDescription%></h6>
+                     <%}%>                   
+                 		<a class = "feedback_data" href="" data-id="<%=tests[i-1].id%>" id="<%=tests[i-1].id%>" data-name="<%=tests[i-1].testName%>" data-collectionid="<%=tests[i-1].testCollectionId%>" data-testcollectionid="<%=tests[i-1].testCollectionId%>"><i class="fa fa-commenting-o fa-2x text_blue feedbackAllowed"></i></a>              	
+                        
+                 		<span class="pull-right">
+                            <a href="" data-id="<%=tests[i-1].id%>" data-name="<%=tests[i-1].testName%>" title="Add <%=tests[i-1].testName%>" data-description="<%=tests[i-1].testDescription%>" data-testcollectionid="<%=tests[i-1].testCollectionId%>"><i class="fa fa-plus-circle fa-2x text_green" style="color: #80A444;"></i></a>
+                            <a href="" data-id="<%=tests[i-1].id%>" data-name="<%=tests[i-1].testName%>" title="Preview <%=tests[i-1].testName%>" data-collectionid="<%=tests[i-1].testCollectionId%>" data-testcollectionid="<%=tests[i-1].testCollectionId%>"><i class="fa fa-eye fa-2x text_blue" style="color: #3097D1;"></i></a>                           
+                        </span>                      
+                        
+                      
+                    </div>
+                </div>
+               <%}%>
+ <%}else{%>
+ <h3 style="margin-left:30px;>No Tests are available with your selection<h3>
+ 
+ <%}%>
+             

@@ -1,0 +1,1 @@
+update assessmentprogram set abbreviatedname='DLM' where programname='Dynamic Learning Maps';
